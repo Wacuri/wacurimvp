@@ -4,8 +4,7 @@ import ListItemPreview from '../containers/list_item_preview';
 
 const Home = () => (
   <div className="home">
-    <ListItems />
-    <ListItemPreview />
+    <h3>Amazing things to come.</h3>
   </div>
 );
 
