@@ -63,7 +63,7 @@ router.get('/', (req, res) => {
     });
     res.end();
   } else {
-    res.status(200).render('../views/index.ejs', {
+    res.status(200).render('index.ejs', {
       html,
       script: JSON.stringify(finalState),
     });
