@@ -56,34 +56,7 @@ router.get('/sessions/:room', async (req, res) => {
 	}
 });
 
-router.get('/sessions/:room/joined/:connection', async (req, res) => {
-  const {room, connection} = req.params;
-  const existingSession = await TokSession.findOne({room}).exec();
-	if (existingSession) {
-    const participantExists = (await TokSessionParticipant.count({session: existingSession, connectionId: connection})) > 0;
-    if (!participantExists) {
-      const participant = new TokSessionParticipant({session: existingSession, connectionId: connection});
-      await participant.save();
-      return res.sendStatus(200);
-    }
-  }
-  res.sendStatus(200);
-});
-
-router.get('/sessions/:room/left/:connection', async (req, res) => {
-  const {room, connection} = req.params;
-  const existingSession = await TokSession.findOne({room}).exec();
-	if (existingSession) {
-    console.log('GET BY', room, existingSession._id, connection);
-    const participant = await TokSessionParticipant.findOne({session: existingSession, connectionId: connection});
-    participant.present = false;
-    await participant.save();
-    return res.sendStatus(200);
-  }
-  res.sendStatus(200);
-});
-
-router.get('/sessions/:room/ready/:connection', async (req, res) => {
+router.get('/sessions/:room/connections/:connection/ready', async (req, res) => {
   const {room, connection} = req.params;
   const existingSession = await TokSession.findOne({room}).exec();
 	if (existingSession) {
@@ -108,6 +81,29 @@ router.get('/journeys', async (req, res) => {
 router.post('/event', async (req, res) => {
   console.log('GOT EVENT', req.body);
   res.sendStatus(200);
+  const {sessionId, connection} = req.body;
+  const session = await TokSession.findOne({sessionId}).exec();
+  
+  switch(req.body.event) {
+    case 'connectionCreated':
+      if (session) {
+        const participantExists = (await TokSessionParticipant.count({session, connectionId: connection.id})) > 0;
+        if (!participantExists) {
+          const participant = new TokSessionParticipant({session, connectionId: connection.id});
+          await participant.save();
+        }
+      }
+      break;
+    case 'connectionDestroyed':
+      if (session) {
+        const participant= await TokSessionParticipant.findOne({session, connectionId: connection.id});
+        if (participant) {
+          participant.present = false;
+          await participant.save();
+        }
+      }
+      break
+  }
 });
 
 export default router;

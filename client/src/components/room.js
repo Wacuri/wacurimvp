@@ -24,12 +24,6 @@ class Room extends Component {
       publisherId: '',
     }
     this.publisher = {};
-    this.publisherStreamWatcher = setInterval(() => {
-      if (this.publisher && this.publisher.state && this.publisher.state.lastStreamId) {
-        this.onInitPublisherStream(this.publisher.state.lastStreamId);
-        clearInterval(this.publisherStreamWatcher);
-      }
-    }, 100);
   }
 
 	componentDidMount() {
@@ -43,6 +37,9 @@ class Room extends Component {
           apiKey: '46100042',
           sessionId: state.session.sessionId,
           token: state.session.token,
+          onConnect: () => {
+            console.log('assigned connection to publisher', this.sessionHelper.session.connection);
+          },
           onStreamsUpdated: streams => {
             console.log('Current subscriber streams:', streams);
             this.setState({ streams });
@@ -70,20 +67,12 @@ class Room extends Component {
   }
 
   onInitPublisher = () => {
-    setTimeout(() => {
-      this.setState({
-        publisherId: this.publisher.state.lastStreamId
-      });
-      console.log('GOT CONNECTION', this.publisher.state.lastStreamId);
-    }, 400);
-  }
-
-  onInitPublisherStream = (streamId) => {
-    console.log('GOT IT', streamId);
+    console.log('initialized publisher');
   }
 
   onConfirmReady = (e) => {
     console.log('im ready');
+    fetch(`/api/sessions/${this.props.match.params.room}/connections/${this.sessionHelper.session.connection.id}/ready`);
   }
 
 	render() {
