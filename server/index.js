@@ -1,5 +1,4 @@
 require('babel-register')({
-  presets: [ 'es2015' ]
 });
 const dotenv = require('dotenv');
 
