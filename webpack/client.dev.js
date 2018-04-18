@@ -16,12 +16,33 @@ module.exports = {
   output: {
     path: path.join(__dirname, '../server/public'),
     filename: './js/index.js',
-    publicPath: '/',
+		publicPath: 'http://localhost:8080/',
   },
   devServer: {
     hot: true,
-    publicPath: '/',
-    historyApiFallback: true
+		publicPath: 'http://localhost:8080/',
+		historyApiFallback: true,
+		headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+    },
+		proxy: {
+			"/api": "http://localhost:3000/api"
+		},
+		stats: {
+			all: false,
+			// Show the url we're serving at
+			wds: true,
+			// Config for minimal console.log mess.
+			assets: false,
+			colors: true,
+			version: false,
+			hash: false,
+			timings: false,
+			chunks: false,
+			chunkModules: false,
+		}
   },
   module: {
     rules: [{
@@ -36,7 +57,10 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: ['css-loader', 'sass-loader'],
+        }),
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -57,5 +81,11 @@ module.exports = {
       template: path.join(__dirname, '../server/views/index.dev.ejs'),
       inject: false,
     }),
+		 new webpack.DefinePlugin({
+      __CLIENT__: true,
+      __SERVER__: false,
+      __DEVELOPMENT__: true,
+    }),
+    new ExtractTextPlugin('css/main.css'),
   ],
 };

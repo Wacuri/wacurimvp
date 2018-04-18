@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 
+
 module.exports = {
   context: path.join(__dirname, '../server'),
   devtool: 'source-map',
