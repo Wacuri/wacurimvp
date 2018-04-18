@@ -96,6 +96,7 @@ router.put('/sessions/:room/journey', async (req, res) => {
     await existingSession.save();
     signal(existingSession.sessionId, {type: 'updatedJourney', data: journey});
   }
+  res.sendStatus(200);
 });
 
 router.post('/event', async (req, res) => {
