@@ -24,11 +24,13 @@ class Room extends Component {
       publisherId: '',
     }
     this.publisher = {};
+    this.audioTag = {};
   }
 
 	componentDidMount() {
-    
-    
+    this.audioTag.addEventListener('ended', (event) => {
+      this.publisher.state.publisher.publishAudio(true);
+    });
 		fetch(`/api/sessions/${this.props.match.params.room}`)
 			.then(res => res.json())
 			.then(json => {
@@ -51,6 +53,12 @@ class Room extends Component {
         });
         this.sessionHelper.session.on("connectionCreated", (event) => {
           console.log('CREATED', event);
+        });
+        this.sessionHelper.session.on("signal", (event) => {
+          console.log("Signal sent from connection ", event);
+          this.publisher.state.publisher.publishAudio(false);
+          this.audioTag.play();
+
         });
 			});
     fetch('/api/journeys')
@@ -77,11 +85,17 @@ class Room extends Component {
 
 	render() {
 		return (
-			<div>
+			<div style={{padding: 20}}>
 				<p style={{display: 'none'}}>{JSON.stringify(state.session, null, 2)}</p>
         <p>{state.journeys.length}</p>
+        <audio controls="true" ref={audioTag => { this.audioTag = audioTag }}>
+         <source src="/journeys/Journey to a Bumblebee-AIFF Mono.mp3" type="audio/mpeg"/>
+        </audio>
 				{this.sessionHelper &&
           <div className='tok-container' ref={container => this.container = container }>
+            {this.state.streams.length == 0 &&
+              <p>Waiting for others to join this journey...</p>
+            }
             <div className='row' style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridGap: '10px', marginRight: '350px'}}>
               {this.state.streams.map(stream => {
                 return (
