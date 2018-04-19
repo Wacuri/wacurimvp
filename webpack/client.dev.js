@@ -8,7 +8,7 @@ module.exports = {
   devtool: 'inline-source-map',
   entry: [
     'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8080',
+    'webpack-dev-server/client?https://11eb2913.ngrok.io',
     'webpack/hot/only-dev-server',
     './src/index.js',
     './res/scss/main.scss',
@@ -16,19 +16,20 @@ module.exports = {
   output: {
     path: path.join(__dirname, '../server/public'),
     filename: './js/index.js',
-		publicPath: 'http://localhost:8080/',
+		publicPath: 'https://11eb2913.ngrok.io/',
   },
   devServer: {
     hot: true,
-		publicPath: 'http://localhost:8080/',
+		publicPath: 'https://11eb2913.ngrok.io/',
 		historyApiFallback: true,
+    disableHostCheck: true,
 		headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
       "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
     },
 		proxy: {
-			"/api": "http://localhost:3000/api"
+			"/api": "https://ed44dc35.ngrok.io/api"
 		},
 		stats: {
 			all: false,

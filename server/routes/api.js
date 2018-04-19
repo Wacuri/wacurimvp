@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 require('isomorphic-fetch');
 
 dotenv.config();
+console.log('GOT IT YO', process.env);
 
 mongoose.connect(process.env.MONGO_URL);
 
@@ -78,6 +79,8 @@ router.get('/sessions/:room/connections/:connection/ready', async (req, res) => 
 
 router.get('/journeys', async (req, res) => {
   const readdirAsync = promisify(fs.readdir)
+  console.log('I AM', __dirname);
+  console.log('TRY DA READ', path.join('..', 'public/journeys'));
   const journeyFiles = (await readdirAsync(path.join(__dirname, '..', 'public/journeys'))).filter(file => {
     return path.extname(file) === '.mp3';
   }).map(file => {

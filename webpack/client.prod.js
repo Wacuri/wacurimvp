@@ -53,6 +53,12 @@ module.exports = {
     new UglifyJSPlugin({
       sourceMap: true
     }),
+		 new webpack.DefinePlugin({
+      __CLIENT__: true,
+      __SERVER__: false,
+      __DEVELOPMENT__: true,
+    }),
+    
     new ExtractTextPlugin('css/main.css'),
   ],
 };

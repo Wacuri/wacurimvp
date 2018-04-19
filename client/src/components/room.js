@@ -10,7 +10,7 @@ require('isomorphic-fetch');
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 
 if (__CLIENT__) {
-	var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
+	var { O5Session, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
 	const OT = require('@opentok/client');
 	window.state = state;
 }
@@ -167,7 +167,8 @@ class Room extends Component {
   }
 
 	render() {
-    const currentParticipant = this.state.session && state.session.participants.find(participant => participant.connectionId === this.state.session.connection.id);
+    const currentParticipant = state.session && state.session.participants.find(participant => participant.connectionId === this.state.session.connection.id);
+    console.log('GOT CURRENT', currentParticipant);
 		return (
 			<div style={{padding: 20}}>
 				<p style={{display: 'none'}}>{JSON.stringify(state.session, null, 2)}</p>
@@ -209,7 +210,7 @@ class Room extends Component {
                 {currentParticipant && currentParticipant.ready &&
                   <p>You are ready!</p>
                 }
-                {!currentParticipant || !currentParticipant.ready &&
+                {(!currentParticipant || !currentParticipant.ready) &&
                   <a className='btn btn-primary' href='#' onClick={this.onConfirmReady}>Ready?</a>
                 }
               </div>
