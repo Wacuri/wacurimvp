@@ -32,6 +32,7 @@
   "homepage": "https://github.com/tahnik/react-express-webpack-babel#readme",
   "dependencies": {
     "@opentok/client": "^2.13.2",
+    "babel-polyfill": "^6.26.0",
     "body-parser": "^1.18.2",
     "bootstrap": "4",
     "cross-env": "^5.0.5",
