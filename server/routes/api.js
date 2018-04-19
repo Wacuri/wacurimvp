@@ -9,9 +9,8 @@ import dotenv from 'dotenv';
 require('isomorphic-fetch');
 
 dotenv.config();
-console.log('GOT IT YO', process.env);
 
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGO_URL);
 
 function promisify(fn) {
   /**
