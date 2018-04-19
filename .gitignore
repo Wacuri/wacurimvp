@@ -1,6 +1,4 @@
 node_modules
 
-**/bin
-**/public
 .env
 *.swp
