@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import TokSession from '../models/tok_session';
 import TokSessionParticipant from '../models/tok_session_participant';
 import dotenv from 'dotenv';
+require('isomorphic-fetch');
 
 dotenv.config();
 
@@ -36,10 +37,12 @@ function generateToken(sessionId) {
 // TODO: switch to POST, just using GET for easier testing
 router.get('/sessions/:room', async (req, res) => {
 	const {room} = req.params;
-	const existingSession = await TokSession.findOne({room}).exec();
+	const existingSession = await TokSession.findOne({room}).lean().exec();
 	if (existingSession) {
+    const participants = await TokSessionParticipant.find({session: existingSession, present: true}).lean().exec();
+    existingSession.participants = participants;
 		res.json({
-			...existingSession.toJSON(),
+			...existingSession,
 			token: generateToken(existingSession.sessionId),
 		});
 	} else {
@@ -63,6 +66,11 @@ router.get('/sessions/:room/connections/:connection/ready', async (req, res) => 
     const participant = await TokSessionParticipant.findOne({session: existingSession, connectionId: connection});
     participant.ready = true;
     await participant.save();
+    signal(existingSession.sessionId, {type: 'ready', data: 'foo'});
+    const allReady = (await TokSessionParticipant.count({session: existingSession, ready: false, present: true})) === 0;
+    if (allReady) {
+      signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
+    }
     return res.sendStatus(200);
   }
   res.sendStsatus(200);
@@ -71,11 +79,24 @@ router.get('/sessions/:room/connections/:connection/ready', async (req, res) => 
 router.get('/journeys', async (req, res) => {
   const readdirAsync = promisify(fs.readdir)
   const journeyFiles = (await readdirAsync(path.join(__dirname, '..', 'public/journeys'))).filter(file => {
-    return file[0] != '.';
+    return path.extname(file) === '.mp3';
   }).map(file => {
-    return `${req.protocol}://${req.headers.host}/journeys/${file}`
+    return `/journeys/${file}`
   });
   res.json(journeyFiles);
+});
+
+router.put('/sessions/:room/journey', async (req, res) => {
+  console.log('UPDATE JOURNEY');
+  const {journey} = req.body;
+  const {room} = req.params;
+  const existingSession = await TokSession.findOne({room}).exec();
+	if (existingSession) {
+    existingSession.journey = journey;
+    await existingSession.save();
+    signal(existingSession.sessionId, {type: 'updatedJourney', data: journey});
+  }
+  res.sendStatus(200);
 });
 
 router.post('/event', async (req, res) => {
@@ -105,6 +126,17 @@ router.post('/event', async (req, res) => {
       break
   }
 });
+
+function signal(sessionId, data) {
+  fetch(`https://api.opentok.com/v2/project/${process.env.OPENTOK_KEY}/session/${sessionId}/signal`, {
+    headers: {
+      'X-TB-PARTNER-AUTH': `${process.env.OPENTOK_KEY}:${process.env.OPENTOK_SECRET}`
+    },
+    method: 'POST',
+    mode: 'cors',
+    body: JSON.stringify(data)
+  }).then(response => console.log(response));
+}
 
 export default router;
 
