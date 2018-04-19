@@ -167,7 +167,7 @@ class Room extends Component {
   }
 
 	render() {
-    const currentParticipant = state.session && state.session.participants.find(participant => participant.connectionId === this.state.session.connection.id);
+    const currentParticipant = this.state.session && state.session && state.session.participants.find(participant => participant.connectionId === this.state.session.connection.id);
     console.log('GOT CURRENT', currentParticipant);
 		return (
 			<div style={{padding: 20}}>
