@@ -1,5 +1,3 @@
-require('babel-register')({
-});
 const dotenv = require('dotenv');
 
 console.log('DO CONFIG YO');

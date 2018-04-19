@@ -209,7 +209,6 @@ module.exports = require("babel-polyfill/lib/index");
 "use strict";
 
 
-__webpack_require__(16)({});
 var dotenv = __webpack_require__(7);
 
 console.log('DO CONFIG YO');
@@ -217,18 +216,12 @@ dotenv.config();
 global.__CLIENT__ = false;
 global.__SERVER__ = true;
 
-var routes = __webpack_require__(17);
+var routes = __webpack_require__(16);
 
 exports = routes;
 
 /***/ }),
 /* 16 */
-/***/ (function(module, exports) {
-
-module.exports = require("babel-register");
-
-/***/ }),
-/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -242,15 +235,15 @@ var _express = __webpack_require__(3);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _bodyParser = __webpack_require__(18);
+var _bodyParser = __webpack_require__(17);
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _api = __webpack_require__(19);
+var _api = __webpack_require__(18);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _ssr = __webpack_require__(24);
+var _ssr = __webpack_require__(23);
 
 var _ssr2 = _interopRequireDefault(_ssr);
 
@@ -272,13 +265,13 @@ app.listen(process.env.PORT || 5000, function () {
 });
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
 module.exports = require("body-parser");
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -290,7 +283,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _fs = __webpack_require__(20);
+var _fs = __webpack_require__(19);
 
 var _fs2 = _interopRequireDefault(_fs);
 
@@ -302,7 +295,7 @@ var _express = __webpack_require__(3);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _opentok = __webpack_require__(21);
+var _opentok = __webpack_require__(20);
 
 var _opentok2 = _interopRequireDefault(_opentok);
 
@@ -310,11 +303,11 @@ var _mongoose = __webpack_require__(4);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _tok_session = __webpack_require__(22);
+var _tok_session = __webpack_require__(21);
 
 var _tok_session2 = _interopRequireDefault(_tok_session);
 
-var _tok_session_participant = __webpack_require__(23);
+var _tok_session_participant = __webpack_require__(22);
 
 var _tok_session_participant2 = _interopRequireDefault(_tok_session_participant);
 
@@ -695,19 +688,19 @@ function signal(sessionId, data) {
 exports.default = router;
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports) {
 
 module.exports = require("fs");
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok");
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -734,7 +727,7 @@ var TokSession = _mongoose2.default.model('TokSession', TokSessionSchema);
 exports.default = TokSession;
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -762,7 +755,7 @@ var TokSessionParticipant = _mongoose2.default.model('TokSessionParticipant', To
 exports.default = TokSessionParticipant;
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -780,7 +773,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _server = __webpack_require__(25);
+var _server = __webpack_require__(24);
 
 var _server2 = _interopRequireDefault(_server);
 
@@ -788,15 +781,15 @@ var _redux = __webpack_require__(10);
 
 var _reactRedux = __webpack_require__(1);
 
-var _reactRouter = __webpack_require__(26);
+var _reactRouter = __webpack_require__(25);
 
-var _index = __webpack_require__(27);
+var _index = __webpack_require__(26);
 
 var _index2 = _interopRequireDefault(_index);
 
 var _action_types = __webpack_require__(5);
 
-var _app = __webpack_require__(31);
+var _app = __webpack_require__(30);
 
 var _app2 = _interopRequireDefault(_app);
 
@@ -865,19 +858,19 @@ router.get('/', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom/server");
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-router");
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -889,7 +882,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(10);
 
-var _list = __webpack_require__(28);
+var _list = __webpack_require__(27);
 
 var _list2 = _interopRequireDefault(_list);
 
@@ -902,7 +895,7 @@ var rootReducer = (0, _redux.combineReducers)({
 exports.default = rootReducer;
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -916,7 +909,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _action_types = __webpack_require__(5);
 
-var _default_state = __webpack_require__(29);
+var _default_state = __webpack_require__(28);
 
 exports.default = function () {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _default_state.LISTS;
@@ -943,7 +936,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -954,7 +947,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.LISTS = undefined;
 
-var _list_items = __webpack_require__(30);
+var _list_items = __webpack_require__(29);
 
 var _list_items2 = _interopRequireDefault(_list_items);
 
@@ -964,7 +957,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var LISTS = exports.LISTS = { items: _list_items2.default, itemPreview: null, itemView: null };
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -989,7 +982,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1005,19 +998,19 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = __webpack_require__(6);
 
-var _header = __webpack_require__(32);
+var _header = __webpack_require__(31);
 
 var _header2 = _interopRequireDefault(_header);
 
-var _home = __webpack_require__(33);
+var _home = __webpack_require__(32);
 
 var _home2 = _interopRequireDefault(_home);
 
-var _list_item_view = __webpack_require__(38);
+var _list_item_view = __webpack_require__(37);
 
 var _list_item_view2 = _interopRequireDefault(_list_item_view);
 
-var _Room = __webpack_require__(40);
+var _Room = __webpack_require__(39);
 
 var _Room2 = _interopRequireDefault(_Room);
 
@@ -1037,7 +1030,7 @@ var App = function App() {
 exports.default = App;
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1068,7 +1061,7 @@ var Header = function Header() {
 exports.default = Header;
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1082,11 +1075,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _list_items = __webpack_require__(34);
+var _list_items = __webpack_require__(33);
 
 var _list_items2 = _interopRequireDefault(_list_items);
 
-var _list_item_preview = __webpack_require__(36);
+var _list_item_preview = __webpack_require__(35);
 
 var _list_item_preview2 = _interopRequireDefault(_list_item_preview);
 
@@ -1107,7 +1100,7 @@ var Home = function Home() {
 exports.default = Home;
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1121,7 +1114,7 @@ var _reactRedux = __webpack_require__(1);
 
 var _list_actions = __webpack_require__(11);
 
-var _list_items = __webpack_require__(35);
+var _list_items = __webpack_require__(34);
 
 var _list_items2 = _interopRequireDefault(_list_items);
 
@@ -1158,7 +1151,7 @@ https://facebook.github.io/react/docs/higher-order-components.html
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_list_items2.default);
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1245,7 +1238,7 @@ ListView.propTypes = {
 exports.default = ListView;
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1257,7 +1250,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _reactRedux = __webpack_require__(1);
 
-var _list_item_preview = __webpack_require__(37);
+var _list_item_preview = __webpack_require__(36);
 
 var _list_item_preview2 = _interopRequireDefault(_list_item_preview);
 
@@ -1282,7 +1275,7 @@ function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(_list_item_preview2.default);
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1361,7 +1354,7 @@ ListItemPreview.defaultProps = {
 exports.default = ListItemPreview;
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1375,7 +1368,7 @@ var _reactRedux = __webpack_require__(1);
 
 var _list_actions = __webpack_require__(11);
 
-var _list_item_view = __webpack_require__(39);
+var _list_item_view = __webpack_require__(38);
 
 var _list_item_view2 = _interopRequireDefault(_list_item_view);
 
@@ -1402,7 +1395,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_list_item_view2.default);
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1505,7 +1498,7 @@ ListItemView.defaultProps = {
 exports.default = ListItemView;
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1523,7 +1516,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactEasyState = __webpack_require__(12);
 
-var _state = __webpack_require__(41);
+var _state = __webpack_require__(40);
 
 var _state2 = _interopRequireDefault(_state);
 
@@ -1531,11 +1524,11 @@ var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _uuid = __webpack_require__(42);
+var _uuid = __webpack_require__(41);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _opentokLayoutJs = __webpack_require__(43);
+var _opentokLayoutJs = __webpack_require__(42);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1545,7 +1538,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-__webpack_require__(44).polyfill();
+__webpack_require__(43).polyfill();
 __webpack_require__(9);
 
 var _ref = {},
@@ -1557,14 +1550,14 @@ var _ref = {},
 
 
 if (__CLIENT__) {
-  var _require = __webpack_require__(45),
+  var _require = __webpack_require__(44),
       O5Session = _require.O5Session,
       OTPublisher = _require.OTPublisher,
       OTStreams = _require.OTStreams,
       OTSubscriber = _require.OTSubscriber,
       createSession = _require.createSession;
 
-  var OT = __webpack_require__(46);
+  var OT = __webpack_require__(45);
   window.state = _state2.default;
 }
 
@@ -1839,7 +1832,7 @@ var Room = function (_Component) {
 exports.default = (0, _reactEasyState.view)(Room);
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1857,31 +1850,31 @@ exports.default = (0, _reactEasyState.store)({
 });
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports) {
 
 module.exports = require("uuid");
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok-layout-js");
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports) {
 
 module.exports = require("es6-promise");
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok-react");
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports) {
 
 module.exports = require("@opentok/client");
