@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,28 +73,16 @@ module.exports = require("react");
 /* 1 */
 /***/ (function(module, exports) {
 
-module.exports = require("react-redux");
+module.exports = require("express");
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports) {
 
-module.exports = require("prop-types");
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-module.exports = require("express");
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
 module.exports = require("mongoose");
 
 /***/ }),
-/* 5 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -112,95 +100,83 @@ var LIST_ACTIONS = exports.LIST_ACTIONS = {
 };
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-router-dom");
-
-/***/ }),
-/* 7 */
+/* 4 */
 /***/ (function(module, exports) {
 
 module.exports = require("dotenv");
 
 /***/ }),
-/* 8 */
+/* 5 */
 /***/ (function(module, exports) {
 
 module.exports = require("path");
 
 /***/ }),
-/* 9 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = require("isomorphic-fetch");
 
 /***/ }),
-/* 10 */
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports = require("redux");
 
 /***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 8 */
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.clearItem = exports.addItem = exports.viewItem = exports.previewItem = undefined;
-
-var _action_types = __webpack_require__(5);
-
-var previewItem = exports.previewItem = function previewItem(name) {
-  return {
-    type: _action_types.LIST_ACTIONS.ITEM_PREVIEW,
-    name: name // shorthand for name: name
-  };
-};
-
-var viewItem = exports.viewItem = function viewItem(name) {
-  return {
-    type: _action_types.LIST_ACTIONS.ITEM_VIEW,
-    name: name
-  };
-};
-
-var addItem = exports.addItem = function addItem(item) {
-  return {
-    type: _action_types.LIST_ACTIONS.ITEM_ADD,
-    item: item // shorthand for item: item
-  };
-};
-
-var clearItem = exports.clearItem = function clearItem() {
-  return {
-    type: _action_types.LIST_ACTIONS.ITEM_CLEAR
-  };
-};
+module.exports = require("react-redux");
 
 /***/ }),
-/* 12 */
+/* 9 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-dom");
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+module.exports = require("prop-types");
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-easy-state");
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(14);
-module.exports = __webpack_require__(15);
+__webpack_require__(13);
+module.exports = __webpack_require__(14);
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-polyfill/lib/index");
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var dotenv = __webpack_require__(4);
+
+dotenv.config();
+global.__CLIENT__ = false;
+global.__SERVER__ = true;
+
+var routes = __webpack_require__(15);
+
+exports = routes;
 
 /***/ }),
 /* 15 */
@@ -209,41 +185,23 @@ module.exports = require("babel-polyfill/lib/index");
 "use strict";
 
 
-var dotenv = __webpack_require__(7);
-
-console.log('DO CONFIG YO');
-dotenv.config();
-global.__CLIENT__ = false;
-global.__SERVER__ = true;
-
-var routes = __webpack_require__(16);
-
-exports = routes;
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _path = __webpack_require__(8);
+var _path = __webpack_require__(5);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _express = __webpack_require__(3);
+var _express = __webpack_require__(1);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _bodyParser = __webpack_require__(17);
+var _bodyParser = __webpack_require__(16);
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _api = __webpack_require__(18);
+var _api = __webpack_require__(17);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _ssr = __webpack_require__(23);
+var _ssr = __webpack_require__(22);
 
 var _ssr2 = _interopRequireDefault(_ssr);
 
@@ -265,13 +223,13 @@ app.listen(process.env.PORT || 5000, function () {
 });
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = require("body-parser");
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -283,35 +241,35 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _fs = __webpack_require__(19);
+var _fs = __webpack_require__(18);
 
 var _fs2 = _interopRequireDefault(_fs);
 
-var _path = __webpack_require__(8);
+var _path = __webpack_require__(5);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _express = __webpack_require__(3);
+var _express = __webpack_require__(1);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _opentok = __webpack_require__(20);
+var _opentok = __webpack_require__(19);
 
 var _opentok2 = _interopRequireDefault(_opentok);
 
-var _mongoose = __webpack_require__(4);
+var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _tok_session = __webpack_require__(21);
+var _tok_session = __webpack_require__(20);
 
 var _tok_session2 = _interopRequireDefault(_tok_session);
 
-var _tok_session_participant = __webpack_require__(22);
+var _tok_session_participant = __webpack_require__(21);
 
 var _tok_session_participant2 = _interopRequireDefault(_tok_session_participant);
 
-var _dotenv = __webpack_require__(7);
+var _dotenv = __webpack_require__(4);
 
 var _dotenv2 = _interopRequireDefault(_dotenv);
 
@@ -321,7 +279,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-__webpack_require__(9);
+__webpack_require__(6);
 
 _dotenv2.default.config();
 
@@ -363,7 +321,7 @@ function generateToken(sessionId) {
 
 // TODO: switch to POST, just using GET for easier testing
 router.get('/sessions/:room', function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(req, res) {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(req, res) {
     var room, existingSession, participants;
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
@@ -396,7 +354,7 @@ router.get('/sessions/:room', function () {
 
           case 12:
             opentok.createSession(function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(err, session) {
+              var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee(err, session) {
                 var newSession;
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                   while (1) {
@@ -447,7 +405,7 @@ router.get('/sessions/:room', function () {
 }());
 
 router.get('/sessions/:room/connections/:connection/ready', function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res) {
+  var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(req, res) {
     var _req$params, room, connection, existingSession, participant, allReady;
 
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
@@ -507,20 +465,17 @@ router.get('/sessions/:room/connections/:connection/ready', function () {
 }());
 
 router.get('/journeys', function () {
-  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(req, res) {
+  var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(req, res) {
     var readdirAsync, journeyFiles;
     return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
             readdirAsync = promisify(_fs2.default.readdir);
-
-            console.log('I AM', __dirname);
-            console.log('TRY DA READ', _path2.default.join('..', 'public/journeys'));
-            _context4.next = 5;
+            _context4.next = 3;
             return readdirAsync(_path2.default.join(__dirname, '..', 'public/journeys'));
 
-          case 5:
+          case 3:
             _context4.t0 = function (file) {
               return _path2.default.extname(file) === '.mp3';
             };
@@ -533,7 +488,7 @@ router.get('/journeys', function () {
 
             res.json(journeyFiles);
 
-          case 9:
+          case 7:
           case 'end':
             return _context4.stop();
         }
@@ -547,7 +502,7 @@ router.get('/journeys', function () {
 }());
 
 router.put('/sessions/:room/journey', function () {
-  var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(req, res) {
+  var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(req, res) {
     var journey, room, existingSession;
     return regeneratorRuntime.wrap(function _callee5$(_context5) {
       while (1) {
@@ -591,7 +546,7 @@ router.put('/sessions/:room/journey', function () {
 }());
 
 router.post('/event', function () {
-  var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res) {
+  var _ref6 = _asyncToGenerator(regeneratorRuntime.mark(function _callee6(req, res) {
     var _req$body, sessionId, connection, session, participantExists, participant, _participant;
 
     return regeneratorRuntime.wrap(function _callee6$(_context6) {
@@ -688,19 +643,19 @@ function signal(sessionId, data) {
 exports.default = router;
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = require("fs");
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok");
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -710,7 +665,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _mongoose = __webpack_require__(4);
+var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
@@ -727,7 +682,7 @@ var TokSession = _mongoose2.default.model('TokSession', TokSessionSchema);
 exports.default = TokSession;
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -737,7 +692,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _mongoose = __webpack_require__(4);
+var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
@@ -755,7 +710,7 @@ var TokSessionParticipant = _mongoose2.default.model('TokSessionParticipant', To
 exports.default = TokSessionParticipant;
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -765,7 +720,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _express = __webpack_require__(3);
+var _express = __webpack_require__(1);
 
 var _express2 = _interopRequireDefault(_express);
 
@@ -773,23 +728,23 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _server = __webpack_require__(24);
+var _server = __webpack_require__(23);
 
 var _server2 = _interopRequireDefault(_server);
 
-var _redux = __webpack_require__(10);
+var _redux = __webpack_require__(7);
 
-var _reactRedux = __webpack_require__(1);
+var _reactRedux = __webpack_require__(8);
 
-var _reactRouter = __webpack_require__(25);
+var _reactRouter = __webpack_require__(24);
 
-var _index = __webpack_require__(26);
+var _index = __webpack_require__(25);
 
 var _index2 = _interopRequireDefault(_index);
 
-var _action_types = __webpack_require__(5);
+var _action_types = __webpack_require__(3);
 
-var _app = __webpack_require__(30);
+var _app = __webpack_require__(29);
 
 var _app2 = _interopRequireDefault(_app);
 
@@ -858,19 +813,19 @@ router.get('/', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom/server");
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-router");
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -880,9 +835,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _redux = __webpack_require__(10);
+var _redux = __webpack_require__(7);
 
-var _list = __webpack_require__(27);
+var _list = __webpack_require__(26);
 
 var _list2 = _interopRequireDefault(_list);
 
@@ -895,7 +850,7 @@ var rootReducer = (0, _redux.combineReducers)({
 exports.default = rootReducer;
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -907,9 +862,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _action_types = __webpack_require__(5);
+var _action_types = __webpack_require__(3);
 
-var _default_state = __webpack_require__(28);
+var _default_state = __webpack_require__(27);
 
 exports.default = function () {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _default_state.LISTS;
@@ -936,7 +891,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -947,7 +902,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.LISTS = undefined;
 
-var _list_items = __webpack_require__(29);
+var _list_items = __webpack_require__(28);
 
 var _list_items2 = _interopRequireDefault(_list_items);
 
@@ -957,7 +912,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var LISTS = exports.LISTS = { items: _list_items2.default, itemPreview: null, itemView: null };
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -982,7 +937,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -996,21 +951,21 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(6);
+var _reactRouterDom = __webpack_require__(9);
 
-var _header = __webpack_require__(31);
+var _header = __webpack_require__(30);
 
 var _header2 = _interopRequireDefault(_header);
 
-var _home = __webpack_require__(32);
+var _home = __webpack_require__(31);
 
 var _home2 = _interopRequireDefault(_home);
 
-var _list_item_view = __webpack_require__(37);
+var _list_item_view = __webpack_require__(33);
 
 var _list_item_view2 = _interopRequireDefault(_list_item_view);
 
-var _Room = __webpack_require__(39);
+var _Room = __webpack_require__(36);
 
 var _Room2 = _interopRequireDefault(_Room);
 
@@ -1030,7 +985,7 @@ var App = function App() {
 exports.default = App;
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1053,7 +1008,7 @@ var Header = function Header() {
     _react2.default.createElement(
       "h1",
       null,
-      "Wacuri!"
+      "Wacuri! testing "
     )
   );
 };
@@ -1061,7 +1016,7 @@ var Header = function Header() {
 exports.default = Header;
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1075,13 +1030,9 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _list_items = __webpack_require__(33);
+var _generator = __webpack_require__(32);
 
-var _list_items2 = _interopRequireDefault(_list_items);
-
-var _list_item_preview = __webpack_require__(35);
-
-var _list_item_preview2 = _interopRequireDefault(_list_item_preview);
+var _generator2 = _interopRequireDefault(_generator);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1092,12 +1043,56 @@ var Home = function Home() {
     _react2.default.createElement(
       'h3',
       null,
-      'Amazing things to come.'
+      'Amazing things to come. Hi there'
     )
   );
 };
 
 exports.default = Home;
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Generator = function (_Component) {
+  _inherits(Generator, _Component);
+
+  function Generator() {
+    _classCallCheck(this, Generator);
+
+    return _possibleConstructorReturn(this, (Generator.__proto__ || Object.getPrototypeOf(Generator)).apply(this, arguments));
+  }
+
+  _createClass(Generator, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        'The Generator'
+      );
+    }
+  }]);
+
+  return Generator;
+}(_react.Component);
 
 /***/ }),
 /* 33 */
@@ -1110,265 +1105,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _reactRedux = __webpack_require__(1);
+var _reactRedux = __webpack_require__(8);
 
-var _list_actions = __webpack_require__(11);
+var _list_actions = __webpack_require__(34);
 
-var _list_items = __webpack_require__(34);
-
-var _list_items2 = _interopRequireDefault(_list_items);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/*
-This is a redux specific function.
-What is does is: It gets the state specified in here from the global redux state.
-For example, here we are retrieving the list of items from the redux store.
-Whenever this list changes, any component that is using this list of item will re-render.
- */
-var mapStateToProps = function mapStateToProps(state) {
-  return {
-    listItems: state.list.items
-  };
-};
-
-/*
-This is a redux specific function.
-http://redux.js.org/docs/api/bindActionCreators.html
- */
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {
-    previewItem: function previewItem(name) {
-      dispatch((0, _list_actions.previewItem)(name));
-    }
-  };
-};
-
-/*
-Here we are creating a Higher order component
-https://facebook.github.io/react/docs/higher-order-components.html
- */
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_list_items2.default);
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(2);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ListView = function (_Component) {
-  _inherits(ListView, _Component);
-
-  function ListView() {
-    _classCallCheck(this, ListView);
-
-    return _possibleConstructorReturn(this, (ListView.__proto__ || Object.getPrototypeOf(ListView)).apply(this, arguments));
-  }
-
-  _createClass(ListView, [{
-    key: 'renderList',
-    value: function renderList() {
-      var _props = this.props,
-          listItems = _props.listItems,
-          previewItem = _props.previewItem;
-
-      return Object.keys(listItems).map(function (key) {
-        var item = listItems[key];
-        return _react2.default.createElement(
-          'li',
-          {
-            key: item.name
-          },
-          _react2.default.createElement(
-            'button',
-            { onClick: function onClick() {
-                return previewItem(item.name);
-              } },
-            item.name
-          )
-        );
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        { className: 'list_items' },
-        _react2.default.createElement(
-          'ul',
-          null,
-          this.renderList()
-        )
-      );
-    }
-  }]);
-
-  return ListView;
-}(_react.Component);
-
-ListView.propTypes = {
-  listItems: _propTypes2.default.object.isRequired,
-  previewItem: _propTypes2.default.func.isRequired
-};
-
-exports.default = ListView;
-
-/***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _reactRedux = __webpack_require__(1);
-
-var _list_item_preview = __webpack_require__(36);
-
-var _list_item_preview2 = _interopRequireDefault(_list_item_preview);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/*
- This is a redux specific function.
- What is does is: It gets the state specified in here from the global redux state.
- For example, here we are retrieving the list of items from the redux store.
- Whenever this list changes, any component that is using this list of item will re-render.
- */
-function mapStateToProps(state) {
-  return {
-    item: state.list.itemPreview
-  };
-}
-
-/*
- Here we are creating a Higher order component
- https://facebook.github.io/react/docs/higher-order-components.html
- */
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(_list_item_preview2.default);
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(2);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _reactRouterDom = __webpack_require__(6);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ListItemPreview = function ListItemPreview(_ref) {
-  var item = _ref.item;
-
-  if (!item) {
-    return _react2.default.createElement(
-      'div',
-      { className: 'preview' },
-      _react2.default.createElement(
-        'h3',
-        null,
-        'Select an item'
-      ),
-      _react2.default.createElement(
-        'p',
-        null,
-        'Description will appear here'
-      )
-    );
-  }
-  return _react2.default.createElement(
-    'div',
-    { className: 'preview' },
-    _react2.default.createElement(
-      'h2',
-      null,
-      ' ',
-      item.name,
-      ' '
-    ),
-    _react2.default.createElement(
-      'p',
-      null,
-      item.description
-    ),
-    _react2.default.createElement(
-      _reactRouterDom.Link,
-      { to: 'view/' + item.name },
-      _react2.default.createElement(
-        'button',
-        { type: 'button', className: 'btn btn-primary' },
-        'Read More'
-      )
-    )
-  );
-};
-
-ListItemPreview.propTypes = {
-  item: _propTypes2.default.object
-};
-
-ListItemPreview.defaultProps = {
-  item: null
-};
-
-exports.default = ListItemPreview;
-
-/***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _reactRedux = __webpack_require__(1);
-
-var _list_actions = __webpack_require__(11);
-
-var _list_item_view = __webpack_require__(38);
+var _list_item_view = __webpack_require__(35);
 
 var _list_item_view2 = _interopRequireDefault(_list_item_view);
 
@@ -1395,7 +1136,48 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_list_item_view2.default);
 
 /***/ }),
-/* 38 */
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.clearItem = exports.addItem = exports.viewItem = exports.previewItem = undefined;
+
+var _action_types = __webpack_require__(3);
+
+var previewItem = exports.previewItem = function previewItem(name) {
+  return {
+    type: _action_types.LIST_ACTIONS.ITEM_PREVIEW,
+    name: name // shorthand for name: name
+  };
+};
+
+var viewItem = exports.viewItem = function viewItem(name) {
+  return {
+    type: _action_types.LIST_ACTIONS.ITEM_VIEW,
+    name: name
+  };
+};
+
+var addItem = exports.addItem = function addItem(item) {
+  return {
+    type: _action_types.LIST_ACTIONS.ITEM_ADD,
+    item: item // shorthand for item: item
+  };
+};
+
+var clearItem = exports.clearItem = function clearItem() {
+  return {
+    type: _action_types.LIST_ACTIONS.ITEM_CLEAR
+  };
+};
+
+/***/ }),
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1411,11 +1193,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(2);
+var _propTypes = __webpack_require__(10);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRouterDom = __webpack_require__(6);
+var _reactRouterDom = __webpack_require__(9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1498,7 +1280,7 @@ ListItemView.defaultProps = {
 exports.default = ListItemView;
 
 /***/ }),
-/* 39 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1514,21 +1296,21 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactEasyState = __webpack_require__(12);
+var _reactEasyState = __webpack_require__(11);
 
-var _state = __webpack_require__(40);
+var _state = __webpack_require__(37);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _propTypes = __webpack_require__(2);
+var _propTypes = __webpack_require__(10);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _uuid = __webpack_require__(41);
+var _uuid = __webpack_require__(38);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _opentokLayoutJs = __webpack_require__(42);
+var _opentokLayoutJs = __webpack_require__(39);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1538,8 +1320,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-__webpack_require__(43).polyfill();
-__webpack_require__(9);
+__webpack_require__(40).polyfill();
+__webpack_require__(6);
 
 var _ref = {},
     OTSession = _ref.OTSession,
@@ -1550,14 +1332,14 @@ var _ref = {},
 
 
 if (__CLIENT__) {
-  var _require = __webpack_require__(44),
-      O5Session = _require.O5Session,
+  var _require = __webpack_require__(41),
+      OTSession = _require.OTSession,
       OTPublisher = _require.OTPublisher,
       OTStreams = _require.OTStreams,
       OTSubscriber = _require.OTSubscriber,
       createSession = _require.createSession;
 
-  var OT = __webpack_require__(45);
+  var OT = __webpack_require__(42);
   window.state = _state2.default;
 }
 
@@ -1630,7 +1412,7 @@ var Room = function (_Component) {
       }).then(function (json) {
         _state2.default.session = json;
         _this2.sessionHelper = createSession({
-          apiKey: '46102002',
+          apiKey: "46102002", //TODO: remove hard-code process.env.OPENTOK_KEY
           sessionId: _state2.default.session.sessionId,
           token: _state2.default.session.token,
           onConnect: function onConnect() {
@@ -1653,19 +1435,19 @@ var Room = function (_Component) {
             event: 'connectionDestroyed'
           };
           console.log('data is', data);
-          // fetch(`/api/event`, {
-          //   body: JSON.stringify(data), // must match 'Content-Type' header
-          //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          //   credentials: 'same-origin', // include, same-origin, *omit
-          //   headers: {
-          //     'user-agent': 'Mozilla/4.0 MDN Example',
-          //     'content-type': 'application/json'
-          //   },
-          //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          //   mode: 'cors', // no-cors, cors, *same-origin
-          //   redirect: 'follow', // manual, *follow, error
-          //   referrer: 'no-referrer', // *client, no-referrer
-          // });
+          fetch('/api/event', {
+            body: JSON.stringify(data), // must match 'Content-Type' header
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, same-origin, *omit
+            headers: {
+              'user-agent': 'Mozilla/4.0 MDN Example',
+              'content-type': 'application/json'
+            },
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, cors, *same-origin
+            redirect: 'follow', // manual, *follow, error
+            referrer: 'no-referrer' // *client, no-referrer
+          });
           _this2.refreshSession();
         });
         _this2.sessionHelper.session.on("connectionCreated", function (event) {
@@ -1678,19 +1460,19 @@ var Room = function (_Component) {
             event: 'connectionCreated'
           };
           console.log('data is', data);
-          // fetch(`/api/event`, {
-          //   body: JSON.stringify(data), // must match 'Content-Type' header
-          //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          //   credentials: 'same-origin', // include, same-origin, *omit
-          //   headers: {
-          //     'user-agent': 'Mozilla/4.0 MDN Example',
-          //     'content-type': 'application/json'
-          //   },
-          //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          //   mode: 'cors', // no-cors, cors, *same-origin
-          //   redirect: 'follow', // manual, *follow, error
-          //   referrer: 'no-referrer', // *client, no-referrer
-          // });
+          fetch('/api/event', {
+            body: JSON.stringify(data), // must match 'Content-Type' header
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, same-origin, *omit
+            headers: {
+              'user-agent': 'Mozilla/4.0 MDN Example',
+              'content-type': 'application/json'
+            },
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, cors, *same-origin
+            redirect: 'follow', // manual, *follow, error
+            referrer: 'no-referrer' // *client, no-referrer
+          });
           _this2.refreshSession();
         });
         _this2.sessionHelper.session.on("signal", function (event) {
@@ -1726,7 +1508,7 @@ var Room = function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      var currentParticipant = _state2.default.session && _state2.default.session.participants.find(function (participant) {
+      var currentParticipant = this.state.session && _state2.default.session && _state2.default.session.participants.find(function (participant) {
         return participant.connectionId === _this3.state.session.connection.id;
       });
       console.log('GOT CURRENT', currentParticipant);
@@ -1832,7 +1614,7 @@ var Room = function (_Component) {
 exports.default = (0, _reactEasyState.view)(Room);
 
 /***/ }),
-/* 40 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1842,7 +1624,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _reactEasyState = __webpack_require__(12);
+var _reactEasyState = __webpack_require__(11);
 
 exports.default = (0, _reactEasyState.store)({
   session: null,
@@ -1850,31 +1632,31 @@ exports.default = (0, _reactEasyState.store)({
 });
 
 /***/ }),
-/* 41 */
+/* 38 */
 /***/ (function(module, exports) {
 
 module.exports = require("uuid");
 
 /***/ }),
-/* 42 */
+/* 39 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok-layout-js");
 
 /***/ }),
-/* 43 */
+/* 40 */
 /***/ (function(module, exports) {
 
 module.exports = require("es6-promise");
 
 /***/ }),
-/* 44 */
+/* 41 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok-react");
 
 /***/ }),
-/* 45 */
+/* 42 */
 /***/ (function(module, exports) {
 
 module.exports = require("@opentok/client");

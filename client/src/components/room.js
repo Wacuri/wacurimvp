@@ -285,4 +285,3 @@ class Room extends Component {
 }
 
 export default view(Room);
-
