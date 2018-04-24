@@ -29,7 +29,11 @@ module.exports = {
       "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
     },
 		proxy: {
+<<<<<<< HEAD
       "/api": "http://localhost:5000/api/"
+=======
+			"/api": "http://localhost:8080"
+>>>>>>> Updated local dev files to reference webpack server files
 		},
 		stats: {
 			all: false,
@@ -68,7 +72,7 @@ module.exports = {
         use: [
           {
             loader: 'file-loader',
-            options: {}  
+            options: {}
           }
         ]
       },
