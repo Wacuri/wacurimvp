@@ -8,7 +8,8 @@ module.exports = {
   context: path.join(__dirname, '../server'),
   devtool: 'source-map',
   entry: [
-    './routes/index.js',
+    'babel-polyfill/lib/index',
+    './index.js',
   ],
   target: 'node',
   output: {
@@ -42,14 +43,19 @@ module.exports = {
       },
     ],
   },
+  target: 'node',
+  node: {
+    __dirname: false,
+    __filename: false,
+  },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
-    }),
-    new UglifyJSPlugin({
-      sourceMap: true
-    }),
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     'NODE_ENV': JSON.stringify('production')
+    //   }
+    // }),
+    // new UglifyJSPlugin({
+    //   sourceMap: true
+    // }),
   ]
 };
