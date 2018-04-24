@@ -8,7 +8,7 @@ module.exports = {
   devtool: 'inline-source-map',
   entry: [
     'react-hot-loader/patch',
-    'webpack-dev-server/client?https://11eb2913.ngrok.io',
+    'webpack-dev-server/client?http://localhost:8080',
     'webpack/hot/only-dev-server',
     './src/index.js',
     './res/scss/main.scss',
@@ -16,11 +16,11 @@ module.exports = {
   output: {
     path: path.join(__dirname, '../server/public'),
     filename: './js/index.js',
-		publicPath: 'https://11eb2913.ngrok.io/',
+		publicPath: 'http://localhost:8080',
   },
   devServer: {
     hot: true,
-		publicPath: 'https://11eb2913.ngrok.io/',
+		publicPath: 'http://localhost:8080',
 		historyApiFallback: true,
     disableHostCheck: true,
 		headers: {
@@ -29,7 +29,7 @@ module.exports = {
       "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
     },
 		proxy: {
-			"/api": "https://ed44dc35.ngrok.io/api"
+			"/api": "http://localhost:8080"
 		},
 		stats: {
 			all: false,
@@ -68,7 +68,7 @@ module.exports = {
         use: [
           {
             loader: 'file-loader',
-            options: {}  
+            options: {}
           }
         ]
       },
