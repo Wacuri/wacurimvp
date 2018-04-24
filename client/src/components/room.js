@@ -10,7 +10,7 @@ require('isomorphic-fetch');
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 
 if (__CLIENT__) {
-	var { O5Session, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
+	var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
 	const OT = require('@opentok/client');
 	window.state = state;
 }
