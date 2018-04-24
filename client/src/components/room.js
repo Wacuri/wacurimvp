@@ -41,7 +41,7 @@ class Room extends Component {
 			.then(json => {
 				state.session = json;
         this.sessionHelper = createSession({
-          apiKey: '46100042',
+          apiKey: "46102002", //TODO: remove hard-code process.env.OPENTOK_KEY
           sessionId: state.session.sessionId,
           token: state.session.token,
           onConnect: () => {
@@ -64,19 +64,19 @@ class Room extends Component {
             event: 'connectionDestroyed',
           }
           console.log('data is', data);
-          // fetch(`/api/event`, {
-          //   body: JSON.stringify(data), // must match 'Content-Type' header
-          //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          //   credentials: 'same-origin', // include, same-origin, *omit
-          //   headers: {
-          //     'user-agent': 'Mozilla/4.0 MDN Example',
-          //     'content-type': 'application/json'
-          //   },
-          //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          //   mode: 'cors', // no-cors, cors, *same-origin
-          //   redirect: 'follow', // manual, *follow, error
-          //   referrer: 'no-referrer', // *client, no-referrer
-          // });
+          fetch(`/api/event`, {
+            body: JSON.stringify(data), // must match 'Content-Type' header
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, same-origin, *omit
+            headers: {
+              'user-agent': 'Mozilla/4.0 MDN Example',
+              'content-type': 'application/json'
+            },
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, cors, *same-origin
+            redirect: 'follow', // manual, *follow, error
+            referrer: 'no-referrer', // *client, no-referrer
+          });
           this.refreshSession();
         });
         this.sessionHelper.session.on("connectionCreated", (event) => {
@@ -89,19 +89,19 @@ class Room extends Component {
             event: 'connectionCreated',
           }
           console.log('data is', data);
-          // fetch(`/api/event`, {
-          //   body: JSON.stringify(data), // must match 'Content-Type' header
-          //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          //   credentials: 'same-origin', // include, same-origin, *omit
-          //   headers: {
-          //     'user-agent': 'Mozilla/4.0 MDN Example',
-          //     'content-type': 'application/json'
-          //   },
-          //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          //   mode: 'cors', // no-cors, cors, *same-origin
-          //   redirect: 'follow', // manual, *follow, error
-          //   referrer: 'no-referrer', // *client, no-referrer
-          // });
+          fetch(`/api/event`, {
+            body: JSON.stringify(data), // must match 'Content-Type' header
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, same-origin, *omit
+            headers: {
+              'user-agent': 'Mozilla/4.0 MDN Example',
+              'content-type': 'application/json'
+            },
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, cors, *same-origin
+            redirect: 'follow', // manual, *follow, error
+            referrer: 'no-referrer', // *client, no-referrer
+          });
           this.refreshSession();
         });
         this.sessionHelper.session.on("signal", (event) => {
