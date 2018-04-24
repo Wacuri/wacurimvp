@@ -1,10 +1,10 @@
 import React from 'react';
-import ListItems from '../containers/list_items';
-import ListItemPreview from '../containers/list_item_preview';
+import Generator from './generator'
 
 const Home = () => (
   <div className="home">
-    <h3>Amazing things to come.</h3>
+    <h3>Amazing things to come. Hi there</h3>
+    <Generator />
   </div>
 );
 
