@@ -1630,7 +1630,7 @@ var Room = function (_Component) {
       }).then(function (json) {
         _state2.default.session = json;
         _this2.sessionHelper = createSession({
-          apiKey: '46100042',
+          apiKey: '46102002',
           sessionId: _state2.default.session.sessionId,
           token: _state2.default.session.token,
           onConnect: function onConnect() {
