@@ -17,11 +17,12 @@ export default class GeneratorForm extends Component {
       return(
         <div>
           <form>
-            Give your room a name <br />
+            <h3>Give your room a name</h3>
             <input type="text" id="session_link" />
-            <br />
-            <input type="button" value="Create a link" onClick={this.createSessionLink} />
-            or <a href='#'>Generate a name</a>
+            <p>
+              <input type="button" value="Create a link" onClick={this.createSessionLink} />
+              &nbsp; or <a href='#'>Generate a name</a>
+            </p>
           </form>
         </div>
       )
