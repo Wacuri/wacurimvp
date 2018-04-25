@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-export default class Generator extends Component {
+export default class GeneratorForm extends Component {
 
   constructor(props){
     super(props)
@@ -17,9 +17,11 @@ export default class Generator extends Component {
       return(
         <div>
           <form>
-            <input type="button" value="Create a session link" onClick={this.createSessionLink} />
-            <br />
+            Give your room a name <br />
             <input type="text" id="session_link" />
+            <br />
+            <input type="button" value="Create a link" onClick={this.createSessionLink} />
+            or <a href='#'>Generate a name</a>
           </form>
         </div>
       )
