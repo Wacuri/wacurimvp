@@ -1,10 +1,11 @@
 import React from 'react';
-import Generator from './generator_form'
+import GeneratorForm from './generator_form'
+import SessionInfo from './session_info'
 
 const Home = () => (
   <div className="home">
-    <h3>Amazing things to come.</h3>
-    <Generator />
+    <GeneratorForm />
+    <SessionInfo />
   </div>
 );
 
