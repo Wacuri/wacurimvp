@@ -1,11 +1,13 @@
 import React, {Component} from 'react'
+import SessionInfo from './session_info'
 
 export default class GeneratorForm extends Component {
 
   constructor(props){
     super(props)
     this.state = {
-      sessionLinkName: ''
+      sessionLinkName: '',
+      sessionLinkUrl: ''
     }
 
     this.handleNameChange = this.handleNameChange.bind(this)
@@ -14,8 +16,7 @@ export default class GeneratorForm extends Component {
   }
 
   createSessionLink() {
-    console.log(this.urlFriendlyName(this.state.sessionLinkName))
-    return this.urlFriendlyName(this.state.sessionLinkName)
+    this.setState({sessionLinkUrl: this.urlFriendlyName(this.state.sessionLinkName) })
   }
 
   handleNameChange(event) {
@@ -32,12 +33,13 @@ export default class GeneratorForm extends Component {
         <div>
           <form>
             <h3>Give your room a name</h3>
-            <input type="text" id="session_link" onChange={this.handleNameChange} />
+            <input type="text" id="session_link" onChange={this.handleNameChange} /> &nbsp; or <a href='#'>Generate a name</a>
             <p>
-              <input type="button" value="Create a link" onClick={this.createSessionLink} />
-              &nbsp; or <a href='#'>Generate a name</a>
+              <input type="button" value="Create a session" onClick={this.createSessionLink} />
+
             </p>
           </form>
+          <SessionInfo sessionLink={this.state.sessionLinkUrl} />
         </div>
       )
   }
