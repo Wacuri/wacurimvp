@@ -7,8 +7,8 @@ export default class EventMessage extends Component {
 
   render() {
     return (
-      <div>
-        A wonderful message is on its way...
+      <div style={{ backgroundColor: '#fc9' }}>
+        {this.props.message} {this.props.message === undefined ? "" : (<a href={this.props.sessionUrl} target='_blank'>Join Now</a>)}
       </div>
     )
   }

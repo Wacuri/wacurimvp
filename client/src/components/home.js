@@ -113,7 +113,8 @@ export default class Home extends Component {
             console.log("**** CAPTURED the journey request !! ")
             this.setState({
               displayMessageVisible: true,
-              displayMessageText: 'Temp text that will be replaced that includes a link to the journey'
+              displayMessageText: "George has created a session 'Daily Jetsons Meditation'.", //TEMP hard coded
+              sessionUrl: '/another-jetsons-url'
             });
           }
         });
@@ -139,7 +140,7 @@ export default class Home extends Component {
   render() {
     return (
       <div className="home">
-        <EventMessage />
+        <EventMessage message={this.state.displayMessageText} sessionUrl={this.state.sessionUrl} />
         <GeneratorForm />
       </div>
       )
