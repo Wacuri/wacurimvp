@@ -32,8 +32,15 @@ export default class GeneratorForm extends Component {
       return(
         <div>
           <form>
-            <h3>Give your room a name</h3>
-            <input type="text" id="session_link" onChange={this.handleNameChange} /> &nbsp; or <a href='#'>Generate a name</a>
+            <h3>Enter Session Details</h3>
+            <p>
+              Give your room a name:<br/>
+              <input type="text" id="session_link" onChange={this.handleNameChange} /> &nbsp; or <a href='#'>Generate a name</a>
+            </p>
+            <p>
+              Description (optional):<br/>
+              <textarea id="session_description" rows="2" cols="25"></textarea>
+            </p>
             <p>
               <input type="button" value="Create a session" onClick={this.createSessionLink} />
 
