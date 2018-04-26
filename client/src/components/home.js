@@ -106,9 +106,11 @@ export default class Home extends Component {
 
         this.sessionHelper.session.on("signal", (event) => {
           console.log("Signal sent from connection ", event);
-          this.refreshSession();
+          console.log("Signal type", event.type);
+          // this.refreshSession(); // FIXME Error: home.js:110 Uncaught TypeError: _this2.refreshSession is not a function
 
           if (event.type === 'signal:displayJourneyRequest') {
+            console.log("**** CAPTURED the journey request !! ")
             this.setState({
               displayMessageVisible: true,
               displayMessageText: 'Temp text that will be replaced that includes a link to the journey'

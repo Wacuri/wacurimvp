@@ -59,6 +59,19 @@ router.get('/sessions/:room', async (req, res) => {
 	}
 });
 
+// TEMP: Use get for convenience. hardcode temp-home-location for the room
+// Trigger a general announcement to everyone
+router.get('/sessions/test/temp-home-location', async (req, res) => {
+  // const {room, connection} = req.params;
+  const existingSession = await TokSession.findOne({room:'temp-home-location'}).exec();
+  if (existingSession) {
+  console.log("**** SENDING SIGNAL")
+  signal(existingSession.sessionId, {type: 'displayJourneyRequest', data: 'Rob has started a session. Join him (link)'});
+  return res.sendStatus(200);
+  }
+  res.sendStatus(200);
+});
+
 router.get('/sessions/:room/connections/:connection/ready', async (req, res) => {
   const {room, connection} = req.params;
   const existingSession = await TokSession.findOne({room}).exec();
@@ -73,7 +86,7 @@ router.get('/sessions/:room/connections/:connection/ready', async (req, res) => 
     }
     return res.sendStatus(200);
   }
-  res.sendStsatus(200);
+  res.sendStatus(200);
 });
 
 router.get('/journeys', async (req, res) => {
@@ -114,7 +127,9 @@ router.post('/event', async (req, res) => {
   res.sendStatus(200);
   const {sessionId, connection} = req.body;
   const session = await TokSession.findOne({sessionId}).exec();
-  
+
+  console.log("*******" + req.body)
+
   switch(req.body.event) {
     case 'connectionCreated':
       if (session) {
