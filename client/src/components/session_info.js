@@ -5,14 +5,19 @@ export default class SessionInfo extends Component {
   constructor(props){
     super(props)
     this.state = {
-      // sessionLinkName: 'placeholder-link' //or something generated randomly
       sessionLinkName: 'Reasonable Default',
-      sessionLinkUrl: 'reasonable-default' //or something generated randomly
+      sessionLinkUrl: 'reasonable-default'
     }
+
+    this.jumpToSession = this.jumpToSession.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({ sessionLinkUrl: nextProps.sessionLink });
+  }
+
+  jumpToSession() {
+    window.open(this.state.sessionLinkUrl, "_blank")
   }
 
   // TODO: npm install --save react@^16.2.0 react-dom@^16.2.0 for getDerivedstateFromProps
