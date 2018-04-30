@@ -58,7 +58,17 @@ export default class Home extends Component {
               id: event.connection.id
             },
             event: 'connectionDestroyed',
+
           }
+
+          const updatedConnectionCount = this.state.totalConnectionsCreated - 1
+          this.setState({totalConnectionsCreated: updatedConnectionCount})
+
+          let newData = [...this.state.connectedUsers]
+          let index = newData.indexOf(event.connection.id)
+          newData.splice(index, 1)
+          this.setState({connectedUsers: newData})
+
           console.log('data is', data);
           // fetch(`/api/event`, {
           //   body: JSON.stringify(data), // must match 'Content-Type' header
@@ -73,7 +83,7 @@ export default class Home extends Component {
           //   redirect: 'follow', // manual, *follow, error
           //   referrer: 'no-referrer', // *client, no-referrer
           // });
-          this.refreshSession();
+          // this.refreshSession();
         });
 
 

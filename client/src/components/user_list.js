@@ -7,6 +7,7 @@ export default class UserList extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({ userCount: nextProps.totalConnectionsCreated });
+    this.setState({ userIds: nextProps.connectedUsers });
   }
 
 
