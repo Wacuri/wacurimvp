@@ -5,14 +5,19 @@ export default class UserList extends Component {
     super(props);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ userCount: nextProps.totalConnectionsCreated });
+  }
+
+
   render() {
     return (
-      <div>
+      <div style={{float:'right', paddingRight:'50px'}}>
+        <h4>Current Users ({this.props.userCount})</h4>
         <ul>
-          <li>Me</li>
-          <li>Person 1</li>
-          <li>Person 2</li>
-          <li>Person 3</li>
+          {this.props.userIds.map(function(name){
+            return <li key={name}>{name}</li>;
+          })}
         </ul>
       </div>
     )

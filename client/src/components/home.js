@@ -22,6 +22,8 @@ export default class Home extends Component {
       streams: [],
       publisherId: '',
       session: null,
+      totalConnectionsCreated: 0,
+      connectedUsers: []
     }
     this.publisher = {};
   }
@@ -78,6 +80,9 @@ export default class Home extends Component {
 
         this.sessionHelper.session.on("connectionCreated", (event) => {
           console.log('CREATED', event);
+          const updatedConnectionCount = this.state.totalConnectionsCreated + 1
+          this.setState({totalConnectionsCreated: updatedConnectionCount})
+          console.log('**** Total connections: ' + this.state.totalConnectionsCreated)
           const data = {
             sessionId: this.sessionHelper.session.sessionId,
             connection: {
@@ -85,6 +90,8 @@ export default class Home extends Component {
             },
             event: 'connectionCreated',
           }
+
+          this.setState({ connectedUsers: [...this.state.connectedUsers, event.connection.id] })
           console.log('data is', data);
           // fetch(`/api/event`, {
           //   body: JSON.stringify(data), // must match 'Content-Type' header
@@ -140,6 +147,7 @@ export default class Home extends Component {
   render() {
     return (
       <div className="home">
+        <UserList userCount={this.state.totalConnectionsCreated} userIds={this.state.connectedUsers} />
         <EventMessage message={this.state.displayMessageText} sessionUrl={this.state.sessionUrl} />
         <GeneratorForm />
       </div>
