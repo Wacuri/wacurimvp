@@ -17,6 +17,11 @@ export default class GeneratorForm extends Component {
 
   createSessionLink() {
     this.setState({sessionLinkUrl: this.urlFriendlyName(this.state.sessionLinkName) })
+    fetch('/api/sessions/test/temp-home-location')
+  }
+
+  sendNotifications() {
+
   }
 
   handleNameChange(event) {
