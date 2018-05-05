@@ -7,6 +7,7 @@ import { StaticRouter } from 'react-router';
 import reducers from '../../client/src/reducers/index';
 import { LIST_ACTIONS } from '../../client/src/consts/action_types';
 import App from '../../client/src/app';
+console.log(process.env);
 
 const router = express.Router();
 
@@ -63,7 +64,7 @@ router.get('/', (req, res) => {
     });
     res.end();
   } else {
-    res.status(200).render('index.ejs', {
+    res.status(200).render(process.env.NODE_ENV === 'production' ? 'index.ejs' : 'index.dev.ejs', {
       html,
       script: JSON.stringify(finalState),
     });

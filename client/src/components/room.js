@@ -170,27 +170,29 @@ class Room extends Component {
     const currentParticipant = this.state.session && state.session && state.session.participants.find(participant => participant.connectionId === this.state.session.connection.id);
     console.log('GOT CURRENT', currentParticipant);
 		return (
-			<div style={{padding: 20}}>
+			<div className='journey-container'>
 				<p style={{display: 'none'}}>{JSON.stringify(state.session, null, 2)}</p>
-        { currentParticipant && state.session.participants.indexOf(currentParticipant) === 0 &&
-          <select onChange={this.onChangeJourney} value={state.session && state.session.journey}>
-            {state.journeys.map(journey => (
-              <option value={journey}>{journey.split('/')[journey.split('/').length -1]}</option>
-            ))}
-          </select>
-        }
+        
         <audio style={{display: 'none'}} key={state.session && state.session.journey} controls="true" ref={audioTag => { this.audioTag = audioTag }}>
          <source src={state.session && state.session.journey} type="audio/mpeg"/>
         </audio>
 				{this.state.session &&
           <div>
             <h2>{state.session.journey.split('/')[state.session.journey.split('/').length - 1]}</h2>
+            { currentParticipant && state.session.participants.indexOf(currentParticipant) === 0 &&
+              <select onChange={this.onChangeJourney} value={state.session && state.session.journey}>
+                {state.journeys.map(journey => (
+                  <option value={journey}>{journey.split('/')[journey.split('/').length -1]}</option>
+                ))}
+              </select>
+            }
+            
             <p>Journey state: {this.state.playerState}</p>
             <div className='tok-container' ref={container => this.container = container }>
               {this.state.streams.length == 0 &&
                 <p>Waiting for others to join this journey...</p>
               }
-              <div className='row' style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridGap: '10px', marginRight: '350px'}}>
+              <div className='row no-gutters' style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridGap: '10px', marginRight: '350px'}}>
                 {this.state.streams.map(stream => {
                   const participant = state.session.participants.find(participant => participant.connectionId === stream.connection.id);
                   return (

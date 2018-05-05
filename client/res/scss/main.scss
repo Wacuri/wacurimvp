@@ -1,1 +1,16 @@
 @import "~bootstrap/scss/bootstrap.scss";
+
+.header {
+  margin: 0;
+  background: black;
+  padding: $spacer;
+
+  h1 {
+    color: white;
+    font-size: 2rem;
+  }
+}
+
+.journey-container {
+  padding: $spacer;
+}
