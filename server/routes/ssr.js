@@ -15,8 +15,10 @@ router.get('/', (req, res) => {
   /*
     http://redux.js.org/docs/recipes/ServerRendering.html
   */
-  const store = createStore(reducers);
-
+  const store = createStore(reducers, {
+    openTokKey: process.env.OPENTOK_KEY
+  });
+    
   /*
       We can dispatch actions from server side as well. This can be very useful if you want
       to inject some initial data into the app. For example, if you have some articles that
@@ -66,7 +68,7 @@ router.get('/', (req, res) => {
   } else {
     res.status(200).render(process.env.NODE_ENV === 'production' ? 'index.ejs' : 'index.dev.ejs', {
       html,
-      script: JSON.stringify(finalState),
+      script: JSON.stringify({...finalState}),
     });
   }
 });

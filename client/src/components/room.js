@@ -41,7 +41,7 @@ class Room extends Component {
 			.then(json => {
 				state.session = json;
         this.sessionHelper = createSession({
-          apiKey: '46100042',
+          apiKey: state.openTokKey,
           sessionId: state.session.sessionId,
           token: state.session.token,
           onConnect: () => {
