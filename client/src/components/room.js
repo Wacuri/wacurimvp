@@ -215,7 +215,6 @@ class Room extends Component {
 		return (
 			<div className='journey-container'>
 				<p style={{display: 'none'}}>{JSON.stringify(state.session, null, 2)}</p>
-
         <audio style={{display: 'none'}} onLoadedMetadata={this.onLoadedMetadata} key={state.session && state.session.journey} controls="true" ref={audioTag => { this.audioTag = audioTag }}>
          <source src={state.session && state.session.journey} type="audio/mpeg"/>
         </audio>
