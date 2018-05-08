@@ -69,7 +69,7 @@ router.get('/sessions/:room/connections/:connection/ready', async (req, res) => 
     signal(existingSession.sessionId, {type: 'ready', data: 'foo'});
     const allReady = (await TokSessionParticipant.count({session: existingSession, ready: false, present: true})) === 0;
     if (allReady) {
-      signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
+      // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
     }
     return res.sendStatus(200);
   }
@@ -97,6 +97,16 @@ router.put('/sessions/:room/journey', async (req, res) => {
     signal(existingSession.sessionId, {type: 'updatedJourney', data: journey});
   }
   res.sendStatus(200);
+});
+
+// TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
+router.post('/sessions/:room/start', async (req, res) => {
+  const {room} = req.params;
+  const existingSession = await TokSession.findOne({room}).exec();
+	if (existingSession) {
+    await existingSession.start();
+    signal(existingSession.sessionId, {type: 'startJourney', data: ''});
+  }
 });
 
 router.post('/event', async (req, res) => {

@@ -24,6 +24,9 @@ class Room extends Component {
       publisherId: '',
       session: null,
       playerState: 'waiting',
+      playerProgress: 0,
+      playerProgressMS: 0,
+      journeyDuration: 0,
     }
     this.publisher = {};
     this.audioTag = {};
@@ -36,6 +39,13 @@ class Room extends Component {
         playerState: 'ended'
       });
     });
+
+    
+    setTimeout(() => {
+      console.log('ADD IT TO', this.audioTag, this.onTimeUpdate);
+      
+    }, 5000);
+    
 		fetch(`/api/sessions/${this.props.match.params.room}`)
 			.then(res => res.json())
 			.then(json => {
@@ -140,12 +150,18 @@ class Room extends Component {
       });
   }
 
+  get timeRemaining() {
+    const seconds = this.state.journeyDuration - this.state.playerProgressMS;
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = (seconds % 60).toFixed(0);
+    return minutes + ":" + (remainingSeconds < 10 ? '0' : '') + remainingSeconds;
+  }
+
   onInitPublisher = () => {
     console.log('initialized publisher');
   }
 
   onConfirmReady = (e) => {
-    console.log('im ready');
     fetch(`/api/sessions/${this.props.match.params.room}/connections/${this.sessionHelper.session.connection.id}/ready`);
   }
 
@@ -166,29 +182,72 @@ class Room extends Component {
     });
   }
 
+  onStartSession = (e) => {
+    fetch(`/api/sessions/${this.props.match.params.room}/start`, {
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'user-agent': 'Mozilla/4.0 MDN Example',
+        'content-type': 'application/json'
+      },
+      method: 'POST',
+      mode: 'cors',
+    });
+  }
+
+  onLoadedMetadata = (e) => {
+    this.setState({
+      journeyDuration: e.target.duration
+    });
+    this.audioTag.removeEventListener('timeupdate', this.onTimeUpdate);
+    this.audioTag.addEventListener('timeupdate', this.onTimeUpdate);
+  }
+
+  onTimeUpdate = (e) => {
+    this.setState({
+      playerProgress: (e.target.currentTime / e.target.duration) * 100,
+      playerProgressMS: e.target.currentTime,
+    });
+  }
+
 	render() {
     const currentParticipant = this.state.session && state.session && state.session.participants.find(participant => participant.connectionId === this.state.session.connection.id);
-    console.log('GOT CURRENT', currentParticipant);
 		return (
 			<div className='journey-container'>
 				<p style={{display: 'none'}}>{JSON.stringify(state.session, null, 2)}</p>
         
-        <audio style={{display: 'none'}} key={state.session && state.session.journey} controls="true" ref={audioTag => { this.audioTag = audioTag }}>
+        <audio style={{display: 'none'}} onLoadedMetadata={this.onLoadedMetadata} key={state.session && state.session.journey} controls="true" ref={audioTag => { this.audioTag = audioTag }}>
          <source src={state.session && state.session.journey} type="audio/mpeg"/>
         </audio>
 				{this.state.session &&
           <div>
-            <h2>{state.session.journey.split('/')[state.session.journey.split('/').length - 1]}</h2>
-            { currentParticipant && state.session.participants.indexOf(currentParticipant) === 0 &&
-              <select onChange={this.onChangeJourney} value={state.session && state.session.journey}>
-                {state.journeys.map(journey => (
-                  <option value={journey}>{journey.split('/')[journey.split('/').length -1]}</option>
-                ))}
-              </select>
-            }
-            
-            <p>Journey state: {this.state.playerState}</p>
-            <div className='tok-container' ref={container => this.container = container }>
+          <div className='row'>
+            <div className='col-6'>
+              <h2>{state.session.journey.split('/')[state.session.journey.split('/').length - 1]}</h2>
+              { currentParticipant && state.session.participants.indexOf(currentParticipant) === 0 &&
+                <div>
+                  <select className='mb-3' onChange={this.onChangeJourney} value={state.session && state.session.journey}>
+                    {state.journeys.map(journey => (
+                      <option value={journey}>{journey.split('/')[journey.split('/').length -1]}</option>
+                    ))}
+                  </select>
+                  { state.session.state === 'created' &&
+                    <div className='mb-2'>
+                      <button onClick={this.onStartSession} className='btn btn-primary'>Start session <i className="fa fa-play" ariaHidden="true"></i></button>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+          <div className='row'>
+            <div className='col-3'>
+              <progress max="100" value={this.state.playerProgress} style={{width: '100%'}}></progress>
+              <p style={{display: 'flex'}}><strong style={{flex: 1}}>Time remaining:</strong><span>{this.timeRemaining}</span></p>
+            </div>
+          </div>
+          <div className='row'>
+            <div className='tok-container col' ref={container => this.container = container }>
               {this.state.streams.length == 0 &&
                 <p>Waiting for others to join this journey...</p>
               }
@@ -218,6 +277,7 @@ class Room extends Component {
               </div>
             </div>
           </div>
+        </div>
 				}
 			</div>
 		)
