@@ -32,6 +32,7 @@
   "homepage": "https://github.com/tahnik/react-express-webpack-babel#readme",
   "dependencies": {
     "@opentok/client": "^2.13.2",
+    "another-mongoose-statemachine": "^1.6.2",
     "babel-polyfill": "^6.26.0",
     "body-parser": "^1.18.2",
     "bootstrap": "4",
@@ -40,6 +41,7 @@
     "ejs": "^2.5.7",
     "es6-promise": "^4.2.4",
     "express": "^4.14.0",
+    "font-awesome": "^4.7.0",
     "isomorphic-fetch": "^2.2.1",
     "mongoose": "^5.0.14",
     "opentok": "^2.6.2",
