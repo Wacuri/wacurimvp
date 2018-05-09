@@ -156,10 +156,12 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div className="home">
-        <UserList userCount={this.state.totalConnectionsCreated} userIds={this.state.connectedUsers} />
-        <EventMessage message={this.state.displayMessageText} sessionUrl={this.state.sessionUrl} />
-        <GeneratorForm />
+      <div className="home container">
+        <div className="row">
+          <span className="col-sm"><UserList userCount={this.state.totalConnectionsCreated} userIds={this.state.connectedUsers} /></span>
+          <span className="col-sm"><EventMessage message={this.state.displayMessageText} sessionUrl={this.state.sessionUrl} /></span>
+          <span className="col-sm"><GeneratorForm /></span>
+        </div>
       </div>
       )
   }
