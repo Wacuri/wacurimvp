@@ -37,7 +37,7 @@ export default class Home extends Component {
       .then(json => {
         state.session = json;
         this.sessionHelper = createSession({
-          apiKey: "46102002", //TODO: remove hard-code process.env.OPENTOK_KEY
+          apiKey: state.openTokKey,
           sessionId: state.session.sessionId,
           token: state.session.token,
           onConnect: () => {

@@ -1412,7 +1412,7 @@ var Room = function (_Component) {
       }).then(function (json) {
         _state2.default.session = json;
         _this2.sessionHelper = createSession({
-          apiKey: "46102002", //TODO: remove hard-code process.env.OPENTOK_KEY
+          apiKey: state.openTokKey,
           sessionId: _state2.default.session.sessionId,
           token: _state2.default.session.token,
           onConnect: function onConnect() {
