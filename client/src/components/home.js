@@ -20,6 +20,11 @@ export default class Home extends Component {
 
     this.state = {
       streams: [],
+      journeysReady: [
+        {title: "Journey 1", userName: "Fred", description: "Dino's dinner", url: "/dinos-dinner"},
+        {title: "Journey 2", userName: "Wilma", description: "Pebbles turns twelve", url: "/pebbles-turns-twelve"},
+        {title: "Journey 3", userName: "George", description: "George's first meditation", url: "georges-first-meditation"}
+      ],
       publisherId: '',
       session: null,
       totalConnectionsCreated: 0,
@@ -32,6 +37,26 @@ export default class Home extends Component {
   componentDidMount() {
     const roomUrl = 'temp-home-location'
 
+    // let messageData = {
+    //   userName: "Bob",
+    //   description: "some text",
+    //   url: "http://www.news.google.com"
+    // }
+
+    // fetch("/api/sessions/temp-home-location", { body: '{}'}, {method: 'POST' })
+      //  fetch(`/api/sessions/${roomUrl}`, {
+      //   body: JSON.stringify(messageData), // must match 'Content-Type' header
+      //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      //   credentials: 'same-origin', // include, same-origin, *omit
+      //   headers: {
+      //     'user-agent': 'Mozilla/4.0 MDN Example',
+      //     'content-type': 'application/json'
+      //   },
+      //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      //   mode: 'cors', // no-cors, cors, *same-origin
+      //   redirect: 'follow', // manual, *follow, error
+      //   referrer: 'no-referrer'// *client, no-referrer
+      // })
     fetch(`/api/sessions/${roomUrl}`)
       .then(res => res.json())
       .then(json => {
@@ -130,6 +155,8 @@ export default class Home extends Component {
             console.log("**** CAPTURED the journey request !! ")
             console.log(event)
             let data = JSON.parse(event.data)
+
+            //CURRENT: Add this into state.journeysReady array
             this.setState({
               displayMessageVisible: true,
               displayMessageText: data.description,
@@ -161,7 +188,7 @@ export default class Home extends Component {
       <div className="home container">
         <div className="row">
           <span className="col-sm"><UserList userCount={this.state.totalConnectionsCreated} userIds={this.state.connectedUsers} /></span>
-          <span className="col-sm"><EventMessage message={this.state.displayMessageText} sessionUrl={this.state.sessionUrl} /></span>
+          <span className="col-sm"><EventMessage messages={this.state.journeysReady} sessionUrl={this.state.sessionUrl} /></span>
           <span className="col-sm"><GeneratorForm /></span>
         </div>
       </div>
