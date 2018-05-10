@@ -211,7 +211,6 @@ module.exports = require("babel-polyfill/lib/index");
 
 var dotenv = __webpack_require__(7);
 
-console.log('DO CONFIG YO');
 dotenv.config();
 global.__CLIENT__ = false;
 global.__SERVER__ = true;
@@ -243,7 +242,7 @@ var _api = __webpack_require__(18);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _ssr = __webpack_require__(23);
+var _ssr = __webpack_require__(24);
 
 var _ssr2 = _interopRequireDefault(_ssr);
 
@@ -307,7 +306,7 @@ var _tok_session = __webpack_require__(21);
 
 var _tok_session2 = _interopRequireDefault(_tok_session);
 
-var _tok_session_participant = __webpack_require__(22);
+var _tok_session_participant = __webpack_require__(23);
 
 var _tok_session_participant2 = _interopRequireDefault(_tok_session_participant);
 
@@ -486,7 +485,7 @@ router.get('/sessions/:room/connections/:connection/ready', function () {
             allReady = _context3.t0 === 0;
 
             if (allReady) {
-              signal(existingSession.sessionId, { type: 'startJourney', data: 'foo' });
+              // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
             }
             return _context3.abrupt('return', res.sendStatus(200));
 
@@ -514,13 +513,10 @@ router.get('/journeys', function () {
         switch (_context4.prev = _context4.next) {
           case 0:
             readdirAsync = promisify(_fs2.default.readdir);
-
-            console.log('I AM', __dirname);
-            console.log('TRY DA READ', _path2.default.join('..', 'public/journeys'));
-            _context4.next = 5;
+            _context4.next = 3;
             return readdirAsync(_path2.default.join(__dirname, '..', 'public/journeys'));
 
-          case 5:
+          case 3:
             _context4.t0 = function (file) {
               return _path2.default.extname(file) === '.mp3';
             };
@@ -533,7 +529,7 @@ router.get('/journeys', function () {
 
             res.json(journeyFiles);
 
-          case 9:
+          case 7:
           case 'end':
             return _context4.stop();
         }
@@ -590,76 +586,33 @@ router.put('/sessions/:room/journey', function () {
   };
 }());
 
-router.post('/event', function () {
+// TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
+router.post('/sessions/:room/start', function () {
   var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res) {
-    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
-
+    var room, existingSession;
     return regeneratorRuntime.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
-            console.log('GOT EVENT', req.body);
-            res.sendStatus(200);
-            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
-            _context6.next = 5;
-            return _tok_session2.default.findOne({ sessionId: sessionId }).exec();
+            room = req.params.room;
+            _context6.next = 3;
+            return _tok_session2.default.findOne({ room: room }).exec();
 
-          case 5:
-            session = _context6.sent;
-            _context6.t0 = req.body.event;
-            _context6.next = _context6.t0 === 'connectionCreated' ? 9 : _context6.t0 === 'connectionDestroyed' ? 19 : 28;
-            break;
+          case 3:
+            existingSession = _context6.sent;
 
-          case 9:
-            if (!session) {
-              _context6.next = 18;
+            if (!existingSession) {
+              _context6.next = 8;
               break;
             }
 
-            _context6.next = 12;
-            return _tok_session_participant2.default.count({ session: session, connectionId: connection.id });
+            _context6.next = 7;
+            return existingSession.start();
 
-          case 12:
-            _context6.t1 = _context6.sent;
-            participantExists = _context6.t1 > 0;
+          case 7:
+            signal(existingSession.sessionId, { type: 'startJourney', data: '' });
 
-            if (participantExists) {
-              _context6.next = 18;
-              break;
-            }
-
-            participant = new _tok_session_participant2.default({ session: session, connectionId: connection.id });
-            _context6.next = 18;
-            return participant.save();
-
-          case 18:
-            return _context6.abrupt('break', 28);
-
-          case 19:
-            if (!session) {
-              _context6.next = 27;
-              break;
-            }
-
-            _context6.next = 22;
-            return _tok_session_participant2.default.findOne({ session: session, connectionId: connection.id });
-
-          case 22:
-            _participant = _context6.sent;
-
-            if (!_participant) {
-              _context6.next = 27;
-              break;
-            }
-
-            _participant.present = false;
-            _context6.next = 27;
-            return _participant.save();
-
-          case 27:
-            return _context6.abrupt('break', 28);
-
-          case 28:
+          case 8:
           case 'end':
             return _context6.stop();
         }
@@ -669,6 +622,88 @@ router.post('/event', function () {
 
   return function (_x11, _x12) {
     return _ref6.apply(this, arguments);
+  };
+}());
+
+router.post('/event', function () {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req, res) {
+    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
+
+    return regeneratorRuntime.wrap(function _callee7$(_context7) {
+      while (1) {
+        switch (_context7.prev = _context7.next) {
+          case 0:
+            console.log('GOT EVENT', req.body);
+            res.sendStatus(200);
+            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
+            _context7.next = 5;
+            return _tok_session2.default.findOne({ sessionId: sessionId }).exec();
+
+          case 5:
+            session = _context7.sent;
+            _context7.t0 = req.body.event;
+            _context7.next = _context7.t0 === 'connectionCreated' ? 9 : _context7.t0 === 'connectionDestroyed' ? 19 : 28;
+            break;
+
+          case 9:
+            if (!session) {
+              _context7.next = 18;
+              break;
+            }
+
+            _context7.next = 12;
+            return _tok_session_participant2.default.count({ session: session, connectionId: connection.id });
+
+          case 12:
+            _context7.t1 = _context7.sent;
+            participantExists = _context7.t1 > 0;
+
+            if (participantExists) {
+              _context7.next = 18;
+              break;
+            }
+
+            participant = new _tok_session_participant2.default({ session: session, connectionId: connection.id });
+            _context7.next = 18;
+            return participant.save();
+
+          case 18:
+            return _context7.abrupt('break', 28);
+
+          case 19:
+            if (!session) {
+              _context7.next = 27;
+              break;
+            }
+
+            _context7.next = 22;
+            return _tok_session_participant2.default.findOne({ session: session, connectionId: connection.id });
+
+          case 22:
+            _participant = _context7.sent;
+
+            if (!_participant) {
+              _context7.next = 27;
+              break;
+            }
+
+            _participant.present = false;
+            _context7.next = 27;
+            return _participant.save();
+
+          case 27:
+            return _context7.abrupt('break', 28);
+
+          case 28:
+          case 'end':
+            return _context7.stop();
+        }
+      }
+    }, _callee7, undefined);
+  }));
+
+  return function (_x13, _x14) {
+    return _ref7.apply(this, arguments);
   };
 }());
 
@@ -714,6 +749,10 @@ var _mongoose = __webpack_require__(4);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
+var _anotherMongooseStatemachine = __webpack_require__(22);
+
+var _anotherMongooseStatemachine2 = _interopRequireDefault(_anotherMongooseStatemachine);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var TokSessionSchema = new _mongoose.Schema({
@@ -722,12 +761,30 @@ var TokSessionSchema = new _mongoose.Schema({
   journey: { type: String, default: '/journeys/Journey to A Spiderweb+Music.mp3' }
 });
 
+TokSessionSchema.plugin(_anotherMongooseStatemachine2.default, {
+  states: {
+    created: { default: true },
+    started: {},
+    completed: {}
+  },
+  transitions: {
+    start: { from: 'created', to: 'started' },
+    end: { from: '*', to: 'completed' }
+  }
+});
+
 var TokSession = _mongoose2.default.model('TokSession', TokSessionSchema);
 
 exports.default = TokSession;
 
 /***/ }),
 /* 22 */
+/***/ (function(module, exports) {
+
+module.exports = require("another-mongoose-statemachine");
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -755,7 +812,7 @@ var TokSessionParticipant = _mongoose2.default.model('TokSessionParticipant', To
 exports.default = TokSessionParticipant;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -765,6 +822,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _express = __webpack_require__(3);
 
 var _express2 = _interopRequireDefault(_express);
@@ -773,7 +832,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _server = __webpack_require__(24);
+var _server = __webpack_require__(25);
 
 var _server2 = _interopRequireDefault(_server);
 
@@ -781,19 +840,21 @@ var _redux = __webpack_require__(10);
 
 var _reactRedux = __webpack_require__(1);
 
-var _reactRouter = __webpack_require__(25);
+var _reactRouter = __webpack_require__(26);
 
-var _index = __webpack_require__(26);
+var _index = __webpack_require__(27);
 
 var _index2 = _interopRequireDefault(_index);
 
 var _action_types = __webpack_require__(5);
 
-var _app = __webpack_require__(30);
+var _app = __webpack_require__(31);
 
 var _app2 = _interopRequireDefault(_app);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+console.log(process.env);
 
 var router = _express2.default.Router();
 
@@ -801,7 +862,9 @@ router.get('/', function (req, res) {
   /*
     http://redux.js.org/docs/recipes/ServerRendering.html
   */
-  var store = (0, _redux.createStore)(_index2.default);
+  var store = (0, _redux.createStore)(_index2.default, {
+    openTokKey: process.env.OPENTOK_KEY
+  });
 
   /*
       We can dispatch actions from server side as well. This can be very useful if you want
@@ -848,9 +911,9 @@ router.get('/', function (req, res) {
     });
     res.end();
   } else {
-    res.status(200).render('index.ejs', {
+    res.status(200).render(process.env.NODE_ENV === 'production' ? 'index.ejs' : 'index.dev.ejs', {
       html: html,
-      script: JSON.stringify(finalState)
+      script: JSON.stringify(_extends({}, finalState))
     });
   }
 });
@@ -858,19 +921,19 @@ router.get('/', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom/server");
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-router");
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -882,20 +945,24 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(10);
 
-var _list = __webpack_require__(27);
+var _list = __webpack_require__(28);
 
 var _list2 = _interopRequireDefault(_list);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
-  list: _list2.default // shorthand for lists: lists
+  list: _list2.default, // shorthand for lists: lists
+  openTokKey: function openTokKey() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    return state;
+  }
 });
 
 exports.default = rootReducer;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -909,7 +976,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _action_types = __webpack_require__(5);
 
-var _default_state = __webpack_require__(28);
+var _default_state = __webpack_require__(29);
 
 exports.default = function () {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _default_state.LISTS;
@@ -936,7 +1003,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -947,7 +1014,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.LISTS = undefined;
 
-var _list_items = __webpack_require__(29);
+var _list_items = __webpack_require__(30);
 
 var _list_items2 = _interopRequireDefault(_list_items);
 
@@ -957,7 +1024,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var LISTS = exports.LISTS = { items: _list_items2.default, itemPreview: null, itemView: null };
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -982,7 +1049,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -998,19 +1065,19 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = __webpack_require__(6);
 
-var _header = __webpack_require__(31);
+var _header = __webpack_require__(32);
 
 var _header2 = _interopRequireDefault(_header);
 
-var _home = __webpack_require__(32);
+var _home = __webpack_require__(33);
 
 var _home2 = _interopRequireDefault(_home);
 
-var _list_item_view = __webpack_require__(37);
+var _list_item_view = __webpack_require__(38);
 
 var _list_item_view2 = _interopRequireDefault(_list_item_view);
 
-var _Room = __webpack_require__(39);
+var _Room = __webpack_require__(40);
 
 var _Room2 = _interopRequireDefault(_Room);
 
@@ -1030,7 +1097,7 @@ var App = function App() {
 exports.default = App;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1049,11 +1116,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Header = function Header() {
   return _react2.default.createElement(
     "div",
-    { style: { marginTop: 20 }, className: "header" },
+    { className: "header pl-4" },
     _react2.default.createElement(
       "h1",
       null,
-      "Wacuri!"
+      "Wacuri"
     )
   );
 };
@@ -1061,7 +1128,7 @@ var Header = function Header() {
 exports.default = Header;
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1075,11 +1142,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _list_items = __webpack_require__(33);
+var _list_items = __webpack_require__(34);
 
 var _list_items2 = _interopRequireDefault(_list_items);
 
-var _list_item_preview = __webpack_require__(35);
+var _list_item_preview = __webpack_require__(36);
 
 var _list_item_preview2 = _interopRequireDefault(_list_item_preview);
 
@@ -1100,7 +1167,7 @@ var Home = function Home() {
 exports.default = Home;
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1114,7 +1181,7 @@ var _reactRedux = __webpack_require__(1);
 
 var _list_actions = __webpack_require__(11);
 
-var _list_items = __webpack_require__(34);
+var _list_items = __webpack_require__(35);
 
 var _list_items2 = _interopRequireDefault(_list_items);
 
@@ -1151,7 +1218,7 @@ https://facebook.github.io/react/docs/higher-order-components.html
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_list_items2.default);
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1238,7 +1305,7 @@ ListView.propTypes = {
 exports.default = ListView;
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1250,7 +1317,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _reactRedux = __webpack_require__(1);
 
-var _list_item_preview = __webpack_require__(36);
+var _list_item_preview = __webpack_require__(37);
 
 var _list_item_preview2 = _interopRequireDefault(_list_item_preview);
 
@@ -1275,7 +1342,7 @@ function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(_list_item_preview2.default);
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1354,7 +1421,7 @@ ListItemPreview.defaultProps = {
 exports.default = ListItemPreview;
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1368,7 +1435,7 @@ var _reactRedux = __webpack_require__(1);
 
 var _list_actions = __webpack_require__(11);
 
-var _list_item_view = __webpack_require__(38);
+var _list_item_view = __webpack_require__(39);
 
 var _list_item_view2 = _interopRequireDefault(_list_item_view);
 
@@ -1395,7 +1462,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_list_item_view2.default);
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1498,7 +1565,7 @@ ListItemView.defaultProps = {
 exports.default = ListItemView;
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1516,7 +1583,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactEasyState = __webpack_require__(12);
 
-var _state = __webpack_require__(40);
+var _state = __webpack_require__(41);
 
 var _state2 = _interopRequireDefault(_state);
 
@@ -1524,11 +1591,11 @@ var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _uuid = __webpack_require__(41);
+var _uuid = __webpack_require__(42);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _opentokLayoutJs = __webpack_require__(42);
+var _opentokLayoutJs = __webpack_require__(43);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1538,7 +1605,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-__webpack_require__(43).polyfill();
+__webpack_require__(44).polyfill();
 __webpack_require__(9);
 
 var _ref = {},
@@ -1550,14 +1617,14 @@ var _ref = {},
 
 
 if (__CLIENT__) {
-  var _require = __webpack_require__(44),
-      O5Session = _require.O5Session,
+  var _require = __webpack_require__(45),
+      OTSession = _require.OTSession,
       OTPublisher = _require.OTPublisher,
       OTStreams = _require.OTStreams,
       OTSubscriber = _require.OTSubscriber,
       createSession = _require.createSession;
 
-  var OT = __webpack_require__(45);
+  var OT = __webpack_require__(46);
   window.state = _state2.default;
 }
 
@@ -1582,7 +1649,6 @@ var Room = function (_Component) {
     };
 
     _this.onConfirmReady = function (e) {
-      console.log('im ready');
       fetch('/api/sessions/' + _this.props.match.params.room + '/connections/' + _this.sessionHelper.session.connection.id + '/ready');
     };
 
@@ -1603,11 +1669,42 @@ var Room = function (_Component) {
       });
     };
 
+    _this.onStartSession = function (e) {
+      fetch('/api/sessions/' + _this.props.match.params.room + '/start', {
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'user-agent': 'Mozilla/4.0 MDN Example',
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+        mode: 'cors'
+      });
+    };
+
+    _this.onLoadedMetadata = function (e) {
+      _this.setState({
+        journeyDuration: e.target.duration
+      });
+      _this.audioTag.removeEventListener('timeupdate', _this.onTimeUpdate);
+      _this.audioTag.addEventListener('timeupdate', _this.onTimeUpdate);
+    };
+
+    _this.onTimeUpdate = function (e) {
+      _this.setState({
+        playerProgress: e.target.currentTime / e.target.duration * 100,
+        playerProgressMS: e.target.currentTime
+      });
+    };
+
     _this.state = {
       streams: [],
       publisherId: '',
       session: null,
-      playerState: 'waiting'
+      playerState: 'waiting',
+      playerProgress: 0,
+      playerProgressMS: 0,
+      journeyDuration: 0
     };
     _this.publisher = {};
     _this.audioTag = {};
@@ -1625,12 +1722,17 @@ var Room = function (_Component) {
           playerState: 'ended'
         });
       });
+
+      setTimeout(function () {
+        console.log('ADD IT TO', _this2.audioTag, _this2.onTimeUpdate);
+      }, 5000);
+
       fetch('/api/sessions/' + this.props.match.params.room).then(function (res) {
         return res.json();
       }).then(function (json) {
         _state2.default.session = json;
         _this2.sessionHelper = createSession({
-          apiKey: '46100042',
+          apiKey: _state2.default.openTokKey,
           sessionId: _state2.default.session.sessionId,
           token: _state2.default.session.token,
           onConnect: function onConnect() {
@@ -1726,32 +1828,20 @@ var Room = function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      var currentParticipant = _state2.default.session && _state2.default.session.participants.find(function (participant) {
+      var currentParticipant = this.state.session && _state2.default.session && _state2.default.session.participants.find(function (participant) {
         return participant.connectionId === _this3.state.session.connection.id;
       });
-      console.log('GOT CURRENT', currentParticipant);
       return _react2.default.createElement(
         'div',
-        { style: { padding: 20 } },
+        { className: 'journey-container' },
         _react2.default.createElement(
           'p',
           { style: { display: 'none' } },
           JSON.stringify(_state2.default.session, null, 2)
         ),
-        currentParticipant && _state2.default.session.participants.indexOf(currentParticipant) === 0 && _react2.default.createElement(
-          'select',
-          { onChange: this.onChangeJourney, value: _state2.default.session && _state2.default.session.journey },
-          _state2.default.journeys.map(function (journey) {
-            return _react2.default.createElement(
-              'option',
-              { value: journey },
-              journey.split('/')[journey.split('/').length - 1]
-            );
-          })
-        ),
         _react2.default.createElement(
           'audio',
-          { style: { display: 'none' }, key: _state2.default.session && _state2.default.session.journey, controls: 'true', ref: function ref(audioTag) {
+          { style: { display: 'none' }, onLoadedMetadata: this.onLoadedMetadata, key: _state2.default.session && _state2.default.session.journey, controls: 'true', ref: function ref(audioTag) {
               _this3.audioTag = audioTag;
             } },
           _react2.default.createElement('source', { src: _state2.default.session && _state2.default.session.journey, type: 'audio/mpeg' })
@@ -1760,69 +1850,131 @@ var Room = function (_Component) {
           'div',
           null,
           _react2.default.createElement(
-            'h2',
-            null,
-            _state2.default.session.journey.split('/')[_state2.default.session.journey.split('/').length - 1]
-          ),
-          _react2.default.createElement(
-            'p',
-            null,
-            'Journey state: ',
-            this.state.playerState
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
+              'div',
+              { className: 'col-6' },
+              _react2.default.createElement(
+                'h2',
+                null,
+                _state2.default.session.journey.split('/')[_state2.default.session.journey.split('/').length - 1]
+              ),
+              currentParticipant && _state2.default.session.participants.indexOf(currentParticipant) === 0 && _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                  'select',
+                  { className: 'mb-3', onChange: this.onChangeJourney, value: _state2.default.session && _state2.default.session.journey },
+                  _state2.default.journeys.map(function (journey) {
+                    return _react2.default.createElement(
+                      'option',
+                      { value: journey },
+                      journey.split('/')[journey.split('/').length - 1]
+                    );
+                  })
+                ),
+                _state2.default.session.state === 'created' && _react2.default.createElement(
+                  'div',
+                  { className: 'mb-2' },
+                  _react2.default.createElement(
+                    'button',
+                    { onClick: this.onStartSession, className: 'btn btn-primary' },
+                    'Start session ',
+                    _react2.default.createElement('i', { className: 'fa fa-play', ariaHidden: 'true' })
+                  )
+                )
+              )
+            )
           ),
           _react2.default.createElement(
             'div',
-            { className: 'tok-container', ref: function ref(container) {
-                return _this3.container = container;
-              } },
-            this.state.streams.length == 0 && _react2.default.createElement(
-              'p',
-              null,
-              'Waiting for others to join this journey...'
-            ),
+            { className: 'row' },
             _react2.default.createElement(
               'div',
-              { className: 'row', style: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridGap: '10px', marginRight: '350px' } },
-              this.state.streams.map(function (stream) {
-                var participant = _state2.default.session.participants.find(function (participant) {
-                  return participant.connectionId === stream.connection.id;
-                });
-                return _react2.default.createElement(
-                  'div',
-                  { className: 'subscriber' },
-                  _react2.default.createElement(
-                    'p',
-                    { style: { fontSize: '14px' }, className: participant && participant.ready ? 'text-success' : 'text-warning' },
-                    participant && participant.ready ? 'Ready to start!' : 'Not ready yet'
-                  ),
-                  _react2.default.createElement(OTSubscriber, {
-                    key: stream.id,
-                    session: _this3.sessionHelper.session,
-                    stream: stream
-                  })
-                );
-              })
-            ),
+              { className: 'col-3' },
+              _react2.default.createElement('progress', { max: '100', value: this.state.playerProgress, style: { width: '100%' } }),
+              _react2.default.createElement(
+                'p',
+                { style: { display: 'flex' } },
+                _react2.default.createElement(
+                  'strong',
+                  { style: { flex: 1 } },
+                  'Time remaining:'
+                ),
+                _react2.default.createElement(
+                  'span',
+                  null,
+                  this.timeRemaining
+                )
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'row' },
             _react2.default.createElement(
               'div',
-              { style: { position: 'fixed', bottom: 0, right: 0 } },
-              _react2.default.createElement(OTPublisher, { session: this.sessionHelper.session, onInit: this.onInitPublisher, ref: function ref(publisher) {
-                  _this3.publisher = publisher;
-                } }),
-              currentParticipant && currentParticipant.ready && _react2.default.createElement(
+              { className: 'tok-container col', ref: function ref(container) {
+                  return _this3.container = container;
+                } },
+              this.state.streams.length == 0 && _react2.default.createElement(
                 'p',
                 null,
-                'You are ready!'
+                'Waiting for others to join this journey...'
               ),
-              (!currentParticipant || !currentParticipant.ready) && _react2.default.createElement(
-                'a',
-                { className: 'btn btn-primary', href: '#', onClick: this.onConfirmReady },
-                'Ready?'
+              _react2.default.createElement(
+                'div',
+                { className: 'row no-gutters', style: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridGap: '10px', marginRight: '350px' } },
+                this.state.streams.map(function (stream) {
+                  var participant = _state2.default.session.participants.find(function (participant) {
+                    return participant.connectionId === stream.connection.id;
+                  });
+                  return _react2.default.createElement(
+                    'div',
+                    { className: 'subscriber' },
+                    _react2.default.createElement(
+                      'p',
+                      { style: { fontSize: '14px' }, className: participant && participant.ready ? 'text-success' : 'text-warning' },
+                      participant && participant.ready ? 'Ready to start!' : 'Not ready yet'
+                    ),
+                    _react2.default.createElement(OTSubscriber, {
+                      key: stream.id,
+                      session: _this3.sessionHelper.session,
+                      stream: stream
+                    })
+                  );
+                })
+              ),
+              _react2.default.createElement(
+                'div',
+                { style: { position: 'fixed', bottom: 0, right: 0 } },
+                _react2.default.createElement(OTPublisher, { session: this.sessionHelper.session, onInit: this.onInitPublisher, ref: function ref(publisher) {
+                    _this3.publisher = publisher;
+                  } }),
+                currentParticipant && currentParticipant.ready && _react2.default.createElement(
+                  'p',
+                  null,
+                  'You are ready!'
+                ),
+                (!currentParticipant || !currentParticipant.ready) && _react2.default.createElement(
+                  'a',
+                  { className: 'btn btn-primary', href: '#', onClick: this.onConfirmReady },
+                  'Ready?'
+                )
               )
             )
           )
         )
       );
+    }
+  }, {
+    key: 'timeRemaining',
+    get: function get() {
+      var seconds = this.state.journeyDuration - this.state.playerProgressMS;
+      var minutes = Math.floor(seconds / 60);
+      var remainingSeconds = (seconds % 60).toFixed(0);
+      return minutes + ":" + (remainingSeconds < 10 ? '0' : '') + remainingSeconds;
     }
   }]);
 
@@ -1832,7 +1984,7 @@ var Room = function (_Component) {
 exports.default = (0, _reactEasyState.view)(Room);
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1842,39 +1994,41 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _reactEasyState = __webpack_require__(12);
 
-exports.default = (0, _reactEasyState.store)({
+exports.default = (0, _reactEasyState.store)(_extends({}, global.__INITIAL_STATE__ || {}, {
   session: null,
   journeys: []
-});
-
-/***/ }),
-/* 41 */
-/***/ (function(module, exports) {
-
-module.exports = require("uuid");
+}));
 
 /***/ }),
 /* 42 */
 /***/ (function(module, exports) {
 
-module.exports = require("opentok-layout-js");
+module.exports = require("uuid");
 
 /***/ }),
 /* 43 */
 /***/ (function(module, exports) {
 
-module.exports = require("es6-promise");
+module.exports = require("opentok-layout-js");
 
 /***/ }),
 /* 44 */
 /***/ (function(module, exports) {
 
-module.exports = require("opentok-react");
+module.exports = require("es6-promise");
 
 /***/ }),
 /* 45 */
+/***/ (function(module, exports) {
+
+module.exports = require("opentok-react");
+
+/***/ }),
+/* 46 */
 /***/ (function(module, exports) {
 
 module.exports = require("@opentok/client");
