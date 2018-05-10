@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,176 +73,93 @@ module.exports = require("react");
 /* 1 */
 /***/ (function(module, exports) {
 
-module.exports = require("react-redux");
+module.exports = require("express");
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports) {
 
-module.exports = require("prop-types");
+module.exports = require("mongoose");
 
 /***/ }),
 /* 3 */
 /***/ (function(module, exports) {
 
-module.exports = require("express");
+module.exports = require("dotenv");
 
 /***/ }),
 /* 4 */
 /***/ (function(module, exports) {
 
-module.exports = require("mongoose");
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-// eslint-disable-next-line
-var LIST_ACTIONS = exports.LIST_ACTIONS = {
-  ITEM_PREVIEW: 'ITEM_PREVIEW',
-  ITEM_VIEW: 'ITEM_VIEW',
-  ITEM_ADD: 'ITEM_ADD',
-  ITEM_CLEAR: 'ITEM_CLEAR'
-};
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-router-dom");
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-module.exports = require("dotenv");
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
 module.exports = require("path");
 
 /***/ }),
-/* 9 */
+/* 5 */
 /***/ (function(module, exports) {
 
 module.exports = require("isomorphic-fetch");
 
 /***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-module.exports = require("redux");
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.clearItem = exports.addItem = exports.viewItem = exports.previewItem = undefined;
-
-var _action_types = __webpack_require__(5);
-
-var previewItem = exports.previewItem = function previewItem(name) {
-  return {
-    type: _action_types.LIST_ACTIONS.ITEM_PREVIEW,
-    name: name // shorthand for name: name
-  };
-};
-
-var viewItem = exports.viewItem = function viewItem(name) {
-  return {
-    type: _action_types.LIST_ACTIONS.ITEM_VIEW,
-    name: name
-  };
-};
-
-var addItem = exports.addItem = function addItem(item) {
-  return {
-    type: _action_types.LIST_ACTIONS.ITEM_ADD,
-    item: item // shorthand for item: item
-  };
-};
-
-var clearItem = exports.clearItem = function clearItem() {
-  return {
-    type: _action_types.LIST_ACTIONS.ITEM_CLEAR
-  };
-};
-
-/***/ }),
-/* 12 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-easy-state");
 
 /***/ }),
-/* 13 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(14);
-module.exports = __webpack_require__(15);
+__webpack_require__(8);
+module.exports = __webpack_require__(9);
 
 
 /***/ }),
-/* 14 */
+/* 8 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-polyfill/lib/index");
 
 /***/ }),
-/* 15 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var dotenv = __webpack_require__(7);
+var dotenv = __webpack_require__(3);
 
 dotenv.config();
 global.__CLIENT__ = false;
 global.__SERVER__ = true;
 
-var routes = __webpack_require__(16);
+var routes = __webpack_require__(10);
 
 exports = routes;
 
 /***/ }),
-/* 16 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _path = __webpack_require__(8);
+var _path = __webpack_require__(4);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _express = __webpack_require__(3);
+var _express = __webpack_require__(1);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _bodyParser = __webpack_require__(17);
+var _bodyParser = __webpack_require__(11);
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _api = __webpack_require__(18);
+var _api = __webpack_require__(12);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _ssr = __webpack_require__(24);
+var _ssr = __webpack_require__(18);
 
 var _ssr2 = _interopRequireDefault(_ssr);
 
@@ -264,13 +181,13 @@ app.listen(process.env.PORT || 5000, function () {
 });
 
 /***/ }),
-/* 17 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = require("body-parser");
 
 /***/ }),
-/* 18 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -282,35 +199,35 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _fs = __webpack_require__(19);
+var _fs = __webpack_require__(13);
 
 var _fs2 = _interopRequireDefault(_fs);
 
-var _path = __webpack_require__(8);
+var _path = __webpack_require__(4);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _express = __webpack_require__(3);
+var _express = __webpack_require__(1);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _opentok = __webpack_require__(20);
+var _opentok = __webpack_require__(14);
 
 var _opentok2 = _interopRequireDefault(_opentok);
 
-var _mongoose = __webpack_require__(4);
+var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _tok_session = __webpack_require__(21);
+var _tok_session = __webpack_require__(15);
 
 var _tok_session2 = _interopRequireDefault(_tok_session);
 
-var _tok_session_participant = __webpack_require__(23);
+var _tok_session_participant = __webpack_require__(17);
 
 var _tok_session_participant2 = _interopRequireDefault(_tok_session_participant);
 
-var _dotenv = __webpack_require__(7);
+var _dotenv = __webpack_require__(3);
 
 var _dotenv2 = _interopRequireDefault(_dotenv);
 
@@ -320,7 +237,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-__webpack_require__(9);
+__webpack_require__(5);
 
 _dotenv2.default.config();
 
@@ -625,76 +542,42 @@ router.post('/sessions/:room/start', function () {
   };
 }());
 
-router.post('/event', function () {
+router.post('/sessions/:room/flag', function () {
   var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req, res) {
-    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
-
+    var room, connectionId, existingSession, participants;
     return regeneratorRuntime.wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
           case 0:
-            console.log('GOT EVENT', req.body);
-            res.sendStatus(200);
-            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
-            _context7.next = 5;
-            return _tok_session2.default.findOne({ sessionId: sessionId }).exec();
+            room = req.params.room;
+            connectionId = req.body.connectionId;
+            _context7.next = 4;
+            return _tok_session2.default.findOne({ room: room }).exec();
 
-          case 5:
-            session = _context7.sent;
-            _context7.t0 = req.body.event;
-            _context7.next = _context7.t0 === 'connectionCreated' ? 9 : _context7.t0 === 'connectionDestroyed' ? 19 : 28;
-            break;
+          case 4:
+            existingSession = _context7.sent;
+
+            if (!existingSession) {
+              _context7.next = 13;
+              break;
+            }
+
+            existingSession.flags.push({ user: connectionId });
+            _context7.next = 9;
+            return existingSession.save();
 
           case 9:
-            if (!session) {
-              _context7.next = 18;
-              break;
-            }
+            _context7.next = 11;
+            return _tok_session_participant2.default.find({ session: existingSession, present: true }).lean().exec();
 
-            _context7.next = 12;
-            return _tok_session_participant2.default.count({ session: session, connectionId: connection.id });
+          case 11:
+            participants = _context7.sent;
+            return _context7.abrupt('return', res.json(_extends({}, existingSession.toJSON(), { participants: participants })));
 
-          case 12:
-            _context7.t1 = _context7.sent;
-            participantExists = _context7.t1 > 0;
+          case 13:
+            res.sendStatus(404);
 
-            if (participantExists) {
-              _context7.next = 18;
-              break;
-            }
-
-            participant = new _tok_session_participant2.default({ session: session, connectionId: connection.id });
-            _context7.next = 18;
-            return participant.save();
-
-          case 18:
-            return _context7.abrupt('break', 28);
-
-          case 19:
-            if (!session) {
-              _context7.next = 27;
-              break;
-            }
-
-            _context7.next = 22;
-            return _tok_session_participant2.default.findOne({ session: session, connectionId: connection.id });
-
-          case 22:
-            _participant = _context7.sent;
-
-            if (!_participant) {
-              _context7.next = 27;
-              break;
-            }
-
-            _participant.present = false;
-            _context7.next = 27;
-            return _participant.save();
-
-          case 27:
-            return _context7.abrupt('break', 28);
-
-          case 28:
+          case 14:
           case 'end':
             return _context7.stop();
         }
@@ -704,6 +587,88 @@ router.post('/event', function () {
 
   return function (_x13, _x14) {
     return _ref7.apply(this, arguments);
+  };
+}());
+
+router.post('/event', function () {
+  var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(req, res) {
+    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
+
+    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            console.log('GOT EVENT', req.body);
+            res.sendStatus(200);
+            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
+            _context8.next = 5;
+            return _tok_session2.default.findOne({ sessionId: sessionId }).exec();
+
+          case 5:
+            session = _context8.sent;
+            _context8.t0 = req.body.event;
+            _context8.next = _context8.t0 === 'connectionCreated' ? 9 : _context8.t0 === 'connectionDestroyed' ? 19 : 28;
+            break;
+
+          case 9:
+            if (!session) {
+              _context8.next = 18;
+              break;
+            }
+
+            _context8.next = 12;
+            return _tok_session_participant2.default.count({ session: session, connectionId: connection.id });
+
+          case 12:
+            _context8.t1 = _context8.sent;
+            participantExists = _context8.t1 > 0;
+
+            if (participantExists) {
+              _context8.next = 18;
+              break;
+            }
+
+            participant = new _tok_session_participant2.default({ session: session, connectionId: connection.id });
+            _context8.next = 18;
+            return participant.save();
+
+          case 18:
+            return _context8.abrupt('break', 28);
+
+          case 19:
+            if (!session) {
+              _context8.next = 27;
+              break;
+            }
+
+            _context8.next = 22;
+            return _tok_session_participant2.default.findOne({ session: session, connectionId: connection.id });
+
+          case 22:
+            _participant = _context8.sent;
+
+            if (!_participant) {
+              _context8.next = 27;
+              break;
+            }
+
+            _participant.present = false;
+            _context8.next = 27;
+            return _participant.save();
+
+          case 27:
+            return _context8.abrupt('break', 28);
+
+          case 28:
+          case 'end':
+            return _context8.stop();
+        }
+      }
+    }, _callee8, undefined);
+  }));
+
+  return function (_x15, _x16) {
+    return _ref8.apply(this, arguments);
   };
 }());
 
@@ -723,19 +688,19 @@ function signal(sessionId, data) {
 exports.default = router;
 
 /***/ }),
-/* 19 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = require("fs");
 
 /***/ }),
-/* 20 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok");
 
 /***/ }),
-/* 21 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -745,20 +710,26 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _mongoose = __webpack_require__(4);
+var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _anotherMongooseStatemachine = __webpack_require__(22);
+var _anotherMongooseStatemachine = __webpack_require__(16);
 
 var _anotherMongooseStatemachine2 = _interopRequireDefault(_anotherMongooseStatemachine);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var FlagSchema = new _mongoose.Schema({
+  user: { type: String },
+  reason: { type: String }
+});
+
 var TokSessionSchema = new _mongoose.Schema({
   room: { type: String, index: true },
   sessionId: { type: String, index: true },
-  journey: { type: String, default: '/journeys/Journey to A Spiderweb+Music.mp3' }
+  journey: { type: String, default: '/journeys/Journey to A Spiderweb+Music.mp3' },
+  flags: { type: [FlagSchema], default: [] }
 });
 
 TokSessionSchema.plugin(_anotherMongooseStatemachine2.default, {
@@ -778,13 +749,13 @@ var TokSession = _mongoose2.default.model('TokSession', TokSessionSchema);
 exports.default = TokSession;
 
 /***/ }),
-/* 22 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = require("another-mongoose-statemachine");
 
 /***/ }),
-/* 23 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -794,7 +765,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _mongoose = __webpack_require__(4);
+var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
@@ -812,7 +783,7 @@ var TokSessionParticipant = _mongoose2.default.model('TokSessionParticipant', To
 exports.default = TokSessionParticipant;
 
 /***/ }),
-/* 24 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -822,9 +793,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _express = __webpack_require__(3);
+var _express = __webpack_require__(1);
 
 var _express2 = _interopRequireDefault(_express);
 
@@ -832,23 +801,17 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _server = __webpack_require__(25);
+var _server = __webpack_require__(19);
 
 var _server2 = _interopRequireDefault(_server);
 
-var _redux = __webpack_require__(10);
+var _redux = __webpack_require__(20);
 
-var _reactRedux = __webpack_require__(1);
+var _reactRedux = __webpack_require__(21);
 
-var _reactRouter = __webpack_require__(26);
+var _reactRouter = __webpack_require__(22);
 
-var _index = __webpack_require__(27);
-
-var _index2 = _interopRequireDefault(_index);
-
-var _action_types = __webpack_require__(5);
-
-var _app = __webpack_require__(31);
+var _app = __webpack_require__(23);
 
 var _app2 = _interopRequireDefault(_app);
 
@@ -859,51 +822,16 @@ console.log(process.env);
 var router = _express2.default.Router();
 
 router.get('/', function (req, res) {
-  /*
-    http://redux.js.org/docs/recipes/ServerRendering.html
-  */
-  var store = (0, _redux.createStore)(_index2.default, {
-    openTokKey: process.env.OPENTOK_KEY
-  });
-
-  /*
-      We can dispatch actions from server side as well. This can be very useful if you want
-      to inject some initial data into the app. For example, if you have some articles that
-      you have fetched from database and you want to load immediately after the user has loaded
-      the webpage, you can do so in here.
-       Here we are inject an list item into our app. Normally once the user has loaded the webpage
-      we would make a request to the server and get the latest item list. But in the server we have
-      instant connection to a database (for example, if you have a mongoDB or MySQL database installed
-      in the server which contains all you items). So you can quickly fetch and inject it into the webpage.
-       This will help SEO as well. If you load the webpage and make a request to the server to get all the
-      latest items/articles, by the time Google Search Engine may not see all the updated items/articles.
-       But if you inject the latest items/articles before it reaches the user, the Search Engine will see the
-      item/article immediately.
-       */
-  store.dispatch({
-    type: _action_types.LIST_ACTIONS.ITEM_ADD,
-    item: {
-      name: 'middleware',
-      description: 'Redux middleware solves different problems than Express or Koa middleware, but in a conceptually similar way.\n      It provides a third-party extension point between dispatching an action, and the moment it reaches the reducer.'
-    }
-  });
-
   var context = {};
 
   var html = _server2.default.renderToString(_react2.default.createElement(
-    _reactRedux.Provider,
-    { store: store },
-    _react2.default.createElement(
-      _reactRouter.StaticRouter,
-      {
-        location: req.originalUrl,
-        context: context
-      },
-      _react2.default.createElement(_app2.default, null)
-    )
+    _reactRouter.StaticRouter,
+    {
+      location: req.originalUrl,
+      context: context
+    },
+    _react2.default.createElement(_app2.default, null)
   ));
-
-  var finalState = store.getState();
 
   if (context.url) {
     res.writeHead(301, {
@@ -913,7 +841,7 @@ router.get('/', function (req, res) {
   } else {
     res.status(200).render(process.env.NODE_ENV === 'production' ? 'index.ejs' : 'index.dev.ejs', {
       html: html,
-      script: JSON.stringify(_extends({}, finalState))
+      script: JSON.stringify({ openTokKey: process.env.OPENTOK_KEY })
     });
   }
 });
@@ -921,135 +849,31 @@ router.get('/', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 25 */
+/* 19 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom/server");
 
 /***/ }),
-/* 26 */
+/* 20 */
+/***/ (function(module, exports) {
+
+module.exports = require("redux");
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-redux");
+
+/***/ }),
+/* 22 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-router");
 
 /***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _redux = __webpack_require__(10);
-
-var _list = __webpack_require__(28);
-
-var _list2 = _interopRequireDefault(_list);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var rootReducer = (0, _redux.combineReducers)({
-  list: _list2.default, // shorthand for lists: lists
-  openTokKey: function openTokKey() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    return state;
-  }
-});
-
-exports.default = rootReducer;
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _action_types = __webpack_require__(5);
-
-var _default_state = __webpack_require__(29);
-
-exports.default = function () {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _default_state.LISTS;
-  var action = arguments[1];
-
-  switch (action.type) {
-    case _action_types.LIST_ACTIONS.ITEM_PREVIEW:
-      return _extends({}, state, { itemPreview: state.items[action.name.toUpperCase()] });
-    case _action_types.LIST_ACTIONS.ITEM_VIEW:
-      return _extends({}, state, { itemView: state.items[action.name.toUpperCase()] });
-    case _action_types.LIST_ACTIONS.ITEM_CLEAR:
-      return _extends({}, state, { itemView: null });
-    case _action_types.LIST_ACTIONS.ITEM_ADD:
-      {
-        var nextItems = _extends({}, state.items);
-        var itemToAdd = action.item;
-        nextItems[itemToAdd.name.toUpperCase()] = itemToAdd;
-        var returnVal = _extends({}, state, { items: nextItems });
-        return returnVal;
-      }
-    default:
-      return state;
-  }
-};
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.LISTS = undefined;
-
-var _list_items = __webpack_require__(30);
-
-var _list_items2 = _interopRequireDefault(_list_items);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// eslint-disable-next-line
-var LISTS = exports.LISTS = { items: _list_items2.default, itemPreview: null, itemView: null };
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  ACTIONS: {
-    name: 'actions',
-    description: 'Actions are payloads of information that send data from your application to your store. They are the only source of information for the store.'
-  },
-  STORE: {
-    name: 'store',
-    description: 'The state of your whole application is stored in an object tree within a single store.'
-  },
-  REDUCERS: {
-    name: 'reducers',
-    description: 'Actions describe the fact that something happened, but don\'t specify how the application\'s state changes in response. This is the job of reducers.'
-  }
-};
-
-/***/ }),
-/* 31 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1063,21 +887,17 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(6);
+var _reactRouterDom = __webpack_require__(24);
 
-var _header = __webpack_require__(32);
+var _header = __webpack_require__(25);
 
 var _header2 = _interopRequireDefault(_header);
 
-var _home = __webpack_require__(33);
+var _home = __webpack_require__(26);
 
 var _home2 = _interopRequireDefault(_home);
 
-var _list_item_view = __webpack_require__(38);
-
-var _list_item_view2 = _interopRequireDefault(_list_item_view);
-
-var _Room = __webpack_require__(40);
+var _Room = __webpack_require__(27);
 
 var _Room2 = _interopRequireDefault(_Room);
 
@@ -1089,15 +909,20 @@ var App = function App() {
     null,
     _react2.default.createElement(_header2.default, null),
     _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _home2.default }),
-    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/:room', component: _Room2.default }),
-    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/view/:name', component: _list_item_view2.default })
+    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/:room', component: _Room2.default })
   );
 };
 
 exports.default = App;
 
 /***/ }),
-/* 32 */
+/* 24 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-dom");
+
+/***/ }),
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1128,7 +953,7 @@ var Header = function Header() {
 exports.default = Header;
 
 /***/ }),
-/* 33 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1142,24 +967,16 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _list_items = __webpack_require__(34);
-
-var _list_items2 = _interopRequireDefault(_list_items);
-
-var _list_item_preview = __webpack_require__(36);
-
-var _list_item_preview2 = _interopRequireDefault(_list_item_preview);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Home = function Home() {
   return _react2.default.createElement(
-    'div',
-    { className: 'home' },
+    "div",
+    { className: "home" },
     _react2.default.createElement(
-      'h3',
+      "h3",
       null,
-      'Amazing things to come.'
+      "Amazing things to come."
     )
   );
 };
@@ -1167,58 +984,7 @@ var Home = function Home() {
 exports.default = Home;
 
 /***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _reactRedux = __webpack_require__(1);
-
-var _list_actions = __webpack_require__(11);
-
-var _list_items = __webpack_require__(35);
-
-var _list_items2 = _interopRequireDefault(_list_items);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/*
-This is a redux specific function.
-What is does is: It gets the state specified in here from the global redux state.
-For example, here we are retrieving the list of items from the redux store.
-Whenever this list changes, any component that is using this list of item will re-render.
- */
-var mapStateToProps = function mapStateToProps(state) {
-  return {
-    listItems: state.list.items
-  };
-};
-
-/*
-This is a redux specific function.
-http://redux.js.org/docs/api/bindActionCreators.html
- */
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {
-    previewItem: function previewItem(name) {
-      dispatch((0, _list_actions.previewItem)(name));
-    }
-  };
-};
-
-/*
-Here we are creating a Higher order component
-https://facebook.github.io/react/docs/higher-order-components.html
- */
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_list_items2.default);
-
-/***/ }),
-/* 35 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1234,368 +1000,21 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(2);
+var _reactEasyState = __webpack_require__(6);
 
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ListView = function (_Component) {
-  _inherits(ListView, _Component);
-
-  function ListView() {
-    _classCallCheck(this, ListView);
-
-    return _possibleConstructorReturn(this, (ListView.__proto__ || Object.getPrototypeOf(ListView)).apply(this, arguments));
-  }
-
-  _createClass(ListView, [{
-    key: 'renderList',
-    value: function renderList() {
-      var _props = this.props,
-          listItems = _props.listItems,
-          previewItem = _props.previewItem;
-
-      return Object.keys(listItems).map(function (key) {
-        var item = listItems[key];
-        return _react2.default.createElement(
-          'li',
-          {
-            key: item.name
-          },
-          _react2.default.createElement(
-            'button',
-            { onClick: function onClick() {
-                return previewItem(item.name);
-              } },
-            item.name
-          )
-        );
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        { className: 'list_items' },
-        _react2.default.createElement(
-          'ul',
-          null,
-          this.renderList()
-        )
-      );
-    }
-  }]);
-
-  return ListView;
-}(_react.Component);
-
-ListView.propTypes = {
-  listItems: _propTypes2.default.object.isRequired,
-  previewItem: _propTypes2.default.func.isRequired
-};
-
-exports.default = ListView;
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _reactRedux = __webpack_require__(1);
-
-var _list_item_preview = __webpack_require__(37);
-
-var _list_item_preview2 = _interopRequireDefault(_list_item_preview);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/*
- This is a redux specific function.
- What is does is: It gets the state specified in here from the global redux state.
- For example, here we are retrieving the list of items from the redux store.
- Whenever this list changes, any component that is using this list of item will re-render.
- */
-function mapStateToProps(state) {
-  return {
-    item: state.list.itemPreview
-  };
-}
-
-/*
- Here we are creating a Higher order component
- https://facebook.github.io/react/docs/higher-order-components.html
- */
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(_list_item_preview2.default);
-
-/***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(2);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _reactRouterDom = __webpack_require__(6);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ListItemPreview = function ListItemPreview(_ref) {
-  var item = _ref.item;
-
-  if (!item) {
-    return _react2.default.createElement(
-      'div',
-      { className: 'preview' },
-      _react2.default.createElement(
-        'h3',
-        null,
-        'Select an item'
-      ),
-      _react2.default.createElement(
-        'p',
-        null,
-        'Description will appear here'
-      )
-    );
-  }
-  return _react2.default.createElement(
-    'div',
-    { className: 'preview' },
-    _react2.default.createElement(
-      'h2',
-      null,
-      ' ',
-      item.name,
-      ' '
-    ),
-    _react2.default.createElement(
-      'p',
-      null,
-      item.description
-    ),
-    _react2.default.createElement(
-      _reactRouterDom.Link,
-      { to: 'view/' + item.name },
-      _react2.default.createElement(
-        'button',
-        { type: 'button', className: 'btn btn-primary' },
-        'Read More'
-      )
-    )
-  );
-};
-
-ListItemPreview.propTypes = {
-  item: _propTypes2.default.object
-};
-
-ListItemPreview.defaultProps = {
-  item: null
-};
-
-exports.default = ListItemPreview;
-
-/***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _reactRedux = __webpack_require__(1);
-
-var _list_actions = __webpack_require__(11);
-
-var _list_item_view = __webpack_require__(39);
-
-var _list_item_view2 = _interopRequireDefault(_list_item_view);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var mapStateToProps = function mapStateToProps(state) {
-  return {
-    item: state.list.itemView
-  };
-};
-
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {
-    viewItem: function viewItem(name) {
-      dispatch((0, _list_actions.viewItem)(name));
-    }
-  };
-};
-
-/*
- Here we are creating a Higher order component
- https://facebook.github.io/react/docs/higher-order-components.html
- */
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_list_item_view2.default);
-
-/***/ }),
-/* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(2);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _reactRouterDom = __webpack_require__(6);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ListItemView = function (_Component) {
-  _inherits(ListItemView, _Component);
-
-  function ListItemView() {
-    _classCallCheck(this, ListItemView);
-
-    return _possibleConstructorReturn(this, (ListItemView.__proto__ || Object.getPrototypeOf(ListItemView)).apply(this, arguments));
-  }
-
-  _createClass(ListItemView, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _props = this.props,
-          viewItem = _props.viewItem,
-          match = _props.match;
-
-      viewItem(match.params.name);
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var item = this.props.item;
-
-      if (!item) {
-        return _react2.default.createElement(
-          'div',
-          null,
-          'Loading...'
-        );
-      }
-
-      return _react2.default.createElement(
-        'div',
-        { className: 'view_item' },
-        _react2.default.createElement(
-          _reactRouterDom.Link,
-          { to: '/' },
-          _react2.default.createElement(
-            'button',
-            { type: 'button' },
-            'Back'
-          )
-        ),
-        _react2.default.createElement(
-          'h2',
-          null,
-          item.name
-        ),
-        _react2.default.createElement(
-          'p',
-          null,
-          item.description
-        )
-      );
-    }
-  }]);
-
-  return ListItemView;
-}(_react.Component);
-
-ListItemView.propTypes = {
-  viewItem: _propTypes2.default.func.isRequired,
-  match: _propTypes2.default.object.isRequired,
-  item: _propTypes2.default.object
-};
-
-ListItemView.defaultProps = {
-  item: null
-};
-
-exports.default = ListItemView;
-
-/***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactEasyState = __webpack_require__(12);
-
-var _state = __webpack_require__(41);
+var _state = __webpack_require__(28);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _propTypes = __webpack_require__(2);
+var _propTypes = __webpack_require__(29);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _uuid = __webpack_require__(42);
+var _uuid = __webpack_require__(30);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _opentokLayoutJs = __webpack_require__(43);
+var _opentokLayoutJs = __webpack_require__(31);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1605,8 +1024,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-__webpack_require__(44).polyfill();
-__webpack_require__(9);
+__webpack_require__(32).polyfill();
+__webpack_require__(5);
 
 var _ref = {},
     OTSession = _ref.OTSession,
@@ -1617,14 +1036,14 @@ var _ref = {},
 
 
 if (__CLIENT__) {
-  var _require = __webpack_require__(45),
+  var _require = __webpack_require__(33),
       OTSession = _require.OTSession,
       OTPublisher = _require.OTPublisher,
       OTStreams = _require.OTStreams,
       OTSubscriber = _require.OTSubscriber,
       createSession = _require.createSession;
 
-  var OT = __webpack_require__(46);
+  var OT = __webpack_require__(34);
   window.state = _state2.default;
 }
 
@@ -1697,6 +1116,25 @@ var Room = function (_Component) {
       });
     };
 
+    _this.onFlag = function (e) {
+      e.preventDefault();
+      fetch('/api/sessions/' + _this.props.match.params.room + '/flag', {
+        cache: 'no-cache',
+        body: JSON.stringify({ connectionId: _this.state.session.connection.id }),
+        credentials: 'same-origin',
+        headers: {
+          'user-agent': 'Mozilla/4.0 MDN Example',
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+        mode: 'cors'
+      }).then(function (res) {
+        return res.json();
+      }).then(function (json) {
+        return _state2.default.session = json;
+      });
+    };
+
     _this.state = {
       streams: [],
       publisherId: '',
@@ -1723,10 +1161,6 @@ var Room = function (_Component) {
         });
       });
 
-      setTimeout(function () {
-        console.log('ADD IT TO', _this2.audioTag, _this2.onTimeUpdate);
-      }, 5000);
-
       fetch('/api/sessions/' + this.props.match.params.room).then(function (res) {
         return res.json();
       }).then(function (json) {
@@ -1744,7 +1178,6 @@ var Room = function (_Component) {
             _this2.setState({ streams: streams });
           }
         });
-        window.sh = _this2.sessionHelper;
         _this2.sessionHelper.session.on("connectionDestroyed", function (event) {
           console.log('DESTROYED', event);
           var data = {
@@ -1754,20 +1187,6 @@ var Room = function (_Component) {
             },
             event: 'connectionDestroyed'
           };
-          console.log('data is', data);
-          // fetch(`/api/event`, {
-          //   body: JSON.stringify(data), // must match 'Content-Type' header
-          //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          //   credentials: 'same-origin', // include, same-origin, *omit
-          //   headers: {
-          //     'user-agent': 'Mozilla/4.0 MDN Example',
-          //     'content-type': 'application/json'
-          //   },
-          //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          //   mode: 'cors', // no-cors, cors, *same-origin
-          //   redirect: 'follow', // manual, *follow, error
-          //   referrer: 'no-referrer', // *client, no-referrer
-          // });
           _this2.refreshSession();
         });
         _this2.sessionHelper.session.on("connectionCreated", function (event) {
@@ -1779,20 +1198,6 @@ var Room = function (_Component) {
             },
             event: 'connectionCreated'
           };
-          console.log('data is', data);
-          // fetch(`/api/event`, {
-          //   body: JSON.stringify(data), // must match 'Content-Type' header
-          //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          //   credentials: 'same-origin', // include, same-origin, *omit
-          //   headers: {
-          //     'user-agent': 'Mozilla/4.0 MDN Example',
-          //     'content-type': 'application/json'
-          //   },
-          //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          //   mode: 'cors', // no-cors, cors, *same-origin
-          //   redirect: 'follow', // manual, *follow, error
-          //   referrer: 'no-referrer', // *client, no-referrer
-          // });
           _this2.refreshSession();
         });
         _this2.sessionHelper.session.on("signal", function (event) {
@@ -1831,6 +1236,12 @@ var Room = function (_Component) {
       var currentParticipant = this.state.session && _state2.default.session && _state2.default.session.participants.find(function (participant) {
         return participant.connectionId === _this3.state.session.connection.id;
       });
+      var currentUserHasFlaggedJourney = false;
+      if (currentParticipant) {
+        currentUserHasFlaggedJourney = _state2.default.session.flags.map(function (flag) {
+          return flag.user;
+        }).indexOf(currentParticipant.connectionId) > -1;
+      }
       return _react2.default.createElement(
         'div',
         { className: 'journey-container' },
@@ -1848,7 +1259,12 @@ var Room = function (_Component) {
         ),
         this.state.session && _react2.default.createElement(
           'div',
-          null,
+          { style: { position: 'relative' } },
+          _react2.default.createElement(
+            'button',
+            { style: { position: 'absolute', top: 0, right: 0 }, className: 'btn btn-danger btn-flag-session', disabled: currentUserHasFlaggedJourney, onClick: this.onFlag },
+            currentUserHasFlaggedJourney ? "You've flagged this journey" : "Flag this journey"
+          ),
           _react2.default.createElement(
             'div',
             { className: 'row' },
@@ -1984,7 +1400,7 @@ var Room = function (_Component) {
 exports.default = (0, _reactEasyState.view)(Room);
 
 /***/ }),
-/* 41 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1996,7 +1412,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _reactEasyState = __webpack_require__(12);
+var _reactEasyState = __webpack_require__(6);
 
 exports.default = (0, _reactEasyState.store)(_extends({}, global.__INITIAL_STATE__ || {}, {
   session: null,
@@ -2004,31 +1420,37 @@ exports.default = (0, _reactEasyState.store)(_extends({}, global.__INITIAL_STATE
 }));
 
 /***/ }),
-/* 42 */
+/* 29 */
+/***/ (function(module, exports) {
+
+module.exports = require("prop-types");
+
+/***/ }),
+/* 30 */
 /***/ (function(module, exports) {
 
 module.exports = require("uuid");
 
 /***/ }),
-/* 43 */
+/* 31 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok-layout-js");
 
 /***/ }),
-/* 44 */
+/* 32 */
 /***/ (function(module, exports) {
 
 module.exports = require("es6-promise");
 
 /***/ }),
-/* 45 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok-react");
 
 /***/ }),
-/* 46 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = require("@opentok/client");
