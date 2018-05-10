@@ -43,7 +43,7 @@ export default class GeneratorForm extends Component {
               <input type="text" id="session_link" onChange={this.handleNameChange} /> &nbsp; or <a href='#'>Generate a name</a>
             </p>
             <p>
-              Description (optional):<br/>
+              Description:<br/>
               <textarea id="session_description" rows="2" cols="25"></textarea>
             </p>
             <p>

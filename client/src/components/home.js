@@ -128,10 +128,12 @@ export default class Home extends Component {
 
           if (event.type === 'signal:displayJourneyRequest') {
             console.log("**** CAPTURED the journey request !! ")
+            console.log(event)
+            let data = JSON.parse(event.data)
             this.setState({
               displayMessageVisible: true,
-              displayMessageText: "George has created a session 'Daily Jetsons Meditation'.", //TEMP hard coded
-              sessionUrl: '/another-jetsons-url'
+              displayMessageText: data.description,
+              sessionUrl: data.messageUrl
             });
           }
         });

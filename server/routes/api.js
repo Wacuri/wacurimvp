@@ -66,7 +66,13 @@ router.get('/sessions/test/temp-home-location', async (req, res) => {
   const existingSession = await TokSession.findOne({room:'temp-home-location'}).exec();
   if (existingSession) {
   console.log("**** SENDING SIGNAL")
-  signal(existingSession.sessionId, {type: 'displayJourneyRequest', data: 'Rob has started a session. Join him (link)'});
+  let messageData = {
+    userName: "Bob",
+    description: "some text",
+    url: "http://www.news.google.com"
+  }
+
+  signal(existingSession.sessionId, {type: 'displayJourneyRequest', data: JSON.stringify(messageData)});
   return res.sendStatus(200);
   }
   res.sendStatus(200);
