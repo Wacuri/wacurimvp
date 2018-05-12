@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -83,109 +83,79 @@ module.exports = require("mongoose");
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-// eslint-disable-next-line
-var LIST_ACTIONS = exports.LIST_ACTIONS = {
-  ITEM_PREVIEW: 'ITEM_PREVIEW',
-  ITEM_VIEW: 'ITEM_VIEW',
-  ITEM_ADD: 'ITEM_ADD',
-  ITEM_CLEAR: 'ITEM_CLEAR'
-};
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports) {
 
 module.exports = require("dotenv");
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports) {
 
 module.exports = require("path");
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports) {
 
 module.exports = require("isomorphic-fetch");
 
 /***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+module.exports = require("opentok-react");
+
+/***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
-module.exports = require("redux");
+module.exports = require("@opentok/client");
 
 /***/ }),
 /* 8 */
 /***/ (function(module, exports) {
 
-module.exports = require("react-redux");
+module.exports = require("react-easy-state");
 
 /***/ }),
 /* 9 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("react-router-dom");
+__webpack_require__(10);
+module.exports = __webpack_require__(11);
+
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = require("prop-types");
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-easy-state");
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(13);
-module.exports = __webpack_require__(14);
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
 module.exports = require("babel-polyfill/lib/index");
 
 /***/ }),
-/* 14 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var dotenv = __webpack_require__(4);
+var dotenv = __webpack_require__(3);
 
 dotenv.config();
 global.__CLIENT__ = false;
 global.__SERVER__ = true;
 
-var routes = __webpack_require__(15);
+var routes = __webpack_require__(12);
 
 exports = routes;
 
 /***/ }),
-/* 15 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _path = __webpack_require__(5);
+var _path = __webpack_require__(4);
 
 var _path2 = _interopRequireDefault(_path);
 
@@ -193,15 +163,15 @@ var _express = __webpack_require__(1);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _bodyParser = __webpack_require__(16);
+var _bodyParser = __webpack_require__(13);
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _api = __webpack_require__(17);
+var _api = __webpack_require__(14);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _ssr = __webpack_require__(22);
+var _ssr = __webpack_require__(20);
 
 var _ssr2 = _interopRequireDefault(_ssr);
 
@@ -223,13 +193,13 @@ app.listen(process.env.PORT || 5000, function () {
 });
 
 /***/ }),
-/* 16 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = require("body-parser");
 
 /***/ }),
-/* 17 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -241,11 +211,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _fs = __webpack_require__(18);
+var _fs = __webpack_require__(15);
 
 var _fs2 = _interopRequireDefault(_fs);
 
-var _path = __webpack_require__(5);
+var _path = __webpack_require__(4);
 
 var _path2 = _interopRequireDefault(_path);
 
@@ -253,7 +223,7 @@ var _express = __webpack_require__(1);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _opentok = __webpack_require__(19);
+var _opentok = __webpack_require__(16);
 
 var _opentok2 = _interopRequireDefault(_opentok);
 
@@ -261,15 +231,15 @@ var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _tok_session = __webpack_require__(20);
+var _tok_session = __webpack_require__(17);
 
 var _tok_session2 = _interopRequireDefault(_tok_session);
 
-var _tok_session_participant = __webpack_require__(21);
+var _tok_session_participant = __webpack_require__(19);
 
 var _tok_session_participant2 = _interopRequireDefault(_tok_session_participant);
 
-var _dotenv = __webpack_require__(4);
+var _dotenv = __webpack_require__(3);
 
 var _dotenv2 = _interopRequireDefault(_dotenv);
 
@@ -279,7 +249,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-__webpack_require__(6);
+__webpack_require__(5);
 
 _dotenv2.default.config();
 
@@ -321,7 +291,7 @@ function generateToken(sessionId) {
 
 // TODO: switch to POST, just using GET for easier testing
 router.get('/sessions/:room', function () {
-  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(req, res) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(req, res) {
     var room, existingSession, participants;
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
@@ -354,7 +324,7 @@ router.get('/sessions/:room', function () {
 
           case 12:
             opentok.createSession(function () {
-              var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee(err, session) {
+              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(err, session) {
                 var newSession;
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                   while (1) {
@@ -404,54 +374,34 @@ router.get('/sessions/:room', function () {
   };
 }());
 
-router.get('/sessions/:room/connections/:connection/ready', function () {
-  var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(req, res) {
-    var _req$params, room, connection, existingSession, participant, allReady;
-
+// TEMP: Use get for convenience. hardcode temp-home-location for the room
+// Trigger a general announcement to everyone
+router.get('/sessions/test/temp-home-location', function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res) {
+    var existingSession;
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
-            _req$params = req.params, room = _req$params.room, connection = _req$params.connection;
-            _context3.next = 3;
-            return _tok_session2.default.findOne({ room: room }).exec();
+            _context3.next = 2;
+            return _tok_session2.default.findOne({ room: 'temp-home-location' }).exec();
 
-          case 3:
+          case 2:
             existingSession = _context3.sent;
 
             if (!existingSession) {
-              _context3.next = 18;
+              _context3.next = 7;
               break;
             }
 
-            _context3.next = 7;
-            return _tok_session_participant2.default.findOne({ session: existingSession, connectionId: connection });
-
-          case 7:
-            participant = _context3.sent;
-
-            participant.ready = true;
-            _context3.next = 11;
-            return participant.save();
-
-          case 11:
-            signal(existingSession.sessionId, { type: 'ready', data: 'foo' });
-            _context3.next = 14;
-            return _tok_session_participant2.default.count({ session: existingSession, ready: false, present: true });
-
-          case 14:
-            _context3.t0 = _context3.sent;
-            allReady = _context3.t0 === 0;
-
-            if (allReady) {
-              signal(existingSession.sessionId, { type: 'startJourney', data: 'foo' });
-            }
+            console.log("**** SENDING SIGNAL");
+            signal(existingSession.sessionId, { type: 'displayJourneyRequest', data: 'Rob has started a session. Join him (link)' });
             return _context3.abrupt('return', res.sendStatus(200));
 
-          case 18:
-            res.sendStsatus(200);
+          case 7:
+            res.sendStatus(200);
 
-          case 19:
+          case 8:
           case 'end':
             return _context3.stop();
         }
@@ -464,31 +414,54 @@ router.get('/sessions/:room/connections/:connection/ready', function () {
   };
 }());
 
-router.get('/journeys', function () {
-  var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(req, res) {
-    var readdirAsync, journeyFiles;
+router.get('/sessions/:room/connections/:connection/ready', function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(req, res) {
+    var _req$params, room, connection, existingSession, participant, allReady;
+
     return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
-            readdirAsync = promisify(_fs2.default.readdir);
+            _req$params = req.params, room = _req$params.room, connection = _req$params.connection;
             _context4.next = 3;
-            return readdirAsync(_path2.default.join(__dirname, '..', 'public/journeys'));
+            return _tok_session2.default.findOne({ room: room }).exec();
 
           case 3:
-            _context4.t0 = function (file) {
-              return _path2.default.extname(file) === '.mp3';
-            };
+            existingSession = _context4.sent;
 
-            _context4.t1 = function (file) {
-              return '/journeys/' + file;
-            };
+            if (!existingSession) {
+              _context4.next = 18;
+              break;
+            }
 
-            journeyFiles = _context4.sent.filter(_context4.t0).map(_context4.t1);
-
-            res.json(journeyFiles);
+            _context4.next = 7;
+            return _tok_session_participant2.default.findOne({ session: existingSession, connectionId: connection });
 
           case 7:
+            participant = _context4.sent;
+
+            participant.ready = true;
+            _context4.next = 11;
+            return participant.save();
+
+          case 11:
+            signal(existingSession.sessionId, { type: 'ready', data: 'foo' });
+            _context4.next = 14;
+            return _tok_session_participant2.default.count({ session: existingSession, ready: false, present: true });
+
+          case 14:
+            _context4.t0 = _context4.sent;
+            allReady = _context4.t0 === 0;
+
+            if (allReady) {
+              // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
+            }
+            return _context4.abrupt('return', res.sendStatus(200));
+
+          case 18:
+            res.sendStatus(200);
+
+          case 19:
           case 'end':
             return _context4.stop();
         }
@@ -501,38 +474,31 @@ router.get('/journeys', function () {
   };
 }());
 
-router.put('/sessions/:room/journey', function () {
-  var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(req, res) {
-    var journey, room, existingSession;
+router.get('/journeys', function () {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(req, res) {
+    var readdirAsync, journeyFiles;
     return regeneratorRuntime.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
-            console.log('UPDATE JOURNEY');
-            journey = req.body.journey;
-            room = req.params.room;
-            _context5.next = 5;
-            return _tok_session2.default.findOne({ room: room }).exec();
+            readdirAsync = promisify(_fs2.default.readdir);
+            _context5.next = 3;
+            return readdirAsync(_path2.default.join(__dirname, '..', 'public/journeys'));
 
-          case 5:
-            existingSession = _context5.sent;
+          case 3:
+            _context5.t0 = function (file) {
+              return _path2.default.extname(file) === '.mp3';
+            };
 
-            if (!existingSession) {
-              _context5.next = 11;
-              break;
-            }
+            _context5.t1 = function (file) {
+              return '/journeys/' + file;
+            };
 
-            existingSession.journey = journey;
-            _context5.next = 10;
-            return existingSession.save();
+            journeyFiles = _context5.sent.filter(_context5.t0).map(_context5.t1);
 
-          case 10:
-            signal(existingSession.sessionId, { type: 'updatedJourney', data: journey });
+            res.json(journeyFiles);
 
-          case 11:
-            res.sendStatus(200);
-
-          case 12:
+          case 7:
           case 'end':
             return _context5.stop();
         }
@@ -545,76 +511,38 @@ router.put('/sessions/:room/journey', function () {
   };
 }());
 
-router.post('/event', function () {
-  var _ref6 = _asyncToGenerator(regeneratorRuntime.mark(function _callee6(req, res) {
-    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
-
+router.put('/sessions/:room/journey', function () {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res) {
+    var journey, room, existingSession;
     return regeneratorRuntime.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
-            console.log('GOT EVENT', req.body);
-            res.sendStatus(200);
-            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
+            console.log('UPDATE JOURNEY');
+            journey = req.body.journey;
+            room = req.params.room;
             _context6.next = 5;
-            return _tok_session2.default.findOne({ sessionId: sessionId }).exec();
+            return _tok_session2.default.findOne({ room: room }).exec();
 
           case 5:
-            session = _context6.sent;
-            _context6.t0 = req.body.event;
-            _context6.next = _context6.t0 === 'connectionCreated' ? 9 : _context6.t0 === 'connectionDestroyed' ? 19 : 28;
-            break;
+            existingSession = _context6.sent;
 
-          case 9:
-            if (!session) {
-              _context6.next = 18;
+            if (!existingSession) {
+              _context6.next = 11;
               break;
             }
 
-            _context6.next = 12;
-            return _tok_session_participant2.default.count({ session: session, connectionId: connection.id });
+            existingSession.journey = journey;
+            _context6.next = 10;
+            return existingSession.save();
+
+          case 10:
+            signal(existingSession.sessionId, { type: 'updatedJourney', data: journey });
+
+          case 11:
+            res.sendStatus(200);
 
           case 12:
-            _context6.t1 = _context6.sent;
-            participantExists = _context6.t1 > 0;
-
-            if (participantExists) {
-              _context6.next = 18;
-              break;
-            }
-
-            participant = new _tok_session_participant2.default({ session: session, connectionId: connection.id });
-            _context6.next = 18;
-            return participant.save();
-
-          case 18:
-            return _context6.abrupt('break', 28);
-
-          case 19:
-            if (!session) {
-              _context6.next = 27;
-              break;
-            }
-
-            _context6.next = 22;
-            return _tok_session_participant2.default.findOne({ session: session, connectionId: connection.id });
-
-          case 22:
-            _participant = _context6.sent;
-
-            if (!_participant) {
-              _context6.next = 27;
-              break;
-            }
-
-            _participant.present = false;
-            _context6.next = 27;
-            return _participant.save();
-
-          case 27:
-            return _context6.abrupt('break', 28);
-
-          case 28:
           case 'end':
             return _context6.stop();
         }
@@ -624,6 +552,179 @@ router.post('/event', function () {
 
   return function (_x11, _x12) {
     return _ref6.apply(this, arguments);
+  };
+}());
+
+// TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
+router.post('/sessions/:room/start', function () {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req, res) {
+    var room, existingSession;
+    return regeneratorRuntime.wrap(function _callee7$(_context7) {
+      while (1) {
+        switch (_context7.prev = _context7.next) {
+          case 0:
+            room = req.params.room;
+            _context7.next = 3;
+            return _tok_session2.default.findOne({ room: room }).exec();
+
+          case 3:
+            existingSession = _context7.sent;
+
+            if (!existingSession) {
+              _context7.next = 8;
+              break;
+            }
+
+            _context7.next = 7;
+            return existingSession.start();
+
+          case 7:
+            signal(existingSession.sessionId, { type: 'startJourney', data: '' });
+
+          case 8:
+          case 'end':
+            return _context7.stop();
+        }
+      }
+    }, _callee7, undefined);
+  }));
+
+  return function (_x13, _x14) {
+    return _ref7.apply(this, arguments);
+  };
+}());
+
+router.post('/sessions/:room/flag', function () {
+  var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(req, res) {
+    var room, connectionId, existingSession, participants;
+    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            room = req.params.room;
+            connectionId = req.body.connectionId;
+            _context8.next = 4;
+            return _tok_session2.default.findOne({ room: room }).exec();
+
+          case 4:
+            existingSession = _context8.sent;
+
+            if (!existingSession) {
+              _context8.next = 13;
+              break;
+            }
+
+            existingSession.flags.push({ user: connectionId });
+            _context8.next = 9;
+            return existingSession.save();
+
+          case 9:
+            _context8.next = 11;
+            return _tok_session_participant2.default.find({ session: existingSession, present: true }).lean().exec();
+
+          case 11:
+            participants = _context8.sent;
+            return _context8.abrupt('return', res.json(_extends({}, existingSession.toJSON(), { participants: participants })));
+
+          case 13:
+            res.sendStatus(404);
+
+          case 14:
+          case 'end':
+            return _context8.stop();
+        }
+      }
+    }, _callee8, undefined);
+  }));
+
+  return function (_x15, _x16) {
+    return _ref8.apply(this, arguments);
+  };
+}());
+
+router.post('/event', function () {
+  var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(req, res) {
+    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
+
+    return regeneratorRuntime.wrap(function _callee9$(_context9) {
+      while (1) {
+        switch (_context9.prev = _context9.next) {
+          case 0:
+            console.log('GOT EVENT', req.body);
+            res.sendStatus(200);
+            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
+            _context9.next = 5;
+            return _tok_session2.default.findOne({ sessionId: sessionId }).exec();
+
+          case 5:
+            session = _context9.sent;
+
+
+            console.log("*******" + req.body);
+
+            _context9.t0 = req.body.event;
+            _context9.next = _context9.t0 === 'connectionCreated' ? 10 : _context9.t0 === 'connectionDestroyed' ? 20 : 29;
+            break;
+
+          case 10:
+            if (!session) {
+              _context9.next = 19;
+              break;
+            }
+
+            _context9.next = 13;
+            return _tok_session_participant2.default.count({ session: session, connectionId: connection.id });
+
+          case 13:
+            _context9.t1 = _context9.sent;
+            participantExists = _context9.t1 > 0;
+
+            if (participantExists) {
+              _context9.next = 19;
+              break;
+            }
+
+            participant = new _tok_session_participant2.default({ session: session, connectionId: connection.id });
+            _context9.next = 19;
+            return participant.save();
+
+          case 19:
+            return _context9.abrupt('break', 29);
+
+          case 20:
+            if (!session) {
+              _context9.next = 28;
+              break;
+            }
+
+            _context9.next = 23;
+            return _tok_session_participant2.default.findOne({ session: session, connectionId: connection.id });
+
+          case 23:
+            _participant = _context9.sent;
+
+            if (!_participant) {
+              _context9.next = 28;
+              break;
+            }
+
+            _participant.present = false;
+            _context9.next = 28;
+            return _participant.save();
+
+          case 28:
+            return _context9.abrupt('break', 29);
+
+          case 29:
+          case 'end':
+            return _context9.stop();
+        }
+      }
+    }, _callee9, undefined);
+  }));
+
+  return function (_x17, _x18) {
+    return _ref9.apply(this, arguments);
   };
 }());
 
@@ -643,19 +744,19 @@ function signal(sessionId, data) {
 exports.default = router;
 
 /***/ }),
-/* 18 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = require("fs");
 
 /***/ }),
-/* 19 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok");
 
 /***/ }),
-/* 20 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -669,12 +770,34 @@ var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
+var _anotherMongooseStatemachine = __webpack_require__(18);
+
+var _anotherMongooseStatemachine2 = _interopRequireDefault(_anotherMongooseStatemachine);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FlagSchema = new _mongoose.Schema({
+  user: { type: String },
+  reason: { type: String }
+});
 
 var TokSessionSchema = new _mongoose.Schema({
   room: { type: String, index: true },
   sessionId: { type: String, index: true },
-  journey: { type: String, default: '/journeys/Journey to A Spiderweb+Music.mp3' }
+  journey: { type: String, default: '/journeys/Journey to A Spiderweb+Music.mp3' },
+  flags: { type: [FlagSchema], default: [] }
+});
+
+TokSessionSchema.plugin(_anotherMongooseStatemachine2.default, {
+  states: {
+    created: { default: true },
+    started: {},
+    completed: {}
+  },
+  transitions: {
+    start: { from: 'created', to: 'started' },
+    end: { from: '*', to: 'completed' }
+  }
 });
 
 var TokSession = _mongoose2.default.model('TokSession', TokSessionSchema);
@@ -682,7 +805,13 @@ var TokSession = _mongoose2.default.model('TokSession', TokSessionSchema);
 exports.default = TokSession;
 
 /***/ }),
-/* 21 */
+/* 18 */
+/***/ (function(module, exports) {
+
+module.exports = require("another-mongoose-statemachine");
+
+/***/ }),
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -710,7 +839,7 @@ var TokSessionParticipant = _mongoose2.default.model('TokSessionParticipant', To
 exports.default = TokSessionParticipant;
 
 /***/ }),
-/* 22 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -728,74 +857,37 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _server = __webpack_require__(23);
+var _server = __webpack_require__(21);
 
 var _server2 = _interopRequireDefault(_server);
 
-var _redux = __webpack_require__(7);
+var _redux = __webpack_require__(22);
 
-var _reactRedux = __webpack_require__(8);
+var _reactRedux = __webpack_require__(23);
 
 var _reactRouter = __webpack_require__(24);
 
-var _index = __webpack_require__(25);
-
-var _index2 = _interopRequireDefault(_index);
-
-var _action_types = __webpack_require__(3);
-
-var _app = __webpack_require__(29);
+var _app = __webpack_require__(25);
 
 var _app2 = _interopRequireDefault(_app);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+console.log(process.env);
+
 var router = _express2.default.Router();
 
 router.get('/', function (req, res) {
-  /*
-    http://redux.js.org/docs/recipes/ServerRendering.html
-  */
-  var store = (0, _redux.createStore)(_index2.default);
-
-  /*
-      We can dispatch actions from server side as well. This can be very useful if you want
-      to inject some initial data into the app. For example, if you have some articles that
-      you have fetched from database and you want to load immediately after the user has loaded
-      the webpage, you can do so in here.
-       Here we are inject an list item into our app. Normally once the user has loaded the webpage
-      we would make a request to the server and get the latest item list. But in the server we have
-      instant connection to a database (for example, if you have a mongoDB or MySQL database installed
-      in the server which contains all you items). So you can quickly fetch and inject it into the webpage.
-       This will help SEO as well. If you load the webpage and make a request to the server to get all the
-      latest items/articles, by the time Google Search Engine may not see all the updated items/articles.
-       But if you inject the latest items/articles before it reaches the user, the Search Engine will see the
-      item/article immediately.
-       */
-  store.dispatch({
-    type: _action_types.LIST_ACTIONS.ITEM_ADD,
-    item: {
-      name: 'middleware',
-      description: 'Redux middleware solves different problems than Express or Koa middleware, but in a conceptually similar way.\n      It provides a third-party extension point between dispatching an action, and the moment it reaches the reducer.'
-    }
-  });
-
   var context = {};
 
   var html = _server2.default.renderToString(_react2.default.createElement(
-    _reactRedux.Provider,
-    { store: store },
-    _react2.default.createElement(
-      _reactRouter.StaticRouter,
-      {
-        location: req.originalUrl,
-        context: context
-      },
-      _react2.default.createElement(_app2.default, null)
-    )
+    _reactRouter.StaticRouter,
+    {
+      location: req.originalUrl,
+      context: context
+    },
+    _react2.default.createElement(_app2.default, null)
   ));
-
-  var finalState = store.getState();
 
   if (context.url) {
     res.writeHead(301, {
@@ -803,9 +895,9 @@ router.get('/', function (req, res) {
     });
     res.end();
   } else {
-    res.status(200).render('index.ejs', {
+    res.status(200).render(process.env.NODE_ENV === 'production' ? 'index.ejs' : 'index.dev.ejs', {
       html: html,
-      script: JSON.stringify(finalState)
+      script: JSON.stringify({ openTokKey: process.env.OPENTOK_KEY })
     });
   }
 });
@@ -813,10 +905,22 @@ router.get('/', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 23 */
+/* 21 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom/server");
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+module.exports = require("redux");
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-redux");
 
 /***/ }),
 /* 24 */
@@ -835,137 +939,21 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _redux = __webpack_require__(7);
-
-var _list = __webpack_require__(26);
-
-var _list2 = _interopRequireDefault(_list);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var rootReducer = (0, _redux.combineReducers)({
-  list: _list2.default // shorthand for lists: lists
-});
-
-exports.default = rootReducer;
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _action_types = __webpack_require__(3);
-
-var _default_state = __webpack_require__(27);
-
-exports.default = function () {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _default_state.LISTS;
-  var action = arguments[1];
-
-  switch (action.type) {
-    case _action_types.LIST_ACTIONS.ITEM_PREVIEW:
-      return _extends({}, state, { itemPreview: state.items[action.name.toUpperCase()] });
-    case _action_types.LIST_ACTIONS.ITEM_VIEW:
-      return _extends({}, state, { itemView: state.items[action.name.toUpperCase()] });
-    case _action_types.LIST_ACTIONS.ITEM_CLEAR:
-      return _extends({}, state, { itemView: null });
-    case _action_types.LIST_ACTIONS.ITEM_ADD:
-      {
-        var nextItems = _extends({}, state.items);
-        var itemToAdd = action.item;
-        nextItems[itemToAdd.name.toUpperCase()] = itemToAdd;
-        var returnVal = _extends({}, state, { items: nextItems });
-        return returnVal;
-      }
-    default:
-      return state;
-  }
-};
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.LISTS = undefined;
-
-var _list_items = __webpack_require__(28);
-
-var _list_items2 = _interopRequireDefault(_list_items);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// eslint-disable-next-line
-var LISTS = exports.LISTS = { items: _list_items2.default, itemPreview: null, itemView: null };
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  ACTIONS: {
-    name: 'actions',
-    description: 'Actions are payloads of information that send data from your application to your store. They are the only source of information for the store.'
-  },
-  STORE: {
-    name: 'store',
-    description: 'The state of your whole application is stored in an object tree within a single store.'
-  },
-  REDUCERS: {
-    name: 'reducers',
-    description: 'Actions describe the fact that something happened, but don\'t specify how the application\'s state changes in response. This is the job of reducers.'
-  }
-};
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(9);
+var _reactRouterDom = __webpack_require__(26);
 
-var _header = __webpack_require__(30);
+var _header = __webpack_require__(27);
 
 var _header2 = _interopRequireDefault(_header);
 
-var _home = __webpack_require__(31);
+var _home = __webpack_require__(28);
 
 var _home2 = _interopRequireDefault(_home);
 
-var _list_item_view = __webpack_require__(33);
-
-var _list_item_view2 = _interopRequireDefault(_list_item_view);
-
-var _Room = __webpack_require__(36);
+var _Room = __webpack_require__(32);
 
 var _Room2 = _interopRequireDefault(_Room);
 
@@ -977,15 +965,20 @@ var App = function App() {
     null,
     _react2.default.createElement(_header2.default, null),
     _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _home2.default }),
-    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/:room', component: _Room2.default }),
-    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/view/:name', component: _list_item_view2.default })
+    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/:room', component: _Room2.default })
   );
 };
 
 exports.default = App;
 
 /***/ }),
-/* 30 */
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-dom");
+
+/***/ }),
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1004,16 +997,439 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Header = function Header() {
   return _react2.default.createElement(
     "div",
-    { style: { marginTop: 20 }, className: "header" },
+    { className: "header pl-4" },
     _react2.default.createElement(
       "h1",
       null,
-      "Wacuri! testing "
+      "Get started with Wacuri!"
     )
   );
 };
 
 exports.default = Header;
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _generator_form = __webpack_require__(29);
+
+var _generator_form2 = _interopRequireDefault(_generator_form);
+
+var _event_message = __webpack_require__(31);
+
+var _event_message2 = _interopRequireDefault(_event_message);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _ref = {},
+    OTSession = _ref.OTSession,
+    OTPublisher = _ref.OTPublisher,
+    OTStreams = _ref.OTStreams,
+    OTSubscriber = _ref.OTSubscriber,
+    createSession = _ref.createSession;
+
+
+if (__CLIENT__) {
+  var _require = __webpack_require__(6),
+      OTSession = _require.OTSession,
+      OTPublisher = _require.OTPublisher,
+      OTStreams = _require.OTStreams,
+      OTSubscriber = _require.OTSubscriber,
+      createSession = _require.createSession;
+
+  var OT = __webpack_require__(7);
+  window.state = state;
+}
+
+var Home = function (_Component) {
+  _inherits(Home, _Component);
+
+  function Home(props) {
+    _classCallCheck(this, Home);
+
+    var _this = _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this, props));
+
+    _this.state = {
+      streams: [],
+      publisherId: '',
+      session: null,
+      totalConnectionsCreated: 0,
+      connectedUsers: []
+    };
+    _this.publisher = {};
+    return _this;
+  }
+
+  _createClass(Home, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      var roomUrl = 'temp-home-location';
+
+      fetch('/api/sessions/' + roomUrl).then(function (res) {
+        return res.json();
+      }).then(function (json) {
+        state.session = json;
+        _this2.sessionHelper = createSession({
+          apiKey: state.openTokKey,
+          sessionId: state.session.sessionId,
+          token: state.session.token,
+          onConnect: function onConnect() {
+            console.log('assigned connection to publisher', _this2.sessionHelper.session.connection);
+            setTimeout(_this2.refreshSession, 1000);
+          },
+          onStreamsUpdated: function onStreamsUpdated(streams) {
+            console.log('Current subscriber streams:', streams);
+            _this2.setState({ streams: streams });
+          }
+        });
+        window.sh = _this2.sessionHelper;
+        _this2.sessionHelper.session.on("connectionDestroyed", function (event) {
+          console.log('DESTROYED', event);
+          var data = {
+            sessionId: _this2.sessionHelper.session.sessionId,
+            connection: {
+              id: event.connection.id
+            },
+            event: 'connectionDestroyed'
+
+          };
+
+          var updatedConnectionCount = _this2.state.totalConnectionsCreated - 1;
+          _this2.setState({ totalConnectionsCreated: updatedConnectionCount });
+
+          var newData = [].concat(_toConsumableArray(_this2.state.connectedUsers));
+          var index = newData.indexOf(event.connection.id);
+          newData.splice(index, 1);
+          _this2.setState({ connectedUsers: newData });
+
+          console.log('data is', data);
+          // fetch(`/api/event`, {
+          //   body: JSON.stringify(data), // must match 'Content-Type' header
+          //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          //   credentials: 'same-origin', // include, same-origin, *omit
+          //   headers: {
+          //     'user-agent': 'Mozilla/4.0 MDN Example',
+          //     'content-type': 'application/json'
+          //   },
+          //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          //   mode: 'cors', // no-cors, cors, *same-origin
+          //   redirect: 'follow', // manual, *follow, error
+          //   referrer: 'no-referrer', // *client, no-referrer
+          // });
+          // this.refreshSession();
+        });
+
+        _this2.sessionHelper.session.on("connectionCreated", function (event) {
+          console.log('CREATED', event);
+          var updatedConnectionCount = _this2.state.totalConnectionsCreated + 1;
+          _this2.setState({ totalConnectionsCreated: updatedConnectionCount });
+          console.log('**** Total connections: ' + _this2.state.totalConnectionsCreated);
+          var data = {
+            sessionId: _this2.sessionHelper.session.sessionId,
+            connection: {
+              id: event.connection.id
+            },
+            event: 'connectionCreated'
+          };
+
+          _this2.setState({ connectedUsers: [].concat(_toConsumableArray(_this2.state.connectedUsers), [event.connection.id]) });
+          console.log('data is', data);
+          // fetch(`/api/event`, {
+          //   body: JSON.stringify(data), // must match 'Content-Type' header
+          //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          //   credentials: 'same-origin', // include, same-origin, *omit
+          //   headers: {
+          //     'user-agent': 'Mozilla/4.0 MDN Example',
+          //     'content-type': 'application/json'
+          //   },
+          //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          //   mode: 'cors', // no-cors, cors, *same-origin
+          //   redirect: 'follow', // manual, *follow, error
+          //   referrer: 'no-referrer', // *client, no-referrer
+          // });
+          // this.refreshSession();
+        });
+
+        _this2.sessionHelper.session.on("signal", function (event) {
+          console.log("Signal sent from connection ", event);
+          console.log("Signal type", event.type);
+          // this.refreshSession(); // FIXME Error: home.js:110 Uncaught TypeError: _this2.refreshSession is not a function
+
+          if (event.type === 'signal:displayJourneyRequest') {
+            console.log("**** CAPTURED the journey request !! ");
+            _this2.setState({
+              displayMessageVisible: true,
+              displayMessageText: "George has created a session 'Daily Jetsons Meditation'.", //TEMP hard coded
+              sessionUrl: '/another-jetsons-url'
+            });
+          }
+        });
+
+        _this2.setState({
+          session: _this2.sessionHelper.session
+        });
+      });
+
+      fetch('/api/journeys').then(function (res) {
+        return res.json();
+      }).then(function (json) {
+        state.journeys = json;
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'home' },
+        _react2.default.createElement(UserList, { userCount: this.state.totalConnectionsCreated, userIds: this.state.connectedUsers }),
+        _react2.default.createElement(_event_message2.default, { message: this.state.displayMessageText, sessionUrl: this.state.sessionUrl }),
+        _react2.default.createElement(_generator_form2.default, null)
+      );
+    }
+  }]);
+
+  return Home;
+}(Component);
+
+exports.default = Home;
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _session_info = __webpack_require__(30);
+
+var _session_info2 = _interopRequireDefault(_session_info);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var GeneratorForm = function (_Component) {
+  _inherits(GeneratorForm, _Component);
+
+  function GeneratorForm(props) {
+    _classCallCheck(this, GeneratorForm);
+
+    var _this = _possibleConstructorReturn(this, (GeneratorForm.__proto__ || Object.getPrototypeOf(GeneratorForm)).call(this, props));
+
+    _this.state = {
+      sessionLinkName: '',
+      sessionLinkUrl: ''
+    };
+
+    _this.handleNameChange = _this.handleNameChange.bind(_this);
+    _this.urlFriendlyName = _this.urlFriendlyName.bind(_this);
+    _this.createSessionLink = _this.createSessionLink.bind(_this);
+    return _this;
+  }
+
+  _createClass(GeneratorForm, [{
+    key: 'createSessionLink',
+    value: function createSessionLink() {
+      this.setState({ sessionLinkUrl: this.urlFriendlyName(this.state.sessionLinkName) });
+      fetch('/api/sessions/test/temp-home-location');
+    }
+  }, {
+    key: 'sendNotifications',
+    value: function sendNotifications() {}
+  }, {
+    key: 'handleNameChange',
+    value: function handleNameChange(event) {
+      this.setState({ sessionLinkName: event.target.value });
+    }
+  }, {
+    key: 'urlFriendlyName',
+    value: function urlFriendlyName(name) {
+      return name.replace(/\s+/g, '-').toLowerCase();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'form',
+          null,
+          _react2.default.createElement(
+            'h3',
+            null,
+            'Enter Session Details'
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            'Give your room a name:',
+            _react2.default.createElement('br', null),
+            _react2.default.createElement('input', { type: 'text', id: 'session_link', onChange: this.handleNameChange }),
+            ' \xA0 or ',
+            _react2.default.createElement(
+              'a',
+              { href: '#' },
+              'Generate a name'
+            )
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            'Description (optional):',
+            _react2.default.createElement('br', null),
+            _react2.default.createElement('textarea', { id: 'session_description', rows: '2', cols: '25' })
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            _react2.default.createElement('input', { type: 'button', value: 'Create a session', onClick: this.createSessionLink })
+          )
+        ),
+        _react2.default.createElement(_session_info2.default, { sessionLink: this.state.sessionLinkUrl })
+      );
+    }
+  }]);
+
+  return GeneratorForm;
+}(_react.Component);
+
+exports.default = GeneratorForm;
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SessionInfo = function (_Component) {
+  _inherits(SessionInfo, _Component);
+
+  function SessionInfo(props) {
+    _classCallCheck(this, SessionInfo);
+
+    var _this = _possibleConstructorReturn(this, (SessionInfo.__proto__ || Object.getPrototypeOf(SessionInfo)).call(this, props));
+
+    _this.state = {
+      sessionLinkName: 'Reasonable Default',
+      sessionLinkUrl: 'reasonable-default'
+    };
+
+    _this.jumpToSession = _this.jumpToSession.bind(_this);
+    return _this;
+  }
+
+  _createClass(SessionInfo, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState({ sessionLinkUrl: nextProps.sessionLink });
+    }
+  }, {
+    key: 'jumpToSession',
+    value: function jumpToSession() {
+      window.open(this.state.sessionLinkUrl, "_blank");
+    }
+
+    // TODO: npm install --save react@^16.2.0 react-dom@^16.2.0 for getDerivedstateFromProps
+
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'h3',
+          null,
+          'Session Created'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          _react2.default.createElement(
+            'span',
+            { style: { fontWeight: 'bold', backgroundColor: '#ccc', padding: '7px' } },
+            'www.wacuri.com/',
+            this.state.sessionLinkUrl
+          ),
+          ' ',
+          _react2.default.createElement(
+            'a',
+            { href: '#' },
+            'Copy link to share'
+          )
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          _react2.default.createElement('input', { type: 'button', value: 'Jump to the session', onClick: this.jumpToSession })
+        )
+      );
+    }
+  }]);
+
+  return SessionInfo;
+}(_react.Component);
+
+exports.default = SessionInfo;
 
 /***/ }),
 /* 31 */
@@ -1026,29 +1442,50 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _generator = __webpack_require__(32);
-
-var _generator2 = _interopRequireDefault(_generator);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Home = function Home() {
-  return _react2.default.createElement(
-    'div',
-    { className: 'home' },
-    _react2.default.createElement(
-      'h3',
-      null,
-      'Amazing things to come. Hi there'
-    )
-  );
-};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-exports.default = Home;
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EventMessage = function (_Component) {
+  _inherits(EventMessage, _Component);
+
+  function EventMessage(props) {
+    _classCallCheck(this, EventMessage);
+
+    return _possibleConstructorReturn(this, (EventMessage.__proto__ || Object.getPrototypeOf(EventMessage)).call(this, props));
+  }
+
+  _createClass(EventMessage, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { style: { backgroundColor: '#fc9' } },
+        this.props.message,
+        ' ',
+        this.props.message === undefined ? "" : _react2.default.createElement(
+          'a',
+          { href: this.props.sessionUrl, target: '_blank' },
+          'Join Now'
+        )
+      );
+    }
+  }]);
+
+  return EventMessage;
+}(_react.Component);
+
+exports.default = EventMessage;
 
 /***/ }),
 /* 32 */
@@ -1057,132 +1494,6 @@ exports.default = Home;
 "use strict";
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Generator = function (_Component) {
-  _inherits(Generator, _Component);
-
-  function Generator() {
-    _classCallCheck(this, Generator);
-
-    return _possibleConstructorReturn(this, (Generator.__proto__ || Object.getPrototypeOf(Generator)).apply(this, arguments));
-  }
-
-  _createClass(Generator, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        null,
-        'The Generator'
-      );
-    }
-  }]);
-
-  return Generator;
-}(_react.Component);
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _reactRedux = __webpack_require__(8);
-
-var _list_actions = __webpack_require__(34);
-
-var _list_item_view = __webpack_require__(35);
-
-var _list_item_view2 = _interopRequireDefault(_list_item_view);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var mapStateToProps = function mapStateToProps(state) {
-  return {
-    item: state.list.itemView
-  };
-};
-
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {
-    viewItem: function viewItem(name) {
-      dispatch((0, _list_actions.viewItem)(name));
-    }
-  };
-};
-
-/*
- Here we are creating a Higher order component
- https://facebook.github.io/react/docs/higher-order-components.html
- */
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_list_item_view2.default);
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.clearItem = exports.addItem = exports.viewItem = exports.previewItem = undefined;
-
-var _action_types = __webpack_require__(3);
-
-var previewItem = exports.previewItem = function previewItem(name) {
-  return {
-    type: _action_types.LIST_ACTIONS.ITEM_PREVIEW,
-    name: name // shorthand for name: name
-  };
-};
-
-var viewItem = exports.viewItem = function viewItem(name) {
-  return {
-    type: _action_types.LIST_ACTIONS.ITEM_VIEW,
-    name: name
-  };
-};
-
-var addItem = exports.addItem = function addItem(item) {
-  return {
-    type: _action_types.LIST_ACTIONS.ITEM_ADD,
-    item: item // shorthand for item: item
-  };
-};
-
-var clearItem = exports.clearItem = function clearItem() {
-  return {
-    type: _action_types.LIST_ACTIONS.ITEM_CLEAR
-  };
-};
-
-/***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -1193,124 +1504,21 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(10);
+var _reactEasyState = __webpack_require__(8);
 
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _reactRouterDom = __webpack_require__(9);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ListItemView = function (_Component) {
-  _inherits(ListItemView, _Component);
-
-  function ListItemView() {
-    _classCallCheck(this, ListItemView);
-
-    return _possibleConstructorReturn(this, (ListItemView.__proto__ || Object.getPrototypeOf(ListItemView)).apply(this, arguments));
-  }
-
-  _createClass(ListItemView, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _props = this.props,
-          viewItem = _props.viewItem,
-          match = _props.match;
-
-      viewItem(match.params.name);
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var item = this.props.item;
-
-      if (!item) {
-        return _react2.default.createElement(
-          'div',
-          null,
-          'Loading...'
-        );
-      }
-
-      return _react2.default.createElement(
-        'div',
-        { className: 'view_item' },
-        _react2.default.createElement(
-          _reactRouterDom.Link,
-          { to: '/' },
-          _react2.default.createElement(
-            'button',
-            { type: 'button' },
-            'Back'
-          )
-        ),
-        _react2.default.createElement(
-          'h2',
-          null,
-          item.name
-        ),
-        _react2.default.createElement(
-          'p',
-          null,
-          item.description
-        )
-      );
-    }
-  }]);
-
-  return ListItemView;
-}(_react.Component);
-
-ListItemView.propTypes = {
-  viewItem: _propTypes2.default.func.isRequired,
-  match: _propTypes2.default.object.isRequired,
-  item: _propTypes2.default.object
-};
-
-ListItemView.defaultProps = {
-  item: null
-};
-
-exports.default = ListItemView;
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactEasyState = __webpack_require__(11);
-
-var _state = __webpack_require__(37);
+var _state = __webpack_require__(33);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _propTypes = __webpack_require__(10);
+var _propTypes = __webpack_require__(34);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _uuid = __webpack_require__(38);
+var _uuid = __webpack_require__(35);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _opentokLayoutJs = __webpack_require__(39);
+var _opentokLayoutJs = __webpack_require__(36);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1320,8 +1528,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-__webpack_require__(40).polyfill();
-__webpack_require__(6);
+__webpack_require__(37).polyfill();
+__webpack_require__(5);
 
 var _ref = {},
     OTSession = _ref.OTSession,
@@ -1332,14 +1540,14 @@ var _ref = {},
 
 
 if (__CLIENT__) {
-  var _require = __webpack_require__(41),
+  var _require = __webpack_require__(6),
       OTSession = _require.OTSession,
       OTPublisher = _require.OTPublisher,
       OTStreams = _require.OTStreams,
       OTSubscriber = _require.OTSubscriber,
       createSession = _require.createSession;
 
-  var OT = __webpack_require__(42);
+  var OT = __webpack_require__(7);
   window.state = _state2.default;
 }
 
@@ -1364,7 +1572,6 @@ var Room = function (_Component) {
     };
 
     _this.onConfirmReady = function (e) {
-      console.log('im ready');
       fetch('/api/sessions/' + _this.props.match.params.room + '/connections/' + _this.sessionHelper.session.connection.id + '/ready');
     };
 
@@ -1385,11 +1592,61 @@ var Room = function (_Component) {
       });
     };
 
+    _this.onStartSession = function (e) {
+      fetch('/api/sessions/' + _this.props.match.params.room + '/start', {
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'user-agent': 'Mozilla/4.0 MDN Example',
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+        mode: 'cors'
+      });
+    };
+
+    _this.onLoadedMetadata = function (e) {
+      _this.setState({
+        journeyDuration: e.target.duration
+      });
+      _this.audioTag.removeEventListener('timeupdate', _this.onTimeUpdate);
+      _this.audioTag.addEventListener('timeupdate', _this.onTimeUpdate);
+    };
+
+    _this.onTimeUpdate = function (e) {
+      _this.setState({
+        playerProgress: e.target.currentTime / e.target.duration * 100,
+        playerProgressMS: e.target.currentTime
+      });
+    };
+
+    _this.onFlag = function (e) {
+      e.preventDefault();
+      fetch('/api/sessions/' + _this.props.match.params.room + '/flag', {
+        cache: 'no-cache',
+        body: JSON.stringify({ connectionId: _this.state.session.connection.id }),
+        credentials: 'same-origin',
+        headers: {
+          'user-agent': 'Mozilla/4.0 MDN Example',
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+        mode: 'cors'
+      }).then(function (res) {
+        return res.json();
+      }).then(function (json) {
+        return _state2.default.session = json;
+      });
+    };
+
     _this.state = {
       streams: [],
       publisherId: '',
       session: null,
-      playerState: 'waiting'
+      playerState: 'waiting',
+      playerProgress: 0,
+      playerProgressMS: 0,
+      journeyDuration: 0
     };
     _this.publisher = {};
     _this.audioTag = {};
@@ -1407,12 +1664,13 @@ var Room = function (_Component) {
           playerState: 'ended'
         });
       });
+
       fetch('/api/sessions/' + this.props.match.params.room).then(function (res) {
         return res.json();
       }).then(function (json) {
         _state2.default.session = json;
         _this2.sessionHelper = createSession({
-          apiKey: state.openTokKey,
+          apiKey: _state2.default.openTokKey,
           sessionId: _state2.default.session.sessionId,
           token: _state2.default.session.token,
           onConnect: function onConnect() {
@@ -1424,7 +1682,6 @@ var Room = function (_Component) {
             _this2.setState({ streams: streams });
           }
         });
-        window.sh = _this2.sessionHelper;
         _this2.sessionHelper.session.on("connectionDestroyed", function (event) {
           console.log('DESTROYED', event);
           var data = {
@@ -1434,20 +1691,6 @@ var Room = function (_Component) {
             },
             event: 'connectionDestroyed'
           };
-          console.log('data is', data);
-          fetch('/api/event', {
-            body: JSON.stringify(data), // must match 'Content-Type' header
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, same-origin, *omit
-            headers: {
-              'user-agent': 'Mozilla/4.0 MDN Example',
-              'content-type': 'application/json'
-            },
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: 'cors', // no-cors, cors, *same-origin
-            redirect: 'follow', // manual, *follow, error
-            referrer: 'no-referrer' // *client, no-referrer
-          });
           _this2.refreshSession();
         });
         _this2.sessionHelper.session.on("connectionCreated", function (event) {
@@ -1459,20 +1702,6 @@ var Room = function (_Component) {
             },
             event: 'connectionCreated'
           };
-          console.log('data is', data);
-          fetch('/api/event', {
-            body: JSON.stringify(data), // must match 'Content-Type' header
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, same-origin, *omit
-            headers: {
-              'user-agent': 'Mozilla/4.0 MDN Example',
-              'content-type': 'application/json'
-            },
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: 'cors', // no-cors, cors, *same-origin
-            redirect: 'follow', // manual, *follow, error
-            referrer: 'no-referrer' // *client, no-referrer
-          });
           _this2.refreshSession();
         });
         _this2.sessionHelper.session.on("signal", function (event) {
@@ -1511,100 +1740,161 @@ var Room = function (_Component) {
       var currentParticipant = this.state.session && _state2.default.session && _state2.default.session.participants.find(function (participant) {
         return participant.connectionId === _this3.state.session.connection.id;
       });
-      console.log('GOT CURRENT', currentParticipant);
+      var currentUserHasFlaggedJourney = false;
+      if (currentParticipant) {
+        currentUserHasFlaggedJourney = _state2.default.session.flags.map(function (flag) {
+          return flag.user;
+        }).indexOf(currentParticipant.connectionId) > -1;
+      }
       return _react2.default.createElement(
         'div',
-        { style: { padding: 20 } },
+        { className: 'journey-container' },
         _react2.default.createElement(
           'p',
           { style: { display: 'none' } },
           JSON.stringify(_state2.default.session, null, 2)
         ),
-        currentParticipant && _state2.default.session.participants.indexOf(currentParticipant) === 0 && _react2.default.createElement(
-          'select',
-          { onChange: this.onChangeJourney, value: _state2.default.session && _state2.default.session.journey },
-          _state2.default.journeys.map(function (journey) {
-            return _react2.default.createElement(
-              'option',
-              { value: journey },
-              journey.split('/')[journey.split('/').length - 1]
-            );
-          })
-        ),
         _react2.default.createElement(
           'audio',
-          { style: { display: 'none' }, key: _state2.default.session && _state2.default.session.journey, controls: 'true', ref: function ref(audioTag) {
+          { style: { display: 'none' }, onLoadedMetadata: this.onLoadedMetadata, key: _state2.default.session && _state2.default.session.journey, controls: 'true', ref: function ref(audioTag) {
               _this3.audioTag = audioTag;
             } },
           _react2.default.createElement('source', { src: _state2.default.session && _state2.default.session.journey, type: 'audio/mpeg' })
         ),
         this.state.session && _react2.default.createElement(
           'div',
-          null,
+          { style: { position: 'relative' } },
           _react2.default.createElement(
-            'h2',
-            null,
-            _state2.default.session.journey.split('/')[_state2.default.session.journey.split('/').length - 1]
-          ),
-          _react2.default.createElement(
-            'p',
-            null,
-            'Journey state: ',
-            this.state.playerState
+            'button',
+            { style: { position: 'absolute', top: 0, right: 0 }, className: 'btn btn-danger btn-flag-session', disabled: currentUserHasFlaggedJourney, onClick: this.onFlag },
+            currentUserHasFlaggedJourney ? "You've flagged this journey" : "Flag this journey"
           ),
           _react2.default.createElement(
             'div',
-            { className: 'tok-container', ref: function ref(container) {
-                return _this3.container = container;
-              } },
-            this.state.streams.length == 0 && _react2.default.createElement(
-              'p',
-              null,
-              'Waiting for others to join this journey...'
-            ),
+            { className: 'row' },
             _react2.default.createElement(
               'div',
-              { className: 'row', style: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridGap: '10px', marginRight: '350px' } },
-              this.state.streams.map(function (stream) {
-                var participant = _state2.default.session.participants.find(function (participant) {
-                  return participant.connectionId === stream.connection.id;
-                });
-                return _react2.default.createElement(
-                  'div',
-                  { className: 'subscriber' },
-                  _react2.default.createElement(
-                    'p',
-                    { style: { fontSize: '14px' }, className: participant && participant.ready ? 'text-success' : 'text-warning' },
-                    participant && participant.ready ? 'Ready to start!' : 'Not ready yet'
-                  ),
-                  _react2.default.createElement(OTSubscriber, {
-                    key: stream.id,
-                    session: _this3.sessionHelper.session,
-                    stream: stream
+              { className: 'col-6' },
+              _react2.default.createElement(
+                'h2',
+                null,
+                _state2.default.session.journey.split('/')[_state2.default.session.journey.split('/').length - 1]
+              ),
+              currentParticipant && _state2.default.session.participants.indexOf(currentParticipant) === 0 && _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                  'select',
+                  { className: 'mb-3', onChange: this.onChangeJourney, value: _state2.default.session && _state2.default.session.journey },
+                  _state2.default.journeys.map(function (journey) {
+                    return _react2.default.createElement(
+                      'option',
+                      { value: journey },
+                      journey.split('/')[journey.split('/').length - 1]
+                    );
                   })
-                );
-              })
-            ),
+                ),
+                _state2.default.session.state === 'created' && _react2.default.createElement(
+                  'div',
+                  { className: 'mb-2' },
+                  _react2.default.createElement(
+                    'button',
+                    { onClick: this.onStartSession, className: 'btn btn-primary' },
+                    'Start session ',
+                    _react2.default.createElement('i', { className: 'fa fa-play', ariaHidden: 'true' })
+                  )
+                )
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'row' },
             _react2.default.createElement(
               'div',
-              { style: { position: 'fixed', bottom: 0, right: 0 } },
-              _react2.default.createElement(OTPublisher, { session: this.sessionHelper.session, onInit: this.onInitPublisher, ref: function ref(publisher) {
-                  _this3.publisher = publisher;
-                } }),
-              currentParticipant && currentParticipant.ready && _react2.default.createElement(
+              { className: 'col-3' },
+              _react2.default.createElement('progress', { max: '100', value: this.state.playerProgress, style: { width: '100%' } }),
+              _react2.default.createElement(
+                'p',
+                { style: { display: 'flex' } },
+                _react2.default.createElement(
+                  'strong',
+                  { style: { flex: 1 } },
+                  'Time remaining:'
+                ),
+                _react2.default.createElement(
+                  'span',
+                  null,
+                  this.timeRemaining
+                )
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
+              'div',
+              { className: 'tok-container col', ref: function ref(container) {
+                  return _this3.container = container;
+                } },
+              this.state.streams.length == 0 && _react2.default.createElement(
                 'p',
                 null,
-                'You are ready!'
+                'Waiting for others to join this journey...'
               ),
-              (!currentParticipant || !currentParticipant.ready) && _react2.default.createElement(
-                'a',
-                { className: 'btn btn-primary', href: '#', onClick: this.onConfirmReady },
-                'Ready?'
+              _react2.default.createElement(
+                'div',
+                { className: 'row no-gutters', style: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridGap: '10px', marginRight: '350px' } },
+                this.state.streams.map(function (stream) {
+                  var participant = _state2.default.session.participants.find(function (participant) {
+                    return participant.connectionId === stream.connection.id;
+                  });
+                  return _react2.default.createElement(
+                    'div',
+                    { className: 'subscriber' },
+                    _react2.default.createElement(
+                      'p',
+                      { style: { fontSize: '14px' }, className: participant && participant.ready ? 'text-success' : 'text-warning' },
+                      participant && participant.ready ? 'Ready to start!' : 'Not ready yet'
+                    ),
+                    _react2.default.createElement(OTSubscriber, {
+                      key: stream.id,
+                      session: _this3.sessionHelper.session,
+                      stream: stream
+                    })
+                  );
+                })
+              ),
+              _react2.default.createElement(
+                'div',
+                { style: { position: 'fixed', bottom: 0, right: 0 } },
+                _react2.default.createElement(OTPublisher, { session: this.sessionHelper.session, onInit: this.onInitPublisher, ref: function ref(publisher) {
+                    _this3.publisher = publisher;
+                  } }),
+                currentParticipant && currentParticipant.ready && _react2.default.createElement(
+                  'p',
+                  null,
+                  'You are ready!'
+                ),
+                (!currentParticipant || !currentParticipant.ready) && _react2.default.createElement(
+                  'a',
+                  { className: 'btn btn-primary', href: '#', onClick: this.onConfirmReady },
+                  'Ready?'
+                )
               )
             )
           )
         )
       );
+    }
+  }, {
+    key: 'timeRemaining',
+    get: function get() {
+      var seconds = this.state.journeyDuration - this.state.playerProgressMS;
+      var minutes = Math.floor(seconds / 60);
+      var remainingSeconds = (seconds % 60).toFixed(0);
+      return minutes + ":" + (remainingSeconds < 10 ? '0' : '') + remainingSeconds;
     }
   }]);
 
@@ -1614,7 +1904,7 @@ var Room = function (_Component) {
 exports.default = (0, _reactEasyState.view)(Room);
 
 /***/ }),
-/* 37 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1624,42 +1914,38 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _reactEasyState = __webpack_require__(11);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-exports.default = (0, _reactEasyState.store)({
+var _reactEasyState = __webpack_require__(8);
+
+exports.default = (0, _reactEasyState.store)(_extends({}, global.__INITIAL_STATE__ || {}, {
   session: null,
   journeys: []
-});
+}));
 
 /***/ }),
-/* 38 */
+/* 34 */
+/***/ (function(module, exports) {
+
+module.exports = require("prop-types");
+
+/***/ }),
+/* 35 */
 /***/ (function(module, exports) {
 
 module.exports = require("uuid");
 
 /***/ }),
-/* 39 */
+/* 36 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok-layout-js");
 
 /***/ }),
-/* 40 */
+/* 37 */
 /***/ (function(module, exports) {
 
 module.exports = require("es6-promise");
-
-/***/ }),
-/* 41 */
-/***/ (function(module, exports) {
-
-module.exports = require("opentok-react");
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports) {
-
-module.exports = require("@opentok/client");
 
 /***/ })
 /******/ ]);
