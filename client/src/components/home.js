@@ -16,15 +16,11 @@ if (__CLIENT__) {
 
 export default class Home extends Component {
   constructor(props) {
-    super(props);
+    super(props)
+    state.activeJourneys = []
 
     this.state = {
       streams: [],
-      activeJourneys: [
-        {title: "Journey 1", userName: "Fred", description: "Dino's dinner", url: "/dinos-dinner"},
-        {title: "Journey 2", userName: "Wilma", description: "Pebbles turns twelve", url: "/pebbles-turns-twelve"},
-        {title: "Journey 3", userName: "George", description: "George's first meditation", url: "georges-first-meditation"}
-      ],
       publisherId: '',
       session: null,
       totalConnectionsCreated: 0,
@@ -156,7 +152,6 @@ export default class Home extends Component {
             console.log(event)
             let data = JSON.parse(event.data)
 
-            //CURRENT: Add this into state.activeJourneys array
             this.setState({
               displayMessageVisible: true,
               displayMessageText: data.description,
@@ -180,8 +175,7 @@ export default class Home extends Component {
     fetch('/api/active_journeys')
       .then(res => res.json())
       .then(json => {
-        this.setState({activeJourneys: json})
-        console.log("*** ACTIVE JOURNEYS", json)
+        state.activeJourneys = json
       });
 
 
@@ -196,7 +190,7 @@ export default class Home extends Component {
       <div className="home container">
         <div className="row">
           <span className="col-sm"><UserList userCount={this.state.totalConnectionsCreated} userIds={this.state.connectedUsers} /></span>
-          <span className="col-sm"><EventMessage journeys={this.state.activeJourneys} sessionUrl={this.state.sessionUrl} /></span>
+          <span className="col-sm"><EventMessage journeys={state.activeJourneys} sessionUrl={this.state.sessionUrl} /></span>
           <span className="col-sm"><GeneratorForm /></span>
         </div>
       </div>

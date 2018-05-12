@@ -11,7 +11,7 @@ export default class EventMessage extends Component {
         {this.props.journeys.map((journey, index) => (
           <p key={index}
              style={{ backgroundColor: '#fc9', padding: '7px'}}>
-             (Someone) started a journey space.
+             A journey space has been created.
              <br/>
              <a href={"/" + journey.room} target="_blank">Join</a>
              &nbsp;&nbsp;
