@@ -20,7 +20,7 @@ export default class Home extends Component {
 
     this.state = {
       streams: [],
-      journeysReady: [
+      activeJourneys: [
         {title: "Journey 1", userName: "Fred", description: "Dino's dinner", url: "/dinos-dinner"},
         {title: "Journey 2", userName: "Wilma", description: "Pebbles turns twelve", url: "/pebbles-turns-twelve"},
         {title: "Journey 3", userName: "George", description: "George's first meditation", url: "georges-first-meditation"}
@@ -156,7 +156,7 @@ export default class Home extends Component {
             console.log(event)
             let data = JSON.parse(event.data)
 
-            //CURRENT: Add this into state.journeysReady array
+            //CURRENT: Add this into state.activeJourneys array
             this.setState({
               displayMessageVisible: true,
               displayMessageText: data.description,
@@ -177,6 +177,14 @@ export default class Home extends Component {
         state.journeys = json;
       });
 
+    fetch('/api/active_journeys')
+      .then(res => res.json())
+      .then(json => {
+        this.setState({activeJourneys: json})
+        console.log("*** ACTIVE JOURNEYS", json)
+      });
+
+
   }
 
 
@@ -188,7 +196,7 @@ export default class Home extends Component {
       <div className="home container">
         <div className="row">
           <span className="col-sm"><UserList userCount={this.state.totalConnectionsCreated} userIds={this.state.connectedUsers} /></span>
-          <span className="col-sm"><EventMessage messages={this.state.journeysReady} sessionUrl={this.state.sessionUrl} /></span>
+          <span className="col-sm"><EventMessage journeys={this.state.activeJourneys} sessionUrl={this.state.sessionUrl} /></span>
           <span className="col-sm"><GeneratorForm /></span>
         </div>
       </div>

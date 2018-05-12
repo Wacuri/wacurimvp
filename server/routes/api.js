@@ -59,7 +59,12 @@ router.get('/sessions/:room', async (req, res) => {
 	}
 });
 
-// TEMP: Use get for convenience.[] hardcode temp-home-location for the room
+router.get('/active_journeys', async(req, res) => {
+  const journeys = await TokSession.find({state: 'created'}).exec()
+  res.json(journeys)
+})
+
+// TEMP: Use get for convenience. hardcode temp-home-location for the room
 // Trigger a general announcement to everyone
 router.get('/sessions/test/temp-home-location', async (req, res) => {
   // const {room, connection} = req.params;
