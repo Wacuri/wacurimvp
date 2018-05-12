@@ -44,7 +44,7 @@ export default class GeneratorForm extends Component {
 
   render() {
       return(
-        <div>
+        <div className="col-sm">
           <form>
             <h3>Enter Journey Details</h3>
             <p>

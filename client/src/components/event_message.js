@@ -2,7 +2,7 @@ import React from 'react'
 
 const EventMessage = (props) => {
   return (
-    <div>
+    <div className="col-sm">
       {props.journeys.map((journey, index) => (
         <p key={index}
            style={{ backgroundColor: '#fc9', padding: '7px'}}>

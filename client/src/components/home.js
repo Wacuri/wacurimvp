@@ -111,10 +111,12 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div className="home">
-        <UserList userCount={this.state.totalConnectionsCreated} userIds={this.state.connectedUsers} />
-        <EventMessage journeyse={state.journeys} />
-        <GeneratorForm />
+      <div className="home container">
+        <div className="row">
+          <UserList userCount={this.state.totalConnectionsCreated} userIds={this.state.connectedUsers} />
+          <EventMessage journeys={state.journeys} />
+          <GeneratorForm />
+        </div>
       </div>
       )
   }
