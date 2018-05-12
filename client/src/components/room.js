@@ -40,12 +40,6 @@ class Room extends Component {
       });
     });
 
-
-    setTimeout(() => {
-      console.log('ADD IT TO', this.audioTag, this.onTimeUpdate);
-
-    }, 5000);
-
 		fetch(`/api/sessions/${this.props.match.params.room}`)
 			.then(res => res.json())
 			.then(json => {
@@ -63,7 +57,6 @@ class Room extends Component {
             this.setState({ streams });
           }
         });
-        window.sh = this.sessionHelper;
         this.sessionHelper.session.on("connectionDestroyed", (event) => {
           console.log('DESTROYED', event);
           const data = {
@@ -73,20 +66,6 @@ class Room extends Component {
             },
             event: 'connectionDestroyed',
           }
-          console.log('data is', data);
-          // fetch(`/api/event`, {
-          //   body: JSON.stringify(data), // must match 'Content-Type' header
-          //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          //   credentials: 'same-origin', // include, same-origin, *omit
-          //   headers: {
-          //     'user-agent': 'Mozilla/4.0 MDN Example',
-          //     'content-type': 'application/json'
-          //   },
-          //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          //   mode: 'cors', // no-cors, cors, *same-origin
-          //   redirect: 'follow', // manual, *follow, error
-          //   referrer: 'no-referrer', // *client, no-referrer
-          // });
           this.refreshSession();
         });
         this.sessionHelper.session.on("connectionCreated", (event) => {
@@ -98,20 +77,6 @@ class Room extends Component {
             },
             event: 'connectionCreated',
           }
-          console.log('data is', data);
-          // fetch(`/api/event`, {
-          //   body: JSON.stringify(data), // must match 'Content-Type' header
-          //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          //   credentials: 'same-origin', // include, same-origin, *omit
-          //   headers: {
-          //     'user-agent': 'Mozilla/4.0 MDN Example',
-          //     'content-type': 'application/json'
-          //   },
-          //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          //   mode: 'cors', // no-cors, cors, *same-origin
-          //   redirect: 'follow', // manual, *follow, error
-          //   referrer: 'no-referrer', // *client, no-referrer
-          // });
           this.refreshSession();
         });
         this.sessionHelper.session.on("signal", (event) => {
@@ -210,8 +175,29 @@ class Room extends Component {
     });
   }
 
+  onFlag = (e) => {
+    e.preventDefault();
+    fetch(`/api/sessions/${this.props.match.params.room}/flag`, {
+      cache: 'no-cache',
+      body: JSON.stringify({connectionId: this.state.session.connection.id}),
+      credentials: 'same-origin',
+      headers: {
+        'user-agent': 'Mozilla/4.0 MDN Example',
+        'content-type': 'application/json'
+      },
+      method: 'POST',
+      mode: 'cors',
+    })
+      .then(res => res.json())
+      .then(json => state.session = json);
+  }
+
 	render() {
     const currentParticipant = this.state.session && state.session && state.session.participants.find(participant => participant.connectionId === this.state.session.connection.id);
+    let currentUserHasFlaggedJourney = false;
+    if (currentParticipant) {
+      currentUserHasFlaggedJourney = state.session.flags.map(flag => flag.user).indexOf(currentParticipant.connectionId) > -1;
+    }
 		return (
 			<div className='journey-container'>
 				<p style={{display: 'none'}}>{JSON.stringify(state.session, null, 2)}</p>
@@ -219,64 +205,65 @@ class Room extends Component {
          <source src={state.session && state.session.journey} type="audio/mpeg"/>
         </audio>
 				{this.state.session &&
-          <div>
-          <div className='row'>
-            <div className='col-6'>
-              <h2>{state.session.journey.split('/')[state.session.journey.split('/').length - 1]}</h2>
-              { currentParticipant && state.session.participants.indexOf(currentParticipant) === 0 &&
-                <div>
-                  <select className='mb-3' onChange={this.onChangeJourney} value={state.session && state.session.journey}>
-                    {state.journeys.map(journey => (
-                      <option value={journey}>{journey.split('/')[journey.split('/').length -1]}</option>
-                    ))}
-                  </select>
-                  { state.session.state === 'created' &&
-                    <div className='mb-2'>
-                      <button onClick={this.onStartSession} className='btn btn-primary'>Start session <i className="fa fa-play" ariaHidden="true"></i></button>
-                    </div>
+          <div style={{position: 'relative'}}>
+            <button style={{position: 'absolute', top: 0, right: 0}} className='btn btn-danger btn-flag-session' disabled={currentUserHasFlaggedJourney} onClick={this.onFlag}>{currentUserHasFlaggedJourney ? "You've flagged this journey" : "Flag this journey"}</button>
+            <div className='row'>
+              <div className='col-6'>
+                <h2>{state.session.journey.split('/')[state.session.journey.split('/').length - 1]}</h2>
+                { currentParticipant && state.session.participants.indexOf(currentParticipant) === 0 &&
+                  <div>
+                    <select className='mb-3' onChange={this.onChangeJourney} value={state.session && state.session.journey}>
+                      {state.journeys.map(journey => (
+                        <option value={journey}>{journey.split('/')[journey.split('/').length -1]}</option>
+                      ))}
+                    </select>
+                    { state.session.state === 'created' &&
+                      <div className='mb-2'>
+                        <button onClick={this.onStartSession} className='btn btn-primary'>Start session <i className="fa fa-play" ariaHidden="true"></i></button>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+            <div className='row'>
+              <div className='col-3'>
+                <progress max="100" value={this.state.playerProgress} style={{width: '100%'}}></progress>
+                <p style={{display: 'flex'}}><strong style={{flex: 1}}>Time remaining:</strong><span>{this.timeRemaining}</span></p>
+              </div>
+            </div>
+            <div className='row'>
+              <div className='tok-container col' ref={container => this.container = container }>
+                {this.state.streams.length == 0 &&
+                  <p>Waiting for others to join this journey...</p>
+                }
+                <div className='row no-gutters' style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridGap: '10px', marginRight: '350px'}}>
+                  {this.state.streams.map(stream => {
+                    const participant = state.session.participants.find(participant => participant.connectionId === stream.connection.id);
+                    return (
+                      <div className={`subscriber`}>
+                        <p style={{fontSize: '14px'}} className={participant && participant.ready ? 'text-success' : 'text-warning'}>{participant && participant.ready ? 'Ready to start!' : 'Not ready yet'}</p>
+                        <OTSubscriber
+                          key={stream.id}
+                          session={this.sessionHelper.session}
+                          stream={stream}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+                <div style={{position: 'fixed', bottom: 0, right: 0}}>
+                  <OTPublisher session={this.sessionHelper.session} onInit={this.onInitPublisher} ref={publisher => {this.publisher = publisher}}/>
+                  {currentParticipant && currentParticipant.ready &&
+                    <p>You are ready!</p>
+                  }
+                  {(!currentParticipant || !currentParticipant.ready) &&
+                    <a className='btn btn-primary' href='#' onClick={this.onConfirmReady}>Ready?</a>
                   }
                 </div>
-              }
-            </div>
-          </div>
-          <div className='row'>
-            <div className='col-3'>
-              <progress max="100" value={this.state.playerProgress} style={{width: '100%'}}></progress>
-              <p style={{display: 'flex'}}><strong style={{flex: 1}}>Time remaining:</strong><span>{this.timeRemaining}</span></p>
-            </div>
-          </div>
-          <div className='row'>
-            <div className='tok-container col' ref={container => this.container = container }>
-              {this.state.streams.length == 0 &&
-                <p>Waiting for others to join this journey...</p>
-              }
-              <div className='row no-gutters' style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridGap: '10px', marginRight: '350px'}}>
-                {this.state.streams.map(stream => {
-                  const participant = state.session.participants.find(participant => participant.connectionId === stream.connection.id);
-                  return (
-                    <div className={`subscriber`}>
-                      <p style={{fontSize: '14px'}} className={participant && participant.ready ? 'text-success' : 'text-warning'}>{participant && participant.ready ? 'Ready to start!' : 'Not ready yet'}</p>
-                      <OTSubscriber
-                        key={stream.id}
-                        session={this.sessionHelper.session}
-                        stream={stream}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-              <div style={{position: 'fixed', bottom: 0, right: 0}}>
-                <OTPublisher session={this.sessionHelper.session} onInit={this.onInitPublisher} ref={publisher => {this.publisher = publisher}}/>
-                {currentParticipant && currentParticipant.ready &&
-                  <p>You are ready!</p>
-                }
-                {(!currentParticipant || !currentParticipant.ready) &&
-                  <a className='btn btn-primary' href='#' onClick={this.onConfirmReady}>Ready?</a>
-                }
               </div>
             </div>
           </div>
-        </div>
 				}
 			</div>
 		)

@@ -1,8 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import GeneratorForm from './generator_form'
 import EventMessage from './event_message'
-import UserList from './user_list'
-import state from '../state';
 
 
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};

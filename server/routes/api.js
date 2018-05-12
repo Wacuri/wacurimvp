@@ -122,6 +122,19 @@ router.post('/sessions/:room/start', async (req, res) => {
   }
 });
 
+router.post('/sessions/:room/flag', async (req, res) => {
+  const {room} = req.params;
+  const {connectionId} = req.body;
+  const existingSession = await TokSession.findOne({room}).exec();
+	if (existingSession) {
+    existingSession.flags.push({user: connectionId});
+    await existingSession.save();
+    const participants = await TokSessionParticipant.find({session: existingSession, present: true}).lean().exec();
+    return res.json({...existingSession.toJSON(), participants});
+  }
+  res.sendStatus(404);
+});
+
 router.post('/event', async (req, res) => {
   console.log('GOT EVENT', req.body);
   res.sendStatus(200);
