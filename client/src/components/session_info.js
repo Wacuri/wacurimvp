@@ -26,9 +26,9 @@ export default class SessionInfo extends Component {
       return(
         <div>
           <h3>Journey Created</h3>
-          <p><span style={{ fontWeight: 'bold', backgroundColor: '#ccc', padding: '7px' }}>www.wacuri.com/{this.state.sessionLinkUrl}</span> <a href="#">Copy link to share</a></p>
+          <p><span style={{ fontWeight: 'bold', backgroundColor: '#ccc', padding: '7px' }}>www.wacuri.com/{this.state.sessionLinkUrl}</span> <a href="#">Copy link</a></p>
 
-            <p><input type="button" value="Jump to the session" onClick={this.jumpToSession} /></p>
+            <p><input className="btn btn-primary" type="button" value="Jump to the session" onClick={this.jumpToSession} /></p>
 
         </div>
       )
