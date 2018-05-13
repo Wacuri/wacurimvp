@@ -45,18 +45,22 @@ export default class GeneratorForm extends Component {
   render() {
       return(
         <div className="col-sm">
-          <form>
-            <h3>Enter Journey Details</h3>
-            <p>
-              Give your room a name:<br/>
-              <input type="text" id="session_link" onChange={this.handleNameChange} /> &nbsp; or <a href='#'>Generate a name</a>
-            </p>
-            <p>
-              <input type="button" value="Create a journey space" onClick={this.createSessionLink} />
+          <div className="container" style={{ border: '1px solid #e6e6e6', padding:'10px'}}>
+            <form>
+              <button type="button" className="btn btn-outline-primary btn-block"><i className="fa fa-plus" ariaHidden="true"></i>&nbsp;&nbsp;Create a new Journey Space</button>
 
-            </p>
-          </form>
-          <SessionInfo sessionLink={this.state.sessionLinkUrl} />
+              <h3>Enter Journey Details</h3>
+              <p>
+                Give your room a name:<br/>
+                <input type="text" id="session_link" onChange={this.handleNameChange} /> &nbsp; or <a href='#'>Generate a name</a>
+              </p>
+              <p>
+                <input type="button" value="Create a journey space" onClick={this.createSessionLink} />
+
+              </p>
+            </form>
+            <SessionInfo sessionLink={this.state.sessionLinkUrl} />
+          </div>
         </div>
       )
   }
