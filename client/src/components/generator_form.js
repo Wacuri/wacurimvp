@@ -52,7 +52,7 @@ export default class GeneratorForm extends Component {
               <h3>Enter Journey Details</h3>
               <p>
                 Give your room a name:<br/>
-                <input type="text" id="session_link" onChange={this.handleNameChange} /> &nbsp; or <a href='#'>Generate a name</a>
+                <input type="text" id="session_link" onChange={this.handleNameChange} />
               </p>
               <p>
                 <input type="button" className="btn btn-primary" value="Create a journey space" onClick={this.createSessionLink} />
