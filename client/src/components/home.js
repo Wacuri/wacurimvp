@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import UserList from './user_list'
 import GeneratorForm from './generator_form'
 import EventMessage from './event_message'
+import JourneySpaceForm from './journey_space_form'
 import state from '../state'
 
 
@@ -114,8 +115,10 @@ export default class Home extends Component {
       <div className="home container">
         <div className="row">
           <UserList userCount={this.state.totalConnectionsCreated} userIds={this.state.connectedUsers} />
-          <EventMessage journeys={state.journeys} />
-          <GeneratorForm />
+          <div className="col-sm">
+            <JourneySpaceForm />
+            <EventMessage journeys={state.journeys} />
+          </div>
         </div>
       </div>
       )
