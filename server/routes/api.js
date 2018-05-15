@@ -165,6 +165,22 @@ router.post('/event', async (req, res) => {
   }
 });
 
+router.post('/login', (req, res) => {
+  req.session.loggedIn = true;
+  req.session.user = {
+    name: req.body.name
+  };
+  res.json({loggedIn: true, user: {name: req.body.name}});
+});
+
+router.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+      res
+        .clearCookie('connect.sid')
+        .redirect('/login')
+    });
+});
+
 function signal(sessionId, data) {
   fetch(`https://api.opentok.com/v2/project/${process.env.OPENTOK_KEY}/session/${sessionId}/signal`, {
     headers: {
