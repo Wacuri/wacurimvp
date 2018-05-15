@@ -9,10 +9,12 @@ export default class JourneySpaceForm extends Component {
     this.state = {
       visible: false
     }
+
+    this.toggleVisibility = this.toggleVisibility.bind(this)
   }
 
-  componentDidMount() {
-
+  toggleVisibility() {
+    this.setState({visible: !this.state.visible})
   }
 
   render() {
@@ -20,12 +22,15 @@ export default class JourneySpaceForm extends Component {
         <div className="col-sm">
           <div className="container" style={{ border: '1px solid #e6e6e6', padding:'10px'}}>
             <form>
-              <button type="button" className="btn btn-outline-primary btn-block"><i className="fa fa-plus" ariaHidden="true"></i>&nbsp;&nbsp;Create a new Journey Space</button>
-              <JourneyDetailEntry />
+              <button type="button" className="btn btn-outline-primary btn-block" onClick={this.toggleVisibility}>
+                <i className="fa fa-plus" ariaHidden="true"></i>&nbsp;&nbsp;Create a new Journey Space
+              </button>
+              <JourneyDetailEntry detailVisibility={this.state.visible} />
             </form>
-            <SessionInfo sessionLink={this.state.sessionLinkUrl} />
           </div>
         </div>
       )
   }
+
+
 }

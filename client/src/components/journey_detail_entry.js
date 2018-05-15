@@ -8,6 +8,11 @@ export default class JourneyDetailEntry extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ visible: nextProps.detailVisibility});
+  }
+
+
   render() {
     if(this.state.visible === true) {
     return (

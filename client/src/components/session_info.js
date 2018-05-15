@@ -5,8 +5,7 @@ export default class SessionInfo extends Component {
   constructor(props){
     super(props)
     this.state = {
-      sessionLinkName: 'Reasonable Default',
-      sessionLinkUrl: 'reasonable-default'
+      sessionLinkUrl: ''
     }
 
     this.jumpToSession = this.jumpToSession.bind(this)
@@ -31,6 +30,7 @@ export default class SessionInfo extends Component {
 
             <p><input className="btn btn-primary" type="button" value="Jump to the session" onClick={this.jumpToSession} /></p>
 
+            <SessionInfo sessionLink={this.state.sessionLinkUrl} />
         </div>
       )
 
