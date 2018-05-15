@@ -13,7 +13,7 @@ export default class UserList extends Component {
 
   render() {
     return (
-      <div style={{float:'right', paddingRight:'50px'}}>
+      <div className="col-sm">
         <h4>Current Users ({this.props.userCount})</h4>
         <ul>
           {this.props.userIds.map(function(name){

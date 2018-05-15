@@ -13,6 +13,10 @@ $fa-font-path: "~font-awesome/fonts";
   }
 }
 
+#messages {
+  border: 1px solid #f00;
+}
+
 .journey-container {
   padding: $spacer;
 }
