@@ -282,13 +282,13 @@ var _mongoose = __webpack_require__(4);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _tok_session = __webpack_require__(20);
+var _journey_space = __webpack_require__(20);
 
-var _tok_session2 = _interopRequireDefault(_tok_session);
+var _journey_space2 = _interopRequireDefault(_journey_space);
 
-var _tok_session_participant = __webpack_require__(22);
+var _journey_participant = __webpack_require__(22);
 
-var _tok_session_participant2 = _interopRequireDefault(_tok_session_participant);
+var _journey_participant2 = _interopRequireDefault(_journey_participant);
 
 var _dotenv = __webpack_require__(5);
 
@@ -350,7 +350,7 @@ router.get('/sessions/:room', function () {
           case 0:
             room = req.params.room;
             _context2.next = 3;
-            return _tok_session2.default.findOne({ room: room }).lean().exec();
+            return _journey_space2.default.findOne({ room: room }).lean().exec();
 
           case 3:
             existingSession = _context2.sent;
@@ -361,7 +361,7 @@ router.get('/sessions/:room', function () {
             }
 
             _context2.next = 7;
-            return _tok_session_participant2.default.find({ session: existingSession, present: true }).lean().exec();
+            return _journey_participant2.default.find({ session: existingSession, present: true }).lean().exec();
 
           case 7:
             participants = _context2.sent;
@@ -390,7 +390,7 @@ router.get('/sessions/:room', function () {
 
                       case 2:
                         // save the sessionId
-                        newSession = new _tok_session2.default({ room: room, sessionId: session.sessionId });
+                        newSession = new _journey_space2.default({ room: room, sessionId: session.sessionId });
                         _context.next = 5;
                         return newSession.save();
 
@@ -425,34 +425,49 @@ router.get('/sessions/:room', function () {
   };
 }());
 
-// TEMP: Use get for convenience. hardcode temp-home-location for the room
-// Trigger a general announcement to everyone
-router.get('/sessions/test/temp-home-location', function () {
+router.post('/sessions/:room/joined', function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res) {
-    var existingSession;
+    var room, connectionId, existingSession, participantExists, participant;
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
-            _context3.next = 2;
-            return _tok_session2.default.findOne({ room: 'temp-home-location' }).exec();
+            room = req.params.room;
+            connectionId = req.body.id;
 
-          case 2:
+            req.session.connections = req.session.connections || {};
+            req.session.connections[room] = connectionId;
+            _context3.next = 6;
+            return _journey_space2.default.findOne({ room: room }).lean().exec();
+
+          case 6:
             existingSession = _context3.sent;
 
             if (!existingSession) {
-              _context3.next = 7;
+              _context3.next = 16;
               break;
             }
 
-            console.log("**** SENDING SIGNAL");
-            signal(existingSession.sessionId, { type: 'displayJourneyRequest', data: 'Rob has started a session. Join him (link)' });
-            return _context3.abrupt('return', res.sendStatus(200));
+            _context3.next = 10;
+            return _journey_participant2.default.count({ session: existingSession, connectionId: connectionId });
 
-          case 7:
+          case 10:
+            _context3.t0 = _context3.sent;
+            participantExists = _context3.t0 > 0;
+
+            if (participantExists) {
+              _context3.next = 16;
+              break;
+            }
+
+            participant = new _journey_participant2.default({ session: existingSession, connectionId: connectionId, user: req.session.user });
+            _context3.next = 16;
+            return participant.save();
+
+          case 16:
             res.sendStatus(200);
 
-          case 8:
+          case 17:
           case 'end':
             return _context3.stop();
         }
@@ -465,54 +480,39 @@ router.get('/sessions/test/temp-home-location', function () {
   };
 }());
 
-router.get('/sessions/:room/connections/:connection/ready', function () {
+router.get('/sessions/:room/:connectionId', function () {
   var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(req, res) {
-    var _req$params, room, connection, existingSession, participant, allReady;
+    var _req$params, room, connectionId, existingSession, participant;
 
     return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
-            _req$params = req.params, room = _req$params.room, connection = _req$params.connection;
+            _req$params = req.params, room = _req$params.room, connectionId = _req$params.connectionId;
             _context4.next = 3;
-            return _tok_session2.default.findOne({ room: room }).exec();
+            return _journey_space2.default.findOne({ room: room }).lean().exec();
 
           case 3:
             existingSession = _context4.sent;
 
             if (!existingSession) {
-              _context4.next = 18;
+              _context4.next = 10;
               break;
             }
 
             _context4.next = 7;
-            return _tok_session_participant2.default.findOne({ session: existingSession, connectionId: connection });
+            return _journey_participant2.default.findOne({ session: existingSession, connectionId: connectionId }).exec();
 
           case 7:
             participant = _context4.sent;
 
-            participant.ready = true;
-            _context4.next = 11;
-            return participant.save();
+            res.json(participant);
+            return _context4.abrupt('return');
+
+          case 10:
+            res.sendStatus(500);
 
           case 11:
-            signal(existingSession.sessionId, { type: 'ready', data: 'foo' });
-            _context4.next = 14;
-            return _tok_session_participant2.default.count({ session: existingSession, ready: false, present: true });
-
-          case 14:
-            _context4.t0 = _context4.sent;
-            allReady = _context4.t0 === 0;
-
-            if (allReady) {
-              // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
-            }
-            return _context4.abrupt('return', res.sendStatus(200));
-
-          case 18:
-            res.sendStatus(200);
-
-          case 19:
           case 'end':
             return _context4.stop();
         }
@@ -525,31 +525,34 @@ router.get('/sessions/:room/connections/:connection/ready', function () {
   };
 }());
 
-router.get('/journeys', function () {
+// TEMP: Use get for convenience. hardcode temp-home-location for the room
+// Trigger a general announcement to everyone
+router.get('/sessions/test/temp-home-location', function () {
   var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(req, res) {
-    var readdirAsync, journeyFiles;
+    var existingSession;
     return regeneratorRuntime.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
-            readdirAsync = promisify(_fs2.default.readdir);
-            _context5.next = 3;
-            return readdirAsync(_path2.default.join(__dirname, '..', 'public/journeys'));
+            _context5.next = 2;
+            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
 
-          case 3:
-            _context5.t0 = function (file) {
-              return _path2.default.extname(file) === '.mp3';
-            };
+          case 2:
+            existingSession = _context5.sent;
 
-            _context5.t1 = function (file) {
-              return '/journeys/' + file;
-            };
+            if (!existingSession) {
+              _context5.next = 7;
+              break;
+            }
 
-            journeyFiles = _context5.sent.filter(_context5.t0).map(_context5.t1);
-
-            res.json(journeyFiles);
+            console.log("**** SENDING SIGNAL");
+            signal(existingSession.sessionId, { type: 'displayJourneyRequest', data: 'Rob has started a session. Join him (link)' });
+            return _context5.abrupt('return', res.sendStatus(200));
 
           case 7:
+            res.sendStatus(200);
+
+          case 8:
           case 'end':
             return _context5.stop();
         }
@@ -562,38 +565,54 @@ router.get('/journeys', function () {
   };
 }());
 
-router.put('/sessions/:room/journey', function () {
+router.get('/sessions/:room/connections/:connection/ready', function () {
   var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res) {
-    var journey, room, existingSession;
+    var _req$params2, room, connection, existingSession, participant, allReady;
+
     return regeneratorRuntime.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
-            console.log('UPDATE JOURNEY');
-            journey = req.body.journey;
-            room = req.params.room;
-            _context6.next = 5;
-            return _tok_session2.default.findOne({ room: room }).exec();
+            _req$params2 = req.params, room = _req$params2.room, connection = _req$params2.connection;
+            _context6.next = 3;
+            return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 5:
+          case 3:
             existingSession = _context6.sent;
 
             if (!existingSession) {
-              _context6.next = 11;
+              _context6.next = 18;
               break;
             }
 
-            existingSession.journey = journey;
-            _context6.next = 10;
-            return existingSession.save();
+            _context6.next = 7;
+            return _journey_participant2.default.findOne({ session: existingSession, connectionId: connection });
 
-          case 10:
-            signal(existingSession.sessionId, { type: 'updatedJourney', data: journey });
+          case 7:
+            participant = _context6.sent;
+
+            participant.ready = true;
+            _context6.next = 11;
+            return participant.save();
 
           case 11:
+            signal(existingSession.sessionId, { type: 'ready', data: 'foo' });
+            _context6.next = 14;
+            return _journey_participant2.default.count({ session: existingSession, ready: false, present: true });
+
+          case 14:
+            _context6.t0 = _context6.sent;
+            allReady = _context6.t0 === 0;
+
+            if (allReady) {
+              // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
+            }
+            return _context6.abrupt('return', res.sendStatus(200));
+
+          case 18:
             res.sendStatus(200);
 
-          case 12:
+          case 19:
           case 'end':
             return _context6.stop();
         }
@@ -606,33 +625,31 @@ router.put('/sessions/:room/journey', function () {
   };
 }());
 
-// TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
-router.post('/sessions/:room/start', function () {
+router.get('/journeys', function () {
   var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req, res) {
-    var room, existingSession;
+    var readdirAsync, journeyFiles;
     return regeneratorRuntime.wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
           case 0:
-            room = req.params.room;
+            readdirAsync = promisify(_fs2.default.readdir);
             _context7.next = 3;
-            return _tok_session2.default.findOne({ room: room }).exec();
+            return readdirAsync(_path2.default.join(__dirname, '..', 'public/journeys'));
 
           case 3:
-            existingSession = _context7.sent;
+            _context7.t0 = function (file) {
+              return _path2.default.extname(file) === '.mp3';
+            };
 
-            if (!existingSession) {
-              _context7.next = 8;
-              break;
-            }
+            _context7.t1 = function (file) {
+              return '/journeys/' + file;
+            };
 
-            _context7.next = 7;
-            return existingSession.start();
+            journeyFiles = _context7.sent.filter(_context7.t0).map(_context7.t1);
+
+            res.json(journeyFiles);
 
           case 7:
-            signal(existingSession.sessionId, { type: 'startJourney', data: '' });
-
-          case 8:
           case 'end':
             return _context7.stop();
         }
@@ -645,42 +662,38 @@ router.post('/sessions/:room/start', function () {
   };
 }());
 
-router.post('/sessions/:room/flag', function () {
+router.put('/sessions/:room/journey', function () {
   var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(req, res) {
-    var room, connectionId, existingSession, participants;
+    var journey, room, existingSession;
     return regeneratorRuntime.wrap(function _callee8$(_context8) {
       while (1) {
         switch (_context8.prev = _context8.next) {
           case 0:
+            console.log('UPDATE JOURNEY');
+            journey = req.body.journey;
             room = req.params.room;
-            connectionId = req.body.connectionId;
-            _context8.next = 4;
-            return _tok_session2.default.findOne({ room: room }).exec();
+            _context8.next = 5;
+            return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 4:
+          case 5:
             existingSession = _context8.sent;
 
             if (!existingSession) {
-              _context8.next = 13;
+              _context8.next = 11;
               break;
             }
 
-            existingSession.flags.push({ user: connectionId });
-            _context8.next = 9;
+            existingSession.journey = journey;
+            _context8.next = 10;
             return existingSession.save();
 
-          case 9:
-            _context8.next = 11;
-            return _tok_session_participant2.default.find({ session: existingSession, present: true }).lean().exec();
+          case 10:
+            signal(existingSession.sessionId, { type: 'updatedJourney', data: journey });
 
           case 11:
-            participants = _context8.sent;
-            return _context8.abrupt('return', res.json(_extends({}, existingSession.toJSON(), { participants: participants })));
+            res.sendStatus(200);
 
-          case 13:
-            res.sendStatus(404);
-
-          case 14:
+          case 12:
           case 'end':
             return _context8.stop();
         }
@@ -693,80 +706,33 @@ router.post('/sessions/:room/flag', function () {
   };
 }());
 
-router.post('/event', function () {
+// TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
+router.post('/sessions/:room/start', function () {
   var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(req, res) {
-    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
-
+    var room, existingSession;
     return regeneratorRuntime.wrap(function _callee9$(_context9) {
       while (1) {
         switch (_context9.prev = _context9.next) {
           case 0:
-            console.log('GOT EVENT', req.body);
-            res.sendStatus(200);
-            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
-            _context9.next = 5;
-            return _tok_session2.default.findOne({ sessionId: sessionId }).exec();
+            room = req.params.room;
+            _context9.next = 3;
+            return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 5:
-            session = _context9.sent;
+          case 3:
+            existingSession = _context9.sent;
 
-
-            console.log("*******" + req.body);
-
-            _context9.t0 = req.body.event;
-            _context9.next = _context9.t0 === 'connectionCreated' ? 10 : _context9.t0 === 'connectionDestroyed' ? 20 : 29;
-            break;
-
-          case 10:
-            if (!session) {
-              _context9.next = 19;
+            if (!existingSession) {
+              _context9.next = 8;
               break;
             }
 
-            _context9.next = 13;
-            return _tok_session_participant2.default.count({ session: session, connectionId: connection.id });
+            _context9.next = 7;
+            return existingSession.start();
 
-          case 13:
-            _context9.t1 = _context9.sent;
-            participantExists = _context9.t1 > 0;
+          case 7:
+            signal(existingSession.sessionId, { type: 'startJourney', data: '' });
 
-            if (participantExists) {
-              _context9.next = 19;
-              break;
-            }
-
-            participant = new _tok_session_participant2.default({ session: session, connectionId: connection.id });
-            _context9.next = 19;
-            return participant.save();
-
-          case 19:
-            return _context9.abrupt('break', 29);
-
-          case 20:
-            if (!session) {
-              _context9.next = 28;
-              break;
-            }
-
-            _context9.next = 23;
-            return _tok_session_participant2.default.findOne({ session: session, connectionId: connection.id });
-
-          case 23:
-            _participant = _context9.sent;
-
-            if (!_participant) {
-              _context9.next = 28;
-              break;
-            }
-
-            _participant.present = false;
-            _context9.next = 28;
-            return _participant.save();
-
-          case 28:
-            return _context9.abrupt('break', 29);
-
-          case 29:
+          case 8:
           case 'end':
             return _context9.stop();
         }
@@ -776,6 +742,140 @@ router.post('/event', function () {
 
   return function (_x17, _x18) {
     return _ref9.apply(this, arguments);
+  };
+}());
+
+router.post('/sessions/:room/flag', function () {
+  var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(req, res) {
+    var room, connectionId, existingSession, participants;
+    return regeneratorRuntime.wrap(function _callee10$(_context10) {
+      while (1) {
+        switch (_context10.prev = _context10.next) {
+          case 0:
+            room = req.params.room;
+            connectionId = req.body.connectionId;
+            _context10.next = 4;
+            return _journey_space2.default.findOne({ room: room }).exec();
+
+          case 4:
+            existingSession = _context10.sent;
+
+            if (!existingSession) {
+              _context10.next = 13;
+              break;
+            }
+
+            existingSession.flags.push({ user: connectionId });
+            _context10.next = 9;
+            return existingSession.save();
+
+          case 9:
+            _context10.next = 11;
+            return _journey_participant2.default.find({ session: existingSession, present: true }).lean().exec();
+
+          case 11:
+            participants = _context10.sent;
+            return _context10.abrupt('return', res.json(_extends({}, existingSession.toJSON(), { participants: participants })));
+
+          case 13:
+            res.sendStatus(404);
+
+          case 14:
+          case 'end':
+            return _context10.stop();
+        }
+      }
+    }, _callee10, undefined);
+  }));
+
+  return function (_x19, _x20) {
+    return _ref10.apply(this, arguments);
+  };
+}());
+
+router.post('/event', function () {
+  var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(req, res) {
+    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
+
+    return regeneratorRuntime.wrap(function _callee11$(_context11) {
+      while (1) {
+        switch (_context11.prev = _context11.next) {
+          case 0:
+            console.log('GOT EVENT', req.body);
+            res.sendStatus(200);
+            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
+            _context11.next = 5;
+            return _journey_space2.default.findOne({ sessionId: sessionId }).exec();
+
+          case 5:
+            session = _context11.sent;
+
+
+            console.log("*******" + req.body);
+
+            _context11.t0 = req.body.event;
+            _context11.next = _context11.t0 === 'connectionCreated' ? 10 : _context11.t0 === 'connectionDestroyed' ? 20 : 29;
+            break;
+
+          case 10:
+            if (!session) {
+              _context11.next = 19;
+              break;
+            }
+
+            _context11.next = 13;
+            return _journey_participant2.default.count({ session: session, connectionId: connection.id });
+
+          case 13:
+            _context11.t1 = _context11.sent;
+            participantExists = _context11.t1 > 0;
+
+            if (participantExists) {
+              _context11.next = 19;
+              break;
+            }
+
+            participant = new _journey_participant2.default({ session: session, connectionId: connection.id });
+            _context11.next = 19;
+            return participant.save();
+
+          case 19:
+            return _context11.abrupt('break', 29);
+
+          case 20:
+            if (!session) {
+              _context11.next = 28;
+              break;
+            }
+
+            _context11.next = 23;
+            return _journey_participant2.default.findOne({ session: session, connectionId: connection.id });
+
+          case 23:
+            _participant = _context11.sent;
+
+            if (!_participant) {
+              _context11.next = 28;
+              break;
+            }
+
+            _participant.present = false;
+            _context11.next = 28;
+            return _participant.save();
+
+          case 28:
+            return _context11.abrupt('break', 29);
+
+          case 29:
+          case 'end':
+            return _context11.stop();
+        }
+      }
+    }, _callee11, undefined);
+  }));
+
+  return function (_x21, _x22) {
+    return _ref11.apply(this, arguments);
   };
 }());
 
@@ -846,14 +946,14 @@ var FlagSchema = new _mongoose.Schema({
   reason: { type: String }
 });
 
-var TokSessionSchema = new _mongoose.Schema({
+var JourneySpaceSchema = new _mongoose.Schema({
   room: { type: String, index: true },
   sessionId: { type: String, index: true },
   journey: { type: String, default: '/journeys/Journey to A Spiderweb+Music.mp3' },
   flags: { type: [FlagSchema], default: [] }
 });
 
-TokSessionSchema.plugin(_anotherMongooseStatemachine2.default, {
+JourneySpaceSchema.plugin(_anotherMongooseStatemachine2.default, {
   states: {
     created: { default: true },
     started: {},
@@ -865,9 +965,9 @@ TokSessionSchema.plugin(_anotherMongooseStatemachine2.default, {
   }
 });
 
-var TokSession = _mongoose2.default.model('TokSession', TokSessionSchema);
+var JourneySpace = _mongoose2.default.model('JourneySpace', JourneySpaceSchema);
 
-exports.default = TokSession;
+exports.default = JourneySpace;
 
 /***/ }),
 /* 21 */
@@ -892,16 +992,17 @@ var _mongoose2 = _interopRequireDefault(_mongoose);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var TokSessionParticipantSchema = new _mongoose.Schema({
+var JourneyParticipantSchema = new _mongoose.Schema({
   "connectionId": { type: String, index: true },
-  "session": { type: _mongoose.Schema.Types.ObjectId, ref: 'TokSession' },
+  "session": { type: _mongoose.Schema.Types.ObjectId, ref: 'JourneySpace' },
   "ready": { type: Boolean, default: false },
-  "present": { type: Boolean, default: true }
+  "present": { type: Boolean, default: true },
+  user: new _mongoose.Schema({ name: String })
 });
 
-var TokSessionParticipant = _mongoose2.default.model('TokSessionParticipant', TokSessionParticipantSchema);
+var JourneyParticipant = _mongoose2.default.model('JourneyParticipant', JourneyParticipantSchema);
 
-exports.default = TokSessionParticipant;
+exports.default = JourneyParticipant;
 
 /***/ }),
 /* 23 */
@@ -941,8 +1042,6 @@ var _state = __webpack_require__(1);
 var _state2 = _interopRequireDefault(_state);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-console.log(process.env);
 
 var router = _express2.default.Router();
 
@@ -1296,7 +1395,6 @@ if (__CLIENT__) {
       createSession = _require.createSession;
 
   var OT = __webpack_require__(11);
-  window.state = _state2.default;
 }
 
 var Home = function (_Component) {
@@ -1336,6 +1434,18 @@ var Home = function (_Component) {
           onConnect: function onConnect() {
             console.log('assigned connection to publisher', _this2.sessionHelper.session.connection);
             setTimeout(_this2.refreshSession, 1000);
+            fetch('/api/sessions/' + roomUrl + '/joined', {
+              body: JSON.stringify({ id: _this2.sessionHelper.session.connection.id }),
+              credentials: 'same-origin', // include, same-origin, *omit
+              headers: {
+                'user-agent': 'Mozilla/4.0 MDN Example',
+                'content-type': 'application/json'
+              },
+              method: 'POST', // *GET, POST, PUT, DELETE, etc.
+              mode: 'cors', // no-cors, cors, *same-origin
+              redirect: 'follow', // manual, *follow, error
+              referrer: 'no-referrer' // *client, no-referrer
+            });
           },
           onStreamsUpdated: function onStreamsUpdated(streams) {
             console.log('Current subscriber streams:', streams);
@@ -1358,7 +1468,9 @@ var Home = function (_Component) {
           _this2.setState({ totalConnectionsCreated: updatedConnectionCount });
 
           var newData = [].concat(_toConsumableArray(_this2.state.connectedUsers));
-          var index = newData.indexOf(event.connection.id);
+          var index = newData.map(function (d) {
+            return d.connectionId;
+          }).indexOf(event.connection.id);
           newData.splice(index, 1);
           _this2.setState({ connectedUsers: newData });
 
@@ -1392,22 +1504,21 @@ var Home = function (_Component) {
             event: 'connectionCreated'
           };
 
-          _this2.setState({ connectedUsers: [].concat(_toConsumableArray(_this2.state.connectedUsers), [event.connection.id]) });
-          console.log('data is', data);
-          // fetch(`/api/event`, {
-          //   body: JSON.stringify(data), // must match 'Content-Type' header
-          //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          //   credentials: 'same-origin', // include, same-origin, *omit
-          //   headers: {
-          //     'user-agent': 'Mozilla/4.0 MDN Example',
-          //     'content-type': 'application/json'
-          //   },
-          //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          //   mode: 'cors', // no-cors, cors, *same-origin
-          //   redirect: 'follow', // manual, *follow, error
-          //   referrer: 'no-referrer', // *client, no-referrer
-          // });
-          // this.refreshSession();
+          var tries = 10;
+          var fetchRetry = function fetchRetry() {
+            fetch('/api/sessions/' + roomUrl + '/' + event.connection.id).then(function (res) {
+              return res.json();
+            }).then(function (json) {
+              if (!json && tries-- > 0) {
+                setTimeout(fetchRetry, 500);
+              } else {
+                _this2.setState({
+                  connectedUsers: [].concat(_toConsumableArray(_this2.state.connectedUsers), [json])
+                });
+              }
+            });
+          };
+          fetchRetry();
         });
 
         _this2.sessionHelper.session.on("signal", function (event) {
@@ -1442,7 +1553,7 @@ var Home = function (_Component) {
       return _react2.default.createElement(
         'div',
         { className: 'home' },
-        _react2.default.createElement(_user_list2.default, { userCount: this.state.totalConnectionsCreated, userIds: this.state.connectedUsers }),
+        _react2.default.createElement(_user_list2.default, { userCount: this.state.totalConnectionsCreated, connections: this.state.connectedUsers }),
         _react2.default.createElement(_event_message2.default, { message: this.state.displayMessageText, sessionUrl: this.state.sessionUrl }),
         _react2.default.createElement(_generator_form2.default, null)
       );
@@ -1489,12 +1600,6 @@ var UserList = function (_Component) {
   }
 
   _createClass(UserList, [{
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this.setState({ userCount: nextProps.totalConnectionsCreated });
-      this.setState({ userIds: nextProps.connectedUsers });
-    }
-  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -1510,11 +1615,11 @@ var UserList = function (_Component) {
         _react2.default.createElement(
           'ul',
           null,
-          this.props.userIds.map(function (name) {
+          this.props.connections.map(function (connection) {
             return _react2.default.createElement(
               'li',
-              { key: name },
-              name
+              { key: connection.user.name },
+              connection.user.name
             );
           })
         )
