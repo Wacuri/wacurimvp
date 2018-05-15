@@ -6,14 +6,14 @@ const FlagSchema = new Schema({
   reason: {type: String},
 });
 
-const TokSessionSchema = new Schema({
+const JourneySpaceSchema = new Schema({
   room: {type: String, index: true},
   sessionId: {type: String, index: true},
   journey: {type: String, default: '/journeys/Journey to A Spiderweb+Music.mp3'},
   flags: {type: [FlagSchema], default: []},
 });
 
-TokSessionSchema.plugin(statemachine, {
+JourneySpaceSchema.plugin(statemachine, {
   states: {
     created: {default: true},
     started: {},
@@ -25,7 +25,7 @@ TokSessionSchema.plugin(statemachine, {
   }
 });
 
-const TokSession = mongoose.model('TokSession', TokSessionSchema);
+const JourneySpace = mongoose.model('JourneySpace', JourneySpaceSchema);
 
-export default TokSession;
+export default JourneySpace;
 

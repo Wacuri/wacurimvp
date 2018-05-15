@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
 import App from '../../client/src/app';
 import state from '../../client/src/state';
-console.log(process.env);
 
 const router = express.Router();
 

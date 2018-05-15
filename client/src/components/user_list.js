@@ -5,19 +5,13 @@ export default class UserList extends Component {
     super(props);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ userCount: nextProps.totalConnectionsCreated });
-    this.setState({ userIds: nextProps.connectedUsers });
-  }
-
-
   render() {
     return (
       <div style={{float:'right', paddingRight:'50px'}}>
         <h4>Current Users ({this.props.userCount})</h4>
         <ul>
-          {this.props.userIds.map(function(name){
-            return <li key={name}>{name}</li>;
+          {this.props.connections.map(function(connection){
+            return <li key={connection.user.name}>{connection.user.name}</li>;
           })}
         </ul>
       </div>
