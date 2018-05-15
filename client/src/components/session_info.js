@@ -5,6 +5,7 @@ export default class SessionInfo extends Component {
   constructor(props){
     super(props)
     this.state = {
+      visible: false,
       sessionLinkUrl: ''
     }
 
@@ -13,6 +14,7 @@ export default class SessionInfo extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({ sessionLinkUrl: nextProps.sessionLink });
+    this.setState({ visible: nextProps.sessionVisibility });
   }
 
   jumpToSession() {
@@ -25,12 +27,8 @@ export default class SessionInfo extends Component {
     if(this.state.visible === true) {
       return(
         <div>
-          <h3>Journey Created</h3>
-          <p><span style={{ fontWeight: 'bold', backgroundColor: '#ccc', padding: '7px' }}>www.wacuri.com/{this.state.sessionLinkUrl}</span> <a href="#">Copy link</a></p>
-
-            <p><input className="btn btn-primary" type="button" value="Jump to the session" onClick={this.jumpToSession} /></p>
-
-            <SessionInfo sessionLink={this.state.sessionLinkUrl} />
+          <strong>You created journey space!</strong>
+          <p><span style={{ fontWeight: 'bold', backgroundColor: '#ccc', padding: '7px' }}>www.wacuri.com/{this.state.sessionLinkUrl}</span>&nbsp;<input className="btn btn-primary" type="button" value="Jump to the session" onClick={this.jumpToSession} /></p>
         </div>
       )
 
