@@ -23,6 +23,7 @@ export default class SessionInfo extends Component {
   // TODO: npm install --save react@^16.2.0 react-dom@^16.2.0 for getDerivedstateFromProps
 
   render() {
+    if(this.state.visible === true) {
       return(
         <div>
           <h3>Journey Created</h3>
@@ -32,5 +33,11 @@ export default class SessionInfo extends Component {
 
         </div>
       )
+
+    } else {
+      return (
+        <div></div>
+      )
+    }
   }
 }
