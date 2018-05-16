@@ -11,7 +11,6 @@ var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 if (__CLIENT__) {
   var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
   const OT = require('@opentok/client');
-  window.state = state;
 }
 
 export default class Home extends Component {
@@ -28,7 +27,6 @@ export default class Home extends Component {
     this.publisher = {};
   }
 
-
   componentDidMount() {
     const roomUrl = 'temp-home-location'
 
@@ -42,6 +40,18 @@ export default class Home extends Component {
           token: state.session.token,
           onConnect: () => {
             setTimeout(this.refreshSession, 1000);
+            fetch(`/api/sessions/${roomUrl}/joined`, {
+              body: JSON.stringify({id: this.sessionHelper.session.connection.id}),
+              credentials: 'same-origin', // include, same-origin, *omit
+              headers: {
+                'user-agent': 'Mozilla/4.0 MDN Example',
+                'content-type': 'application/json'
+              },
+              method: 'POST', // *GET, POST, PUT, DELETE, etc.
+              mode: 'cors', // no-cors, cors, *same-origin
+              redirect: 'follow', // manual, *follow, error
+              referrer: 'no-referrer', // *client, no-referrer
+            });
           },
           onStreamsUpdated: streams => {
             this.setState({ streams });
@@ -62,7 +72,7 @@ export default class Home extends Component {
           this.setState({totalConnectionsCreated: updatedConnectionCount})
 
           let newData = [...this.state.connectedUsers]
-          let index = newData.indexOf(event.connection.id)
+          let index = newData.map(d => d.connectionId).indexOf(event.connection.id)
           newData.splice(index, 1)
           this.setState({connectedUsers: newData})
         });
@@ -81,7 +91,19 @@ export default class Home extends Component {
             event: 'connectionCreated',
           }
 
-          this.setState({ connectedUsers: [...this.state.connectedUsers, event.connection.id] })
+          let tries = 10;
+          const fetchRetry = () => {
+            fetch(`/api/sessions/${roomUrl}/${event.connection.id}`).then(res => res.json()).then(json => {
+              if (!json && tries-- > 0) {
+                setTimeout(fetchRetry, 500);
+              } else {
+                this.setState({
+                  connectedUsers: [...this.state.connectedUsers, json]
+                });
+              }
+            });
+          }
+          fetchRetry();
         });
 
 
@@ -114,7 +136,7 @@ export default class Home extends Component {
     return (
       <div className="home container">
         <div className="row">
-          <UserList userCount={this.state.totalConnectionsCreated} userIds={this.state.connectedUsers} />
+          <UserList userCount={this.state.totalConnectionsCreated} connections={this.state.connectedUsers} />
           <div className="col-sm">
             <JourneySpaceForm />
             <EventMessage journeys={state.journeys} />

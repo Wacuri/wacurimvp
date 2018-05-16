@@ -5,12 +5,16 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
 import App from '../../client/src/app';
-console.log(process.env);
+import state from '../../client/src/state';
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
   const context = {};
+
+  state.loggedIn = req.session.loggedIn;
+  state.user = req.session.user;
+  console.log('GOT SESSION', req.session, req.originalUrl);
 
   const html = ReactDOMServer.renderToString(
     <StaticRouter
@@ -21,15 +25,19 @@ router.get('/', (req, res) => {
     </StaticRouter>
   );
 
+  console.log('GOT HTML', html, context.url);
   if (context.url) {
-    res.writeHead(301, {
-      Location: context.url,
-    });
+    console.log('REDIRECT');
+    if (req.originalUrl != '/favicon.ico') {
+      res.writeHead(301, {
+        Location: context.url,
+      });
+    }
     res.end();
   } else {
     res.status(200).render(process.env.NODE_ENV === 'production' ? 'index.ejs' : 'index.dev.ejs', {
       html,
-      script: JSON.stringify({openTokKey: process.env.OPENTOK_KEY}),
+      script: JSON.stringify({openTokKey: process.env.OPENTOK_KEY, loggedIn: req.session.loggedIn, user: req.session.user}),
     });
   }
 });

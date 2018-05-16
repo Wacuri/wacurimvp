@@ -4,7 +4,18 @@ import bodyParser from 'body-parser';
 import api from './api';
 import ssr from './ssr';
 
+import session from 'express-session';
+import createMongoStore from 'connect-mongo';
+
 const app = express();
+
+app.use(session({
+    secret: 'qVaNxeu5VVEAtkyFJ/62EKcp7Lw=',
+    saveUninitialized: false, // don't create session until something stored
+	  resave: false, //don't save session if unmodified
+    store: new (createMongoStore(session))({url: process.env.MONGODB_URI || process.env.MONGO_URL}),
+    cookie: {expires: new Date(253402300000000)}
+}));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../views'));

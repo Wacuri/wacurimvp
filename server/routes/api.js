@@ -3,8 +3,8 @@ import path from 'path';
 import express from 'express';
 import OpenTok from 'opentok';
 import mongoose from 'mongoose';
-import TokSession from '../models/tok_session';
-import TokSessionParticipant from '../models/tok_session_participant';
+import JourneySpace from '../models/journey_space';
+import JourneyParticipant from '../models/journey_participant';
 import dotenv from 'dotenv';
 require('isomorphic-fetch');
 
@@ -37,9 +37,9 @@ function generateToken(sessionId) {
 // TODO: switch to POST, just using GET for easier testing
 router.get('/sessions/:room', async (req, res) => {
 	const {room} = req.params;
-	const existingSession = await TokSession.findOne({room}).lean().exec();
+	const existingSession = await JourneySpace.findOne({room}).lean().exec();
 	if (existingSession) {
-    const participants = await TokSessionParticipant.find({session: existingSession, present: true}).lean().exec();
+    const participants = await JourneyParticipant.find({session: existingSession, present: true}).lean().exec();
     existingSession.participants = participants;
 		res.json({
 			...existingSession,
@@ -49,7 +49,7 @@ router.get('/sessions/:room', async (req, res) => {
 		opentok.createSession(async (err, session) => {
 		  if (err) throw err;
 			// save the sessionId
-			const newSession = new TokSession({room, sessionId: session.sessionId});
+			const newSession = new JourneySpace({room, sessionId: session.sessionId});
 			await newSession.save();
 			res.json({
 				...newSession.toJSON(),
@@ -57,6 +57,33 @@ router.get('/sessions/:room', async (req, res) => {
 			});
 		});
 	}
+});
+
+router.post('/sessions/:room/joined', async (req, res) => {
+	const {room} = req.params;
+  const {id: connectionId} = req.body;
+  req.session.connections = req.session.connections || {};
+  req.session.connections[room] = connectionId;
+	const existingSession = await JourneySpace.findOne({room}).lean().exec();
+	if (existingSession) {
+      const participantExists = (await JourneyParticipant.count({session: existingSession, connectionId})) > 0;
+      if (!participantExists) {
+        const participant = new JourneyParticipant({session: existingSession, connectionId: connectionId, user: req.session.user});
+        await participant.save();
+      }
+  }
+  res.sendStatus(200);
+});
+
+router.get('/sessions/:room/:connectionId', async (req, res) => {
+  const {room, connectionId} = req.params;
+	const existingSession = await JourneySpace.findOne({room}).lean().exec();
+	if (existingSession) {
+    const participant = await JourneyParticipant.findOne({session: existingSession, connectionId}).exec();
+    res.json(participant);
+    return;
+  }
+  res.sendStatus(500);
 });
 
 router.get('/active_journeys', async(req, res) => {
@@ -68,7 +95,7 @@ router.get('/active_journeys', async(req, res) => {
 // Trigger a general announcement to everyone
 router.get('/sessions/test/temp-home-location', async (req, res) => {
   // const {room, connection} = req.params;
-  const existingSession = await TokSession.findOne({room:'temp-home-location'}).exec();
+  const existingSession = await JourneySpace.findOne({room:'temp-home-location'}).exec();
   if (existingSession) {
   console.log("**** SENDING SIGNAL")
   let messageData = {
@@ -85,13 +112,13 @@ router.get('/sessions/test/temp-home-location', async (req, res) => {
 
 router.get('/sessions/:room/connections/:connection/ready', async (req, res) => {
   const {room, connection} = req.params;
-  const existingSession = await TokSession.findOne({room}).exec();
+  const existingSession = await JourneySpace.findOne({room}).exec();
 	if (existingSession) {
-    const participant = await TokSessionParticipant.findOne({session: existingSession, connectionId: connection});
+    const participant = await JourneyParticipant.findOne({session: existingSession, connectionId: connection});
     participant.ready = true;
     await participant.save();
     signal(existingSession.sessionId, {type: 'ready', data: 'foo'});
-    const allReady = (await TokSessionParticipant.count({session: existingSession, ready: false, present: true})) === 0;
+    const allReady = (await JourneyParticipant.count({session: existingSession, ready: false, present: true})) === 0;
     if (allReady) {
       // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
     }
@@ -114,7 +141,7 @@ router.put('/sessions/:room/journey', async (req, res) => {
   console.log('UPDATE JOURNEY');
   const {journey} = req.body;
   const {room} = req.params;
-  const existingSession = await TokSession.findOne({room}).exec();
+  const existingSession = await JourneySpace.findOne({room}).exec();
 	if (existingSession) {
     existingSession.journey = journey;
     await existingSession.save();
@@ -126,7 +153,7 @@ router.put('/sessions/:room/journey', async (req, res) => {
 // TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
 router.post('/sessions/:room/start', async (req, res) => {
   const {room} = req.params;
-  const existingSession = await TokSession.findOne({room}).exec();
+  const existingSession = await JourneySpace.findOne({room}).exec();
 	if (existingSession) {
     await existingSession.start();
     signal(existingSession.sessionId, {type: 'startJourney', data: ''});
@@ -136,11 +163,11 @@ router.post('/sessions/:room/start', async (req, res) => {
 router.post('/sessions/:room/flag', async (req, res) => {
   const {room} = req.params;
   const {connectionId} = req.body;
-  const existingSession = await TokSession.findOne({room}).exec();
+  const existingSession = await JourneySpace.findOne({room}).exec();
 	if (existingSession) {
     existingSession.flags.push({user: connectionId});
     await existingSession.save();
-    const participants = await TokSessionParticipant.find({session: existingSession, present: true}).lean().exec();
+    const participants = await JourneyParticipant.find({session: existingSession, present: true}).lean().exec();
     return res.json({...existingSession.toJSON(), participants});
   }
   res.sendStatus(404);
@@ -150,23 +177,23 @@ router.post('/event', async (req, res) => {
   console.log('GOT EVENT', req.body);
   res.sendStatus(200);
   const {sessionId, connection} = req.body;
-  const session = await TokSession.findOne({sessionId}).exec();
+  const session = await JourneySpace.findOne({sessionId}).exec();
 
   console.log("*******" + req.body)
 
   switch(req.body.event) {
     case 'connectionCreated':
       if (session) {
-        const participantExists = (await TokSessionParticipant.count({session, connectionId: connection.id})) > 0;
+        const participantExists = (await JourneyParticipant.count({session, connectionId: connection.id})) > 0;
         if (!participantExists) {
-          const participant = new TokSessionParticipant({session, connectionId: connection.id});
+          const participant = new JourneyParticipant({session, connectionId: connection.id});
           await participant.save();
         }
       }
       break;
     case 'connectionDestroyed':
       if (session) {
-        const participant= await TokSessionParticipant.findOne({session, connectionId: connection.id});
+        const participant= await JourneyParticipant.findOne({session, connectionId: connection.id});
         if (participant) {
           participant.present = false;
           await participant.save();
@@ -174,6 +201,22 @@ router.post('/event', async (req, res) => {
       }
       break
   }
+});
+
+router.post('/login', (req, res) => {
+  req.session.loggedIn = true;
+  req.session.user = {
+    name: req.body.name
+  };
+  res.json({loggedIn: true, user: {name: req.body.name}});
+});
+
+router.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+      res
+        .clearCookie('connect.sid')
+        .redirect('/login')
+    });
 });
 
 function signal(sessionId, data) {
