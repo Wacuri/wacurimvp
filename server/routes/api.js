@@ -87,9 +87,9 @@ router.get('/sessions/:room/:connectionId', async (req, res) => {
 });
 
 router.get('/active_journeys', async(req, res) => {
-  const journeys = await TokSession.find({state: 'created'}).exec()
-  res.json(journeys)
-})
+  const journeys = await JourneySpace.find({state: 'created', startAt: {$gte: new Date()}, room: {$ne: 'temp-home-location'}}).sort({startAt: 1}).exec();
+  res.json(journeys);
+});
 
 // TEMP: Use get for convenience. hardcode temp-home-location for the room
 // Trigger a general announcement to everyone

@@ -4,10 +4,15 @@ import bodyParser from 'body-parser';
 import api from './api';
 import ssr from './ssr';
 
+import Agenda from 'agenda';
+import Agendash from 'agendash';
+
 import session from 'express-session';
 import createMongoStore from 'connect-mongo';
 
+
 const app = express();
+const agenda = new Agenda({db: {address: process.env.MONGODB_URI || process.env.MONGO_URL}});
 
 app.use(session({
     secret: 'qVaNxeu5VVEAtkyFJ/62EKcp7Lw=',
@@ -16,6 +21,8 @@ app.use(session({
     store: new (createMongoStore(session))({url: process.env.MONGODB_URI || process.env.MONGO_URL}),
     cookie: {expires: new Date(253402300000000)}
 }));
+
+app.use('/jobs', Agendash(agenda));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../views'));

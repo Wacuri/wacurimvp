@@ -3,10 +3,19 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { view } from 'react-easy-state';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import Header from './components/header';
 import Home from './components/home';
 import Room from './components/Room';
 import state from './state';
+
+var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
+
+if (__CLIENT__) {
+  var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
+  const OT = require('@opentok/client');
+}
+
 
 const RequireLoginRoute = ({component: Component, ...rest}) => {
   return (
@@ -77,6 +86,73 @@ class Login extends Component {
   }
 }
 
+class JoinableJourneyCard extends Component {
+  render() {
+    const {journey} = this.props;
+
+    return (
+      <div className='joinable-journey-card'>
+        <div className='image'>
+          <img src={journey.image}/>
+        </div>
+        <div className='content'>
+          <p>{journey.name}</p>
+          <p>Starts at: {moment(journey.startAt).format('LT')}</p>
+          <a href={`/${journey.room}`} className='btn btn-primary'>Join</a>
+        </div>
+      </div>
+    )
+  }
+}
+
+class AutoCreatedJourneysQueue extends Component {
+  
+  componentDidMount() {
+    const roomUrl = 'temp-home-location'
+
+    // subscribe to global events
+    fetch(`/api/sessions/${roomUrl}`)
+      .then(res => res.json())
+      .then(json => {
+        state.session = json;
+        this.sessionHelper = createSession({
+          apiKey: state.openTokKey,
+          sessionId: state.session.sessionId,
+          token: state.session.token,
+          onConnect: () => {
+          }
+        });
+
+        this.sessionHelper.session.on("signal:createdNewJourney", (event) => {
+          state.joinableJourneys.push(JSON.parse(event.data));
+        });
+
+        this.sessionHelper.session.on("signal:expiredJourney", (event) => {
+          const journey = JSON.parse(event.data);
+          const idx = state.joinableJourneys.findIndex(j => j._id === journey._id);
+          state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), ...state.joinableJourneys.slice(idx + 1)];
+        });
+        
+      });
+
+
+    // fetch currently active journeys
+    fetch('/api/active_journeys')
+      .then(res => res.json())
+      .then(json => {
+        state.joinableJourneys = json;
+      });
+  }
+
+  render() {
+    return (
+      <div className='joinable-journeys'>
+        {state.joinableJourneys.map(journey => <JoinableJourneyCard journey={journey}/>)}
+      </div>
+    )
+  }
+}
+
 class App extends Component {
   render() {
     return (
@@ -84,8 +160,9 @@ class App extends Component {
         <Header />
         <Switch>
           <Route exact path="/login" component={withRouter(Login)} />
-          <RequireLoginRoute exact path="/" component={Home} />
-          <RequireLoginRoute exact path="/:room" component={Room} />
+          <Route exact path="/join" component={view(AutoCreatedJourneysQueue)} />
+          <Route exact path="/" component={Home} />
+          <Route exact path="/:room" component={Room} />
         </Switch>
       </div>
     )
