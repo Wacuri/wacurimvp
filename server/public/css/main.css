@@ -8605,7 +8605,23 @@ a.text-dark:hover, a.text-dark:focus {
     color: white;
     font-size: 2rem; }
 
+#messages {
+  border: 1px solid #f00; }
+
 .journey-container {
   padding: 1rem; }
+
+.joinable-journeys {
+  padding: 20px; }
+
+.joinable-journey-card {
+  display: flex;
+  margin-bottom: 20px; }
+  .joinable-journey-card .image img {
+    border-radius: 10px;
+    width: 100%;
+    max-width: 200px; }
+  .joinable-journey-card .content {
+    margin-left: 10px; }
 
 /*# sourceMappingURL=main.css.map*/
