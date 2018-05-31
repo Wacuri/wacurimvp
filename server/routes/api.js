@@ -37,12 +37,23 @@ function generateToken(sessionId) {
 // TODO: switch to POST, just using GET for easier testing
 router.get('/sessions/:room', async (req, res) => {
 	const {room} = req.params;
-	const existingSession = await JourneySpace.findOne({room}).lean().exec();
+	const existingSession = await JourneySpace.findOne({room}).exec();
 	if (existingSession) {
+    if (!existingSession.sessionId) {
+      const session = await new Promise((resolve, reject) => {
+        opentok.createSession(async (err, session) => {
+          if (err) reject(err);
+          resolve(session);
+        });
+      });
+      existingSession.sessionId = session.sessionId;
+      await existingSession.save();
+    }
     const participants = await JourneyParticipant.find({session: existingSession, present: true}).lean().exec();
-    existingSession.participants = participants;
+    const response = existingSession.toJSON();
+    response.participants = participants;
 		res.json({
-			...existingSession,
+			...response,
 			token: generateToken(existingSession.sessionId),
 		});
 	} else {
@@ -138,7 +149,6 @@ router.get('/journeys', async (req, res) => {
 });
 
 router.put('/sessions/:room/journey', async (req, res) => {
-  console.log('UPDATE JOURNEY');
   const {journey} = req.body;
   const {room} = req.params;
   const existingSession = await JourneySpace.findOne({room}).exec();

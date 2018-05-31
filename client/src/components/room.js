@@ -58,7 +58,6 @@ class Room extends Component {
           }
         });
         this.sessionHelper.session.on("connectionDestroyed", (event) => {
-          console.log('DESTROYED', event);
           const data = {
             sessionId: this.sessionHelper.session.sessionId,
             connection: {
