@@ -77,6 +77,12 @@ module.exports = require("react");
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+module.exports = require("mongoose");
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -90,8 +96,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _reactEasyState = __webpack_require__(4);
 
-exports.default = (0, _reactEasyState.store)(_extends({
+var state = (0, _reactEasyState.store)(_extends({
   session: null,
+  sessionId: null,
   journeys: [],
   joinableJourneys: [],
   loggedIn: false,
@@ -99,11 +106,7 @@ exports.default = (0, _reactEasyState.store)(_extends({
   location: '/'
 }, global.__INITIAL_STATE__ || {}));
 
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-module.exports = require("mongoose");
+exports.default = state;
 
 /***/ }),
 /* 4 */
@@ -116,7 +119,7 @@ module.exports = require("react-easy-state");
 /***/ (function(module, exports, __webpack_require__) {
 
 const createJob = __webpack_require__(21);
-const processJobs = __webpack_require__(87);
+const processJobs = __webpack_require__(88);
 
 module.exports = {
   createJob,
@@ -189,7 +192,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _mongoose = __webpack_require__(3);
+var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
@@ -311,21 +314,21 @@ class Job {
   }
 }
 
-Job.prototype.toJSON = __webpack_require__(69);
-Job.prototype.computeNextRunAt = __webpack_require__(70);
-Job.prototype.repeatEvery = __webpack_require__(73);
-Job.prototype.repeatAt = __webpack_require__(74);
-Job.prototype.disable = __webpack_require__(75);
-Job.prototype.enable = __webpack_require__(76);
-Job.prototype.unique = __webpack_require__(77);
-Job.prototype.schedule = __webpack_require__(78);
-Job.prototype.priority = __webpack_require__(79);
-Job.prototype.fail = __webpack_require__(80);
-Job.prototype.run = __webpack_require__(81);
-Job.prototype.isRunning = __webpack_require__(82);
-Job.prototype.save = __webpack_require__(83);
-Job.prototype.remove = __webpack_require__(84);
-Job.prototype.touch = __webpack_require__(85);
+Job.prototype.toJSON = __webpack_require__(70);
+Job.prototype.computeNextRunAt = __webpack_require__(71);
+Job.prototype.repeatEvery = __webpack_require__(74);
+Job.prototype.repeatAt = __webpack_require__(75);
+Job.prototype.disable = __webpack_require__(76);
+Job.prototype.enable = __webpack_require__(77);
+Job.prototype.unique = __webpack_require__(78);
+Job.prototype.schedule = __webpack_require__(79);
+Job.prototype.priority = __webpack_require__(80);
+Job.prototype.fail = __webpack_require__(81);
+Job.prototype.run = __webpack_require__(82);
+Job.prototype.isRunning = __webpack_require__(83);
+Job.prototype.save = __webpack_require__(84);
+Job.prototype.remove = __webpack_require__(85);
+Job.prototype.touch = __webpack_require__(86);
 
 module.exports = Job;
 
@@ -384,7 +387,7 @@ global.__CLIENT__ = false;
 global.__SERVER__ = true;
 
 var routes = __webpack_require__(25);
-__webpack_require__(52);
+__webpack_require__(53);
 
 exports = routes;
 
@@ -411,23 +414,23 @@ var _api = __webpack_require__(27);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _ssr = __webpack_require__(30);
+var _ssr = __webpack_require__(31);
 
 var _ssr2 = _interopRequireDefault(_ssr);
 
-var _agenda = __webpack_require__(48);
+var _agenda = __webpack_require__(49);
 
 var _agenda2 = _interopRequireDefault(_agenda);
 
-var _agendash = __webpack_require__(49);
+var _agendash = __webpack_require__(50);
 
 var _agendash2 = _interopRequireDefault(_agendash);
 
-var _expressSession = __webpack_require__(50);
+var _expressSession = __webpack_require__(51);
 
 var _expressSession2 = _interopRequireDefault(_expressSession);
 
-var _connectMongo = __webpack_require__(51);
+var _connectMongo = __webpack_require__(52);
 
 var _connectMongo2 = _interopRequireDefault(_connectMongo);
 
@@ -438,7 +441,7 @@ var agenda = new _agenda2.default({ db: { address: process.env.MONGODB_URI || pr
 
 app.use((0, _expressSession2.default)({
     secret: 'qVaNxeu5VVEAtkyFJ/62EKcp7Lw=',
-    saveUninitialized: false, // don't create session until something stored
+    saveUninitialized: true, // don't create session until something stored
     resave: false, //don't save session if unmodified
     store: new ((0, _connectMongo2.default)(_expressSession2.default))({ url: process.env.MONGODB_URI || process.env.MONGO_URL }),
     cookie: { expires: new Date(253402300000000) }
@@ -494,7 +497,7 @@ var _opentok = __webpack_require__(14);
 
 var _opentok2 = _interopRequireDefault(_opentok);
 
-var _mongoose = __webpack_require__(3);
+var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
@@ -505,6 +508,10 @@ var _journey_space2 = _interopRequireDefault(_journey_space);
 var _journey_participant = __webpack_require__(29);
 
 var _journey_participant2 = _interopRequireDefault(_journey_participant);
+
+var _journey_rsvp = __webpack_require__(30);
+
+var _journey_rsvp2 = _interopRequireDefault(_journey_rsvp);
 
 var _dotenv = __webpack_require__(12);
 
@@ -559,7 +566,7 @@ function generateToken(sessionId) {
 // TODO: switch to POST, just using GET for easier testing
 router.get('/sessions/:room', function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res) {
-    var room, existingSession, session, participants, response;
+    var room, existingSession, session, participants, rsvps, response;
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
@@ -572,7 +579,7 @@ router.get('/sessions/:room', function () {
             existingSession = _context3.sent;
 
             if (!existingSession) {
-              _context3.next = 20;
+              _context3.next = 24;
               break;
             }
 
@@ -619,19 +626,25 @@ router.get('/sessions/:room', function () {
 
           case 14:
             participants = _context3.sent;
+            _context3.next = 17;
+            return _journey_rsvp2.default.find({ journey: existingSession }).lean().exec();
+
+          case 17:
+            rsvps = _context3.sent;
             response = existingSession.toJSON();
 
             response.participants = participants;
+            response.rsvps = rsvps;
             res.json(_extends({}, response, {
               token: generateToken(existingSession.sessionId)
             }));
-            _context3.next = 21;
+            _context3.next = 25;
             break;
 
-          case 20:
+          case 24:
             opentok.createSession(function () {
               var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(err, session) {
-                var newSession;
+                var newSession, response;
                 return regeneratorRuntime.wrap(function _callee2$(_context2) {
                   while (1) {
                     switch (_context2.prev = _context2.next) {
@@ -650,11 +663,15 @@ router.get('/sessions/:room', function () {
                         return newSession.save();
 
                       case 5:
-                        res.json(_extends({}, newSession.toJSON(), {
+                        response = newSession.toJSON();
+
+                        response.participants = [];
+                        response.rsvps = [];
+                        res.json(_extends({}, response, {
                           token: generateToken(session.sessionId)
                         }));
 
-                      case 6:
+                      case 9:
                       case 'end':
                         return _context2.stop();
                     }
@@ -667,7 +684,7 @@ router.get('/sessions/:room', function () {
               };
             }());
 
-          case 21:
+          case 25:
           case 'end':
             return _context3.stop();
         }
@@ -788,10 +805,24 @@ router.get('/active_journeys', function () {
         switch (_context6.prev = _context6.next) {
           case 0:
             _context6.next = 2;
-            return _journey_space2.default.find({ state: 'created', startAt: { $gte: new Date() }, room: { $ne: 'temp-home-location' } }).sort({ startAt: 1 }).exec();
+            return _journey_space2.default.aggregate([{
+              $match: {
+                state: 'created', startAt: { $gte: new Date() }, room: { $ne: 'temp-home-location' }
+              }
+            }, {
+              $lookup: {
+                from: 'journeyrsvps',
+                localField: '_id',
+                foreignField: 'journey',
+                as: 'rsvps'
+              }
+            }, {
+              $sort: { startAt: 1 }
+            }]);
 
           case 2:
             journeys = _context6.sent;
+
 
             res.json(journeys);
 
@@ -808,41 +839,35 @@ router.get('/active_journeys', function () {
   };
 }());
 
-// TEMP: Use get for convenience. hardcode temp-home-location for the room
-// Trigger a general announcement to everyone
-router.get('/sessions/test/temp-home-location', function () {
+router.post('/journeys/:id/rsvp', function () {
   var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req, res) {
-    var existingSession, messageData;
+    var journey, rsvp, globalSpace;
     return regeneratorRuntime.wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
           case 0:
             _context7.next = 2;
-            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
+            return _journey_space2.default.findById(req.params.id).exec();
 
           case 2:
-            existingSession = _context7.sent;
+            journey = _context7.sent;
+            rsvp = new _journey_rsvp2.default({ journey: journey, user: req.session.id });
+            _context7.next = 6;
+            return rsvp.save();
 
-            if (!existingSession) {
-              _context7.next = 8;
-              break;
-            }
-
-            console.log("**** SENDING SIGNAL");
-            messageData = {
-              userName: "Bob",
-              description: "some text",
-              url: "http://www.news.google.com"
-            };
-
-
-            signal(existingSession.sessionId, { type: 'displayJourneyRequest', data: JSON.stringify(messageData) });
-            return _context7.abrupt('return', res.sendStatus(200));
+          case 6:
+            _context7.next = 8;
+            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
 
           case 8:
+            globalSpace = _context7.sent;
+
+            if (globalSpace) {
+              opentok.signal(globalSpace.sessionId, null, { 'type': 'newRSVP', 'data': JSON.stringify(rsvp) }, function () {});
+            }
             res.sendStatus(200);
 
-          case 9:
+          case 11:
           case 'end':
             return _context7.stop();
         }
@@ -855,54 +880,41 @@ router.get('/sessions/test/temp-home-location', function () {
   };
 }());
 
-router.get('/sessions/:room/connections/:connection/ready', function () {
+// TEMP: Use get for convenience. hardcode temp-home-location for the room
+// Trigger a general announcement to everyone
+router.get('/sessions/test/temp-home-location', function () {
   var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(req, res) {
-    var _req$params2, room, connection, existingSession, participant, allReady;
-
+    var existingSession, messageData;
     return regeneratorRuntime.wrap(function _callee8$(_context8) {
       while (1) {
         switch (_context8.prev = _context8.next) {
           case 0:
-            _req$params2 = req.params, room = _req$params2.room, connection = _req$params2.connection;
-            _context8.next = 3;
-            return _journey_space2.default.findOne({ room: room }).exec();
+            _context8.next = 2;
+            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
 
-          case 3:
+          case 2:
             existingSession = _context8.sent;
 
             if (!existingSession) {
-              _context8.next = 18;
+              _context8.next = 8;
               break;
             }
 
-            _context8.next = 7;
-            return _journey_participant2.default.findOne({ session: existingSession, connectionId: connection });
+            console.log("**** SENDING SIGNAL");
+            messageData = {
+              userName: "Bob",
+              description: "some text",
+              url: "http://www.news.google.com"
+            };
 
-          case 7:
-            participant = _context8.sent;
 
-            participant.ready = true;
-            _context8.next = 11;
-            return participant.save();
-
-          case 11:
-            signal(existingSession.sessionId, { type: 'ready', data: 'foo' });
-            _context8.next = 14;
-            return _journey_participant2.default.count({ session: existingSession, ready: false, present: true });
-
-          case 14:
-            _context8.t0 = _context8.sent;
-            allReady = _context8.t0 === 0;
-
-            if (allReady) {
-              // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
-            }
+            signal(existingSession.sessionId, { type: 'displayJourneyRequest', data: JSON.stringify(messageData) });
             return _context8.abrupt('return', res.sendStatus(200));
 
-          case 18:
+          case 8:
             res.sendStatus(200);
 
-          case 19:
+          case 9:
           case 'end':
             return _context8.stop();
         }
@@ -915,31 +927,54 @@ router.get('/sessions/:room/connections/:connection/ready', function () {
   };
 }());
 
-router.get('/journeys', function () {
+router.get('/sessions/:room/connections/:connection/ready', function () {
   var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(req, res) {
-    var readdirAsync, journeyFiles;
+    var _req$params2, room, connection, existingSession, participant, allReady;
+
     return regeneratorRuntime.wrap(function _callee9$(_context9) {
       while (1) {
         switch (_context9.prev = _context9.next) {
           case 0:
-            readdirAsync = promisify(_fs2.default.readdir);
+            _req$params2 = req.params, room = _req$params2.room, connection = _req$params2.connection;
             _context9.next = 3;
-            return readdirAsync(_path2.default.join(__dirname, '..', 'public/journeys'));
+            return _journey_space2.default.findOne({ room: room }).exec();
 
           case 3:
-            _context9.t0 = function (file) {
-              return _path2.default.extname(file) === '.mp3';
-            };
+            existingSession = _context9.sent;
 
-            _context9.t1 = function (file) {
-              return '/journeys/' + file;
-            };
+            if (!existingSession) {
+              _context9.next = 18;
+              break;
+            }
 
-            journeyFiles = _context9.sent.filter(_context9.t0).map(_context9.t1);
-
-            res.json(journeyFiles);
+            _context9.next = 7;
+            return _journey_participant2.default.findOne({ session: existingSession, connectionId: connection });
 
           case 7:
+            participant = _context9.sent;
+
+            participant.ready = true;
+            _context9.next = 11;
+            return participant.save();
+
+          case 11:
+            signal(existingSession.sessionId, { type: 'ready', data: 'foo' });
+            _context9.next = 14;
+            return _journey_participant2.default.count({ session: existingSession, ready: false, present: true });
+
+          case 14:
+            _context9.t0 = _context9.sent;
+            allReady = _context9.t0 === 0;
+
+            if (allReady) {
+              // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
+            }
+            return _context9.abrupt('return', res.sendStatus(200));
+
+          case 18:
+            res.sendStatus(200);
+
+          case 19:
           case 'end':
             return _context9.stop();
         }
@@ -952,37 +987,31 @@ router.get('/journeys', function () {
   };
 }());
 
-router.put('/sessions/:room/journey', function () {
+router.get('/journeys', function () {
   var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(req, res) {
-    var journey, room, existingSession;
+    var readdirAsync, journeyFiles;
     return regeneratorRuntime.wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
           case 0:
-            journey = req.body.journey;
-            room = req.params.room;
-            _context10.next = 4;
-            return _journey_space2.default.findOne({ room: room }).exec();
+            readdirAsync = promisify(_fs2.default.readdir);
+            _context10.next = 3;
+            return readdirAsync(_path2.default.join(__dirname, '..', 'public/journeys'));
 
-          case 4:
-            existingSession = _context10.sent;
+          case 3:
+            _context10.t0 = function (file) {
+              return _path2.default.extname(file) === '.mp3';
+            };
 
-            if (!existingSession) {
-              _context10.next = 10;
-              break;
-            }
+            _context10.t1 = function (file) {
+              return '/journeys/' + file;
+            };
 
-            existingSession.journey = journey;
-            _context10.next = 9;
-            return existingSession.save();
+            journeyFiles = _context10.sent.filter(_context10.t0).map(_context10.t1);
 
-          case 9:
-            signal(existingSession.sessionId, { type: 'updatedJourney', data: journey });
+            res.json(journeyFiles);
 
-          case 10:
-            res.sendStatus(200);
-
-          case 11:
+          case 7:
           case 'end':
             return _context10.stop();
         }
@@ -995,33 +1024,37 @@ router.put('/sessions/:room/journey', function () {
   };
 }());
 
-// TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
-router.post('/sessions/:room/start', function () {
+router.put('/sessions/:room/journey', function () {
   var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(req, res) {
-    var room, existingSession;
+    var journey, room, existingSession;
     return regeneratorRuntime.wrap(function _callee11$(_context11) {
       while (1) {
         switch (_context11.prev = _context11.next) {
           case 0:
+            journey = req.body.journey;
             room = req.params.room;
-            _context11.next = 3;
+            _context11.next = 4;
             return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 3:
+          case 4:
             existingSession = _context11.sent;
 
             if (!existingSession) {
-              _context11.next = 8;
+              _context11.next = 10;
               break;
             }
 
-            _context11.next = 7;
-            return existingSession.start();
+            existingSession.journey = journey;
+            _context11.next = 9;
+            return existingSession.save();
 
-          case 7:
-            signal(existingSession.sessionId, { type: 'startJourney', data: '' });
+          case 9:
+            signal(existingSession.sessionId, { type: 'updatedJourney', data: journey });
 
-          case 8:
+          case 10:
+            res.sendStatus(200);
+
+          case 11:
           case 'end':
             return _context11.stop();
         }
@@ -1034,42 +1067,33 @@ router.post('/sessions/:room/start', function () {
   };
 }());
 
-router.post('/sessions/:room/flag', function () {
+// TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
+router.post('/sessions/:room/start', function () {
   var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12(req, res) {
-    var room, connectionId, existingSession, participants;
+    var room, existingSession;
     return regeneratorRuntime.wrap(function _callee12$(_context12) {
       while (1) {
         switch (_context12.prev = _context12.next) {
           case 0:
             room = req.params.room;
-            connectionId = req.body.connectionId;
-            _context12.next = 4;
+            _context12.next = 3;
             return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 4:
+          case 3:
             existingSession = _context12.sent;
 
             if (!existingSession) {
-              _context12.next = 13;
+              _context12.next = 8;
               break;
             }
 
-            existingSession.flags.push({ user: connectionId });
-            _context12.next = 9;
-            return existingSession.save();
+            _context12.next = 7;
+            return existingSession.start();
 
-          case 9:
-            _context12.next = 11;
-            return _journey_participant2.default.find({ session: existingSession, present: true }).lean().exec();
+          case 7:
+            signal(existingSession.sessionId, { type: 'startJourney', data: '' });
 
-          case 11:
-            participants = _context12.sent;
-            return _context12.abrupt('return', res.json(_extends({}, existingSession.toJSON(), { participants: participants })));
-
-          case 13:
-            res.sendStatus(404);
-
-          case 14:
+          case 8:
           case 'end':
             return _context12.stop();
         }
@@ -1082,80 +1106,42 @@ router.post('/sessions/:room/flag', function () {
   };
 }());
 
-router.post('/event', function () {
+router.post('/sessions/:room/flag', function () {
   var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(req, res) {
-    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
-
+    var room, connectionId, existingSession, participants;
     return regeneratorRuntime.wrap(function _callee13$(_context13) {
       while (1) {
         switch (_context13.prev = _context13.next) {
           case 0:
-            console.log('GOT EVENT', req.body);
-            res.sendStatus(200);
-            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
-            _context13.next = 5;
-            return _journey_space2.default.findOne({ sessionId: sessionId }).exec();
+            room = req.params.room;
+            connectionId = req.body.connectionId;
+            _context13.next = 4;
+            return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 5:
-            session = _context13.sent;
+          case 4:
+            existingSession = _context13.sent;
 
-
-            console.log("*******" + req.body);
-
-            _context13.t0 = req.body.event;
-            _context13.next = _context13.t0 === 'connectionCreated' ? 10 : _context13.t0 === 'connectionDestroyed' ? 20 : 29;
-            break;
-
-          case 10:
-            if (!session) {
-              _context13.next = 19;
+            if (!existingSession) {
+              _context13.next = 13;
               break;
             }
 
-            _context13.next = 13;
-            return _journey_participant2.default.count({ session: session, connectionId: connection.id });
+            existingSession.flags.push({ user: connectionId });
+            _context13.next = 9;
+            return existingSession.save();
+
+          case 9:
+            _context13.next = 11;
+            return _journey_participant2.default.find({ session: existingSession, present: true }).lean().exec();
+
+          case 11:
+            participants = _context13.sent;
+            return _context13.abrupt('return', res.json(_extends({}, existingSession.toJSON(), { participants: participants })));
 
           case 13:
-            _context13.t1 = _context13.sent;
-            participantExists = _context13.t1 > 0;
+            res.sendStatus(404);
 
-            if (participantExists) {
-              _context13.next = 19;
-              break;
-            }
-
-            participant = new _journey_participant2.default({ session: session, connectionId: connection.id });
-            _context13.next = 19;
-            return participant.save();
-
-          case 19:
-            return _context13.abrupt('break', 29);
-
-          case 20:
-            if (!session) {
-              _context13.next = 28;
-              break;
-            }
-
-            _context13.next = 23;
-            return _journey_participant2.default.findOne({ session: session, connectionId: connection.id });
-
-          case 23:
-            _participant = _context13.sent;
-
-            if (!_participant) {
-              _context13.next = 28;
-              break;
-            }
-
-            _participant.present = false;
-            _context13.next = 28;
-            return _participant.save();
-
-          case 28:
-            return _context13.abrupt('break', 29);
-
-          case 29:
+          case 14:
           case 'end':
             return _context13.stop();
         }
@@ -1165,6 +1151,92 @@ router.post('/event', function () {
 
   return function (_x25, _x26) {
     return _ref13.apply(this, arguments);
+  };
+}());
+
+router.post('/event', function () {
+  var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14(req, res) {
+    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
+
+    return regeneratorRuntime.wrap(function _callee14$(_context14) {
+      while (1) {
+        switch (_context14.prev = _context14.next) {
+          case 0:
+            console.log('GOT EVENT', req.body);
+            res.sendStatus(200);
+            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
+            _context14.next = 5;
+            return _journey_space2.default.findOne({ sessionId: sessionId }).exec();
+
+          case 5:
+            session = _context14.sent;
+
+
+            console.log("*******" + req.body);
+
+            _context14.t0 = req.body.event;
+            _context14.next = _context14.t0 === 'connectionCreated' ? 10 : _context14.t0 === 'connectionDestroyed' ? 20 : 29;
+            break;
+
+          case 10:
+            if (!session) {
+              _context14.next = 19;
+              break;
+            }
+
+            _context14.next = 13;
+            return _journey_participant2.default.count({ session: session, connectionId: connection.id });
+
+          case 13:
+            _context14.t1 = _context14.sent;
+            participantExists = _context14.t1 > 0;
+
+            if (participantExists) {
+              _context14.next = 19;
+              break;
+            }
+
+            participant = new _journey_participant2.default({ session: session, connectionId: connection.id });
+            _context14.next = 19;
+            return participant.save();
+
+          case 19:
+            return _context14.abrupt('break', 29);
+
+          case 20:
+            if (!session) {
+              _context14.next = 28;
+              break;
+            }
+
+            _context14.next = 23;
+            return _journey_participant2.default.findOne({ session: session, connectionId: connection.id });
+
+          case 23:
+            _participant = _context14.sent;
+
+            if (!_participant) {
+              _context14.next = 28;
+              break;
+            }
+
+            _participant.present = false;
+            _context14.next = 28;
+            return _participant.save();
+
+          case 28:
+            return _context14.abrupt('break', 29);
+
+          case 29:
+          case 'end':
+            return _context14.stop();
+        }
+      }
+    }, _callee14, undefined);
+  }));
+
+  return function (_x27, _x28) {
+    return _ref14.apply(this, arguments);
   };
 }());
 
@@ -1214,7 +1286,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _mongoose = __webpack_require__(3);
+var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
@@ -1243,6 +1315,32 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _mongoose = __webpack_require__(2);
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var JourneyRSVPSchema = new _mongoose.Schema({
+  journey: { type: _mongoose.Schema.Types.ObjectId, ref: 'JourneySpace' },
+  user: { type: String }
+});
+
+var JourneyRSVP = _mongoose2.default.model('JourneyRSVP', JourneyRSVPSchema);
+
+exports.default = JourneyRSVP;
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _express = __webpack_require__(7);
 
 var _express2 = _interopRequireDefault(_express);
@@ -1251,21 +1349,21 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _server = __webpack_require__(31);
+var _server = __webpack_require__(32);
 
 var _server2 = _interopRequireDefault(_server);
 
-var _redux = __webpack_require__(32);
+var _redux = __webpack_require__(33);
 
-var _reactRedux = __webpack_require__(33);
+var _reactRedux = __webpack_require__(34);
 
 var _reactRouter = __webpack_require__(17);
 
-var _app = __webpack_require__(34);
+var _app = __webpack_require__(35);
 
 var _app2 = _interopRequireDefault(_app);
 
-var _state = __webpack_require__(2);
+var _state = __webpack_require__(3);
 
 var _state2 = _interopRequireDefault(_state);
 
@@ -1301,7 +1399,7 @@ router.get('/', function (req, res) {
   } else {
     res.status(200).render(process.env.NODE_ENV === 'production' ? 'index.ejs' : 'index.dev.ejs', {
       html: html,
-      script: JSON.stringify({ openTokKey: process.env.OPENTOK_KEY, loggedIn: req.session.loggedIn, user: req.session.user })
+      script: JSON.stringify({ openTokKey: process.env.OPENTOK_KEY, loggedIn: req.session.loggedIn, user: req.session.user, sessionId: req.sessionID })
     });
   }
 });
@@ -1309,25 +1407,25 @@ router.get('/', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom/server");
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = require("redux");
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-redux");
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1345,7 +1443,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(35);
+var _reactRouterDom = __webpack_require__(36);
 
 var _reactRouter = __webpack_require__(17);
 
@@ -1359,19 +1457,19 @@ var _moment = __webpack_require__(8);
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _header = __webpack_require__(36);
+var _header = __webpack_require__(37);
 
 var _header2 = _interopRequireDefault(_header);
 
-var _home = __webpack_require__(37);
+var _home = __webpack_require__(38);
 
 var _home2 = _interopRequireDefault(_home);
 
-var _Room = __webpack_require__(44);
+var _Room = __webpack_require__(45);
 
 var _Room2 = _interopRequireDefault(_Room);
 
-var _state = __webpack_require__(2);
+var _state = __webpack_require__(3);
 
 var _state2 = _interopRequireDefault(_state);
 
@@ -1502,9 +1600,31 @@ var JoinableJourneyCard = function (_Component2) {
   _inherits(JoinableJourneyCard, _Component2);
 
   function JoinableJourneyCard() {
+    var _ref3;
+
+    var _temp, _this3, _ret;
+
     _classCallCheck(this, JoinableJourneyCard);
 
-    return _possibleConstructorReturn(this, (JoinableJourneyCard.__proto__ || Object.getPrototypeOf(JoinableJourneyCard)).apply(this, arguments));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this3 = _possibleConstructorReturn(this, (_ref3 = JoinableJourneyCard.__proto__ || Object.getPrototypeOf(JoinableJourneyCard)).call.apply(_ref3, [this].concat(args))), _this3), _this3.onJoin = function (e) {
+      e.preventDefault();
+      fetch('/api/journeys/' + _this3.props.journey._id + '/rsvp', {
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, same-origin, *omit
+        headers: {
+          'user-agent': 'Mozilla/4.0 MDN Example',
+          'content-type': 'application/json'
+        },
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, cors, *same-origin
+        redirect: 'follow', // manual, *follow, error
+        referrer: 'no-referrer' // *client, no-referrer
+      });
+    }, _temp), _possibleConstructorReturn(_this3, _ret);
   }
 
   _createClass(JoinableJourneyCard, [{
@@ -1512,7 +1632,9 @@ var JoinableJourneyCard = function (_Component2) {
     value: function render() {
       var journey = this.props.journey;
 
-
+      var currentUserHasRSVP = (journey.rsvps || []).find(function (rsvp) {
+        return rsvp.user === _state2.default.sessionId;
+      }) != null;
       return _react2.default.createElement(
         'div',
         { className: 'joinable-journey-card' },
@@ -1525,7 +1647,7 @@ var JoinableJourneyCard = function (_Component2) {
           'div',
           { className: 'content' },
           _react2.default.createElement(
-            'p',
+            'h4',
             null,
             journey.name
           ),
@@ -1536,9 +1658,20 @@ var JoinableJourneyCard = function (_Component2) {
             (0, _moment2.default)(journey.startAt).format('LT')
           ),
           _react2.default.createElement(
+            'p',
+            null,
+            journey.rsvps.length,
+            ' / 3'
+          ),
+          journey.rsvps.length < 3 && !currentUserHasRSVP && _react2.default.createElement(
+            'a',
+            { href: '/' + journey.room, onClick: this.onJoin, className: 'btn btn-primary' },
+            'Join'
+          ),
+          currentUserHasRSVP && _react2.default.createElement(
             'a',
             { href: '/' + journey.room, className: 'btn btn-primary' },
-            'Join'
+            'Go there now'
           )
         )
       );
@@ -1586,6 +1719,18 @@ var AutoCreatedJourneysQueue = function (_Component3) {
             return j._id === journey._id;
           });
           _state2.default.joinableJourneys = [].concat(_toConsumableArray(_state2.default.joinableJourneys.slice(0, idx)), _toConsumableArray(_state2.default.joinableJourneys.slice(idx + 1)));
+        });
+
+        _this5.sessionHelper.session.on('signal:newRSVP', function (event) {
+          var rsvp = JSON.parse(event.data);
+          var journey = _state2.default.joinableJourneys.find(function (j) {
+            return j._id == rsvp.journey._id;
+          });
+          var idx = _state2.default.joinableJourneys.findIndex(function (j) {
+            return j._id === journey._id;
+          });
+          journey.rsvps.push(rsvp);
+          _state2.default.joinableJourneys = [].concat(_toConsumableArray(_state2.default.joinableJourneys.slice(0, idx)), [journey], _toConsumableArray(_state2.default.joinableJourneys.slice(idx + 1)));
         });
       });
 
@@ -1646,13 +1791,13 @@ var App = function (_Component4) {
 exports.default = (0, _reactRouter.withRouter)((0, _reactEasyState.view)(App));
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-router-dom");
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1668,7 +1813,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactEasyState = __webpack_require__(4);
 
-var _state = __webpack_require__(2);
+var _state = __webpack_require__(3);
 
 var _state2 = _interopRequireDefault(_state);
 
@@ -1704,7 +1849,7 @@ var Header = function Header() {
 exports.default = (0, _reactEasyState.view)(Header);
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1720,23 +1865,23 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _user_list = __webpack_require__(38);
+var _user_list = __webpack_require__(39);
 
 var _user_list2 = _interopRequireDefault(_user_list);
 
-var _generator_form = __webpack_require__(39);
+var _generator_form = __webpack_require__(40);
 
 var _generator_form2 = _interopRequireDefault(_generator_form);
 
-var _event_message = __webpack_require__(40);
+var _event_message = __webpack_require__(41);
 
 var _event_message2 = _interopRequireDefault(_event_message);
 
-var _journey_space_form = __webpack_require__(41);
+var _journey_space_form = __webpack_require__(42);
 
 var _journey_space_form2 = _interopRequireDefault(_journey_space_form);
 
-var _state = __webpack_require__(2);
+var _state = __webpack_require__(3);
 
 var _state2 = _interopRequireDefault(_state);
 
@@ -1921,7 +2066,7 @@ var Home = function (_Component) {
 exports.default = Home;
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1988,7 +2133,7 @@ var UserList = function (_Component) {
 exports.default = UserList;
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2004,7 +2149,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _state = __webpack_require__(2);
+var _state = __webpack_require__(3);
 
 var _state2 = _interopRequireDefault(_state);
 
@@ -2079,7 +2224,7 @@ var GeneratorForm = function (_Component) {
 exports.default = GeneratorForm;
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2125,7 +2270,7 @@ var EventMessage = function EventMessage(props) {
 exports.default = EventMessage;
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2141,7 +2286,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _journey_detail_entry = __webpack_require__(42);
+var _journey_detail_entry = __webpack_require__(43);
 
 var _journey_detail_entry2 = _interopRequireDefault(_journey_detail_entry);
 
@@ -2205,7 +2350,7 @@ var JourneySpaceForm = function (_Component) {
 exports.default = JourneySpaceForm;
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2221,7 +2366,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _session_info = __webpack_require__(43);
+var _session_info = __webpack_require__(44);
 
 var _session_info2 = _interopRequireDefault(_session_info);
 
@@ -2324,7 +2469,7 @@ var JourneyDetailEntry = function (_Component) {
 exports.default = JourneyDetailEntry;
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2416,7 +2561,7 @@ var SessionInfo = function (_Component) {
 exports.default = SessionInfo;
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2434,7 +2579,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactEasyState = __webpack_require__(4);
 
-var _state = __webpack_require__(2);
+var _state = __webpack_require__(3);
 
 var _state2 = _interopRequireDefault(_state);
 
@@ -2442,11 +2587,11 @@ var _propTypes = __webpack_require__(18);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _uuid = __webpack_require__(45);
+var _uuid = __webpack_require__(46);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _opentokLayoutJs = __webpack_require__(46);
+var _opentokLayoutJs = __webpack_require__(47);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2456,7 +2601,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-__webpack_require__(47).polyfill();
+__webpack_require__(48).polyfill();
 __webpack_require__(16);
 
 var _ref = {},
@@ -2831,49 +2976,49 @@ var Room = function (_Component) {
 exports.default = (0, _reactEasyState.view)(Room);
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports) {
 
 module.exports = require("uuid");
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok-layout-js");
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports) {
 
 module.exports = require("es6-promise");
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports) {
 
 module.exports = require("agenda");
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports) {
 
 module.exports = require("agendash");
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports) {
 
 module.exports = require("express-session");
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports) {
 
 module.exports = require("connect-mongo");
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2887,11 +3032,11 @@ var _path = __webpack_require__(6);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _Agenda = __webpack_require__(53);
+var _Agenda = __webpack_require__(54);
 
 var _Agenda2 = _interopRequireDefault(_Agenda);
 
-var _lodash = __webpack_require__(98);
+var _lodash = __webpack_require__(99);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -2903,7 +3048,7 @@ var _moment = __webpack_require__(8);
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _mongoose = __webpack_require__(3);
+var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
@@ -2911,7 +3056,7 @@ var _journey_space = __webpack_require__(15);
 
 var _journey_space2 = _interopRequireDefault(_journey_space);
 
-var _journey_content = __webpack_require__(99);
+var _journey_content = __webpack_require__(100);
 
 var _journey_content2 = _interopRequireDefault(_journey_content);
 
@@ -3093,16 +3238,16 @@ agenda.on('ready', function () {
 });
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Agenda = __webpack_require__(54);
+const Agenda = __webpack_require__(55);
 
 module.exports = Agenda;
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3112,7 +3257,7 @@ module.exports = Agenda;
  * - Refactor remaining deprecated MongoDB Native Driver methods: findAndModify()
  */
 
-const Emitter = __webpack_require__(55).EventEmitter;
+const Emitter = __webpack_require__(56).EventEmitter;
 const humanInterval = __webpack_require__(11);
 
 class Agenda extends Emitter {
@@ -3149,41 +3294,41 @@ class Agenda extends Emitter {
   }
 }
 
-Agenda.prototype.mongo = __webpack_require__(56);
-Agenda.prototype.database = __webpack_require__(57);
-Agenda.prototype.db_init = __webpack_require__(59); // eslint-disable-line camelcase
-Agenda.prototype.name = __webpack_require__(60);
-Agenda.prototype.processEvery = __webpack_require__(61);
-Agenda.prototype.maxConcurrency = __webpack_require__(62);
-Agenda.prototype.defaultConcurrency = __webpack_require__(63);
-Agenda.prototype.lockLimit = __webpack_require__(64);
-Agenda.prototype.defaultLockLimit = __webpack_require__(65);
-Agenda.prototype.defaultLockLifetime = __webpack_require__(66);
-Agenda.prototype.sort = __webpack_require__(67);
-Agenda.prototype.create = __webpack_require__(68);
-Agenda.prototype.jobs = __webpack_require__(86);
-Agenda.prototype.purge = __webpack_require__(88);
-Agenda.prototype.define = __webpack_require__(89);
-Agenda.prototype.every = __webpack_require__(90);
-Agenda.prototype.schedule = __webpack_require__(91);
-Agenda.prototype.now = __webpack_require__(92);
-Agenda.prototype.cancel = __webpack_require__(93);
-Agenda.prototype.saveJob = __webpack_require__(94);
-Agenda.prototype.start = __webpack_require__(95);
-Agenda.prototype.stop = __webpack_require__(96);
-Agenda.prototype._findAndLockNextJob = __webpack_require__(97);
+Agenda.prototype.mongo = __webpack_require__(57);
+Agenda.prototype.database = __webpack_require__(58);
+Agenda.prototype.db_init = __webpack_require__(60); // eslint-disable-line camelcase
+Agenda.prototype.name = __webpack_require__(61);
+Agenda.prototype.processEvery = __webpack_require__(62);
+Agenda.prototype.maxConcurrency = __webpack_require__(63);
+Agenda.prototype.defaultConcurrency = __webpack_require__(64);
+Agenda.prototype.lockLimit = __webpack_require__(65);
+Agenda.prototype.defaultLockLimit = __webpack_require__(66);
+Agenda.prototype.defaultLockLifetime = __webpack_require__(67);
+Agenda.prototype.sort = __webpack_require__(68);
+Agenda.prototype.create = __webpack_require__(69);
+Agenda.prototype.jobs = __webpack_require__(87);
+Agenda.prototype.purge = __webpack_require__(89);
+Agenda.prototype.define = __webpack_require__(90);
+Agenda.prototype.every = __webpack_require__(91);
+Agenda.prototype.schedule = __webpack_require__(92);
+Agenda.prototype.now = __webpack_require__(93);
+Agenda.prototype.cancel = __webpack_require__(94);
+Agenda.prototype.saveJob = __webpack_require__(95);
+Agenda.prototype.start = __webpack_require__(96);
+Agenda.prototype.stop = __webpack_require__(97);
+Agenda.prototype._findAndLockNextJob = __webpack_require__(98);
 
 module.exports = Agenda;
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports) {
 
 module.exports = require("events");
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3204,12 +3349,12 @@ module.exports = function(mdb, collection, cb) {
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-const MongoClient = __webpack_require__(58).MongoClient;
+const MongoClient = __webpack_require__(59).MongoClient;
 const debug = __webpack_require__(0)('agenda:database');
 
 /**
@@ -3253,13 +3398,13 @@ module.exports = function(url, collection, options, cb) {
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports) {
 
 module.exports = require("mongodb");
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3316,7 +3461,7 @@ module.exports = function(collection, cb) {
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3336,7 +3481,7 @@ module.exports = function(name) {
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3357,7 +3502,7 @@ module.exports = function(time) {
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3377,7 +3522,7 @@ module.exports = function(num) {
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3397,7 +3542,7 @@ module.exports = function(num) {
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3418,7 +3563,7 @@ module.exports = function(num) {
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3438,7 +3583,7 @@ module.exports = function(num) {
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3459,7 +3604,7 @@ module.exports = function(ms) {
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3480,7 +3625,7 @@ module.exports = function(query) {
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3504,7 +3649,7 @@ module.exports = function(name, data) {
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3537,14 +3682,14 @@ module.exports = function() {
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 const humanInterval = __webpack_require__(11);
-const CronTime = __webpack_require__(71).CronTime;
-const moment = __webpack_require__(72);
+const CronTime = __webpack_require__(72).CronTime;
+const moment = __webpack_require__(73);
 const date = __webpack_require__(20);
 const debug = __webpack_require__(0)('agenda:job');
 
@@ -3636,19 +3781,19 @@ module.exports = function() {
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports) {
 
 module.exports = require("cron");
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports) {
 
 module.exports = require("moment-timezone");
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3669,7 +3814,7 @@ module.exports = function(interval, options) {
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3687,7 +3832,7 @@ module.exports = function(time) {
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3704,7 +3849,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3721,7 +3866,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3741,7 +3886,7 @@ module.exports = function(unique, opts) {
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3760,7 +3905,7 @@ module.exports = function(time) {
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3797,7 +3942,7 @@ module.exports = function(priority) {
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3824,7 +3969,7 @@ module.exports = function(reason) {
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3900,7 +4045,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3928,7 +4073,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3946,7 +4091,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3963,7 +4108,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3981,7 +4126,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4009,7 +4154,7 @@ module.exports = function(query, cb) {
 
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4350,7 +4495,7 @@ module.exports = function(extraJob) {
 
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4371,7 +4516,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4405,7 +4550,7 @@ module.exports = function(name, options, processor) {
 
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4494,7 +4639,7 @@ module.exports = function(interval, names, data, options, cb) {
 
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4575,7 +4720,7 @@ module.exports = function(when, names, data, cb) {
 
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4603,7 +4748,7 @@ module.exports = function(name, data, cb) {
 
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4633,7 +4778,7 @@ module.exports = function(query, cb) {
 
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4783,7 +4928,7 @@ module.exports = function(job, cb) {
 
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4809,7 +4954,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 96 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4859,7 +5004,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 97 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4950,13 +5095,13 @@ module.exports = function(jobName, definition, cb) {
 
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash");
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4966,7 +5111,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _mongoose = __webpack_require__(3);
+var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
