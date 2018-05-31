@@ -558,47 +558,86 @@ function generateToken(sessionId) {
 
 // TODO: switch to POST, just using GET for easier testing
 router.get('/sessions/:room', function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(req, res) {
-    var room, existingSession, participants;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res) {
+    var room, existingSession, session, participants, response;
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
             room = req.params.room;
-            _context2.next = 3;
-            return _journey_space2.default.findOne({ room: room }).lean().exec();
+            _context3.next = 3;
+            return _journey_space2.default.findOne({ room: room }).exec();
 
           case 3:
-            existingSession = _context2.sent;
+            existingSession = _context3.sent;
 
             if (!existingSession) {
-              _context2.next = 12;
+              _context3.next = 20;
               break;
             }
 
-            _context2.next = 7;
-            return _journey_participant2.default.find({ session: existingSession, present: true }).lean().exec();
+            if (existingSession.sessionId) {
+              _context3.next = 12;
+              break;
+            }
 
-          case 7:
-            participants = _context2.sent;
+            _context3.next = 8;
+            return new Promise(function (resolve, reject) {
+              opentok.createSession(function () {
+                var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(err, session) {
+                  return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          if (err) reject(err);
+                          resolve(session);
 
-            existingSession.participants = participants;
-            res.json(_extends({}, existingSession, {
-              token: generateToken(existingSession.sessionId)
-            }));
-            _context2.next = 13;
-            break;
+                        case 2:
+                        case 'end':
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee, undefined);
+                }));
+
+                return function (_x3, _x4) {
+                  return _ref2.apply(this, arguments);
+                };
+              }());
+            });
+
+          case 8:
+            session = _context3.sent;
+
+            existingSession.sessionId = session.sessionId;
+            _context3.next = 12;
+            return existingSession.save();
 
           case 12:
+            _context3.next = 14;
+            return _journey_participant2.default.find({ session: existingSession, present: true }).lean().exec();
+
+          case 14:
+            participants = _context3.sent;
+            response = existingSession.toJSON();
+
+            response.participants = participants;
+            res.json(_extends({}, response, {
+              token: generateToken(existingSession.sessionId)
+            }));
+            _context3.next = 21;
+            break;
+
+          case 20:
             opentok.createSession(function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(err, session) {
+              var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(err, session) {
                 var newSession;
-                return regeneratorRuntime.wrap(function _callee$(_context) {
+                return regeneratorRuntime.wrap(function _callee2$(_context2) {
                   while (1) {
-                    switch (_context.prev = _context.next) {
+                    switch (_context2.prev = _context2.next) {
                       case 0:
                         if (!err) {
-                          _context.next = 2;
+                          _context2.next = 2;
                           break;
                         }
 
@@ -607,7 +646,7 @@ router.get('/sessions/:room', function () {
                       case 2:
                         // save the sessionId
                         newSession = new _journey_space2.default({ room: room, sessionId: session.sessionId });
-                        _context.next = 5;
+                        _context2.next = 5;
                         return newSession.save();
 
                       case 5:
@@ -617,23 +656,23 @@ router.get('/sessions/:room', function () {
 
                       case 6:
                       case 'end':
-                        return _context.stop();
+                        return _context2.stop();
                     }
                   }
-                }, _callee, undefined);
+                }, _callee2, undefined);
               }));
 
-              return function (_x3, _x4) {
-                return _ref2.apply(this, arguments);
+              return function (_x5, _x6) {
+                return _ref3.apply(this, arguments);
               };
             }());
 
-          case 13:
+          case 21:
           case 'end':
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2, undefined);
+    }, _callee3, undefined);
   }));
 
   return function (_x, _x2) {
@@ -642,93 +681,48 @@ router.get('/sessions/:room', function () {
 }());
 
 router.post('/sessions/:room/joined', function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res) {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(req, res) {
     var room, connectionId, existingSession, participantExists, participant;
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+    return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
-        switch (_context3.prev = _context3.next) {
+        switch (_context4.prev = _context4.next) {
           case 0:
             room = req.params.room;
             connectionId = req.body.id;
 
             req.session.connections = req.session.connections || {};
             req.session.connections[room] = connectionId;
-            _context3.next = 6;
+            _context4.next = 6;
             return _journey_space2.default.findOne({ room: room }).lean().exec();
 
           case 6:
-            existingSession = _context3.sent;
+            existingSession = _context4.sent;
 
             if (!existingSession) {
-              _context3.next = 16;
+              _context4.next = 16;
               break;
             }
 
-            _context3.next = 10;
+            _context4.next = 10;
             return _journey_participant2.default.count({ session: existingSession, connectionId: connectionId });
 
           case 10:
-            _context3.t0 = _context3.sent;
-            participantExists = _context3.t0 > 0;
+            _context4.t0 = _context4.sent;
+            participantExists = _context4.t0 > 0;
 
             if (participantExists) {
-              _context3.next = 16;
+              _context4.next = 16;
               break;
             }
 
             participant = new _journey_participant2.default({ session: existingSession, connectionId: connectionId, user: req.session.user });
-            _context3.next = 16;
+            _context4.next = 16;
             return participant.save();
 
           case 16:
             res.sendStatus(200);
 
           case 17:
-          case 'end':
-            return _context3.stop();
-        }
-      }
-    }, _callee3, undefined);
-  }));
-
-  return function (_x5, _x6) {
-    return _ref3.apply(this, arguments);
-  };
-}());
-
-router.get('/sessions/:room/:connectionId', function () {
-  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(req, res) {
-    var _req$params, room, connectionId, existingSession, participant;
-
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            _req$params = req.params, room = _req$params.room, connectionId = _req$params.connectionId;
-            _context4.next = 3;
-            return _journey_space2.default.findOne({ room: room }).lean().exec();
-
-          case 3:
-            existingSession = _context4.sent;
-
-            if (!existingSession) {
-              _context4.next = 10;
-              break;
-            }
-
-            _context4.next = 7;
-            return _journey_participant2.default.findOne({ session: existingSession, connectionId: connectionId }).exec();
-
-          case 7:
-            participant = _context4.sent;
-
-            res.json(participant);
-            return _context4.abrupt('return');
-
-          case 10:
-            res.sendStatus(500);
-
-          case 11:
           case 'end':
             return _context4.stop();
         }
@@ -741,22 +735,39 @@ router.get('/sessions/:room/:connectionId', function () {
   };
 }());
 
-router.get('/active_journeys', function () {
+router.get('/sessions/:room/:connectionId', function () {
   var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(req, res) {
-    var journeys;
+    var _req$params, room, connectionId, existingSession, participant;
+
     return regeneratorRuntime.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
-            _context5.next = 2;
-            return _journey_space2.default.find({ state: 'created', startAt: { $gte: new Date() }, room: { $ne: 'temp-home-location' } }).sort({ startAt: 1 }).exec();
+            _req$params = req.params, room = _req$params.room, connectionId = _req$params.connectionId;
+            _context5.next = 3;
+            return _journey_space2.default.findOne({ room: room }).lean().exec();
 
-          case 2:
-            journeys = _context5.sent;
+          case 3:
+            existingSession = _context5.sent;
 
-            res.json(journeys);
+            if (!existingSession) {
+              _context5.next = 10;
+              break;
+            }
 
-          case 4:
+            _context5.next = 7;
+            return _journey_participant2.default.findOne({ session: existingSession, connectionId: connectionId }).exec();
+
+          case 7:
+            participant = _context5.sent;
+
+            res.json(participant);
+            return _context5.abrupt('return');
+
+          case 10:
+            res.sendStatus(500);
+
+          case 11:
           case 'end':
             return _context5.stop();
         }
@@ -769,41 +780,22 @@ router.get('/active_journeys', function () {
   };
 }());
 
-// TEMP: Use get for convenience. hardcode temp-home-location for the room
-// Trigger a general announcement to everyone
-router.get('/sessions/test/temp-home-location', function () {
+router.get('/active_journeys', function () {
   var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res) {
-    var existingSession, messageData;
+    var journeys;
     return regeneratorRuntime.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
             _context6.next = 2;
-            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
+            return _journey_space2.default.find({ state: 'created', startAt: { $gte: new Date() }, room: { $ne: 'temp-home-location' } }).sort({ startAt: 1 }).exec();
 
           case 2:
-            existingSession = _context6.sent;
+            journeys = _context6.sent;
 
-            if (!existingSession) {
-              _context6.next = 8;
-              break;
-            }
+            res.json(journeys);
 
-            console.log("**** SENDING SIGNAL");
-            messageData = {
-              userName: "Bob",
-              description: "some text",
-              url: "http://www.news.google.com"
-            };
-
-
-            signal(existingSession.sessionId, { type: 'displayJourneyRequest', data: JSON.stringify(messageData) });
-            return _context6.abrupt('return', res.sendStatus(200));
-
-          case 8:
-            res.sendStatus(200);
-
-          case 9:
+          case 4:
           case 'end':
             return _context6.stop();
         }
@@ -816,54 +808,41 @@ router.get('/sessions/test/temp-home-location', function () {
   };
 }());
 
-router.get('/sessions/:room/connections/:connection/ready', function () {
+// TEMP: Use get for convenience. hardcode temp-home-location for the room
+// Trigger a general announcement to everyone
+router.get('/sessions/test/temp-home-location', function () {
   var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req, res) {
-    var _req$params2, room, connection, existingSession, participant, allReady;
-
+    var existingSession, messageData;
     return regeneratorRuntime.wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
           case 0:
-            _req$params2 = req.params, room = _req$params2.room, connection = _req$params2.connection;
-            _context7.next = 3;
-            return _journey_space2.default.findOne({ room: room }).exec();
+            _context7.next = 2;
+            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
 
-          case 3:
+          case 2:
             existingSession = _context7.sent;
 
             if (!existingSession) {
-              _context7.next = 18;
+              _context7.next = 8;
               break;
             }
 
-            _context7.next = 7;
-            return _journey_participant2.default.findOne({ session: existingSession, connectionId: connection });
+            console.log("**** SENDING SIGNAL");
+            messageData = {
+              userName: "Bob",
+              description: "some text",
+              url: "http://www.news.google.com"
+            };
 
-          case 7:
-            participant = _context7.sent;
 
-            participant.ready = true;
-            _context7.next = 11;
-            return participant.save();
-
-          case 11:
-            signal(existingSession.sessionId, { type: 'ready', data: 'foo' });
-            _context7.next = 14;
-            return _journey_participant2.default.count({ session: existingSession, ready: false, present: true });
-
-          case 14:
-            _context7.t0 = _context7.sent;
-            allReady = _context7.t0 === 0;
-
-            if (allReady) {
-              // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
-            }
+            signal(existingSession.sessionId, { type: 'displayJourneyRequest', data: JSON.stringify(messageData) });
             return _context7.abrupt('return', res.sendStatus(200));
 
-          case 18:
+          case 8:
             res.sendStatus(200);
 
-          case 19:
+          case 9:
           case 'end':
             return _context7.stop();
         }
@@ -876,31 +855,54 @@ router.get('/sessions/:room/connections/:connection/ready', function () {
   };
 }());
 
-router.get('/journeys', function () {
+router.get('/sessions/:room/connections/:connection/ready', function () {
   var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(req, res) {
-    var readdirAsync, journeyFiles;
+    var _req$params2, room, connection, existingSession, participant, allReady;
+
     return regeneratorRuntime.wrap(function _callee8$(_context8) {
       while (1) {
         switch (_context8.prev = _context8.next) {
           case 0:
-            readdirAsync = promisify(_fs2.default.readdir);
+            _req$params2 = req.params, room = _req$params2.room, connection = _req$params2.connection;
             _context8.next = 3;
-            return readdirAsync(_path2.default.join(__dirname, '..', 'public/journeys'));
+            return _journey_space2.default.findOne({ room: room }).exec();
 
           case 3:
-            _context8.t0 = function (file) {
-              return _path2.default.extname(file) === '.mp3';
-            };
+            existingSession = _context8.sent;
 
-            _context8.t1 = function (file) {
-              return '/journeys/' + file;
-            };
+            if (!existingSession) {
+              _context8.next = 18;
+              break;
+            }
 
-            journeyFiles = _context8.sent.filter(_context8.t0).map(_context8.t1);
-
-            res.json(journeyFiles);
+            _context8.next = 7;
+            return _journey_participant2.default.findOne({ session: existingSession, connectionId: connection });
 
           case 7:
+            participant = _context8.sent;
+
+            participant.ready = true;
+            _context8.next = 11;
+            return participant.save();
+
+          case 11:
+            signal(existingSession.sessionId, { type: 'ready', data: 'foo' });
+            _context8.next = 14;
+            return _journey_participant2.default.count({ session: existingSession, ready: false, present: true });
+
+          case 14:
+            _context8.t0 = _context8.sent;
+            allReady = _context8.t0 === 0;
+
+            if (allReady) {
+              // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
+            }
+            return _context8.abrupt('return', res.sendStatus(200));
+
+          case 18:
+            res.sendStatus(200);
+
+          case 19:
           case 'end':
             return _context8.stop();
         }
@@ -913,38 +915,31 @@ router.get('/journeys', function () {
   };
 }());
 
-router.put('/sessions/:room/journey', function () {
+router.get('/journeys', function () {
   var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(req, res) {
-    var journey, room, existingSession;
+    var readdirAsync, journeyFiles;
     return regeneratorRuntime.wrap(function _callee9$(_context9) {
       while (1) {
         switch (_context9.prev = _context9.next) {
           case 0:
-            console.log('UPDATE JOURNEY');
-            journey = req.body.journey;
-            room = req.params.room;
-            _context9.next = 5;
-            return _journey_space2.default.findOne({ room: room }).exec();
+            readdirAsync = promisify(_fs2.default.readdir);
+            _context9.next = 3;
+            return readdirAsync(_path2.default.join(__dirname, '..', 'public/journeys'));
 
-          case 5:
-            existingSession = _context9.sent;
+          case 3:
+            _context9.t0 = function (file) {
+              return _path2.default.extname(file) === '.mp3';
+            };
 
-            if (!existingSession) {
-              _context9.next = 11;
-              break;
-            }
+            _context9.t1 = function (file) {
+              return '/journeys/' + file;
+            };
 
-            existingSession.journey = journey;
-            _context9.next = 10;
-            return existingSession.save();
+            journeyFiles = _context9.sent.filter(_context9.t0).map(_context9.t1);
 
-          case 10:
-            signal(existingSession.sessionId, { type: 'updatedJourney', data: journey });
+            res.json(journeyFiles);
 
-          case 11:
-            res.sendStatus(200);
-
-          case 12:
+          case 7:
           case 'end':
             return _context9.stop();
         }
@@ -957,33 +952,37 @@ router.put('/sessions/:room/journey', function () {
   };
 }());
 
-// TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
-router.post('/sessions/:room/start', function () {
+router.put('/sessions/:room/journey', function () {
   var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(req, res) {
-    var room, existingSession;
+    var journey, room, existingSession;
     return regeneratorRuntime.wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
           case 0:
+            journey = req.body.journey;
             room = req.params.room;
-            _context10.next = 3;
+            _context10.next = 4;
             return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 3:
+          case 4:
             existingSession = _context10.sent;
 
             if (!existingSession) {
-              _context10.next = 8;
+              _context10.next = 10;
               break;
             }
 
-            _context10.next = 7;
-            return existingSession.start();
+            existingSession.journey = journey;
+            _context10.next = 9;
+            return existingSession.save();
 
-          case 7:
-            signal(existingSession.sessionId, { type: 'startJourney', data: '' });
+          case 9:
+            signal(existingSession.sessionId, { type: 'updatedJourney', data: journey });
 
-          case 8:
+          case 10:
+            res.sendStatus(200);
+
+          case 11:
           case 'end':
             return _context10.stop();
         }
@@ -996,42 +995,33 @@ router.post('/sessions/:room/start', function () {
   };
 }());
 
-router.post('/sessions/:room/flag', function () {
+// TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
+router.post('/sessions/:room/start', function () {
   var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(req, res) {
-    var room, connectionId, existingSession, participants;
+    var room, existingSession;
     return regeneratorRuntime.wrap(function _callee11$(_context11) {
       while (1) {
         switch (_context11.prev = _context11.next) {
           case 0:
             room = req.params.room;
-            connectionId = req.body.connectionId;
-            _context11.next = 4;
+            _context11.next = 3;
             return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 4:
+          case 3:
             existingSession = _context11.sent;
 
             if (!existingSession) {
-              _context11.next = 13;
+              _context11.next = 8;
               break;
             }
 
-            existingSession.flags.push({ user: connectionId });
-            _context11.next = 9;
-            return existingSession.save();
+            _context11.next = 7;
+            return existingSession.start();
 
-          case 9:
-            _context11.next = 11;
-            return _journey_participant2.default.find({ session: existingSession, present: true }).lean().exec();
+          case 7:
+            signal(existingSession.sessionId, { type: 'startJourney', data: '' });
 
-          case 11:
-            participants = _context11.sent;
-            return _context11.abrupt('return', res.json(_extends({}, existingSession.toJSON(), { participants: participants })));
-
-          case 13:
-            res.sendStatus(404);
-
-          case 14:
+          case 8:
           case 'end':
             return _context11.stop();
         }
@@ -1044,80 +1034,42 @@ router.post('/sessions/:room/flag', function () {
   };
 }());
 
-router.post('/event', function () {
+router.post('/sessions/:room/flag', function () {
   var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12(req, res) {
-    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
-
+    var room, connectionId, existingSession, participants;
     return regeneratorRuntime.wrap(function _callee12$(_context12) {
       while (1) {
         switch (_context12.prev = _context12.next) {
           case 0:
-            console.log('GOT EVENT', req.body);
-            res.sendStatus(200);
-            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
-            _context12.next = 5;
-            return _journey_space2.default.findOne({ sessionId: sessionId }).exec();
+            room = req.params.room;
+            connectionId = req.body.connectionId;
+            _context12.next = 4;
+            return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 5:
-            session = _context12.sent;
+          case 4:
+            existingSession = _context12.sent;
 
-
-            console.log("*******" + req.body);
-
-            _context12.t0 = req.body.event;
-            _context12.next = _context12.t0 === 'connectionCreated' ? 10 : _context12.t0 === 'connectionDestroyed' ? 20 : 29;
-            break;
-
-          case 10:
-            if (!session) {
-              _context12.next = 19;
+            if (!existingSession) {
+              _context12.next = 13;
               break;
             }
 
-            _context12.next = 13;
-            return _journey_participant2.default.count({ session: session, connectionId: connection.id });
+            existingSession.flags.push({ user: connectionId });
+            _context12.next = 9;
+            return existingSession.save();
+
+          case 9:
+            _context12.next = 11;
+            return _journey_participant2.default.find({ session: existingSession, present: true }).lean().exec();
+
+          case 11:
+            participants = _context12.sent;
+            return _context12.abrupt('return', res.json(_extends({}, existingSession.toJSON(), { participants: participants })));
 
           case 13:
-            _context12.t1 = _context12.sent;
-            participantExists = _context12.t1 > 0;
+            res.sendStatus(404);
 
-            if (participantExists) {
-              _context12.next = 19;
-              break;
-            }
-
-            participant = new _journey_participant2.default({ session: session, connectionId: connection.id });
-            _context12.next = 19;
-            return participant.save();
-
-          case 19:
-            return _context12.abrupt('break', 29);
-
-          case 20:
-            if (!session) {
-              _context12.next = 28;
-              break;
-            }
-
-            _context12.next = 23;
-            return _journey_participant2.default.findOne({ session: session, connectionId: connection.id });
-
-          case 23:
-            _participant = _context12.sent;
-
-            if (!_participant) {
-              _context12.next = 28;
-              break;
-            }
-
-            _participant.present = false;
-            _context12.next = 28;
-            return _participant.save();
-
-          case 28:
-            return _context12.abrupt('break', 29);
-
-          case 29:
+          case 14:
           case 'end':
             return _context12.stop();
         }
@@ -1127,6 +1079,92 @@ router.post('/event', function () {
 
   return function (_x23, _x24) {
     return _ref12.apply(this, arguments);
+  };
+}());
+
+router.post('/event', function () {
+  var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(req, res) {
+    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
+
+    return regeneratorRuntime.wrap(function _callee13$(_context13) {
+      while (1) {
+        switch (_context13.prev = _context13.next) {
+          case 0:
+            console.log('GOT EVENT', req.body);
+            res.sendStatus(200);
+            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
+            _context13.next = 5;
+            return _journey_space2.default.findOne({ sessionId: sessionId }).exec();
+
+          case 5:
+            session = _context13.sent;
+
+
+            console.log("*******" + req.body);
+
+            _context13.t0 = req.body.event;
+            _context13.next = _context13.t0 === 'connectionCreated' ? 10 : _context13.t0 === 'connectionDestroyed' ? 20 : 29;
+            break;
+
+          case 10:
+            if (!session) {
+              _context13.next = 19;
+              break;
+            }
+
+            _context13.next = 13;
+            return _journey_participant2.default.count({ session: session, connectionId: connection.id });
+
+          case 13:
+            _context13.t1 = _context13.sent;
+            participantExists = _context13.t1 > 0;
+
+            if (participantExists) {
+              _context13.next = 19;
+              break;
+            }
+
+            participant = new _journey_participant2.default({ session: session, connectionId: connection.id });
+            _context13.next = 19;
+            return participant.save();
+
+          case 19:
+            return _context13.abrupt('break', 29);
+
+          case 20:
+            if (!session) {
+              _context13.next = 28;
+              break;
+            }
+
+            _context13.next = 23;
+            return _journey_participant2.default.findOne({ session: session, connectionId: connection.id });
+
+          case 23:
+            _participant = _context13.sent;
+
+            if (!_participant) {
+              _context13.next = 28;
+              break;
+            }
+
+            _participant.present = false;
+            _context13.next = 28;
+            return _participant.save();
+
+          case 28:
+            return _context13.abrupt('break', 29);
+
+          case 29:
+          case 'end':
+            return _context13.stop();
+        }
+      }
+    }, _callee13, undefined);
+  }));
+
+  return function (_x25, _x26) {
+    return _ref13.apply(this, arguments);
   };
 }());
 
@@ -2573,7 +2611,6 @@ var Room = function (_Component) {
           }
         });
         _this2.sessionHelper.session.on("connectionDestroyed", function (event) {
-          console.log('DESTROYED', event);
           var data = {
             sessionId: _this2.sessionHelper.session.sessionId,
             connection: {
