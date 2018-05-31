@@ -16,7 +16,7 @@ const agenda = new Agenda({db: {address: process.env.MONGODB_URI || process.env.
 
 app.use(session({
     secret: 'qVaNxeu5VVEAtkyFJ/62EKcp7Lw=',
-    saveUninitialized: false, // don't create session until something stored
+    saveUninitialized: true, // don't create session until something stored
 	  resave: false, //don't save session if unmodified
     store: new (createMongoStore(session))({url: process.env.MONGODB_URI || process.env.MONGO_URL}),
     cookie: {expires: new Date(253402300000000)}

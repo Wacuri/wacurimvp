@@ -1,7 +1,8 @@
 import { store } from 'react-easy-state'
 
-export default store({
+const state =  store({
   session: null,
+  sessionId: null,
   journeys: [],
   joinableJourneys: [],
   loggedIn: false,
@@ -9,3 +10,5 @@ export default store({
   location: '/',
   ...(global.__INITIAL_STATE__ || {})
 });
+
+export default state;
