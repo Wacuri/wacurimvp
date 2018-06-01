@@ -25,7 +25,9 @@ agenda.define('create journey space', async function(job, done) {
     await journeySpace.save();
     const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
     if (globalSpace) {
-      opentok.signal(globalSpace.sessionId, null, { 'type': 'createdNewJourney', 'data': JSON.stringify(journeySpace) }, done);
+      const response = journeySpace.toJSON();
+      response.rsvps = [];
+      opentok.signal(globalSpace.sessionId, null, { 'type': 'createdNewJourney', 'data': JSON.stringify(response) }, done);
     } else {
       done();
     }
