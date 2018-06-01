@@ -3070,7 +3070,7 @@ var db = _mongoose2.default.connection;
 
 agenda.define('create journey space', function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(job, done) {
-    var randomJourney, journeySpace, globalSpace;
+    var randomJourney, journeySpace, globalSpace, response;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -3099,7 +3099,10 @@ agenda.define('create journey space', function () {
             globalSpace = _context.sent;
 
             if (globalSpace) {
-              opentok.signal(globalSpace.sessionId, null, { 'type': 'createdNewJourney', 'data': JSON.stringify(journeySpace) }, done);
+              response = journeySpace.toJSON();
+
+              response.rsvps = [];
+              opentok.signal(globalSpace.sessionId, null, { 'type': 'createdNewJourney', 'data': JSON.stringify(response) }, done);
             } else {
               done();
             }
