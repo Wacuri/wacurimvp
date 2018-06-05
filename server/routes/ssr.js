@@ -37,7 +37,7 @@ router.get('/', (req, res) => {
   } else {
     res.status(200).render(process.env.NODE_ENV === 'production' ? 'index.ejs' : 'index.dev.ejs', {
       html,
-      script: JSON.stringify({openTokKey: process.env.OPENTOK_KEY, loggedIn: req.session.loggedIn, user: req.session.user}),
+      script: JSON.stringify({openTokKey: process.env.OPENTOK_KEY, loggedIn: req.session.loggedIn, user: req.session.user, sessionId: req.sessionID}),
     });
   }
 });

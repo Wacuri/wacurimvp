@@ -5,6 +5,7 @@ import OpenTok from 'opentok';
 import mongoose from 'mongoose';
 import JourneySpace from '../models/journey_space';
 import JourneyParticipant from '../models/journey_participant';
+import JourneyRSVP from '../models/journey_rsvp';
 import dotenv from 'dotenv';
 require('isomorphic-fetch');
 
@@ -37,12 +38,25 @@ function generateToken(sessionId) {
 // TODO: switch to POST, just using GET for easier testing
 router.get('/sessions/:room', async (req, res) => {
 	const {room} = req.params;
-	const existingSession = await JourneySpace.findOne({room}).lean().exec();
+	const existingSession = await JourneySpace.findOne({room}).exec();
 	if (existingSession) {
+    if (!existingSession.sessionId) {
+      const session = await new Promise((resolve, reject) => {
+        opentok.createSession(async (err, session) => {
+          if (err) reject(err);
+          resolve(session);
+        });
+      });
+      existingSession.sessionId = session.sessionId;
+      await existingSession.save();
+    }
     const participants = await JourneyParticipant.find({session: existingSession, present: true}).lean().exec();
-    existingSession.participants = participants;
+    const rsvps = await JourneyRSVP.find({journey: existingSession}).lean().exec();
+    const response = existingSession.toJSON();
+    response.participants = participants;
+    response.rsvps = rsvps;
 		res.json({
-			...existingSession,
+			...response,
 			token: generateToken(existingSession.sessionId),
 		});
 	} else {
@@ -51,8 +65,11 @@ router.get('/sessions/:room', async (req, res) => {
 			// save the sessionId
 			const newSession = new JourneySpace({room, sessionId: session.sessionId});
 			await newSession.save();
+      const response = newSession.toJSON();
+      response.participants = [];
+      response.rsvps = [];
 			res.json({
-				...newSession.toJSON(),
+				...response,
 				token: generateToken(session.sessionId),
 			});
 		});
@@ -87,9 +104,40 @@ router.get('/sessions/:room/:connectionId', async (req, res) => {
 });
 
 router.get('/active_journeys', async(req, res) => {
-  const journeys = await TokSession.find({state: 'created'}).exec()
-  res.json(journeys)
-})
+  const journeys = await JourneySpace.aggregate([
+    {
+      $match: {
+        state: 'created', startAt: {$gte: new Date()}, room: {$ne: 'temp-home-location'}
+      }
+    }, 
+
+    {
+      $lookup: {
+        from: 'journeyrsvps',
+        localField: '_id',
+        foreignField: 'journey',
+        as: 'rsvps'
+      }
+    },
+
+    {
+      $sort: {startAt: 1}
+    }
+  ]);
+  
+  res.json(journeys);
+});
+
+router.post('/journeys/:id/rsvp', async (req, res) => {
+  const journey = await JourneySpace.findById(req.params.id).exec();
+  const rsvp = new JourneyRSVP({journey, user: req.session.id});
+  await rsvp.save();
+  const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+  if (globalSpace) {
+    opentok.signal(globalSpace.sessionId, null, { 'type': 'newRSVP', 'data': JSON.stringify(rsvp) }, () => {});
+  }
+  res.sendStatus(200);
+});
 
 // TEMP: Use get for convenience. hardcode temp-home-location for the room
 // Trigger a general announcement to everyone
@@ -138,7 +186,6 @@ router.get('/journeys', async (req, res) => {
 });
 
 router.put('/sessions/:room/journey', async (req, res) => {
-  console.log('UPDATE JOURNEY');
   const {journey} = req.body;
   const {room} = req.params;
   const existingSession = await JourneySpace.findOne({room}).exec();

@@ -20,3 +20,22 @@ $fa-font-path: "~font-awesome/fonts";
 .journey-container {
   padding: $spacer;
 }
+
+.joinable-journeys {
+  padding: 20px;
+}
+
+.joinable-journey-card {
+  display: flex;
+  margin-bottom: 20px;
+
+  .image img {
+    border-radius: 10px;
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .content {
+    margin-left: 10px;
+  }
+}
