@@ -3052,7 +3052,7 @@ router.get('/active_journeys', function () {
             _context6.next = 2;
             return _journey_space2.default.aggregate([{
               $match: {
-                state: 'created', startAt: { $gte: new Date() }, room: { $ne: 'temp-home-location' }
+                state: { $in: ['created', 'joined'] }, startAt: { $gte: new Date() }, room: { $ne: 'temp-home-location' }
               }
             }, {
               $lookup: {
@@ -3096,19 +3096,30 @@ router.post('/journeys/:id/rsvp', function () {
 
           case 2:
             journey = _context7.sent;
-            _context7.next = 5;
+            _context7.prev = 3;
+            _context7.next = 6;
             return journey.joined();
 
-          case 5:
-            rsvp = new _journey_rsvp2.default({ journey: journey, user: req.session.id });
-            _context7.next = 8;
-            return rsvp.save();
+          case 6:
+            _context7.next = 11;
+            break;
 
           case 8:
-            _context7.next = 10;
+            _context7.prev = 8;
+            _context7.t0 = _context7['catch'](3);
+
+            console.log(_context7.t0);
+
+          case 11:
+            rsvp = new _journey_rsvp2.default({ journey: journey, user: req.session.id });
+            _context7.next = 14;
+            return rsvp.save();
+
+          case 14:
+            _context7.next = 16;
             return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
 
-          case 10:
+          case 16:
             globalSpace = _context7.sent;
 
             if (globalSpace) {
@@ -3116,12 +3127,12 @@ router.post('/journeys/:id/rsvp', function () {
             }
             res.sendStatus(200);
 
-          case 13:
+          case 19:
           case 'end':
             return _context7.stop();
         }
       }
-    }, _callee7, undefined);
+    }, _callee7, undefined, [[3, 8]]);
   }));
 
   return function (_x13, _x14) {

@@ -107,7 +107,7 @@ router.get('/active_journeys', async(req, res) => {
   const journeys = await JourneySpace.aggregate([
     {
       $match: {
-        state: 'created', startAt: {$gte: new Date()}, room: {$ne: 'temp-home-location'}
+        state: {$in: ['created', 'joined']}, startAt: {$gte: new Date()}, room: {$ne: 'temp-home-location'}
       }
     }, 
 
@@ -130,7 +130,11 @@ router.get('/active_journeys', async(req, res) => {
 
 router.post('/journeys/:id/rsvp', async (req, res) => {
   const journey = await JourneySpace.findById(req.params.id).exec();
-  await journey.joined();
+  try {
+    await journey.joined();
+  } catch(e) {
+    console.log(e);
+  }
   const rsvp = new JourneyRSVP({journey, user: req.session.id});
   await rsvp.save();
   const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
