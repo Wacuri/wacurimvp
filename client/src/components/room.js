@@ -145,7 +145,9 @@ class Waiting extends Component {
         }
         <div className='waiting' style={{transform: `translateY(${this.state.open ? '0' : '94%'})`, position: `${this.state.open ? 'relative' : 'absolute'}`}}>
           <a className='text-right mr-3' style={{display: 'block', color: 'white'}} href='#' onClick={this.onToggle}>{this.state.open ? 'Close X' : 'Open ^'}</a>
-          <iframe height='100%' width='100%' style={{width: '100%', height: '400px', border: 'none'}} src='/pdf.html'/>
+          <div style={{WebkitOverflowScrolling: 'touch', overflowY: 'scroll'}}>
+            <iframe height='100%' width='100%' style={{width: '100%', height: '400px', border: 'none'}} src='https://docs.google.com/viewer?url=http://wacuri.herokuapp.com/CuriousLive4-Stage%20Orientation.pdf&embedded=true'/>
+          </div>
         </div>
       </div>
     )

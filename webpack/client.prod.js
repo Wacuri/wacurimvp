@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+var IsomorphicLoaderPlugin = require("isomorphic-loader/lib/webpack-plugin");
 
 module.exports = {
   context: path.join(__dirname, '../client'),
@@ -50,6 +51,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new IsomorphicLoaderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')

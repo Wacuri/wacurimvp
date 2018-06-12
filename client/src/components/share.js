@@ -14,7 +14,7 @@ if (__CLIENT__) {
         telegram: payload => (isDesktop ? 'https://telegram.me/share/msg?url='+location.host+'&text=' : 'tg://msg?text=') + payload,
         facebook: (payload, fbid, url) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
         email:    (payload, title) => 'mailto:?subject='+title+'&body='+payload,
-        sms:      payload => 'sms:?body='+payload
+      sms:      payload => 'sms:/&body='+payload
     };
 
     class WebShareUI{

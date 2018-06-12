@@ -4117,6 +4117,8 @@ var _CuriousLiveLogo2 = _interopRequireDefault(_CuriousLiveLogo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+console.log("LOGO IS", _CuriousLiveLogo2.default);
+
 var Header = function Header() {
   return _react2.default.createElement(
     'div',
@@ -5083,7 +5085,7 @@ var Waiting = function (_Component) {
       if (this.canvas) {
         var _fadeOut = function _fadeOut() {
           var ctx = _this.canvas.getContext('2d');
-          ctx.fillStyle = "rgba(0,0,0,0.01)";
+          ctx.fillStyle = "rgba(0,0,0,0.1)";
           ctx.fillRect(0, 0, _this.canvas.width, _this.canvas.height);
           setTimeout(_fadeOut, 100);
         };
@@ -5137,7 +5139,11 @@ var Waiting = function (_Component) {
             { className: 'text-right mr-3', style: { display: 'block', color: 'white' }, href: '#', onClick: this.onToggle },
             this.state.open ? 'Close X' : 'Open ^'
           ),
-          _react2.default.createElement('iframe', { height: '100%', width: '100%', style: { width: '100%', height: '400px', border: 'none' }, src: '/pdf.html' })
+          _react2.default.createElement(
+            'div',
+            { style: { WebkitOverflowScrolling: 'touch', overflowY: 'scroll' } },
+            _react2.default.createElement('iframe', { height: '100%', width: '100%', style: { width: '100%', height: '400px', border: 'none' }, src: 'https://docs.google.com/viewer?url=http://wacuri.herokuapp.com/CuriousLive4-Stage%20Orientation.pdf&embedded=true' })
+          )
         )
       );
     }
