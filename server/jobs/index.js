@@ -6,6 +6,7 @@ import OpenTok from 'opentok';
 import moment from 'moment';
 import mongoose from 'mongoose';
 import JourneySpace from '../models/journey_space';
+import JourneyRSVP from '../models/journey_rsvp';
 import JourneyContent from '../models/journey_content';
 
 const agenda = new Agenda({db: {address: process.env.MONGODB_URI || process.env.MONGO_URL}});
@@ -23,6 +24,7 @@ agenda.define('create journey space', async function(job, done) {
       startAt: moment().add(10, 'minutes').toDate()
     });
     await journeySpace.save();
+    await agenda.schedule(journeySpace.startAt, 'start journey', {journey: journeySpace._id});
     const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
     if (globalSpace) {
       const response = journeySpace.toJSON();
@@ -50,6 +52,24 @@ agenda.define('clear expired journeys', async function(job, done) {
     done();
   } catch(e) {
     console.log(e);
+    done(e);
+  }
+});
+
+agenda.define('start journey', async function(job, done) {
+  try {
+    const {journey} = job.attrs.data;
+    const journeySpace = await JourneySpace.findById(journey).exec();
+    const rsvps = await JourneyRSVP.find({journey: journeySpace._id}).exec();
+    if (rsvps.length > 1) {
+      await journeySpace.start();
+      opentok.signal(journeySpace.sessionId, null, { 'type': 'startJourney', 'data': JSON.stringify({journey}) }, () => {});
+    } else {
+      await journeySpace.fail();
+      opentok.signal(journeySpace.sessionId, null, { 'type': 'failJourney', 'data': JSON.stringify({journey}) }, () => {});
+    }
+    done();
+  } catch(e) {
     done(e);
   }
 });

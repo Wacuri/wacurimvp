@@ -8599,17 +8599,76 @@ a.text-dark:hover, a.text-dark:focus {
 
 .header {
   margin: 0;
-  background: black;
-  padding: 1rem; }
+  background: #fcbd51;
+  padding: 0; }
   .header h1 {
     color: white;
-    font-size: 2rem; }
+    font-size: 2rem;
+    margin: 0; }
+  .header .logo img {
+    width: 150px;
+    height: 40px; }
 
 #messages {
   border: 1px solid #f00; }
 
-.journey-container {
-  padding: 1rem; }
+.journeyspace {
+  background: black;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 46px); }
+
+.journeyspace-content {
+  flex: 1; }
+
+.journeyspace-footer {
+  background: #fcbd51; }
+
+.journeyspace-title {
+  color: white; }
+
+.journeyspace-content p {
+  color: white; }
+
+.journeyspace-container {
+  position: relative; }
+
+.journeyspace-stream {
+  width: 100vw;
+  height: calc(100vw * 3/4);
+  position: relative; }
+  .journeyspace-stream > div {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0; }
+
+.journeyspace-streams-count-1 .journeyspace-me {
+  display: none; }
+
+.journeyspace-streams-count-2 {
+  position: relative; }
+  .journeyspace-streams-count-2 .journeyspace-active-stream {
+    position: relative; }
+  .journeyspace-streams-count-2 .journeyspace-me {
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 25vw;
+    height: calc(25vw * 3/4); }
+
+.journeyspace-grid-layout {
+  display: flex;
+  flex-wrap: wrap; }
+  .journeyspace-grid-layout .journeyspace-stream:first-child {
+    flex: 1;
+    flex-basis: 100%; }
+  .journeyspace-grid-layout .journeyspace-stream:nth-child(n+2) {
+    flex: 1;
+    flex-basis: 1%;
+    height: 0;
+    padding-top: 50%; }
 
 .joinable-journeys {
   padding: 20px; }
@@ -8623,5 +8682,10 @@ a.text-dark:hover, a.text-dark:focus {
     max-width: 200px; }
   .joinable-journey-card .content {
     margin-left: 10px; }
+
+.btn-flag-session {
+  background: none;
+  border: none;
+  color: black; }
 
 /*# sourceMappingURL=main.css.map*/

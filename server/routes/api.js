@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import JourneySpace from '../models/journey_space';
 import JourneyParticipant from '../models/journey_participant';
 import JourneyRSVP from '../models/journey_rsvp';
+import JourneyContent from '../models/journey_content';
 import dotenv from 'dotenv';
 require('isomorphic-fetch');
 
@@ -31,7 +32,6 @@ function generateToken(sessionId) {
 	tokenOptions.role = "publisher";
 	// Generate a token.
 	const token = opentok.generateToken(sessionId, tokenOptions);
-  console.log('return token', token);
 	return token;
 }
 
@@ -130,12 +130,31 @@ router.get('/active_journeys', async(req, res) => {
 
 router.post('/journeys/:id/rsvp', async (req, res) => {
   const journey = await JourneySpace.findById(req.params.id).exec();
+  await journey.joined();
   const rsvp = new JourneyRSVP({journey, user: req.session.id});
   await rsvp.save();
   const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
   if (globalSpace) {
     opentok.signal(globalSpace.sessionId, null, { 'type': 'newRSVP', 'data': JSON.stringify(rsvp) }, () => {});
   }
+  res.sendStatus(200);
+});
+
+router.post('/journeys/:id/completed', async (req, res) => {
+  const journey = await JourneySpace.findById(req.params.id).exec();
+  await journey.complete();
+  const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+  if (globalSpace) {
+    opentok.signal(globalSpace.sessionId, null, { 'type': 'completed', 'data': JSON.stringify(journey.toJSON()) }, () => {});
+  }
+  res.sendStatus(200);
+});
+
+router.put('/journeys/:room/progress', async (req, res) => {
+  const {currentTime} = req.body;
+  const journey = await JourneySpace.findOne({room: req.params.room}).exec();
+  journey.currentTime = currentTime;
+  await journey.save();
   res.sendStatus(200);
 });
 
@@ -176,21 +195,18 @@ router.get('/sessions/:room/connections/:connection/ready', async (req, res) => 
 });
 
 router.get('/journeys', async (req, res) => {
-  const readdirAsync = promisify(fs.readdir)
-  const journeyFiles = (await readdirAsync(path.join(__dirname, '..', 'public/journeys'))).filter(file => {
-    return path.extname(file) === '.mp3';
-  }).map(file => {
-    return `/journeys/${file}`
-  });
-  res.json(journeyFiles);
+  const journeys = await JourneyContent.find().exec();
+  res.json(journeys);
 });
 
 router.put('/sessions/:room/journey', async (req, res) => {
   const {journey} = req.body;
   const {room} = req.params;
   const existingSession = await JourneySpace.findOne({room}).exec();
+  const journeyContent = await JourneyContent.findOne({filePath: journey}).exec();
 	if (existingSession) {
     existingSession.journey = journey;
+    existingSession['name'] = journeyContent.get('name');
     await existingSession.save();
     signal(existingSession.sessionId, {type: 'updatedJourney', data: journey});
   }
@@ -209,10 +225,10 @@ router.post('/sessions/:room/start', async (req, res) => {
 
 router.post('/sessions/:room/flag', async (req, res) => {
   const {room} = req.params;
-  const {connectionId} = req.body;
+  const userId = req.sessionID; // using sessionId as representation of user for now
   const existingSession = await JourneySpace.findOne({room}).exec();
 	if (existingSession) {
-    existingSession.flags.push({user: connectionId});
+    existingSession.flags.push({user: userId});
     await existingSession.save();
     const participants = await JourneyParticipant.find({session: existingSession, present: true}).lean().exec();
     return res.json({...existingSession.toJSON(), participants});

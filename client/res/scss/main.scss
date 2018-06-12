@@ -2,14 +2,24 @@
 $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome.scss";
 
+h2 {
+  font-size: 1.7rem;
+}
+
 .header {
   margin: 0;
-  background: black;
-  padding: $spacer;
+  background: rgb(252, 189, 81);
+  padding: 0;
 
   h1 {
     color: white;
     font-size: 2rem;
+    margin: 0;
+  }
+
+  .logo img {
+    width: 150px;
+    max-height: 46px;
   }
 }
 
@@ -17,8 +27,119 @@ $fa-font-path: "~font-awesome/fonts";
   border: 1px solid #f00;
 }
 
-.journey-container {
-  padding: $spacer;
+.journeyspace {
+  background: black;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 46px);
+}
+
+.journeyspace-content {
+  flex: 1;
+}
+
+.journeyspace-footer {
+  background: rgb(252, 189, 81);
+}
+
+.journeyspace-title {
+  color: white;
+}
+
+.journeyspace-content {
+  p {
+    color: white;
+  }
+}
+
+.journeyspace-container {
+  position: relative;
+}
+
+.journeyspace-stream {
+  width: 100vw;
+  height: calc(100vw * 3/4);
+  position: relative;
+  
+  >div {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
+.journeyspace-streams-count-1 {
+  .journeyspace-me {
+    display: none;
+  }
+}
+
+.journeyspace-streams-count-2 {
+  position: relative;
+
+  .journeyspace-active-stream {
+    position: relative;
+  }
+
+  .journeyspace-me {
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 25vw;
+    height: calc(25vw * 3/4);
+  }
+}
+
+.journeyspace-grid-layout {
+  display: flex;
+  flex-wrap: wrap;
+
+  .journeyspace-stream:first-child {
+    flex: 1;
+    flex-basis: 100%;
+  }
+
+  .journeyspace-stream:nth-child(n+2) {
+    flex: 1;
+    flex-basis: 1%;
+    height: 0;
+    padding-top: 50%;
+  }
+
+}
+
+.journeyspace-share {
+  a {
+    color: white;
+  }
+}
+
+.journeyspace-progress {
+  small {
+    text-transform: uppercase;
+    color: white;
+    font-weight: 100;
+    font-size: 0.7rem;
+  }
+
+  progress[value] {
+    -webkit-appearance: none;
+   appearance: none;
+   height: 4px;
+   display: block;
+ }
+
+  progress[value]::-webkit-progress-bar {
+    background-color: rgb(255, 191, 53);
+    border-radius: 2px;
+  }
+
+  progress[value]::-webkit-progress-value {
+    background-color: rgb(97, 97, 97);
+    border-radius: 2px 0 0 2px;
+  }
 }
 
 .joinable-journeys {
@@ -38,4 +159,142 @@ $fa-font-path: "~font-awesome/fonts";
   .content {
     margin-left: 10px;
   }
+}
+
+.journeyspace-attendeeCount {
+  padding-top: 2px;
+
+  .journeyspace-attendeeCountLabel {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: white;
+    margin: 0;
+    font-weight: 100;
+    text-align: right;
+  }
+
+  .journeyspace-attendeeCountCount {
+    text-align: right;
+    margin: 0;
+  }
+}
+
+.btn-flag-session {
+  background: none;
+  border: none;
+  color: black;
+}
+
+.waiting {
+  transition: all 400ms ease-in-out;
+
+  h3, p {
+    color: white;
+  }
+}
+
+/* Fonts */
+
+.web-share-title {
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    opacity: 0.7;
+}
+
+.web-share {
+    position: fixed;
+    top: -10px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: background .4s;
+    padding: 8px;
+    flex-direction: column;
+    justify-content: flex-end;
+    z-index: 100000;
+    display: none;
+
+    .fa {
+      display: block;
+      text-align: center;
+    }
+}
+
+.web-share-container {
+    max-width: 490px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto 8px;
+    background: #F8F8F8;
+    border-radius: 12px;
+    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+    padding: 16px 23px;
+    text-align: left;
+    color: black;
+    transform: translateY(10vh);
+    opacity: 0;
+    transition: transform .4s, opacity .4s;
+}
+
+.web-share-container.web-share-cancel {
+    color: #0076FF;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.web-share-item {
+    margin: 16px 8px;
+    display: inline-block;
+    text-decoration: none !important;
+    color: black !important;
+    cursor: pointer;
+    width: 64px;
+}
+
+.web-share-item [class^="web-share-icon-"] {
+    background-color: white;
+    border-radius: 12px;
+    padding: 12px;
+    color: black;
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0 auto;
+}
+
+.web-share-item[href=""] {
+    display: none;
+}
+
+.web-share-item-desc {
+    text-align: center;
+    margin-top: 4px;
+}
+
+.web-share.desktop .web-share-sms {
+    display: none;
+}
+
+
+.signature-pad {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width:400px;
+  height:400px;
+  background-color: white;
+}
+
+.wrapper {
+  position: relative;
+  height: 400px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

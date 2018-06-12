@@ -94,7 +94,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _reactEasyState = __webpack_require__(4);
+var _reactEasyState = __webpack_require__(5);
 
 var state = (0, _reactEasyState.store)(_extends({
   session: null,
@@ -110,22 +110,22 @@ exports.default = state;
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-easy-state");
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const createJob = __webpack_require__(21);
-const processJobs = __webpack_require__(88);
+const createJob = __webpack_require__(16);
+const processJobs = __webpack_require__(61);
 
 module.exports = {
   createJob,
   processJobs
 };
 
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-easy-state");
 
 /***/ }),
 /* 6 */
@@ -137,7 +137,7 @@ module.exports = require("path");
 /* 7 */
 /***/ (function(module, exports) {
 
-module.exports = require("express");
+module.exports = require("human-interval");
 
 /***/ }),
 /* 8 */
@@ -149,19 +149,19 @@ module.exports = require("moment");
 /* 9 */
 /***/ (function(module, exports) {
 
-module.exports = require("opentok-react");
+module.exports = require("express");
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = require("@opentok/client");
+module.exports = require("opentok-react");
 
 /***/ }),
 /* 11 */
 /***/ (function(module, exports) {
 
-module.exports = require("human-interval");
+module.exports = require("@opentok/client");
 
 /***/ }),
 /* 12 */
@@ -177,92 +177,6 @@ module.exports = require("fs");
 
 /***/ }),
 /* 14 */
-/***/ (function(module, exports) {
-
-module.exports = require("opentok");
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _mongoose = __webpack_require__(2);
-
-var _mongoose2 = _interopRequireDefault(_mongoose);
-
-var _anotherMongooseStatemachine = __webpack_require__(28);
-
-var _anotherMongooseStatemachine2 = _interopRequireDefault(_anotherMongooseStatemachine);
-
-var _moment = __webpack_require__(8);
-
-var _moment2 = _interopRequireDefault(_moment);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var FlagSchema = new _mongoose.Schema({
-  user: { type: String },
-  reason: { type: String }
-});
-
-var JourneySpaceSchema = new _mongoose.Schema({
-  room: { type: String, index: true },
-  name: { type: String, index: true },
-  image: { type: String },
-  sessionId: { type: String, index: true },
-  journey: { type: String, default: '/journeys/Journey to A Spiderweb+Music.mp3' },
-  startAt: { type: Date, default: function _default() {
-      return (0, _moment2.default)().add(10, 'minutes').toDate();
-    } },
-  flags: { type: [FlagSchema], default: [] }
-}, {
-  timestamps: true
-});
-
-JourneySpaceSchema.plugin(_anotherMongooseStatemachine2.default, {
-  states: {
-    created: { default: true },
-    started: {},
-    completed: {},
-    expired: {}
-  },
-  transitions: {
-    start: { from: 'created', to: 'started' },
-    end: { from: '*', to: 'completed' },
-    expire: { from: '*', to: 'expired' }
-  }
-});
-
-var JourneySpace = _mongoose2.default.model('JourneySpace', JourneySpaceSchema);
-
-exports.default = JourneySpace;
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-module.exports = require("isomorphic-fetch");
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-router");
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-module.exports = require("prop-types");
-
-/***/ }),
-/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -314,38 +228,38 @@ class Job {
   }
 }
 
-Job.prototype.toJSON = __webpack_require__(70);
-Job.prototype.computeNextRunAt = __webpack_require__(71);
-Job.prototype.repeatEvery = __webpack_require__(74);
-Job.prototype.repeatAt = __webpack_require__(75);
-Job.prototype.disable = __webpack_require__(76);
-Job.prototype.enable = __webpack_require__(77);
-Job.prototype.unique = __webpack_require__(78);
-Job.prototype.schedule = __webpack_require__(79);
-Job.prototype.priority = __webpack_require__(80);
-Job.prototype.fail = __webpack_require__(81);
-Job.prototype.run = __webpack_require__(82);
-Job.prototype.isRunning = __webpack_require__(83);
-Job.prototype.save = __webpack_require__(84);
-Job.prototype.remove = __webpack_require__(85);
-Job.prototype.touch = __webpack_require__(86);
+Job.prototype.toJSON = __webpack_require__(43);
+Job.prototype.computeNextRunAt = __webpack_require__(44);
+Job.prototype.repeatEvery = __webpack_require__(47);
+Job.prototype.repeatAt = __webpack_require__(48);
+Job.prototype.disable = __webpack_require__(49);
+Job.prototype.enable = __webpack_require__(50);
+Job.prototype.unique = __webpack_require__(51);
+Job.prototype.schedule = __webpack_require__(52);
+Job.prototype.priority = __webpack_require__(53);
+Job.prototype.fail = __webpack_require__(54);
+Job.prototype.run = __webpack_require__(55);
+Job.prototype.isRunning = __webpack_require__(56);
+Job.prototype.save = __webpack_require__(57);
+Job.prototype.remove = __webpack_require__(58);
+Job.prototype.touch = __webpack_require__(59);
 
 module.exports = Job;
 
 
 /***/ }),
-/* 20 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = require("date.js");
 
 /***/ }),
-/* 21 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-const Job = __webpack_require__(19);
+const Job = __webpack_require__(14);
 
 /**
  * Create Job object from data
@@ -358,6 +272,92 @@ module.exports = (agenda, jobData) => {
   return new Job(jobData);
 };
 
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+module.exports = require("opentok");
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _mongoose = __webpack_require__(2);
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+var _anotherMongooseStatemachine = __webpack_require__(73);
+
+var _anotherMongooseStatemachine2 = _interopRequireDefault(_anotherMongooseStatemachine);
+
+var _moment = __webpack_require__(8);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FlagSchema = new _mongoose.Schema({
+  user: { type: String },
+  reason: { type: String }
+});
+
+var JourneySpaceSchema = new _mongoose.Schema({
+  room: { type: String, index: true },
+  name: { type: String, index: true },
+  image: { type: String },
+  sessionId: { type: String, index: true },
+  journey: { type: String, default: '/journeys/Journey to A Spiderweb+Music.mp3' },
+  startAt: { type: Date, default: function _default() {
+      return (0, _moment2.default)().add(10, 'minutes').toDate();
+    } },
+  flags: { type: [FlagSchema], default: [] }
+}, {
+  timestamps: true
+});
+
+JourneySpaceSchema.plugin(_anotherMongooseStatemachine2.default, {
+  states: {
+    created: { default: true },
+    started: {},
+    completed: {},
+    expired: {}
+  },
+  transitions: {
+    start: { from: 'created', to: 'started' },
+    end: { from: '*', to: 'completed' },
+    expire: { from: '*', to: 'expired' }
+  }
+});
+
+var JourneySpace = _mongoose2.default.model('JourneySpace', JourneySpaceSchema);
+
+exports.default = JourneySpace;
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+module.exports = require("isomorphic-fetch");
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router");
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+module.exports = require("prop-types");
 
 /***/ }),
 /* 22 */
@@ -386,13 +386,2144 @@ dotenv.config();
 global.__CLIENT__ = false;
 global.__SERVER__ = true;
 
-var routes = __webpack_require__(25);
-__webpack_require__(53);
+var extendRequire = __webpack_require__(25);
 
-exports = routes;
+__webpack_require__(26);
+
+extendRequire().then(function () {
+    __webpack_require__(75);
+}).catch(function (err) {
+    console.log(err);
+});
 
 /***/ }),
 /* 25 */
+/***/ (function(module, exports) {
+
+module.exports = require("isomorphic-loader/lib/extend-require");
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _fs = __webpack_require__(13);
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _path = __webpack_require__(6);
+
+var _path2 = _interopRequireDefault(_path);
+
+var _Agenda = __webpack_require__(27);
+
+var _Agenda2 = _interopRequireDefault(_Agenda);
+
+var _lodash = __webpack_require__(72);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _opentok = __webpack_require__(17);
+
+var _opentok2 = _interopRequireDefault(_opentok);
+
+var _moment = __webpack_require__(8);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _mongoose = __webpack_require__(2);
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+var _journey_space = __webpack_require__(18);
+
+var _journey_space2 = _interopRequireDefault(_journey_space);
+
+var _journey_content = __webpack_require__(74);
+
+var _journey_content2 = _interopRequireDefault(_journey_content);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+var agenda = new _Agenda2.default({ db: { address: process.env.MONGODB_URI || process.env.MONGO_URL } });
+var opentok = new _opentok2.default(process.env.OPENTOK_KEY, process.env.OPENTOK_SECRET);
+var db = _mongoose2.default.connection;
+
+agenda.define('create journey space', function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(job, done) {
+    var randomJourney, journeySpace, globalSpace, response;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            _context.next = 3;
+            return db.collection('journeycontents').aggregate([{ $sample: { size: 1 } }]).toArray();
+
+          case 3:
+            randomJourney = _context.sent[0];
+            journeySpace = new _journey_space2.default({
+              journey: randomJourney.filePath,
+              name: randomJourney.name,
+              image: randomJourney.image,
+              room: randomJourney.name.toLowerCase().replace(/[^a-z]/ig, '-') + '-' + new Date().getTime(),
+              startAt: (0, _moment2.default)().add(10, 'minutes').toDate()
+            });
+            _context.next = 7;
+            return journeySpace.save();
+
+          case 7:
+            _context.next = 9;
+            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
+
+          case 9:
+            globalSpace = _context.sent;
+
+            if (globalSpace) {
+              response = journeySpace.toJSON();
+
+              response.rsvps = [];
+              opentok.signal(globalSpace.sessionId, null, { 'type': 'createdNewJourney', 'data': JSON.stringify(response) }, done);
+            } else {
+              done();
+            }
+            _context.next = 17;
+            break;
+
+          case 13:
+            _context.prev = 13;
+            _context.t0 = _context['catch'](0);
+
+            console.log(_context.t0);
+            done(_context.t0);
+
+          case 17:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this, [[0, 13]]);
+  }));
+
+  return function (_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}());
+
+agenda.define('clear expired journeys', function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(job, done) {
+    var expiredJourneys, globalSpace, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, journey;
+
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return _journey_space2.default.find({ state: 'created', startAt: { $lt: (0, _moment2.default)().subtract(1, 'minutes') } }).exec();
+
+          case 3:
+            expiredJourneys = _context2.sent;
+            _context2.next = 6;
+            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
+
+          case 6:
+            globalSpace = _context2.sent;
+            _iteratorNormalCompletion = true;
+            _didIteratorError = false;
+            _iteratorError = undefined;
+            _context2.prev = 10;
+            _iterator = expiredJourneys[Symbol.iterator]();
+
+          case 12:
+            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+              _context2.next = 20;
+              break;
+            }
+
+            journey = _step.value;
+            _context2.next = 16;
+            return journey.expire();
+
+          case 16:
+            if (globalSpace) {
+              opentok.signal(globalSpace.sessionId, null, { 'type': 'expiredJourney', 'data': JSON.stringify(journey) }, function () {});
+            }
+
+          case 17:
+            _iteratorNormalCompletion = true;
+            _context2.next = 12;
+            break;
+
+          case 20:
+            _context2.next = 26;
+            break;
+
+          case 22:
+            _context2.prev = 22;
+            _context2.t0 = _context2['catch'](10);
+            _didIteratorError = true;
+            _iteratorError = _context2.t0;
+
+          case 26:
+            _context2.prev = 26;
+            _context2.prev = 27;
+
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+
+          case 29:
+            _context2.prev = 29;
+
+            if (!_didIteratorError) {
+              _context2.next = 32;
+              break;
+            }
+
+            throw _iteratorError;
+
+          case 32:
+            return _context2.finish(29);
+
+          case 33:
+            return _context2.finish(26);
+
+          case 34:
+            done();
+            _context2.next = 41;
+            break;
+
+          case 37:
+            _context2.prev = 37;
+            _context2.t1 = _context2['catch'](0);
+
+            console.log(_context2.t1);
+            done(_context2.t1);
+
+          case 41:
+          case 'end':
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this, [[0, 37], [10, 22, 26, 34], [27,, 29, 33]]);
+  }));
+
+  return function (_x3, _x4) {
+    return _ref2.apply(this, arguments);
+  };
+}());
+
+agenda.on('ready', function () {
+  agenda.every('1 minute', 'create journey space');
+  agenda.every('1 minute', 'clear expired journeys');
+
+  agenda.start();
+});
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Agenda = __webpack_require__(28);
+
+module.exports = Agenda;
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * General Notes:
+ * - Refactor remaining deprecated MongoDB Native Driver methods: findAndModify()
+ */
+
+const Emitter = __webpack_require__(29).EventEmitter;
+const humanInterval = __webpack_require__(7);
+
+class Agenda extends Emitter {
+  constructor(config, cb) {
+    super();
+
+    if (!(this instanceof Agenda)) {
+      return new Agenda(config);
+    }
+
+    config = config || {};
+
+    this._name = config.name;
+    this._processEvery = humanInterval(config.processEvery) || humanInterval('5 seconds');
+    this._defaultConcurrency = config.defaultConcurrency || 5;
+    this._maxConcurrency = config.maxConcurrency || 20;
+    this._defaultLockLimit = config.defaultLockLimit || 0;
+    this._lockLimit = config.lockLimit || 0;
+    this._definitions = {};
+    this._runningJobs = [];
+    this._lockedJobs = [];
+    this._jobQueue = [];
+    this._defaultLockLifetime = config.defaultLockLifetime || 10 * 60 * 1000; // 10 minute default lockLifetime
+    this._sort = config.sort || {nextRunAt: 1, priority: -1};
+    this._indices = Object.assign({name: 1}, this._sort, {priority: -1, lockedAt: 1, nextRunAt: 1, disabled: 1});
+
+    this._isLockingOnTheFly = false;
+    this._jobsToLock = [];
+    if (config.mongo) {
+      this.mongo(config.mongo, config.db ? config.db.collection : undefined, cb);
+    } else if (config.db) {
+      this.database(config.db.address, config.db.collection, config.db.options, cb);
+    }
+  }
+}
+
+Agenda.prototype.mongo = __webpack_require__(30);
+Agenda.prototype.database = __webpack_require__(31);
+Agenda.prototype.db_init = __webpack_require__(33); // eslint-disable-line camelcase
+Agenda.prototype.name = __webpack_require__(34);
+Agenda.prototype.processEvery = __webpack_require__(35);
+Agenda.prototype.maxConcurrency = __webpack_require__(36);
+Agenda.prototype.defaultConcurrency = __webpack_require__(37);
+Agenda.prototype.lockLimit = __webpack_require__(38);
+Agenda.prototype.defaultLockLimit = __webpack_require__(39);
+Agenda.prototype.defaultLockLifetime = __webpack_require__(40);
+Agenda.prototype.sort = __webpack_require__(41);
+Agenda.prototype.create = __webpack_require__(42);
+Agenda.prototype.jobs = __webpack_require__(60);
+Agenda.prototype.purge = __webpack_require__(62);
+Agenda.prototype.define = __webpack_require__(63);
+Agenda.prototype.every = __webpack_require__(64);
+Agenda.prototype.schedule = __webpack_require__(65);
+Agenda.prototype.now = __webpack_require__(66);
+Agenda.prototype.cancel = __webpack_require__(67);
+Agenda.prototype.saveJob = __webpack_require__(68);
+Agenda.prototype.start = __webpack_require__(69);
+Agenda.prototype.stop = __webpack_require__(70);
+Agenda.prototype._findAndLockNextJob = __webpack_require__(71);
+
+module.exports = Agenda;
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports) {
+
+module.exports = require("events");
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Build method used to add MongoDB connection details
+ * @param {MongoClient} mdb instance of MongoClient to use
+ * @param {String} collection name collection we want to use ('agendaJobs')
+ * @param {Function} cb called when MongoDB connection fails or passes
+ * @returns {exports} instance of Agenda
+ */
+module.exports = function(mdb, collection, cb) {
+  this._mdb = mdb;
+  this.db_init(collection, cb);
+  return this;
+};
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const MongoClient = __webpack_require__(32).MongoClient;
+const debug = __webpack_require__(0)('agenda:database');
+
+/**
+ * Connect to the spec'd MongoDB server and database.
+ * @param {String} url MongoDB server URI
+ * @param {String} collection name of collection to use
+ * @param {Object} options options for connecting
+ * @param {Function} cb callback of MongoDB connection
+ * @returns {exports}
+ * NOTE:
+ * If `url` includes auth details then `options` must specify: { 'uri_decode_auth': true }. This does Auth on
+ * the specified database, not the Admin database. If you are using Auth on the Admin DB and not on the Agenda DB,
+ * then you need to authenticate against the Admin DB and then pass the MongoDB instance into the constructor
+ * or use Agenda.mongo(). If your app already has a MongoDB connection then use that. ie. specify config.mongo in
+ * the constructor or use Agenda.mongo().
+ */
+module.exports = function(url, collection, options, cb) {
+  const self = this;
+  if (!url.match(/^mongodb:\/\/.*/)) {
+    url = 'mongodb://' + url;
+  }
+
+  collection = collection || 'agendaJobs';
+  options = Object.assign({autoReconnect: true, reconnectTries: Number.MAX_SAFE_INTEGER, reconnectInterval: this._processEvery}, options);
+  MongoClient.connect(url, options, (error, db) => {
+    if (error) {
+      debug('error connecting to MongoDB using collection: [%s]', collection);
+      if (cb) {
+        cb(error, null);
+      } else {
+        throw error;
+      }
+      return;
+    }
+    debug('successful connection to MongoDB using collection: [%s]', collection);
+    self._mdb = db;
+    self.db_init(collection, cb);
+  });
+  return this;
+};
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports) {
+
+module.exports = require("mongodb");
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:db_init');
+
+/**
+ * Internal method called in the case where new indices have an error during creation
+ * @param {Error} err error returned from index creation from before
+ * @param {*} result result passed in from earlier attempt of creating index
+ * @param {Agenda} self instance of Agenda
+ * @param {Function} cb called when indices fail or pass
+ * @returns {undefined}
+ */
+const handleLegacyCreateIndex = (err, result, self, cb) => {
+  if (err && err.message !== 'no such cmd: createIndex') {
+    debug('not attempting legacy index, emitting error');
+    self.emit('error', err);
+  } else {
+    // Looks like a mongo.version < 2.4.x
+    err = null;
+    self._collection.ensureIndex(self._indices, {
+      name: 'findAndLockNextJobIndex'
+    });
+    self.emit('ready');
+  }
+  if (cb) {
+    cb(err, self._collection);
+  }
+};
+
+/**
+ * Setup and initialize the collection used to manage Jobs.
+ * @param {String} collection name or undefined for default 'agendaJobs'
+ * @param {Function} cb called when the db is initialized
+ * @returns {undefined}
+ */
+module.exports = function(collection, cb) {
+  const self = this;
+  debug('init database collection using name [%s]', collection);
+  this._collection = this._mdb.collection(collection || 'agendaJobs');
+  debug('attempting index creation');
+  this._collection.createIndex(this._indices, {
+    name: 'findAndLockNextJobIndex'
+  }, (err, result) => {
+    if (err) {
+      debug('index creation failed, attempting legacy index creation next');
+    } else {
+      debug('index creation success');
+    }
+    handleLegacyCreateIndex(err, result, self, cb);
+  });
+};
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:name');
+
+/**
+ * Set name of queue
+ * @param {String} name name of agenda instance
+ * @returns {exports} agenda instance
+ */
+module.exports = function(name) {
+  debug('Agenda.name(%s)', name);
+  this._name = name;
+  return this;
+};
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const humanInterval = __webpack_require__(7);
+const debug = __webpack_require__(0)('agenda:processEvery');
+
+/**
+ * Set the default process interval
+ * @param {Number} time time to process
+ * @returns {exports} agenda instance
+ */
+module.exports = function(time) {
+  debug('Agenda.processEvery(%d)', time);
+  this._processEvery = humanInterval(time);
+  return this;
+};
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:maxConcurrency');
+
+/**
+ * Set the concurrency for jobs (globally), type does not matter
+ * @param {Number} num max concurrency value
+ * @returns {exports} agenda instance
+ */
+module.exports = function(num) {
+  debug('Agenda.maxConcurrency(%d)', num);
+  this._maxConcurrency = num;
+  return this;
+};
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:defaultConcurrency');
+
+/**
+ * Set the default concurrency for each job
+ * @param {Number} num default concurrency
+ * @returns {exports} agenda instance
+ */
+module.exports = function(num) {
+  debug('Agenda.defaultConcurrency(%d)', num);
+  this._defaultConcurrency = num;
+  return this;
+};
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:locklimit');
+
+/**
+ * Set the default amount jobs that are allowed to be locked at one time (GLOBAL)
+ * NOTE: Is this different than max concurrency?
+ * @param {Number} num Lock limit
+ * @returns {exports} agenda instance
+ */
+module.exports = function(num) {
+  debug('Agenda.lockLimit(%d)', num);
+  this._lockLimit = num;
+  return this;
+};
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:defaultLockLimit');
+
+/**
+ * Set default lock limit per job type
+ * @param {Number} num Lock limit per job
+ * @returns {exports} agenda instance
+ */
+module.exports = function(num) {
+  debug('Agenda.defaultLockLimit(%d)', num);
+  this._defaultLockLimit = num;
+  return this;
+};
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:defaultLockLifetime');
+
+/**
+ * Set the default lock time (in ms)
+ * Default is 10 * 60 * 1000 ms (10 minutes)
+ * @param {Number} ms time in ms to set default lock
+ * @returns {exports} agenda instance
+ */
+module.exports = function(ms) {
+  debug('Agenda.defaultLockLifetime(%d)', ms);
+  this._defaultLockLifetime = ms;
+  return this;
+};
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:sort');
+
+/**
+ * Set the sort query for finding next job
+ * Default is { nextRunAt: 1, priority: -1 }
+ * @param {Object} query sort query object for MongoDB
+ * @returns {exports} agenda instance
+ */
+module.exports = function(query) {
+  debug('Agenda.sort([Object])');
+  this._sort = query;
+  return this;
+};
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:create');
+const Job = __webpack_require__(14);
+
+/**
+ * Given a name and some data, create a new job
+ * @param {String} name name of job
+ * @param {Object} data data to set for job
+ * @access protected
+ * @returns {module.Job} instance of new job
+ */
+module.exports = function(name, data) {
+  debug('Agenda.create(%s, [Object])', name);
+  const priority = this._definitions[name] ? this._definitions[name].priority : 0;
+  const job = new Job({name, data, type: 'normal', priority, agenda: this});
+  return job;
+};
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Given a job, turn it into an object we can store in Mongo
+ * @returns {Object} json object from Job
+ */
+module.exports = function() {
+  const self = this;
+  const attrs = self.attrs || {};
+  const result = {};
+
+  for (const prop in attrs) {
+    if ({}.hasOwnProperty.call(attrs, prop)) {
+      result[prop] = attrs[prop];
+    }
+  }
+
+  const dates = ['lastRunAt', 'lastFinishedAt', 'nextRunAt', 'failedAt', 'lockedAt'];
+  dates.forEach(d => {
+    if (result[d]) {
+      result[d] = new Date(result[d]);
+    }
+  });
+
+  return result;
+};
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const humanInterval = __webpack_require__(7);
+const CronTime = __webpack_require__(45).CronTime;
+const moment = __webpack_require__(46);
+const date = __webpack_require__(15);
+const debug = __webpack_require__(0)('agenda:job');
+
+/**
+ * Internal method used to compute next time a job should run and sets the proper values
+ * @returns {exports} instance of Job instance
+ */
+module.exports = function() {
+  const interval = this.attrs.repeatInterval;
+  const timezone = this.attrs.repeatTimezone;
+  const repeatAt = this.attrs.repeatAt;
+  this.attrs.nextRunAt = undefined;
+
+  const dateForTimezone = date => {
+    date = moment(date);
+    if (timezone !== null) {
+      date.tz(timezone);
+    }
+    return date;
+  };
+
+  /**
+   * Internal method that computes the interval
+   * @returns {undefined}
+   */
+  const computeFromInterval = () => {
+    debug('[%s:%s] computing next run via interval [%s]', this.attrs.name, this.attrs._id, interval);
+    let lastRun = this.attrs.lastRunAt || new Date();
+    lastRun = dateForTimezone(lastRun);
+    try {
+      const cronTime = new CronTime(interval);
+      let nextDate = cronTime._getNextDateFrom(lastRun);
+      if (nextDate.valueOf() === lastRun.valueOf()) {
+        // Handle cronTime giving back the same date for the next run time
+        nextDate = cronTime._getNextDateFrom(dateForTimezone(new Date(lastRun.valueOf() + 1000)));
+      }
+      this.attrs.nextRunAt = nextDate;
+      debug('[%s:%s] nextRunAt set to [%s]', this.attrs.name, this.attrs._id, this.attrs.nextRunAt.toISOString());
+    } catch (e) {
+      // Nope, humanInterval then!
+      try {
+        if (!this.attrs.lastRunAt && humanInterval(interval)) {
+          this.attrs.nextRunAt = lastRun.valueOf();
+          debug('[%s:%s] nextRunAt set to [%s]', this.attrs.name, this.attrs._id, this.attrs.nextRunAt.toISOString());
+        } else {
+          this.attrs.nextRunAt = lastRun.valueOf() + humanInterval(interval);
+          debug('[%s:%s] nextRunAt set to [%s]', this.attrs.name, this.attrs._id, this.attrs.nextRunAt.toISOString());
+        }
+      } catch (e) {}
+    } finally {
+      if (isNaN(this.attrs.nextRunAt)) {
+        this.attrs.nextRunAt = undefined;
+        debug('[%s:%s] failed to calculate nextRunAt due to invalid repeat interval', this.attrs.name, this.attrs._id);
+        this.fail('failed to calculate nextRunAt due to invalid repeat interval');
+      }
+    }
+  };
+
+  /**
+   * Internal method to compute next run time from the repeat string
+   * @returns {undefined}
+   */
+  function computeFromRepeatAt() {
+    const lastRun = this.attrs.lastRunAt || new Date();
+    const nextDate = date(repeatAt).valueOf();
+
+    // If you do not specify offset date for below test it will fail for ms
+    const offset = Date.now();
+    if (offset === date(repeatAt, offset).valueOf()) {
+      this.attrs.nextRunAt = undefined;
+      debug('[%s:%s] failed to calculate repeatAt due to invalid format', this.attrs.name, this.attrs._id);
+      this.fail('failed to calculate repeatAt time due to invalid format');
+    } else if (nextDate.valueOf() === lastRun.valueOf()) {
+      this.attrs.nextRunAt = date('tomorrow at ', repeatAt);
+      debug('[%s:%s] nextRunAt set to [%s]', this.attrs.name, this.attrs._id, this.attrs.nextRunAt.toISOString());
+    } else {
+      this.attrs.nextRunAt = date(repeatAt);
+      debug('[%s:%s] nextRunAt set to [%s]', this.attrs.name, this.attrs._id, this.attrs.nextRunAt.toISOString());
+    }
+  }
+
+  if (interval) {
+    computeFromInterval.call(this);
+  } else if (repeatAt) {
+    computeFromRepeatAt.call(this);
+  }
+  return this;
+};
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports) {
+
+module.exports = require("cron");
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
+
+module.exports = require("moment-timezone");
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Sets a job to repeat every X amount of time
+ * @param {String} interval repeat every X
+ * @param {Object} options options to use for job
+ * @returns {exports} instance of Job
+ */
+module.exports = function(interval, options) {
+  options = options || {};
+  this.attrs.repeatInterval = interval;
+  this.attrs.repeatTimezone = options.timezone ? options.timezone : null;
+  return this;
+};
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Sets a job to repeat at a specific time
+ * @param {String} time time to repeat job at (human readable or number)
+ * @returns {exports} instance of Job
+ */
+module.exports = function(time) {
+  this.attrs.repeatAt = time;
+  return this;
+};
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Prevents the job type from running
+ * @returns {exports} instance of Job
+ */
+module.exports = function() {
+  this.attrs.disabled = true;
+  return this;
+};
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Allows job type to run
+ * @returns {exports} instance of Job
+ */
+module.exports = function() {
+  this.attrs.disabled = false;
+  return this;
+};
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Data to ensure is unique for job to be created
+ * @param {Object} unique mongo data query for unique
+ * @param {Object} opts unique options
+ * @returns {exports} instance of Job
+ */
+module.exports = function(unique, opts) {
+  this.attrs.unique = unique;
+  this.attrs.uniqueOpts = opts;
+  return this;
+};
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const date = __webpack_require__(15);
+
+/**
+ * Schedules a job to run at specified time
+ * @param {String} time schedule a job to run "then"
+ * @returns {exports} instance of Job
+ */
+module.exports = function(time) {
+  this.attrs.nextRunAt = (time instanceof Date) ? time : date(time);
+  return this;
+};
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Internal method to turn priority into a number
+ * @param {String|Number} priority string to parse into number
+ * @returns {Number} priority that was parsed
+ */
+const parsePriority = priority => {
+  const priorityMap = {
+    lowest: -20,
+    low: -10,
+    normal: 0,
+    high: 10,
+    highest: 20
+  };
+  if (typeof priority === 'number' || priority instanceof Number) {
+    return priority;
+  }
+  return priorityMap[priority];
+};
+
+/**
+ * Sets priority of the job
+ * @param {String} priority priority of when job should be queued
+ * @returns {exports} instance of Job
+ */
+module.exports = function(priority) {
+  this.attrs.priority = parsePriority(priority);
+  return this;
+};
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:job');
+
+/**
+ * Fails the job with a reason (error) specified
+ * @param {Error|String} reason reason job failed
+ * @returns {exports} instance of Job
+ */
+module.exports = function(reason) {
+  if (reason instanceof Error) {
+    reason = reason.message;
+  }
+  this.attrs.failReason = reason;
+  this.attrs.failCount = (this.attrs.failCount || 0) + 1;
+  const now = new Date();
+  this.attrs.failedAt = now;
+  this.attrs.lastFinishedAt = now;
+  debug('[%s:%s] fail() called [%d] times so far', this.attrs.name, this.attrs._id, this.attrs.failCount);
+  return this;
+};
+
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:job');
+
+/**
+ * Internal method (RUN)
+ * @param {Function} cb called when job persistence in MongoDB fails or passes
+ * @returns {undefined}
+ */
+module.exports = function(cb) {
+  const self = this;
+  const agenda = self.agenda;
+  const definition = agenda._definitions[self.attrs.name];
+
+  setImmediate(() => {
+    self.attrs.lastRunAt = new Date();
+    debug('[%s:%s] setting lastRunAt to: %s', self.attrs.name, self.attrs._id, self.attrs.lastRunAt.toISOString());
+    self.computeNextRunAt();
+    self.save(() => {
+      const jobCallback = function(err) {
+        if (err) {
+          self.fail(err);
+        }
+
+        if (!err) {
+          self.attrs.lastFinishedAt = new Date();
+        }
+        self.attrs.lockedAt = null;
+        debug('[%s:%s] job finished at [%s] and was unlocked', self.attrs.name, self.attrs._id, self.attrs.lastFinishedAt);
+
+        self.save((saveErr, job) => {
+          cb && cb(err || saveErr, job);  // eslint-disable-line no-unused-expressions
+          if (err) {
+            agenda.emit('fail', err, self);
+            agenda.emit('fail:' + self.attrs.name, err, self);
+            debug('[%s:%s] failed to be saved to MongoDB', self.attrs.name, self.attrs._id);
+          } else {
+            agenda.emit('success', self);
+            agenda.emit('success:' + self.attrs.name, self);
+            debug('[%s:%s] was saved successfully to MongoDB', self.attrs.name, self.attrs._id);
+          }
+          agenda.emit('complete', self);
+          agenda.emit('complete:' + self.attrs.name, self);
+          debug('[%s:%s] job has finished', self.attrs.name, self.attrs._id);
+        });
+      };
+
+      try {
+        agenda.emit('start', self);
+        agenda.emit('start:' + self.attrs.name, self);
+        debug('[%s:%s] starting job', self.attrs.name, self.attrs._id);
+        if (!definition) {
+          debug('[%s:%s] has no definition, can not run', self.attrs.name, self.attrs._id);
+          throw new Error('Undefined job');
+        }
+        if (definition.fn.length === 2) {
+          debug('[%s:%s] process function being called', self.attrs.name, self.attrs._id);
+          definition.fn(self, jobCallback);
+        } else {
+          debug('[%s:%s] process function being called', self.attrs.name, self.attrs._id);
+          definition.fn(self);
+          jobCallback();
+        }
+      } catch (err) {
+        debug('[%s:%s] unknown error occurred', self.attrs.name, self.attrs._id);
+        jobCallback(err);
+      }
+    });
+  });
+};
+
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * A job is running if:
+ * (lastRunAt exists AND lastFinishedAt does not exist)
+ * OR
+ * (lastRunAt exists AND lastFinishedAt exists but the lastRunAt is newer [in time] than lastFinishedAt)
+ * @returns {boolean} whether or not job is running at the moment (true for running)
+ */
+module.exports = function() {
+  if (!this.attrs.lastRunAt) {
+    return false;
+  }
+  if (!this.attrs.lastFinishedAt) {
+    return true;
+  }
+  if (this.attrs.lockedAt && this.attrs.lastRunAt.getTime() > this.attrs.lastFinishedAt.getTime()) {
+    return true;
+  }
+  return false;
+};
+
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Saves a job into the MongoDB
+ * @param {Function} cb called after job is saved or errors
+ * @returns {exports} instance of Job
+ */
+module.exports = function(cb) {
+  this.agenda.saveJob(this, cb);
+  return this;
+};
+
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Remove the job from MongoDB
+ * @param {Function} cb called when job removal fails or passes
+ * @returns {undefined}
+ */
+module.exports = function(cb) {
+  this.agenda.cancel({_id: this.attrs._id}, cb);
+};
+
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Updates "lockedAt" time so the job does not get picked up again
+ * @param {Function} cb called when job "touch" fails or passes
+ * @returns {undefined}
+ */
+module.exports = function(cb) {
+  this.attrs.lockedAt = new Date();
+  this.save(cb);
+};
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const utils = __webpack_require__(4);
+
+const createJob = utils.createJob;
+
+/**
+ * Finds all jobs matching 'query'
+ * @param {Object} query object for MongoDB
+ * @param {Function} cb called when fails or passes
+ * @returns {undefined}
+ */
+module.exports = function(query, cb) {
+  const self = this;
+  this._collection.find(query).toArray((error, result) => {
+    let jobs;
+    if (!error) {
+      jobs = result.map(createJob.bind(null, self));
+    }
+    cb(error, jobs);
+  });
+};
+
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// @TODO: What should we use for internal util functions?
+//        Maybe we should use agenda:util:processJobs which would move agenda:* to agenda:agenda;*
+const debug = __webpack_require__(0)('agenda:internal:processJobs');
+const createJob = __webpack_require__(16);
+
+/**
+ * Process methods for jobs
+ * @param {module.Job} extraJob job to run immediately
+ * @returns {undefined}
+ */
+module.exports = function(extraJob) {
+  debug('starting to process jobs');
+  // Make sure an interval has actually been set
+  // Prevents race condition with 'Agenda.stop' and already scheduled run
+  if (!this._processInterval) {
+    debug('no _processInterval set when calling processJobs, returning');
+    return;
+  }
+
+  const self = this;
+  const definitions = this._definitions;
+  const jobQueue = this._jobQueue;
+  let jobName;
+
+  // Determine whether or not we have a direct process call!
+  if (!extraJob) {
+    // Go through each jobName set in 'Agenda.process' and fill the queue with the next jobs
+    for (jobName in definitions) {
+      if ({}.hasOwnProperty.call(definitions, jobName)) {
+        debug('queuing up job to process: [%s]', jobName);
+        jobQueueFilling(jobName);
+      }
+    }
+  } else if (definitions[extraJob.attrs.name]) {
+    // Add the job to list of jobs to lock and then lock it immediately!
+    debug('job [%s] was passed directly to processJobs(), locking and running immediately', extraJob.attrs.name);
+    self._jobsToLock.push(extraJob);
+    lockOnTheFly();
+  }
+
+  /**
+   * Returns true if a job of the specified name can be locked.
+   * Considers maximum locked jobs at any time if self._lockLimit is > 0
+   * Considers maximum locked jobs of the specified name at any time if jobDefinition.lockLimit is > 0
+   * @param {String} name name of job to check if we should lock or not
+   * @returns {boolean} whether or not you should lock job
+   */
+  function shouldLock(name) {
+    const jobDefinition = definitions[name];
+    let shouldLock = true;
+    if (self._lockLimit && self._lockLimit <= self._lockedJobs.length) {
+      shouldLock = false;
+    }
+    if (jobDefinition.lockLimit && jobDefinition.lockLimit <= jobDefinition.locked) {
+      shouldLock = false;
+    }
+    debug('job [%s] lock status: shouldLock = %s', name, shouldLock);
+    return shouldLock;
+  }
+
+  /**
+   * Internal method that adds jobs to be processed to the local queue
+   * @param {*} jobs Jobs to queue
+   * @param {boolean} inFront puts the job in front of queue if true
+   * @returns {undefined}
+   */
+  function enqueueJobs(jobs, inFront) {
+    if (!Array.isArray(jobs)) {
+      jobs = [jobs];
+    }
+
+    jobs.forEach(job => {
+      let jobIndex;
+      let start;
+      let loopCondition;
+      let endCondition;
+      let inc;
+
+      if (inFront) {
+        start = jobQueue.length ? jobQueue.length - 1 : 0;
+        inc = -1;
+        loopCondition = function() {
+          return jobIndex >= 0;
+        };
+        endCondition = function(queuedJob) {
+          return !queuedJob || queuedJob.attrs.priority < job.attrs.priority;
+        };
+      } else {
+        start = 0;
+        inc = 1;
+        loopCondition = function() {
+          return jobIndex < jobQueue.length;
+        };
+        endCondition = function(queuedJob) {
+          return queuedJob.attrs.priority >= job.attrs.priority;
+        };
+      }
+
+      for (jobIndex = start; loopCondition(); jobIndex += inc) {
+        if (endCondition(jobQueue[jobIndex])) {
+          break;
+        }
+      }
+
+      // Insert the job to the queue at its prioritized position for processing
+      jobQueue.splice(jobIndex, 0, job);
+    });
+  }
+
+  /**
+   * Internal method that will lock a job and store it on MongoDB
+   * This method is called when we immediately start to process a job without using the process interval
+   * We do this because sometimes jobs are scheduled but will be run before the next process time
+   * @returns {undefined}
+   */
+  function lockOnTheFly() {
+    // Already running this? Return
+    if (self._isLockingOnTheFly) {
+      debug('lockOnTheFly() already running, returning');
+      return;
+    }
+
+    // Don't have any jobs to run? Return
+    if (self._jobsToLock.length === 0) {
+      debug('no jobs to current lock on the fly, returning');
+      self._isLockingOnTheFly = false;
+      return;
+    }
+
+    // Set that we are running this
+    self._isLockingOnTheFly = true;
+
+    // Grab a job that needs to be locked
+    const now = new Date();
+    const job = self._jobsToLock.pop();
+
+    // If locking limits have been hit, stop locking on the fly.
+    // Jobs that were waiting to be locked will be picked up during a
+    // future locking interval.
+    if (!shouldLock(job.attrs.name)) {
+      debug('lock limit hit for: [%s]', job.attrs.name);
+      self._jobsToLock = [];
+      self._isLockingOnTheFly = false;
+      return;
+    }
+
+    // Query to run against collection to see if we need to lock it
+    const criteria = {
+      _id: job.attrs._id,
+      lockedAt: null,
+      nextRunAt: job.attrs.nextRunAt,
+      disabled: {$ne: true}
+    };
+
+    // Update / options for the MongoDB query
+    const update = {$set: {lockedAt: now}};
+    const options = {returnOriginal: false};
+
+    // Lock the job in MongoDB!
+    self._collection.findOneAndUpdate(criteria, update, options, (err, resp) => {
+      if (err) {
+        throw err;
+      }
+      // Did the "job" get locked? Create a job object and run
+      if (resp.value) {
+        const job = createJob(self, resp.value);
+        debug('found job [%s] that can be locked on the fly', job.attrs.name);
+        self._lockedJobs.push(job);
+        definitions[job.attrs.name].locked++;
+        enqueueJobs(job);
+        jobProcessing();
+      }
+
+      // Mark lock on fly is done for now
+      self._isLockingOnTheFly = false;
+
+      // Re-run in case anything is in the queue
+      lockOnTheFly();
+    });
+  }
+
+  /**
+   * Internal method used to fill a queue with jobs that can be run
+   * @param {String} name fill a queue with specific job name
+   * @returns {undefined}
+   */
+  function jobQueueFilling(name) {
+    // Don't lock because of a limit we have set (lockLimit, etc)
+    if (!shouldLock(name)) {
+      debug('lock limit reached in queue filling for [%s]', name);
+      return;
+    }
+
+    // Set the date of the next time we are going to run _processEvery function
+    const now = new Date();
+    self._nextScanAt = new Date(now.valueOf() + self._processEvery);
+
+    // For this job name, find the next job to run and lock it!
+    self._findAndLockNextJob(name, definitions[name], (err, job) => {
+      if (err) {
+        debug('[%s] job lock failed while filling queue', name);
+        throw err;
+      }
+
+      // Still have the job?
+      // 1. Add it to lock list
+      // 2. Add count of locked jobs
+      // 3. Queue the job to actually be run now that it is locked
+      // 4. Recursively run this same method we are in to check for more available jobs of same type!
+      if (job) {
+        debug('[%s:%s] job locked while filling queue', name, job.attrs._id);
+        self._lockedJobs.push(job);
+        definitions[job.attrs.name].locked++;
+        enqueueJobs(job);
+        jobQueueFilling(name);
+        jobProcessing();
+      }
+    });
+  }
+
+  /**
+   * Internal method that processes any jobs in the local queue (array)
+   * @returns {undefined}
+   */
+  function jobProcessing() {
+    // Ensure we have jobs
+    if (jobQueue.length === 0) {
+      return;
+    }
+
+    // Store for all sorts of things
+    const now = new Date();
+
+    // Get the next job that is not blocked by concurrency
+    let next;
+    for (next = jobQueue.length - 1; next > 0; next -= 1) {
+      const def = definitions[jobQueue[next].attrs.name];
+      if (def.concurrency > def.running) {
+        break;
+      }
+    }
+
+    // We now have the job we are going to process and its definition
+    const job = jobQueue.splice(next, 1)[0];
+    const jobDefinition = definitions[job.attrs.name];
+
+    debug('[%s:%s] about to process job', job.attrs.name, job.attrs._id);
+
+    // If the 'nextRunAt' time is older than the current time, run the job
+    // Otherwise, setTimeout that gets called at the time of 'nextRunAt'
+    if (job.attrs.nextRunAt < now) {
+      debug('[%s:%s] nextRunAt is in the past, run the job immediately', job.attrs.name, job.attrs._id);
+      runOrRetry();
+    } else {
+      const runIn = job.attrs.nextRunAt - now;
+      debug('[%s:%s] nextRunAt is in the future, calling setTimeout(%d)', job.attrs.name, job.attrs._id, runIn);
+      setTimeout(runOrRetry, runIn);
+    }
+
+    /**
+     * Internal method that tries to run a job and if it fails, retries again!
+     * @returns {undefined}
+     */
+    function runOrRetry() {
+      if (self._processInterval) {
+        if (jobDefinition.concurrency > jobDefinition.running && self._runningJobs.length < self._maxConcurrency) {
+          // Get the deadline of when the job is not supposed to go past for locking
+          const lockDeadline = new Date(Date.now() - jobDefinition.lockLifetime);
+
+          // This means a job has "expired", as in it has not been "touched" within the lockoutTime
+          // Remove from local lock
+          // NOTE: Shouldn't we update the 'lockedAt' value in MongoDB so it can be picked up on restart?
+          if (job.attrs.lockedAt < lockDeadline) {
+            debug('[%s:%s] job lock has expired, freeing it up', job.attrs.name, job.attrs._id);
+            self._lockedJobs.splice(self._lockedJobs.indexOf(job), 1);
+            jobDefinition.locked--;
+            jobProcessing();
+            return;
+          }
+
+          // Add to local "running" queue
+          self._runningJobs.push(job);
+          jobDefinition.running++;
+
+          // CALL THE ACTUAL METHOD TO PROCESS THE JOB!!!
+          debug('[%s:%s] processing job', job.attrs.name, job.attrs._id);
+          job.run(processJobResult);
+
+          // Re-run the loop to check for more jobs to process (locally)
+          jobProcessing();
+        } else {
+          // Run the job immediately by putting it on the top of the queue
+          debug('[%s:%s] concurrency preventing immediate run, pushing job to top of queue', job.attrs.name, job.attrs._id);
+          enqueueJobs(job, true);
+        }
+      }
+    }
+  }
+
+  /**
+   * Internal method used to run the job definition
+   * @param {Error} err thrown if can't process job
+   * @param {module.Job} job job to process
+   * @returns {undefined}
+   */
+  function processJobResult(err, job) {
+    if (err && !job) {
+      throw (err);
+    }
+    const name = job.attrs.name;
+
+    // Job isn't in running jobs so throw an error
+    if (self._runningJobs.indexOf(job) === -1) {
+      debug('[%s] callback was called, job must have been marked as complete already', job.attrs._id);
+      throw new Error('callback already called - job ' + name + ' already marked complete');
+    }
+
+    // Remove the job from the running queue
+    self._runningJobs.splice(self._runningJobs.indexOf(job), 1);
+    if (definitions[name].running > 0) {
+      definitions[name].running--;
+    }
+
+    // Remove the job from the locked queue
+    self._lockedJobs.splice(self._lockedJobs.indexOf(job), 1);
+    if (definitions[name].locked > 0) {
+      definitions[name].locked--;
+    }
+
+    // Re-process jobs now that one has finished
+    jobProcessing();
+  }
+};
+
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:purge');
+
+/**
+ * Removes all jobs from queue
+ * NOTE: Only use after defining your jobs
+ * @param {Function} cb called when fails or passes
+ * @returns {undefined}
+ */
+module.exports = function(cb) {
+  const definedNames = Object.keys(this._definitions);
+  debug('Agenda.purge(%o)');
+  this.cancel({name: {$not: {$in: definedNames}}}, cb);
+};
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:define');
+
+/**
+ * Setup definition for job
+ * Method is used by consumers of lib to setup their functions
+ * @param {String} name name of job
+ * @param {Object} options options for job to run
+ * @param {Function} processor function to be called to run actual job
+ * @returns {undefined}
+ */
+module.exports = function(name, options, processor) {
+  if (!processor) {
+    processor = options;
+    options = {};
+  }
+  this._definitions[name] = {
+    fn: processor,
+    concurrency: options.concurrency || this._defaultConcurrency,
+    lockLimit: options.lockLimit || this._defaultLockLimit,
+    priority: options.priority || 0,
+    lockLifetime: options.lockLifetime || this._defaultLockLifetime,
+    running: 0,
+    locked: 0
+  };
+  debug('job [%s] defined with following options: \n%O', name, this._definitions[name]);
+};
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:every');
+
+/**
+ * Creates a scheduled job with given interval and name/names of the job to run
+ * @param {Number} interval run every X interval
+ * @param {*} names String or strings of jobs to schedule
+ * @param {Object} data data to run for job
+ * @param {Object} options options to run job for
+ * @param {Function} cb called when schedule fails or passes
+ * @returns {*} Job or jobs created
+ */
+module.exports = function(interval, names, data, options, cb) {
+  const self = this;
+
+  if (cb === undefined && typeof data === 'function') {
+    cb = data;
+    data = undefined;
+  } else if (cb === undefined && typeof options === 'function') {
+    cb = options;
+    options = undefined;
+  }
+
+  /**
+   * Internal method to setup job that gets run every interval
+   * @param {Number} interval run every X interval
+   * @param {*} name String job to schedule
+   * @param {Object} data data to run for job
+   * @param {Object} options options to run job for
+   * @param {Function} cb called when schedule fails or passes
+   * @returns {module.Job} instance of job
+   */
+  const createJob = (interval, name, data, options, cb) => {
+    const job = self.create(name, data);
+    job.attrs.type = 'single';
+    job.repeatEvery(interval, options);
+    job.computeNextRunAt();
+    job.save(cb);
+    return job;
+  };
+
+  /**
+   * Internal helper method that uses createJob to create jobs for an array of names
+   * @param {Number} interval run every X interval
+   * @param {*} names Strings of jobs to schedule
+   * @param {Object} data data to run for job
+   * @param {Object} options options to run job for
+   * @param {Function} cb called when schedule fails or passes
+   * @returns {*} array of jobs created
+   */
+  const createJobs = (interval, names, data, options, cb) => {
+    const results = [];
+    let pending = names.length;
+    let errored = false;
+    return names.map((name, i) => {
+      return createJob(interval, name, data, options, (err, result) => {
+        if (err) {
+          if (!errored) {
+            cb(err);
+          }
+          errored = true;
+          return;
+        }
+        results[i] = result;
+        if (--pending === 0 && cb) {
+          debug('every() -> all jobs created successfully');
+          cb(null, results);
+        } else {
+          debug('every() -> error creating one or more of the jobs');
+        }
+      });
+    });
+  };
+
+  if (typeof names === 'string' || names instanceof String) {
+    debug('Agenda.every(%s, %O, [Object], %O, cb)', interval, names, options);
+    return createJob(interval, names, data, options, cb);
+  } else if (Array.isArray(names)) {
+    debug('Agenda.every(%s, %s, [Object], %O, cb)', interval, names, options);
+    return createJobs(interval, names, data, options, cb);
+  }
+};
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:schedule');
+
+/**
+ * Schedule a job or jobs at a specific time
+ * @param {String} when when the job gets run
+ * @param {*} names array of job names to run
+ * @param {Object} data data to send to job
+ * @param {Function} cb called when schedule fails or passes
+ * @returns {*} job or jobs created
+ */
+module.exports = function(when, names, data, cb) {
+  const self = this;
+
+  if (cb === undefined && typeof data === 'function') {
+    cb = data;
+    data = undefined;
+  }
+
+  /**
+   * Internal method that creates a job with given date
+   * @param {String} when when the job gets run
+   * @param {String} name of job to run
+   * @param {Object} data data to send to job
+   * @param {Function} cb called when job persistence in MongoDB fails or passes
+   * @returns {module.Job} instance of new job
+   */
+  const createJob = (when, name, data, cb) => {
+    const job = self.create(name, data);
+    job.schedule(when);
+    job.save(cb);
+    return job;
+  };
+
+  /**
+   * Internal helper method that calls createJob on a names array
+   * @param {String} when when the job gets run
+   * @param {*} names of jobs to run
+   * @param {Object} data data to send to job
+   * @param {Function} cb called when job(s) persistence in MongoDB fails or passes
+   * @returns {*} jobs that were created
+   */
+  const createJobs = (when, names, data, cb) => {
+    const results = [];
+    let pending = names.length;
+    let errored = false;
+    return names.map((name, i) => {
+      return createJob(when, name, data, (err, result) => {
+        if (err) {
+          if (!errored) {
+            cb(err);
+          }
+          errored = true;
+          return;
+        }
+        results[i] = result;
+        if (--pending === 0 && cb) {
+          debug('Agenda.schedule()::createJobs() -> all jobs created successfully');
+          cb(null, results);
+        } else {
+          debug('Agenda.schedule()::createJobs() -> error creating one or more of the jobs');
+        }
+      });
+    });
+  };
+
+  if (typeof names === 'string' || names instanceof String) {
+    debug('Agenda.schedule(%s, %O, [Object], cb)', when, names);
+    return createJob(when, names, data, cb);
+  } else if (Array.isArray(names)) {
+    debug('Agenda.schedule(%s, %O, [Object], cb)', when, names);
+    return createJobs(when, names, data, cb);
+  }
+};
+
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:now');
+
+/**
+ * Create a job for this exact moment
+ * @param {String} name name of job to schedule
+ * @param {Object} data data to pass to job
+ * @param {Function} cb called when job scheduling fails or passes
+ * @returns {module.Job} new job instance created
+ */
+module.exports = function(name, data, cb) {
+  if (!cb && typeof data === 'function') {
+    cb = data;
+    data = undefined;
+  }
+  debug('Agenda.now(%s, [Object])', name);
+  const job = this.create(name, data);
+  job.schedule(new Date());
+  job.save(cb);
+  return job;
+};
+
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:cancel');
+
+/**
+ * Cancels any jobs matching the passed MongoDB query, and removes them from the database.
+ *  @param {Object} query MongoDB query to use when cancelling
+ *  @param {Function} cb callback(error, numRemoved) when cancellation fails or passes
+ *  @caller client code, Agenda.purge(), Job.remove()
+ *  @returns {undefined}
+ */
+module.exports = function(query, cb) {
+  debug('attempting to cancel all Agenda jobs', query);
+  this._collection.deleteMany(query, (error, result) => {
+    if (cb) {
+      if (error) {
+        debug('error trying to delete jobs from MongoDB');
+      } else {
+        debug('jobs cancelled');
+      }
+      cb(error, result && result.result ? result.result.n : undefined);
+    }
+  });
+};
+
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:saveJob');
+const utils = __webpack_require__(4);
+
+const processJobs = utils.processJobs;
+
+/**
+ * Save the properties on a job to MongoDB
+ * @param {module.Job} job job to save into MongoDB
+ * @param {Function} cb called when job is saved or errors
+ * @returns {undefined}
+ */
+module.exports = function(job, cb) {
+  debug('attempting to save a job into Agenda instance');
+
+  // Grab information needed to save job but that we don't want to persist in MongoDB
+  const fn = cb;
+  const self = this;
+  const id = job.attrs._id;
+  const unique = job.attrs.unique;
+  const uniqueOpts = job.attrs.uniqueOpts;
+
+  // Store job as JSON and remove props we don't want to store from object
+  const props = job.toJSON();
+  delete props._id;
+  delete props.unique;
+  delete props.uniqueOpts;
+
+  // Store name of agenda queue as last modifier in job data
+  props.lastModifiedBy = this._name;
+  debug('set job props: \n%O', props);
+
+  // Grab current time and set default query options for MongoDB
+  const now = new Date();
+  const protect = {};
+  let update = {$set: props};
+  debug('current time stored as %s', now.toISOString());
+
+  // If the job already had an ID, then update the properties of the job
+  // i.e, who last modified it, etc
+  if (id) {
+    // Update the job and process the resulting data'
+    debug('job already has _id, calling findOneAndUpdate() using _id as query');
+    this._collection.findOneAndUpdate({
+      _id: id
+    },
+    update, {
+      returnOriginal: false
+    },
+    processDbResult);
+  } else if (props.type === 'single') {
+    // Job type set to 'single' so...
+    // NOTE: Again, not sure about difference between 'single' here and 'once' in job.js
+    debug('job with type of "single" found');
+
+    // If the nextRunAt time is older than the current time, "protect" that property, meaning, don't change
+    // a scheduled job's next run time!
+    if (props.nextRunAt && props.nextRunAt <= now) {
+      debug('job has a scheduled nextRunAt time, protecting that field from upsert');
+      protect.nextRunAt = props.nextRunAt;
+      delete props.nextRunAt;
+    }
+
+    // If we have things to protect, set them in MongoDB using $setOnInsert
+    if (Object.keys(protect).length > 0) {
+      update.$setOnInsert = protect;
+    }
+
+    // Try an upsert
+    // NOTE: 'single' again, not exactly sure what it means
+    debug('calling findOneAndUpdate() with job name and type of "single" as query');
+    this._collection.findOneAndUpdate({
+      name: props.name,
+      type: 'single'
+    },
+    update, {
+      upsert: true,
+      returnOriginal: false
+    },
+    processDbResult);
+  } else if (unique) {
+    // If we want the job to be unique, then we can upsert based on the 'unique' query object that was passed in
+    const query = job.attrs.unique;
+    query.name = props.name;
+    if (uniqueOpts && uniqueOpts.insertOnly) {
+      update = {$setOnInsert: props};
+    }
+
+    // Use the 'unique' query object to find an existing job or create a new one
+    debug('calling findOneAndUpdate() with unique object as query: \n%O', query);
+    this._collection.findOneAndUpdate(query, update, {upsert: true, returnOriginal: false}, processDbResult);
+  } else {
+    // If all else fails, the job does not exist yet so we just insert it into MongoDB
+    debug('using default behavior, inserting new job via insertOne() with props that were set: \n%O', props);
+    this._collection.insertOne(props, processDbResult);
+  }
+
+  /**
+   * Given a result for findOneAndUpdate() or insert() above, determine whether to process
+   * the job immediately or to let the processJobs() interval pick it up later
+   * @param {Error} err error passed in via MongoDB call as to whether modify call failed or passed
+   * @param {*} result the data returned from the findOneAndUpdate() call or insertOne() call
+   * @access private
+   * @returns {undefined}
+   */
+  function processDbResult(err, result) {
+    // Check if there is an error and either cb(error) or throw if there is no callback
+    if (err) {
+      debug('processDbResult() received an error, job was not updated/created');
+      if (fn) {
+        return fn(err);
+      }
+      throw err;
+    } else if (result) {
+      debug('processDbResult() called with success, checking whether to process job immediately or not');
+
+      // We have a result from the above calls
+      // findAndModify() returns different results than insertOne() so check for that
+      let res = result.ops ? result.ops : result.value;
+      if (res) {
+        // If it is an array, grab the first job
+        if (Array.isArray(res)) {
+          res = res[0];
+        }
+
+        // Grab ID and nextRunAt from MongoDB and store it as an attribute on Job
+        job.attrs._id = res._id;
+        job.attrs.nextRunAt = res.nextRunAt;
+
+        // If the current job would have been processed in an older scan, process the job immediately
+        if (job.attrs.nextRunAt && job.attrs.nextRunAt < self._nextScanAt) {
+          debug('[%s:%s] job would have ran by nextScanAt, processing the job immediately', job.attrs.name, res._id);
+          processJobs.call(self, job);
+        }
+      }
+    }
+
+    // If we have a callback, return the Job instance
+    if (fn) {
+      fn(null, job);
+    }
+  }
+};
+
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:start');
+const utils = __webpack_require__(4);
+
+const processJobs = utils.processJobs;
+
+/**
+ * Starts processing jobs using processJobs() methods, storing an interval ID
+ * @returns {undefined}
+ */
+module.exports = function() {
+  if (this._processInterval) {
+    debug('Agenda.start was already called, ignoring');
+  } else {
+    debug('Agenda.start called, creating interval to call processJobs every [%dms]', this._processEvery);
+    this._processInterval = setInterval(processJobs.bind(this), this._processEvery);
+    process.nextTick(processJobs.bind(this));
+  }
+};
+
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:stop');
+
+/**
+ * Clear the interval that processes the jobs
+ * @param {Function} cb called when job unlocking fails or passes
+ * @returns {undefined}
+ */
+module.exports = function(cb) {
+  const self = this;
+  /**
+   * Internal method to unlock jobs so that they can be re-run
+   * NOTE: May need to update what properties get set here, since job unlocking seems to fail
+   * @param {Function} done callback called when job unlocking fails or passes
+   * @access private
+   * @returns {undefined}
+   */
+  const _unlockJobs = function(done) {
+    debug('Agenda._unlockJobs()');
+    const jobIds = self._lockedJobs.map(job => job.attrs._id);
+
+    if (jobIds.length === 0) {
+      debug('no jobs to unlock');
+      return done();
+    }
+
+    debug('about to unlock jobs with ids: %O', jobIds);
+    self._collection.updateMany({_id: {$in: jobIds}}, {$set: {lockedAt: null}}, err => {
+      if (err) {
+        return done(err);
+      }
+
+      self._lockedJobs = [];
+      return done();
+    });
+  };
+
+  debug('Agenda.stop called, clearing interval for processJobs()');
+  cb = cb || function() {};
+  clearInterval(this._processInterval);
+  this._processInterval = undefined;
+  _unlockJobs(cb);
+};
+
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const debug = __webpack_require__(0)('agenda:_findAndLockNextJob');
+const utils = __webpack_require__(4);
+
+const createJob = utils.createJob;
+
+/**
+ * Find and lock jobs
+ * @param {String} jobName name of job to try to lock
+ * @param {Object} definition definition used to tell how job is run
+ * @param {Function} cb called when job lock fails or passes
+ * @access protected
+ * @caller jobQueueFilling() only
+ * @returns {undefined}
+ */
+module.exports = function(jobName, definition, cb) {
+  const self = this;
+  const now = new Date();
+  const lockDeadline = new Date(Date.now().valueOf() - definition.lockLifetime);
+  debug('_findAndLockNextJob(%s, [Function], cb)', jobName);
+
+  // Don't try and access MongoDB if we've lost connection to it.
+  // Trying to resolve crash on Dev PC when it resumes from sleep. NOTE: Does this still happen?
+  const s = this._mdb.s || this._mdb.db.s;
+  if (s.topology.connections().length === 0) {
+    if (s.topology.autoReconnect && !s.topology.isDestroyed()) {
+      // Continue processing but notify that Agenda has lost the connection
+      debug('Missing MongoDB connection, not attempting to find and lock a job');
+      self.emit('error', new Error('Lost MongoDB connection'));
+      cb();
+    } else {
+      // No longer recoverable
+      debug('topology.autoReconnect: %s, topology.isDestroyed(): %s', s.topology.autoReconnect, s.topology.isDestroyed());
+      cb(new Error('MongoDB connection is not recoverable, application restart required'));
+    }
+  } else {
+    /**
+    * Query used to find job to run
+    * @type {{$or: [*]}}
+    */
+    const JOB_PROCESS_WHERE_QUERY = {
+      $or: [{
+        name: jobName,
+        lockedAt: null,
+        nextRunAt: {$lte: this._nextScanAt},
+        disabled: {$ne: true}
+      }, {
+        name: jobName,
+        lockedAt: {$exists: false},
+        nextRunAt: {$lte: this._nextScanAt},
+        disabled: {$ne: true}
+      }, {
+        name: jobName,
+        lockedAt: {$lte: lockDeadline},
+        disabled: {$ne: true}
+      }]
+    };
+
+    /**
+    * Query used to set a job as locked
+    * @type {{$set: {lockedAt: Date}}}
+    */
+    const JOB_PROCESS_SET_QUERY = {$set: {lockedAt: now}};
+
+    /**
+    * Query used to affect what gets returned
+    * @type {{returnOriginal: boolean, sort: object}}
+    */
+    const JOB_RETURN_QUERY = {returnOriginal: false, sort: this._sort};
+
+    // Find ONE and ONLY ONE job and set the 'lockedAt' time so that job begins to be processed
+    this._collection.findOneAndUpdate(JOB_PROCESS_WHERE_QUERY, JOB_PROCESS_SET_QUERY, JOB_RETURN_QUERY, (err, result) => {
+      let job;
+      if (!err && result.value) {
+        debug('found a job available to lock, creating a new job on Agenda with id [%s]', result.value._id);
+        job = createJob(self, result.value);
+      }
+      if (err) {
+        debug('error occurred when running query to find and lock job');
+      }
+      cb(err, job);
+    });
+  }
+};
+
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports) {
+
+module.exports = require("lodash");
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports) {
+
+module.exports = require("another-mongoose-statemachine");
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _mongoose = __webpack_require__(2);
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var JourneyContentSchema = new _mongoose.Schema({
+  filePath: { type: String },
+  image: { type: String }
+}, {
+  timestamps: true
+});
+
+var JourneyContent = _mongoose2.default.model('JourneyContent', JourneyContentSchema);
+
+exports.default = JourneyContent;
+
+/***/ }),
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -402,35 +2533,35 @@ var _path = __webpack_require__(6);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _express = __webpack_require__(7);
+var _express = __webpack_require__(9);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _bodyParser = __webpack_require__(26);
+var _bodyParser = __webpack_require__(76);
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _api = __webpack_require__(27);
+var _api = __webpack_require__(77);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _ssr = __webpack_require__(31);
+var _ssr = __webpack_require__(80);
 
 var _ssr2 = _interopRequireDefault(_ssr);
 
-var _agenda = __webpack_require__(49);
+var _agenda = __webpack_require__(99);
 
 var _agenda2 = _interopRequireDefault(_agenda);
 
-var _agendash = __webpack_require__(50);
+var _agendash = __webpack_require__(100);
 
 var _agendash2 = _interopRequireDefault(_agendash);
 
-var _expressSession = __webpack_require__(51);
+var _expressSession = __webpack_require__(101);
 
 var _expressSession2 = _interopRequireDefault(_expressSession);
 
-var _connectMongo = __webpack_require__(52);
+var _connectMongo = __webpack_require__(102);
 
 var _connectMongo2 = _interopRequireDefault(_connectMongo);
 
@@ -463,13 +2594,13 @@ app.listen(process.env.PORT || 5000, function () {
 });
 
 /***/ }),
-/* 26 */
+/* 76 */
 /***/ (function(module, exports) {
 
 module.exports = require("body-parser");
 
 /***/ }),
-/* 27 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -489,11 +2620,11 @@ var _path = __webpack_require__(6);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _express = __webpack_require__(7);
+var _express = __webpack_require__(9);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _opentok = __webpack_require__(14);
+var _opentok = __webpack_require__(17);
 
 var _opentok2 = _interopRequireDefault(_opentok);
 
@@ -501,15 +2632,15 @@ var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _journey_space = __webpack_require__(15);
+var _journey_space = __webpack_require__(18);
 
 var _journey_space2 = _interopRequireDefault(_journey_space);
 
-var _journey_participant = __webpack_require__(29);
+var _journey_participant = __webpack_require__(78);
 
 var _journey_participant2 = _interopRequireDefault(_journey_participant);
 
-var _journey_rsvp = __webpack_require__(30);
+var _journey_rsvp = __webpack_require__(79);
 
 var _journey_rsvp2 = _interopRequireDefault(_journey_rsvp);
 
@@ -523,7 +2654,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-__webpack_require__(16);
+__webpack_require__(19);
 
 _dotenv2.default.config();
 
@@ -1108,40 +3239,43 @@ router.post('/sessions/:room/start', function () {
 
 router.post('/sessions/:room/flag', function () {
   var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(req, res) {
-    var room, connectionId, existingSession, participants;
+    var room, userId, existingSession, participants;
     return regeneratorRuntime.wrap(function _callee13$(_context13) {
       while (1) {
         switch (_context13.prev = _context13.next) {
           case 0:
             room = req.params.room;
-            connectionId = req.body.connectionId;
-            _context13.next = 4;
+
+            console.log('GOT ONE', req.sessionID);
+            userId = req.sessionID; // using sessionId as representation of user for now
+
+            _context13.next = 5;
             return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 4:
+          case 5:
             existingSession = _context13.sent;
 
             if (!existingSession) {
-              _context13.next = 13;
+              _context13.next = 14;
               break;
             }
 
-            existingSession.flags.push({ user: connectionId });
-            _context13.next = 9;
+            existingSession.flags.push({ user: userId });
+            _context13.next = 10;
             return existingSession.save();
 
-          case 9:
-            _context13.next = 11;
+          case 10:
+            _context13.next = 12;
             return _journey_participant2.default.find({ session: existingSession, present: true }).lean().exec();
 
-          case 11:
+          case 12:
             participants = _context13.sent;
             return _context13.abrupt('return', res.json(_extends({}, existingSession.toJSON(), { participants: participants })));
 
-          case 13:
+          case 14:
             res.sendStatus(404);
 
-          case 14:
+          case 15:
           case 'end':
             return _context13.stop();
         }
@@ -1270,13 +3404,7 @@ function signal(sessionId, data) {
 exports.default = router;
 
 /***/ }),
-/* 28 */
-/***/ (function(module, exports) {
-
-module.exports = require("another-mongoose-statemachine");
-
-/***/ }),
-/* 29 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1305,7 +3433,7 @@ var JourneyParticipant = _mongoose2.default.model('JourneyParticipant', JourneyP
 exports.default = JourneyParticipant;
 
 /***/ }),
-/* 30 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1331,7 +3459,7 @@ var JourneyRSVP = _mongoose2.default.model('JourneyRSVP', JourneyRSVPSchema);
 exports.default = JourneyRSVP;
 
 /***/ }),
-/* 31 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1341,7 +3469,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _express = __webpack_require__(7);
+var _express = __webpack_require__(9);
 
 var _express2 = _interopRequireDefault(_express);
 
@@ -1349,17 +3477,17 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _server = __webpack_require__(32);
+var _server = __webpack_require__(81);
 
 var _server2 = _interopRequireDefault(_server);
 
-var _redux = __webpack_require__(33);
+var _redux = __webpack_require__(82);
 
-var _reactRedux = __webpack_require__(34);
+var _reactRedux = __webpack_require__(83);
 
-var _reactRouter = __webpack_require__(17);
+var _reactRouter = __webpack_require__(20);
 
-var _app = __webpack_require__(35);
+var _app = __webpack_require__(84);
 
 var _app2 = _interopRequireDefault(_app);
 
@@ -1407,25 +3535,25 @@ router.get('/', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 32 */
+/* 81 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom/server");
 
 /***/ }),
-/* 33 */
+/* 82 */
 /***/ (function(module, exports) {
 
 module.exports = require("redux");
 
 /***/ }),
-/* 34 */
+/* 83 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-redux");
 
 /***/ }),
-/* 35 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1443,13 +3571,13 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(36);
+var _reactRouterDom = __webpack_require__(85);
 
-var _reactRouter = __webpack_require__(17);
+var _reactRouter = __webpack_require__(20);
 
-var _reactEasyState = __webpack_require__(4);
+var _reactEasyState = __webpack_require__(5);
 
-var _propTypes = __webpack_require__(18);
+var _propTypes = __webpack_require__(21);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -1457,15 +3585,15 @@ var _moment = __webpack_require__(8);
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _header = __webpack_require__(37);
+var _header = __webpack_require__(86);
 
 var _header2 = _interopRequireDefault(_header);
 
-var _home = __webpack_require__(38);
+var _home = __webpack_require__(88);
 
 var _home2 = _interopRequireDefault(_home);
 
-var _Room = __webpack_require__(45);
+var _Room = __webpack_require__(95);
 
 var _Room2 = _interopRequireDefault(_Room);
 
@@ -1496,14 +3624,14 @@ var _ref = {},
 
 
 if (__CLIENT__) {
-  var _require = __webpack_require__(9),
+  var _require = __webpack_require__(10),
       OTSession = _require.OTSession,
       OTPublisher = _require.OTPublisher,
       OTStreams = _require.OTStreams,
       OTSubscriber = _require.OTSubscriber,
       createSession = _require.createSession;
 
-  var OT = __webpack_require__(10);
+  var OT = __webpack_require__(11);
 }
 
 var RequireLoginRoute = function RequireLoginRoute(_ref2) {
@@ -1791,13 +3919,13 @@ var App = function (_Component4) {
 exports.default = (0, _reactRouter.withRouter)((0, _reactEasyState.view)(App));
 
 /***/ }),
-/* 36 */
+/* 85 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-router-dom");
 
 /***/ }),
-/* 37 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1811,24 +3939,28 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactEasyState = __webpack_require__(4);
+var _reactEasyState = __webpack_require__(5);
 
 var _state = __webpack_require__(3);
 
 var _state2 = _interopRequireDefault(_state);
+
+var _CuriousLiveLogo = __webpack_require__(87);
+
+var _CuriousLiveLogo2 = _interopRequireDefault(_CuriousLiveLogo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Header = function Header() {
   return _react2.default.createElement(
     'div',
-    { className: 'header pl-4' },
+    { className: 'header' },
     _react2.default.createElement(
       'h1',
-      null,
-      'Get started with Wacuri!'
+      { className: 'logo' },
+      _react2.default.createElement('img', { src: _CuriousLiveLogo2.default })
     ),
-    _state2.default.loggedIn && _state2.default.user && _react2.default.createElement(
+    false && _state2.default.loggedIn && _state2.default.user && _react2.default.createElement(
       'div',
       null,
       _react2.default.createElement(
@@ -1849,7 +3981,13 @@ var Header = function Header() {
 exports.default = (0, _reactEasyState.view)(Header);
 
 /***/ }),
-/* 38 */
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "f8a62333255a9846821aec2c092c395e.png";
+
+/***/ }),
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1865,19 +4003,19 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _user_list = __webpack_require__(39);
+var _user_list = __webpack_require__(89);
 
 var _user_list2 = _interopRequireDefault(_user_list);
 
-var _generator_form = __webpack_require__(40);
+var _generator_form = __webpack_require__(90);
 
 var _generator_form2 = _interopRequireDefault(_generator_form);
 
-var _event_message = __webpack_require__(41);
+var _event_message = __webpack_require__(91);
 
 var _event_message2 = _interopRequireDefault(_event_message);
 
-var _journey_space_form = __webpack_require__(42);
+var _journey_space_form = __webpack_require__(92);
 
 var _journey_space_form2 = _interopRequireDefault(_journey_space_form);
 
@@ -1904,14 +4042,14 @@ var _ref = {},
 
 
 if (__CLIENT__) {
-  var _require = __webpack_require__(9),
+  var _require = __webpack_require__(10),
       OTSession = _require.OTSession,
       OTPublisher = _require.OTPublisher,
       OTStreams = _require.OTStreams,
       OTSubscriber = _require.OTSubscriber,
       createSession = _require.createSession;
 
-  var OT = __webpack_require__(10);
+  var OT = __webpack_require__(11);
 }
 
 var Home = function (_Component) {
@@ -2066,7 +4204,7 @@ var Home = function (_Component) {
 exports.default = Home;
 
 /***/ }),
-/* 39 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2133,7 +4271,7 @@ var UserList = function (_Component) {
 exports.default = UserList;
 
 /***/ }),
-/* 40 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2224,7 +4362,7 @@ var GeneratorForm = function (_Component) {
 exports.default = GeneratorForm;
 
 /***/ }),
-/* 41 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2270,7 +4408,7 @@ var EventMessage = function EventMessage(props) {
 exports.default = EventMessage;
 
 /***/ }),
-/* 42 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2286,7 +4424,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _journey_detail_entry = __webpack_require__(43);
+var _journey_detail_entry = __webpack_require__(93);
 
 var _journey_detail_entry2 = _interopRequireDefault(_journey_detail_entry);
 
@@ -2350,7 +4488,7 @@ var JourneySpaceForm = function (_Component) {
 exports.default = JourneySpaceForm;
 
 /***/ }),
-/* 43 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2366,7 +4504,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _session_info = __webpack_require__(44);
+var _session_info = __webpack_require__(94);
 
 var _session_info2 = _interopRequireDefault(_session_info);
 
@@ -2469,7 +4607,7 @@ var JourneyDetailEntry = function (_Component) {
 exports.default = JourneyDetailEntry;
 
 /***/ }),
-/* 44 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2561,7 +4699,7 @@ var SessionInfo = function (_Component) {
 exports.default = SessionInfo;
 
 /***/ }),
-/* 45 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2577,21 +4715,21 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactEasyState = __webpack_require__(4);
+var _reactEasyState = __webpack_require__(5);
 
 var _state = __webpack_require__(3);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _propTypes = __webpack_require__(18);
+var _propTypes = __webpack_require__(21);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _uuid = __webpack_require__(46);
+var _uuid = __webpack_require__(96);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _opentokLayoutJs = __webpack_require__(47);
+var _opentokLayoutJs = __webpack_require__(97);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2601,8 +4739,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-__webpack_require__(48).polyfill();
-__webpack_require__(16);
+__webpack_require__(98).polyfill();
+__webpack_require__(19);
 
 var _ref = {},
     OTSession = _ref.OTSession,
@@ -2613,16 +4751,31 @@ var _ref = {},
 
 
 if (__CLIENT__) {
-  var _require = __webpack_require__(9),
+  var _require = __webpack_require__(10),
       OTSession = _require.OTSession,
       OTPublisher = _require.OTPublisher,
       OTStreams = _require.OTStreams,
       OTSubscriber = _require.OTSubscriber,
       createSession = _require.createSession;
 
-  var OT = __webpack_require__(10);
+  var OT = __webpack_require__(11);
   window.state = _state2.default;
 }
+
+var FlagControl = function FlagControl(_ref2) {
+  var currentUserHasFlaggedJourney = _ref2.currentUserHasFlaggedJourney,
+      onFlag = _ref2.onFlag,
+      children = _ref2.children;
+
+  return _react2.default.createElement(
+    'button',
+    {
+      className: 'btn btn-flag-session',
+      disabled: currentUserHasFlaggedJourney,
+      onClick: onFlag },
+    children
+  );
+};
 
 var Room = function (_Component) {
   _inherits(Room, _Component);
@@ -2719,7 +4872,8 @@ var Room = function (_Component) {
       playerState: 'waiting',
       playerProgress: 0,
       playerProgressMS: 0,
-      journeyDuration: 0
+      journeyDuration: 0,
+      currentlyActivePublisher: null
     };
     _this.publisher = {};
     _this.audioTag = {};
@@ -2753,6 +4907,11 @@ var Room = function (_Component) {
           onStreamsUpdated: function onStreamsUpdated(streams) {
             console.log('Current subscriber streams:', streams);
             _this2.setState({ streams: streams });
+            if (!_this2.state.currentlyActivePublisher) {
+              _this2.setState({
+                currentlyActivePublisher: streams[0]
+              });
+            }
           }
         });
         _this2.sessionHelper.session.on("connectionDestroyed", function (event) {
@@ -2812,52 +4971,39 @@ var Room = function (_Component) {
       var currentParticipant = this.state.session && _state2.default.session && _state2.default.session.participants.find(function (participant) {
         return participant.connectionId === _this3.state.session.connection.id;
       });
-      var currentUserHasFlaggedJourney = false;
-      if (currentParticipant) {
-        currentUserHasFlaggedJourney = _state2.default.session.flags.map(function (flag) {
-          return flag.user;
-        }).indexOf(currentParticipant.connectionId) > -1;
-      }
+      var currentUserHasFlaggedJourney = _state2.default.session && _state2.default.session.flags.map(function (flag) {
+        return flag.user;
+      }).indexOf(_state2.default.sessionId) > -1;
       return _react2.default.createElement(
         'div',
-        { className: 'journey-container' },
+        { className: 'journeyspace' },
         _react2.default.createElement(
-          'p',
-          { style: { display: 'none' } },
-          JSON.stringify(_state2.default.session, null, 2)
-        ),
-        _react2.default.createElement(
-          'audio',
-          { style: { display: 'none' }, onLoadedMetadata: this.onLoadedMetadata, key: _state2.default.session && _state2.default.session.journey, controls: 'true', ref: function ref(audioTag) {
-              _this3.audioTag = audioTag;
-            } },
-          _react2.default.createElement('source', { src: _state2.default.session && _state2.default.session.journey, type: 'audio/mpeg' })
-        ),
-        this.state.session && _react2.default.createElement(
           'div',
-          { style: { position: 'relative' } },
+          { className: 'journeyspace-content' },
           _react2.default.createElement(
-            'button',
-            { style: { position: 'absolute', top: 0, right: 0 }, className: 'btn btn-danger btn-flag-session', disabled: currentUserHasFlaggedJourney, onClick: this.onFlag },
-            currentUserHasFlaggedJourney ? "You've flagged this journey" : "Flag this journey"
+            'audio',
+            { style: { display: 'none' }, onLoadedMetadata: this.onLoadedMetadata, key: _state2.default.session && _state2.default.session.journey, controls: 'true', ref: function ref(audioTag) {
+                _this3.audioTag = audioTag;
+              } },
+            _react2.default.createElement('source', { src: _state2.default.session && _state2.default.session.journey, type: 'audio/mpeg' })
           ),
-          _react2.default.createElement(
+          this.state.session && _react2.default.createElement(
             'div',
-            { className: 'row' },
+            null,
             _react2.default.createElement(
               'div',
-              { className: 'col-6' },
+              { className: 'journeyspace-meta p-3' },
               _react2.default.createElement(
                 'h2',
-                null,
-                _state2.default.session.journey.split('/')[_state2.default.session.journey.split('/').length - 1]
+                { className: 'journeyspace-title' },
+                _state2.default.session.name
               ),
               currentParticipant && _state2.default.session.participants.indexOf(currentParticipant) === 0 && _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement(
                   'select',
-                  { className: 'mb-3', onChange: this.onChangeJourney, value: _state2.default.session && _state2.default.session.journey },
+                  { onChange: this.onChangeJourney, value: _state2.default.session && _state2.default.session.journey },
                   _state2.default.journeys.map(function (journey) {
                     return _react2.default.createElement(
                       'option',
@@ -2868,7 +5014,7 @@ var Room = function (_Component) {
                 ),
                 _state2.default.session.state === 'created' && _react2.default.createElement(
                   'div',
-                  { className: 'mb-2' },
+                  null,
                   _react2.default.createElement(
                     'button',
                     { onClick: this.onStartSession, className: 'btn btn-primary' },
@@ -2876,85 +5022,96 @@ var Room = function (_Component) {
                     _react2.default.createElement('i', { className: 'fa fa-play', ariaHidden: 'true' })
                   )
                 )
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'row' },
-            _react2.default.createElement(
-              'div',
-              { className: 'col-3' },
-              _react2.default.createElement('progress', { max: '100', value: this.state.playerProgress, style: { width: '100%' } }),
+              ),
               _react2.default.createElement(
-                'p',
-                { style: { display: 'flex' } },
+                'div',
+                null,
                 _react2.default.createElement(
-                  'strong',
-                  { style: { flex: 1 } },
-                  'Time remaining:'
-                ),
-                _react2.default.createElement(
-                  'span',
+                  'div',
                   null,
-                  this.timeRemaining
+                  _react2.default.createElement('progress', { max: '100', value: this.state.playerProgress, style: { width: '100%' } }),
+                  _react2.default.createElement(
+                    'p',
+                    { style: { display: 'flex' } },
+                    _react2.default.createElement(
+                      'strong',
+                      { style: { flex: 1 } },
+                      'Time remaining:'
+                    ),
+                    _react2.default.createElement(
+                      'span',
+                      null,
+                      this.timeRemaining
+                    )
+                  )
                 )
               )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'row' },
+            ),
             _react2.default.createElement(
               'div',
-              { className: 'tok-container col', ref: function ref(container) {
-                  return _this3.container = container;
-                } },
+              { className: 'journeyspace-container journeyspace-streams-count-' + (this.state.streams.length + 1) + ' ' + (this.state.streams.length >= 2 ? 'journeyspace-grid-layout' : '') },
               this.state.streams.length == 0 && _react2.default.createElement(
                 'p',
                 null,
                 'Waiting for others to join this journey...'
               ),
+              this.state.streams.map(function (stream) {
+                var participant = _state2.default.session.participants.find(function (participant) {
+                  return participant.connectionId === stream.connection.id;
+                });
+                return _react2.default.createElement(
+                  'div',
+                  { className: 'journeyspace-stream ' + (_this3.state.currentlyActivePublisher ? 'journeyspace-active-stream' : '') },
+                  _react2.default.createElement(OTSubscriber, {
+                    key: stream.id,
+                    session: _this3.sessionHelper.session,
+                    stream: stream,
+                    properties: {
+                      width: '100%',
+                      height: '100%'
+                    }
+                  })
+                );
+              }),
               _react2.default.createElement(
                 'div',
-                { className: 'row no-gutters', style: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridGap: '10px', marginRight: '350px' } },
-                this.state.streams.map(function (stream) {
-                  var participant = _state2.default.session.participants.find(function (participant) {
-                    return participant.connectionId === stream.connection.id;
-                  });
-                  return _react2.default.createElement(
-                    'div',
-                    { className: 'subscriber' },
-                    _react2.default.createElement(
-                      'p',
-                      { style: { fontSize: '14px' }, className: participant && participant.ready ? 'text-success' : 'text-warning' },
-                      participant && participant.ready ? 'Ready to start!' : 'Not ready yet'
-                    ),
-                    _react2.default.createElement(OTSubscriber, {
-                      key: stream.id,
-                      session: _this3.sessionHelper.session,
-                      stream: stream
-                    })
-                  );
-                })
-              ),
-              _react2.default.createElement(
-                'div',
-                { style: { position: 'fixed', bottom: 0, right: 0 } },
-                _react2.default.createElement(OTPublisher, { session: this.sessionHelper.session, onInit: this.onInitPublisher, ref: function ref(publisher) {
+                { className: 'journeyspace-stream journeyspace-me' },
+                _react2.default.createElement(OTPublisher, {
+                  properties: { width: '100%', height: '100%' },
+                  session: this.sessionHelper.session,
+                  onInit: this.onInitPublisher,
+                  ref: function ref(publisher) {
                     _this3.publisher = publisher;
-                  } }),
-                currentParticipant && currentParticipant.ready && _react2.default.createElement(
-                  'p',
-                  null,
-                  'You are ready!'
-                ),
-                (!currentParticipant || !currentParticipant.ready) && _react2.default.createElement(
-                  'a',
-                  { className: 'btn btn-primary', href: '#', onClick: this.onConfirmReady },
-                  'Ready?'
-                )
+                  }
+                })
               )
+            )
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'journeyspace-footer', style: { display: 'flex' } },
+          _react2.default.createElement(
+            'div',
+            { style: { flex: 1 } },
+            _react2.default.createElement(
+              FlagControl,
+              { currentUserHasFlaggedJourney: currentUserHasFlaggedJourney, onFlag: this.onFlag },
+              currentUserHasFlaggedJourney ? "Reported" : "Report"
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { style: { marginLeft: 'auto', marginRight: '10px', alignSelf: 'center' } },
+            _react2.default.createElement(
+              'a',
+              { className: 'mr-2' },
+              _react2.default.createElement('i', { className: 'fa fa-camera', ariaHidden: 'true' })
+            ),
+            _react2.default.createElement(
+              'a',
+              { className: '' },
+              _react2.default.createElement('i', { className: 'fa fa-microphone', ariaHidden: 'true' })
             )
           )
         )
@@ -2976,2160 +5133,46 @@ var Room = function (_Component) {
 exports.default = (0, _reactEasyState.view)(Room);
 
 /***/ }),
-/* 46 */
+/* 96 */
 /***/ (function(module, exports) {
 
 module.exports = require("uuid");
 
 /***/ }),
-/* 47 */
+/* 97 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok-layout-js");
 
 /***/ }),
-/* 48 */
+/* 98 */
 /***/ (function(module, exports) {
 
 module.exports = require("es6-promise");
 
 /***/ }),
-/* 49 */
+/* 99 */
 /***/ (function(module, exports) {
 
 module.exports = require("agenda");
 
 /***/ }),
-/* 50 */
+/* 100 */
 /***/ (function(module, exports) {
 
 module.exports = require("agendash");
 
 /***/ }),
-/* 51 */
+/* 101 */
 /***/ (function(module, exports) {
 
 module.exports = require("express-session");
 
 /***/ }),
-/* 52 */
+/* 102 */
 /***/ (function(module, exports) {
 
 module.exports = require("connect-mongo");
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _fs = __webpack_require__(13);
-
-var _fs2 = _interopRequireDefault(_fs);
-
-var _path = __webpack_require__(6);
-
-var _path2 = _interopRequireDefault(_path);
-
-var _Agenda = __webpack_require__(54);
-
-var _Agenda2 = _interopRequireDefault(_Agenda);
-
-var _lodash = __webpack_require__(99);
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _opentok = __webpack_require__(14);
-
-var _opentok2 = _interopRequireDefault(_opentok);
-
-var _moment = __webpack_require__(8);
-
-var _moment2 = _interopRequireDefault(_moment);
-
-var _mongoose = __webpack_require__(2);
-
-var _mongoose2 = _interopRequireDefault(_mongoose);
-
-var _journey_space = __webpack_require__(15);
-
-var _journey_space2 = _interopRequireDefault(_journey_space);
-
-var _journey_content = __webpack_require__(100);
-
-var _journey_content2 = _interopRequireDefault(_journey_content);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-var agenda = new _Agenda2.default({ db: { address: process.env.MONGODB_URI || process.env.MONGO_URL } });
-var opentok = new _opentok2.default(process.env.OPENTOK_KEY, process.env.OPENTOK_SECRET);
-var db = _mongoose2.default.connection;
-
-agenda.define('create journey space', function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(job, done) {
-    var randomJourney, journeySpace, globalSpace, response;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.prev = 0;
-            _context.next = 3;
-            return db.collection('journeycontents').aggregate([{ $sample: { size: 1 } }]).toArray();
-
-          case 3:
-            randomJourney = _context.sent[0];
-            journeySpace = new _journey_space2.default({
-              journey: randomJourney.filePath,
-              name: randomJourney.name,
-              image: randomJourney.image,
-              room: randomJourney.name.toLowerCase().replace(/[^a-z]/ig, '-') + '-' + new Date().getTime(),
-              startAt: (0, _moment2.default)().add(10, 'minutes').toDate()
-            });
-            _context.next = 7;
-            return journeySpace.save();
-
-          case 7:
-            _context.next = 9;
-            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
-
-          case 9:
-            globalSpace = _context.sent;
-
-            if (globalSpace) {
-              response = journeySpace.toJSON();
-
-              response.rsvps = [];
-              opentok.signal(globalSpace.sessionId, null, { 'type': 'createdNewJourney', 'data': JSON.stringify(response) }, done);
-            } else {
-              done();
-            }
-            _context.next = 17;
-            break;
-
-          case 13:
-            _context.prev = 13;
-            _context.t0 = _context['catch'](0);
-
-            console.log(_context.t0);
-            done(_context.t0);
-
-          case 17:
-          case 'end':
-            return _context.stop();
-        }
-      }
-    }, _callee, this, [[0, 13]]);
-  }));
-
-  return function (_x, _x2) {
-    return _ref.apply(this, arguments);
-  };
-}());
-
-agenda.define('clear expired journeys', function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(job, done) {
-    var expiredJourneys, globalSpace, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, journey;
-
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
-            return _journey_space2.default.find({ state: 'created', startAt: { $lt: (0, _moment2.default)().subtract(1, 'minutes') } }).exec();
-
-          case 3:
-            expiredJourneys = _context2.sent;
-            _context2.next = 6;
-            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
-
-          case 6:
-            globalSpace = _context2.sent;
-            _iteratorNormalCompletion = true;
-            _didIteratorError = false;
-            _iteratorError = undefined;
-            _context2.prev = 10;
-            _iterator = expiredJourneys[Symbol.iterator]();
-
-          case 12:
-            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-              _context2.next = 20;
-              break;
-            }
-
-            journey = _step.value;
-            _context2.next = 16;
-            return journey.expire();
-
-          case 16:
-            if (globalSpace) {
-              opentok.signal(globalSpace.sessionId, null, { 'type': 'expiredJourney', 'data': JSON.stringify(journey) }, function () {});
-            }
-
-          case 17:
-            _iteratorNormalCompletion = true;
-            _context2.next = 12;
-            break;
-
-          case 20:
-            _context2.next = 26;
-            break;
-
-          case 22:
-            _context2.prev = 22;
-            _context2.t0 = _context2['catch'](10);
-            _didIteratorError = true;
-            _iteratorError = _context2.t0;
-
-          case 26:
-            _context2.prev = 26;
-            _context2.prev = 27;
-
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
-            }
-
-          case 29:
-            _context2.prev = 29;
-
-            if (!_didIteratorError) {
-              _context2.next = 32;
-              break;
-            }
-
-            throw _iteratorError;
-
-          case 32:
-            return _context2.finish(29);
-
-          case 33:
-            return _context2.finish(26);
-
-          case 34:
-            done();
-            _context2.next = 41;
-            break;
-
-          case 37:
-            _context2.prev = 37;
-            _context2.t1 = _context2['catch'](0);
-
-            console.log(_context2.t1);
-            done(_context2.t1);
-
-          case 41:
-          case 'end':
-            return _context2.stop();
-        }
-      }
-    }, _callee2, this, [[0, 37], [10, 22, 26, 34], [27,, 29, 33]]);
-  }));
-
-  return function (_x3, _x4) {
-    return _ref2.apply(this, arguments);
-  };
-}());
-
-agenda.on('ready', function () {
-  agenda.every('1 minute', 'create journey space');
-  agenda.every('1 minute', 'clear expired journeys');
-
-  agenda.start();
-});
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Agenda = __webpack_require__(55);
-
-module.exports = Agenda;
-
-
-/***/ }),
-/* 55 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/**
- * General Notes:
- * - Refactor remaining deprecated MongoDB Native Driver methods: findAndModify()
- */
-
-const Emitter = __webpack_require__(56).EventEmitter;
-const humanInterval = __webpack_require__(11);
-
-class Agenda extends Emitter {
-  constructor(config, cb) {
-    super();
-
-    if (!(this instanceof Agenda)) {
-      return new Agenda(config);
-    }
-
-    config = config || {};
-
-    this._name = config.name;
-    this._processEvery = humanInterval(config.processEvery) || humanInterval('5 seconds');
-    this._defaultConcurrency = config.defaultConcurrency || 5;
-    this._maxConcurrency = config.maxConcurrency || 20;
-    this._defaultLockLimit = config.defaultLockLimit || 0;
-    this._lockLimit = config.lockLimit || 0;
-    this._definitions = {};
-    this._runningJobs = [];
-    this._lockedJobs = [];
-    this._jobQueue = [];
-    this._defaultLockLifetime = config.defaultLockLifetime || 10 * 60 * 1000; // 10 minute default lockLifetime
-    this._sort = config.sort || {nextRunAt: 1, priority: -1};
-    this._indices = Object.assign({name: 1}, this._sort, {priority: -1, lockedAt: 1, nextRunAt: 1, disabled: 1});
-
-    this._isLockingOnTheFly = false;
-    this._jobsToLock = [];
-    if (config.mongo) {
-      this.mongo(config.mongo, config.db ? config.db.collection : undefined, cb);
-    } else if (config.db) {
-      this.database(config.db.address, config.db.collection, config.db.options, cb);
-    }
-  }
-}
-
-Agenda.prototype.mongo = __webpack_require__(57);
-Agenda.prototype.database = __webpack_require__(58);
-Agenda.prototype.db_init = __webpack_require__(60); // eslint-disable-line camelcase
-Agenda.prototype.name = __webpack_require__(61);
-Agenda.prototype.processEvery = __webpack_require__(62);
-Agenda.prototype.maxConcurrency = __webpack_require__(63);
-Agenda.prototype.defaultConcurrency = __webpack_require__(64);
-Agenda.prototype.lockLimit = __webpack_require__(65);
-Agenda.prototype.defaultLockLimit = __webpack_require__(66);
-Agenda.prototype.defaultLockLifetime = __webpack_require__(67);
-Agenda.prototype.sort = __webpack_require__(68);
-Agenda.prototype.create = __webpack_require__(69);
-Agenda.prototype.jobs = __webpack_require__(87);
-Agenda.prototype.purge = __webpack_require__(89);
-Agenda.prototype.define = __webpack_require__(90);
-Agenda.prototype.every = __webpack_require__(91);
-Agenda.prototype.schedule = __webpack_require__(92);
-Agenda.prototype.now = __webpack_require__(93);
-Agenda.prototype.cancel = __webpack_require__(94);
-Agenda.prototype.saveJob = __webpack_require__(95);
-Agenda.prototype.start = __webpack_require__(96);
-Agenda.prototype.stop = __webpack_require__(97);
-Agenda.prototype._findAndLockNextJob = __webpack_require__(98);
-
-module.exports = Agenda;
-
-
-/***/ }),
-/* 56 */
-/***/ (function(module, exports) {
-
-module.exports = require("events");
-
-/***/ }),
-/* 57 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Build method used to add MongoDB connection details
- * @param {MongoClient} mdb instance of MongoClient to use
- * @param {String} collection name collection we want to use ('agendaJobs')
- * @param {Function} cb called when MongoDB connection fails or passes
- * @returns {exports} instance of Agenda
- */
-module.exports = function(mdb, collection, cb) {
-  this._mdb = mdb;
-  this.db_init(collection, cb);
-  return this;
-};
-
-
-/***/ }),
-/* 58 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const MongoClient = __webpack_require__(59).MongoClient;
-const debug = __webpack_require__(0)('agenda:database');
-
-/**
- * Connect to the spec'd MongoDB server and database.
- * @param {String} url MongoDB server URI
- * @param {String} collection name of collection to use
- * @param {Object} options options for connecting
- * @param {Function} cb callback of MongoDB connection
- * @returns {exports}
- * NOTE:
- * If `url` includes auth details then `options` must specify: { 'uri_decode_auth': true }. This does Auth on
- * the specified database, not the Admin database. If you are using Auth on the Admin DB and not on the Agenda DB,
- * then you need to authenticate against the Admin DB and then pass the MongoDB instance into the constructor
- * or use Agenda.mongo(). If your app already has a MongoDB connection then use that. ie. specify config.mongo in
- * the constructor or use Agenda.mongo().
- */
-module.exports = function(url, collection, options, cb) {
-  const self = this;
-  if (!url.match(/^mongodb:\/\/.*/)) {
-    url = 'mongodb://' + url;
-  }
-
-  collection = collection || 'agendaJobs';
-  options = Object.assign({autoReconnect: true, reconnectTries: Number.MAX_SAFE_INTEGER, reconnectInterval: this._processEvery}, options);
-  MongoClient.connect(url, options, (error, db) => {
-    if (error) {
-      debug('error connecting to MongoDB using collection: [%s]', collection);
-      if (cb) {
-        cb(error, null);
-      } else {
-        throw error;
-      }
-      return;
-    }
-    debug('successful connection to MongoDB using collection: [%s]', collection);
-    self._mdb = db;
-    self.db_init(collection, cb);
-  });
-  return this;
-};
-
-
-/***/ }),
-/* 59 */
-/***/ (function(module, exports) {
-
-module.exports = require("mongodb");
-
-/***/ }),
-/* 60 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:db_init');
-
-/**
- * Internal method called in the case where new indices have an error during creation
- * @param {Error} err error returned from index creation from before
- * @param {*} result result passed in from earlier attempt of creating index
- * @param {Agenda} self instance of Agenda
- * @param {Function} cb called when indices fail or pass
- * @returns {undefined}
- */
-const handleLegacyCreateIndex = (err, result, self, cb) => {
-  if (err && err.message !== 'no such cmd: createIndex') {
-    debug('not attempting legacy index, emitting error');
-    self.emit('error', err);
-  } else {
-    // Looks like a mongo.version < 2.4.x
-    err = null;
-    self._collection.ensureIndex(self._indices, {
-      name: 'findAndLockNextJobIndex'
-    });
-    self.emit('ready');
-  }
-  if (cb) {
-    cb(err, self._collection);
-  }
-};
-
-/**
- * Setup and initialize the collection used to manage Jobs.
- * @param {String} collection name or undefined for default 'agendaJobs'
- * @param {Function} cb called when the db is initialized
- * @returns {undefined}
- */
-module.exports = function(collection, cb) {
-  const self = this;
-  debug('init database collection using name [%s]', collection);
-  this._collection = this._mdb.collection(collection || 'agendaJobs');
-  debug('attempting index creation');
-  this._collection.createIndex(this._indices, {
-    name: 'findAndLockNextJobIndex'
-  }, (err, result) => {
-    if (err) {
-      debug('index creation failed, attempting legacy index creation next');
-    } else {
-      debug('index creation success');
-    }
-    handleLegacyCreateIndex(err, result, self, cb);
-  });
-};
-
-
-/***/ }),
-/* 61 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:name');
-
-/**
- * Set name of queue
- * @param {String} name name of agenda instance
- * @returns {exports} agenda instance
- */
-module.exports = function(name) {
-  debug('Agenda.name(%s)', name);
-  this._name = name;
-  return this;
-};
-
-
-/***/ }),
-/* 62 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const humanInterval = __webpack_require__(11);
-const debug = __webpack_require__(0)('agenda:processEvery');
-
-/**
- * Set the default process interval
- * @param {Number} time time to process
- * @returns {exports} agenda instance
- */
-module.exports = function(time) {
-  debug('Agenda.processEvery(%d)', time);
-  this._processEvery = humanInterval(time);
-  return this;
-};
-
-
-/***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:maxConcurrency');
-
-/**
- * Set the concurrency for jobs (globally), type does not matter
- * @param {Number} num max concurrency value
- * @returns {exports} agenda instance
- */
-module.exports = function(num) {
-  debug('Agenda.maxConcurrency(%d)', num);
-  this._maxConcurrency = num;
-  return this;
-};
-
-
-/***/ }),
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:defaultConcurrency');
-
-/**
- * Set the default concurrency for each job
- * @param {Number} num default concurrency
- * @returns {exports} agenda instance
- */
-module.exports = function(num) {
-  debug('Agenda.defaultConcurrency(%d)', num);
-  this._defaultConcurrency = num;
-  return this;
-};
-
-
-/***/ }),
-/* 65 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:locklimit');
-
-/**
- * Set the default amount jobs that are allowed to be locked at one time (GLOBAL)
- * NOTE: Is this different than max concurrency?
- * @param {Number} num Lock limit
- * @returns {exports} agenda instance
- */
-module.exports = function(num) {
-  debug('Agenda.lockLimit(%d)', num);
-  this._lockLimit = num;
-  return this;
-};
-
-
-/***/ }),
-/* 66 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:defaultLockLimit');
-
-/**
- * Set default lock limit per job type
- * @param {Number} num Lock limit per job
- * @returns {exports} agenda instance
- */
-module.exports = function(num) {
-  debug('Agenda.defaultLockLimit(%d)', num);
-  this._defaultLockLimit = num;
-  return this;
-};
-
-
-/***/ }),
-/* 67 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:defaultLockLifetime');
-
-/**
- * Set the default lock time (in ms)
- * Default is 10 * 60 * 1000 ms (10 minutes)
- * @param {Number} ms time in ms to set default lock
- * @returns {exports} agenda instance
- */
-module.exports = function(ms) {
-  debug('Agenda.defaultLockLifetime(%d)', ms);
-  this._defaultLockLifetime = ms;
-  return this;
-};
-
-
-/***/ }),
-/* 68 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:sort');
-
-/**
- * Set the sort query for finding next job
- * Default is { nextRunAt: 1, priority: -1 }
- * @param {Object} query sort query object for MongoDB
- * @returns {exports} agenda instance
- */
-module.exports = function(query) {
-  debug('Agenda.sort([Object])');
-  this._sort = query;
-  return this;
-};
-
-
-/***/ }),
-/* 69 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:create');
-const Job = __webpack_require__(19);
-
-/**
- * Given a name and some data, create a new job
- * @param {String} name name of job
- * @param {Object} data data to set for job
- * @access protected
- * @returns {module.Job} instance of new job
- */
-module.exports = function(name, data) {
-  debug('Agenda.create(%s, [Object])', name);
-  const priority = this._definitions[name] ? this._definitions[name].priority : 0;
-  const job = new Job({name, data, type: 'normal', priority, agenda: this});
-  return job;
-};
-
-
-/***/ }),
-/* 70 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Given a job, turn it into an object we can store in Mongo
- * @returns {Object} json object from Job
- */
-module.exports = function() {
-  const self = this;
-  const attrs = self.attrs || {};
-  const result = {};
-
-  for (const prop in attrs) {
-    if ({}.hasOwnProperty.call(attrs, prop)) {
-      result[prop] = attrs[prop];
-    }
-  }
-
-  const dates = ['lastRunAt', 'lastFinishedAt', 'nextRunAt', 'failedAt', 'lockedAt'];
-  dates.forEach(d => {
-    if (result[d]) {
-      result[d] = new Date(result[d]);
-    }
-  });
-
-  return result;
-};
-
-
-/***/ }),
-/* 71 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const humanInterval = __webpack_require__(11);
-const CronTime = __webpack_require__(72).CronTime;
-const moment = __webpack_require__(73);
-const date = __webpack_require__(20);
-const debug = __webpack_require__(0)('agenda:job');
-
-/**
- * Internal method used to compute next time a job should run and sets the proper values
- * @returns {exports} instance of Job instance
- */
-module.exports = function() {
-  const interval = this.attrs.repeatInterval;
-  const timezone = this.attrs.repeatTimezone;
-  const repeatAt = this.attrs.repeatAt;
-  this.attrs.nextRunAt = undefined;
-
-  const dateForTimezone = date => {
-    date = moment(date);
-    if (timezone !== null) {
-      date.tz(timezone);
-    }
-    return date;
-  };
-
-  /**
-   * Internal method that computes the interval
-   * @returns {undefined}
-   */
-  const computeFromInterval = () => {
-    debug('[%s:%s] computing next run via interval [%s]', this.attrs.name, this.attrs._id, interval);
-    let lastRun = this.attrs.lastRunAt || new Date();
-    lastRun = dateForTimezone(lastRun);
-    try {
-      const cronTime = new CronTime(interval);
-      let nextDate = cronTime._getNextDateFrom(lastRun);
-      if (nextDate.valueOf() === lastRun.valueOf()) {
-        // Handle cronTime giving back the same date for the next run time
-        nextDate = cronTime._getNextDateFrom(dateForTimezone(new Date(lastRun.valueOf() + 1000)));
-      }
-      this.attrs.nextRunAt = nextDate;
-      debug('[%s:%s] nextRunAt set to [%s]', this.attrs.name, this.attrs._id, this.attrs.nextRunAt.toISOString());
-    } catch (e) {
-      // Nope, humanInterval then!
-      try {
-        if (!this.attrs.lastRunAt && humanInterval(interval)) {
-          this.attrs.nextRunAt = lastRun.valueOf();
-          debug('[%s:%s] nextRunAt set to [%s]', this.attrs.name, this.attrs._id, this.attrs.nextRunAt.toISOString());
-        } else {
-          this.attrs.nextRunAt = lastRun.valueOf() + humanInterval(interval);
-          debug('[%s:%s] nextRunAt set to [%s]', this.attrs.name, this.attrs._id, this.attrs.nextRunAt.toISOString());
-        }
-      } catch (e) {}
-    } finally {
-      if (isNaN(this.attrs.nextRunAt)) {
-        this.attrs.nextRunAt = undefined;
-        debug('[%s:%s] failed to calculate nextRunAt due to invalid repeat interval', this.attrs.name, this.attrs._id);
-        this.fail('failed to calculate nextRunAt due to invalid repeat interval');
-      }
-    }
-  };
-
-  /**
-   * Internal method to compute next run time from the repeat string
-   * @returns {undefined}
-   */
-  function computeFromRepeatAt() {
-    const lastRun = this.attrs.lastRunAt || new Date();
-    const nextDate = date(repeatAt).valueOf();
-
-    // If you do not specify offset date for below test it will fail for ms
-    const offset = Date.now();
-    if (offset === date(repeatAt, offset).valueOf()) {
-      this.attrs.nextRunAt = undefined;
-      debug('[%s:%s] failed to calculate repeatAt due to invalid format', this.attrs.name, this.attrs._id);
-      this.fail('failed to calculate repeatAt time due to invalid format');
-    } else if (nextDate.valueOf() === lastRun.valueOf()) {
-      this.attrs.nextRunAt = date('tomorrow at ', repeatAt);
-      debug('[%s:%s] nextRunAt set to [%s]', this.attrs.name, this.attrs._id, this.attrs.nextRunAt.toISOString());
-    } else {
-      this.attrs.nextRunAt = date(repeatAt);
-      debug('[%s:%s] nextRunAt set to [%s]', this.attrs.name, this.attrs._id, this.attrs.nextRunAt.toISOString());
-    }
-  }
-
-  if (interval) {
-    computeFromInterval.call(this);
-  } else if (repeatAt) {
-    computeFromRepeatAt.call(this);
-  }
-  return this;
-};
-
-
-/***/ }),
-/* 72 */
-/***/ (function(module, exports) {
-
-module.exports = require("cron");
-
-/***/ }),
-/* 73 */
-/***/ (function(module, exports) {
-
-module.exports = require("moment-timezone");
-
-/***/ }),
-/* 74 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Sets a job to repeat every X amount of time
- * @param {String} interval repeat every X
- * @param {Object} options options to use for job
- * @returns {exports} instance of Job
- */
-module.exports = function(interval, options) {
-  options = options || {};
-  this.attrs.repeatInterval = interval;
-  this.attrs.repeatTimezone = options.timezone ? options.timezone : null;
-  return this;
-};
-
-
-/***/ }),
-/* 75 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Sets a job to repeat at a specific time
- * @param {String} time time to repeat job at (human readable or number)
- * @returns {exports} instance of Job
- */
-module.exports = function(time) {
-  this.attrs.repeatAt = time;
-  return this;
-};
-
-
-/***/ }),
-/* 76 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Prevents the job type from running
- * @returns {exports} instance of Job
- */
-module.exports = function() {
-  this.attrs.disabled = true;
-  return this;
-};
-
-
-/***/ }),
-/* 77 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Allows job type to run
- * @returns {exports} instance of Job
- */
-module.exports = function() {
-  this.attrs.disabled = false;
-  return this;
-};
-
-
-/***/ }),
-/* 78 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Data to ensure is unique for job to be created
- * @param {Object} unique mongo data query for unique
- * @param {Object} opts unique options
- * @returns {exports} instance of Job
- */
-module.exports = function(unique, opts) {
-  this.attrs.unique = unique;
-  this.attrs.uniqueOpts = opts;
-  return this;
-};
-
-
-/***/ }),
-/* 79 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const date = __webpack_require__(20);
-
-/**
- * Schedules a job to run at specified time
- * @param {String} time schedule a job to run "then"
- * @returns {exports} instance of Job
- */
-module.exports = function(time) {
-  this.attrs.nextRunAt = (time instanceof Date) ? time : date(time);
-  return this;
-};
-
-
-/***/ }),
-/* 80 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Internal method to turn priority into a number
- * @param {String|Number} priority string to parse into number
- * @returns {Number} priority that was parsed
- */
-const parsePriority = priority => {
-  const priorityMap = {
-    lowest: -20,
-    low: -10,
-    normal: 0,
-    high: 10,
-    highest: 20
-  };
-  if (typeof priority === 'number' || priority instanceof Number) {
-    return priority;
-  }
-  return priorityMap[priority];
-};
-
-/**
- * Sets priority of the job
- * @param {String} priority priority of when job should be queued
- * @returns {exports} instance of Job
- */
-module.exports = function(priority) {
-  this.attrs.priority = parsePriority(priority);
-  return this;
-};
-
-
-/***/ }),
-/* 81 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:job');
-
-/**
- * Fails the job with a reason (error) specified
- * @param {Error|String} reason reason job failed
- * @returns {exports} instance of Job
- */
-module.exports = function(reason) {
-  if (reason instanceof Error) {
-    reason = reason.message;
-  }
-  this.attrs.failReason = reason;
-  this.attrs.failCount = (this.attrs.failCount || 0) + 1;
-  const now = new Date();
-  this.attrs.failedAt = now;
-  this.attrs.lastFinishedAt = now;
-  debug('[%s:%s] fail() called [%d] times so far', this.attrs.name, this.attrs._id, this.attrs.failCount);
-  return this;
-};
-
-
-/***/ }),
-/* 82 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:job');
-
-/**
- * Internal method (RUN)
- * @param {Function} cb called when job persistence in MongoDB fails or passes
- * @returns {undefined}
- */
-module.exports = function(cb) {
-  const self = this;
-  const agenda = self.agenda;
-  const definition = agenda._definitions[self.attrs.name];
-
-  setImmediate(() => {
-    self.attrs.lastRunAt = new Date();
-    debug('[%s:%s] setting lastRunAt to: %s', self.attrs.name, self.attrs._id, self.attrs.lastRunAt.toISOString());
-    self.computeNextRunAt();
-    self.save(() => {
-      const jobCallback = function(err) {
-        if (err) {
-          self.fail(err);
-        }
-
-        if (!err) {
-          self.attrs.lastFinishedAt = new Date();
-        }
-        self.attrs.lockedAt = null;
-        debug('[%s:%s] job finished at [%s] and was unlocked', self.attrs.name, self.attrs._id, self.attrs.lastFinishedAt);
-
-        self.save((saveErr, job) => {
-          cb && cb(err || saveErr, job);  // eslint-disable-line no-unused-expressions
-          if (err) {
-            agenda.emit('fail', err, self);
-            agenda.emit('fail:' + self.attrs.name, err, self);
-            debug('[%s:%s] failed to be saved to MongoDB', self.attrs.name, self.attrs._id);
-          } else {
-            agenda.emit('success', self);
-            agenda.emit('success:' + self.attrs.name, self);
-            debug('[%s:%s] was saved successfully to MongoDB', self.attrs.name, self.attrs._id);
-          }
-          agenda.emit('complete', self);
-          agenda.emit('complete:' + self.attrs.name, self);
-          debug('[%s:%s] job has finished', self.attrs.name, self.attrs._id);
-        });
-      };
-
-      try {
-        agenda.emit('start', self);
-        agenda.emit('start:' + self.attrs.name, self);
-        debug('[%s:%s] starting job', self.attrs.name, self.attrs._id);
-        if (!definition) {
-          debug('[%s:%s] has no definition, can not run', self.attrs.name, self.attrs._id);
-          throw new Error('Undefined job');
-        }
-        if (definition.fn.length === 2) {
-          debug('[%s:%s] process function being called', self.attrs.name, self.attrs._id);
-          definition.fn(self, jobCallback);
-        } else {
-          debug('[%s:%s] process function being called', self.attrs.name, self.attrs._id);
-          definition.fn(self);
-          jobCallback();
-        }
-      } catch (err) {
-        debug('[%s:%s] unknown error occurred', self.attrs.name, self.attrs._id);
-        jobCallback(err);
-      }
-    });
-  });
-};
-
-
-/***/ }),
-/* 83 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * A job is running if:
- * (lastRunAt exists AND lastFinishedAt does not exist)
- * OR
- * (lastRunAt exists AND lastFinishedAt exists but the lastRunAt is newer [in time] than lastFinishedAt)
- * @returns {boolean} whether or not job is running at the moment (true for running)
- */
-module.exports = function() {
-  if (!this.attrs.lastRunAt) {
-    return false;
-  }
-  if (!this.attrs.lastFinishedAt) {
-    return true;
-  }
-  if (this.attrs.lockedAt && this.attrs.lastRunAt.getTime() > this.attrs.lastFinishedAt.getTime()) {
-    return true;
-  }
-  return false;
-};
-
-
-/***/ }),
-/* 84 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Saves a job into the MongoDB
- * @param {Function} cb called after job is saved or errors
- * @returns {exports} instance of Job
- */
-module.exports = function(cb) {
-  this.agenda.saveJob(this, cb);
-  return this;
-};
-
-
-/***/ }),
-/* 85 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Remove the job from MongoDB
- * @param {Function} cb called when job removal fails or passes
- * @returns {undefined}
- */
-module.exports = function(cb) {
-  this.agenda.cancel({_id: this.attrs._id}, cb);
-};
-
-
-/***/ }),
-/* 86 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Updates "lockedAt" time so the job does not get picked up again
- * @param {Function} cb called when job "touch" fails or passes
- * @returns {undefined}
- */
-module.exports = function(cb) {
-  this.attrs.lockedAt = new Date();
-  this.save(cb);
-};
-
-
-/***/ }),
-/* 87 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const utils = __webpack_require__(5);
-
-const createJob = utils.createJob;
-
-/**
- * Finds all jobs matching 'query'
- * @param {Object} query object for MongoDB
- * @param {Function} cb called when fails or passes
- * @returns {undefined}
- */
-module.exports = function(query, cb) {
-  const self = this;
-  this._collection.find(query).toArray((error, result) => {
-    let jobs;
-    if (!error) {
-      jobs = result.map(createJob.bind(null, self));
-    }
-    cb(error, jobs);
-  });
-};
-
-
-/***/ }),
-/* 88 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// @TODO: What should we use for internal util functions?
-//        Maybe we should use agenda:util:processJobs which would move agenda:* to agenda:agenda;*
-const debug = __webpack_require__(0)('agenda:internal:processJobs');
-const createJob = __webpack_require__(21);
-
-/**
- * Process methods for jobs
- * @param {module.Job} extraJob job to run immediately
- * @returns {undefined}
- */
-module.exports = function(extraJob) {
-  debug('starting to process jobs');
-  // Make sure an interval has actually been set
-  // Prevents race condition with 'Agenda.stop' and already scheduled run
-  if (!this._processInterval) {
-    debug('no _processInterval set when calling processJobs, returning');
-    return;
-  }
-
-  const self = this;
-  const definitions = this._definitions;
-  const jobQueue = this._jobQueue;
-  let jobName;
-
-  // Determine whether or not we have a direct process call!
-  if (!extraJob) {
-    // Go through each jobName set in 'Agenda.process' and fill the queue with the next jobs
-    for (jobName in definitions) {
-      if ({}.hasOwnProperty.call(definitions, jobName)) {
-        debug('queuing up job to process: [%s]', jobName);
-        jobQueueFilling(jobName);
-      }
-    }
-  } else if (definitions[extraJob.attrs.name]) {
-    // Add the job to list of jobs to lock and then lock it immediately!
-    debug('job [%s] was passed directly to processJobs(), locking and running immediately', extraJob.attrs.name);
-    self._jobsToLock.push(extraJob);
-    lockOnTheFly();
-  }
-
-  /**
-   * Returns true if a job of the specified name can be locked.
-   * Considers maximum locked jobs at any time if self._lockLimit is > 0
-   * Considers maximum locked jobs of the specified name at any time if jobDefinition.lockLimit is > 0
-   * @param {String} name name of job to check if we should lock or not
-   * @returns {boolean} whether or not you should lock job
-   */
-  function shouldLock(name) {
-    const jobDefinition = definitions[name];
-    let shouldLock = true;
-    if (self._lockLimit && self._lockLimit <= self._lockedJobs.length) {
-      shouldLock = false;
-    }
-    if (jobDefinition.lockLimit && jobDefinition.lockLimit <= jobDefinition.locked) {
-      shouldLock = false;
-    }
-    debug('job [%s] lock status: shouldLock = %s', name, shouldLock);
-    return shouldLock;
-  }
-
-  /**
-   * Internal method that adds jobs to be processed to the local queue
-   * @param {*} jobs Jobs to queue
-   * @param {boolean} inFront puts the job in front of queue if true
-   * @returns {undefined}
-   */
-  function enqueueJobs(jobs, inFront) {
-    if (!Array.isArray(jobs)) {
-      jobs = [jobs];
-    }
-
-    jobs.forEach(job => {
-      let jobIndex;
-      let start;
-      let loopCondition;
-      let endCondition;
-      let inc;
-
-      if (inFront) {
-        start = jobQueue.length ? jobQueue.length - 1 : 0;
-        inc = -1;
-        loopCondition = function() {
-          return jobIndex >= 0;
-        };
-        endCondition = function(queuedJob) {
-          return !queuedJob || queuedJob.attrs.priority < job.attrs.priority;
-        };
-      } else {
-        start = 0;
-        inc = 1;
-        loopCondition = function() {
-          return jobIndex < jobQueue.length;
-        };
-        endCondition = function(queuedJob) {
-          return queuedJob.attrs.priority >= job.attrs.priority;
-        };
-      }
-
-      for (jobIndex = start; loopCondition(); jobIndex += inc) {
-        if (endCondition(jobQueue[jobIndex])) {
-          break;
-        }
-      }
-
-      // Insert the job to the queue at its prioritized position for processing
-      jobQueue.splice(jobIndex, 0, job);
-    });
-  }
-
-  /**
-   * Internal method that will lock a job and store it on MongoDB
-   * This method is called when we immediately start to process a job without using the process interval
-   * We do this because sometimes jobs are scheduled but will be run before the next process time
-   * @returns {undefined}
-   */
-  function lockOnTheFly() {
-    // Already running this? Return
-    if (self._isLockingOnTheFly) {
-      debug('lockOnTheFly() already running, returning');
-      return;
-    }
-
-    // Don't have any jobs to run? Return
-    if (self._jobsToLock.length === 0) {
-      debug('no jobs to current lock on the fly, returning');
-      self._isLockingOnTheFly = false;
-      return;
-    }
-
-    // Set that we are running this
-    self._isLockingOnTheFly = true;
-
-    // Grab a job that needs to be locked
-    const now = new Date();
-    const job = self._jobsToLock.pop();
-
-    // If locking limits have been hit, stop locking on the fly.
-    // Jobs that were waiting to be locked will be picked up during a
-    // future locking interval.
-    if (!shouldLock(job.attrs.name)) {
-      debug('lock limit hit for: [%s]', job.attrs.name);
-      self._jobsToLock = [];
-      self._isLockingOnTheFly = false;
-      return;
-    }
-
-    // Query to run against collection to see if we need to lock it
-    const criteria = {
-      _id: job.attrs._id,
-      lockedAt: null,
-      nextRunAt: job.attrs.nextRunAt,
-      disabled: {$ne: true}
-    };
-
-    // Update / options for the MongoDB query
-    const update = {$set: {lockedAt: now}};
-    const options = {returnOriginal: false};
-
-    // Lock the job in MongoDB!
-    self._collection.findOneAndUpdate(criteria, update, options, (err, resp) => {
-      if (err) {
-        throw err;
-      }
-      // Did the "job" get locked? Create a job object and run
-      if (resp.value) {
-        const job = createJob(self, resp.value);
-        debug('found job [%s] that can be locked on the fly', job.attrs.name);
-        self._lockedJobs.push(job);
-        definitions[job.attrs.name].locked++;
-        enqueueJobs(job);
-        jobProcessing();
-      }
-
-      // Mark lock on fly is done for now
-      self._isLockingOnTheFly = false;
-
-      // Re-run in case anything is in the queue
-      lockOnTheFly();
-    });
-  }
-
-  /**
-   * Internal method used to fill a queue with jobs that can be run
-   * @param {String} name fill a queue with specific job name
-   * @returns {undefined}
-   */
-  function jobQueueFilling(name) {
-    // Don't lock because of a limit we have set (lockLimit, etc)
-    if (!shouldLock(name)) {
-      debug('lock limit reached in queue filling for [%s]', name);
-      return;
-    }
-
-    // Set the date of the next time we are going to run _processEvery function
-    const now = new Date();
-    self._nextScanAt = new Date(now.valueOf() + self._processEvery);
-
-    // For this job name, find the next job to run and lock it!
-    self._findAndLockNextJob(name, definitions[name], (err, job) => {
-      if (err) {
-        debug('[%s] job lock failed while filling queue', name);
-        throw err;
-      }
-
-      // Still have the job?
-      // 1. Add it to lock list
-      // 2. Add count of locked jobs
-      // 3. Queue the job to actually be run now that it is locked
-      // 4. Recursively run this same method we are in to check for more available jobs of same type!
-      if (job) {
-        debug('[%s:%s] job locked while filling queue', name, job.attrs._id);
-        self._lockedJobs.push(job);
-        definitions[job.attrs.name].locked++;
-        enqueueJobs(job);
-        jobQueueFilling(name);
-        jobProcessing();
-      }
-    });
-  }
-
-  /**
-   * Internal method that processes any jobs in the local queue (array)
-   * @returns {undefined}
-   */
-  function jobProcessing() {
-    // Ensure we have jobs
-    if (jobQueue.length === 0) {
-      return;
-    }
-
-    // Store for all sorts of things
-    const now = new Date();
-
-    // Get the next job that is not blocked by concurrency
-    let next;
-    for (next = jobQueue.length - 1; next > 0; next -= 1) {
-      const def = definitions[jobQueue[next].attrs.name];
-      if (def.concurrency > def.running) {
-        break;
-      }
-    }
-
-    // We now have the job we are going to process and its definition
-    const job = jobQueue.splice(next, 1)[0];
-    const jobDefinition = definitions[job.attrs.name];
-
-    debug('[%s:%s] about to process job', job.attrs.name, job.attrs._id);
-
-    // If the 'nextRunAt' time is older than the current time, run the job
-    // Otherwise, setTimeout that gets called at the time of 'nextRunAt'
-    if (job.attrs.nextRunAt < now) {
-      debug('[%s:%s] nextRunAt is in the past, run the job immediately', job.attrs.name, job.attrs._id);
-      runOrRetry();
-    } else {
-      const runIn = job.attrs.nextRunAt - now;
-      debug('[%s:%s] nextRunAt is in the future, calling setTimeout(%d)', job.attrs.name, job.attrs._id, runIn);
-      setTimeout(runOrRetry, runIn);
-    }
-
-    /**
-     * Internal method that tries to run a job and if it fails, retries again!
-     * @returns {undefined}
-     */
-    function runOrRetry() {
-      if (self._processInterval) {
-        if (jobDefinition.concurrency > jobDefinition.running && self._runningJobs.length < self._maxConcurrency) {
-          // Get the deadline of when the job is not supposed to go past for locking
-          const lockDeadline = new Date(Date.now() - jobDefinition.lockLifetime);
-
-          // This means a job has "expired", as in it has not been "touched" within the lockoutTime
-          // Remove from local lock
-          // NOTE: Shouldn't we update the 'lockedAt' value in MongoDB so it can be picked up on restart?
-          if (job.attrs.lockedAt < lockDeadline) {
-            debug('[%s:%s] job lock has expired, freeing it up', job.attrs.name, job.attrs._id);
-            self._lockedJobs.splice(self._lockedJobs.indexOf(job), 1);
-            jobDefinition.locked--;
-            jobProcessing();
-            return;
-          }
-
-          // Add to local "running" queue
-          self._runningJobs.push(job);
-          jobDefinition.running++;
-
-          // CALL THE ACTUAL METHOD TO PROCESS THE JOB!!!
-          debug('[%s:%s] processing job', job.attrs.name, job.attrs._id);
-          job.run(processJobResult);
-
-          // Re-run the loop to check for more jobs to process (locally)
-          jobProcessing();
-        } else {
-          // Run the job immediately by putting it on the top of the queue
-          debug('[%s:%s] concurrency preventing immediate run, pushing job to top of queue', job.attrs.name, job.attrs._id);
-          enqueueJobs(job, true);
-        }
-      }
-    }
-  }
-
-  /**
-   * Internal method used to run the job definition
-   * @param {Error} err thrown if can't process job
-   * @param {module.Job} job job to process
-   * @returns {undefined}
-   */
-  function processJobResult(err, job) {
-    if (err && !job) {
-      throw (err);
-    }
-    const name = job.attrs.name;
-
-    // Job isn't in running jobs so throw an error
-    if (self._runningJobs.indexOf(job) === -1) {
-      debug('[%s] callback was called, job must have been marked as complete already', job.attrs._id);
-      throw new Error('callback already called - job ' + name + ' already marked complete');
-    }
-
-    // Remove the job from the running queue
-    self._runningJobs.splice(self._runningJobs.indexOf(job), 1);
-    if (definitions[name].running > 0) {
-      definitions[name].running--;
-    }
-
-    // Remove the job from the locked queue
-    self._lockedJobs.splice(self._lockedJobs.indexOf(job), 1);
-    if (definitions[name].locked > 0) {
-      definitions[name].locked--;
-    }
-
-    // Re-process jobs now that one has finished
-    jobProcessing();
-  }
-};
-
-
-/***/ }),
-/* 89 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:purge');
-
-/**
- * Removes all jobs from queue
- * NOTE: Only use after defining your jobs
- * @param {Function} cb called when fails or passes
- * @returns {undefined}
- */
-module.exports = function(cb) {
-  const definedNames = Object.keys(this._definitions);
-  debug('Agenda.purge(%o)');
-  this.cancel({name: {$not: {$in: definedNames}}}, cb);
-};
-
-
-/***/ }),
-/* 90 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:define');
-
-/**
- * Setup definition for job
- * Method is used by consumers of lib to setup their functions
- * @param {String} name name of job
- * @param {Object} options options for job to run
- * @param {Function} processor function to be called to run actual job
- * @returns {undefined}
- */
-module.exports = function(name, options, processor) {
-  if (!processor) {
-    processor = options;
-    options = {};
-  }
-  this._definitions[name] = {
-    fn: processor,
-    concurrency: options.concurrency || this._defaultConcurrency,
-    lockLimit: options.lockLimit || this._defaultLockLimit,
-    priority: options.priority || 0,
-    lockLifetime: options.lockLifetime || this._defaultLockLifetime,
-    running: 0,
-    locked: 0
-  };
-  debug('job [%s] defined with following options: \n%O', name, this._definitions[name]);
-};
-
-
-/***/ }),
-/* 91 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:every');
-
-/**
- * Creates a scheduled job with given interval and name/names of the job to run
- * @param {Number} interval run every X interval
- * @param {*} names String or strings of jobs to schedule
- * @param {Object} data data to run for job
- * @param {Object} options options to run job for
- * @param {Function} cb called when schedule fails or passes
- * @returns {*} Job or jobs created
- */
-module.exports = function(interval, names, data, options, cb) {
-  const self = this;
-
-  if (cb === undefined && typeof data === 'function') {
-    cb = data;
-    data = undefined;
-  } else if (cb === undefined && typeof options === 'function') {
-    cb = options;
-    options = undefined;
-  }
-
-  /**
-   * Internal method to setup job that gets run every interval
-   * @param {Number} interval run every X interval
-   * @param {*} name String job to schedule
-   * @param {Object} data data to run for job
-   * @param {Object} options options to run job for
-   * @param {Function} cb called when schedule fails or passes
-   * @returns {module.Job} instance of job
-   */
-  const createJob = (interval, name, data, options, cb) => {
-    const job = self.create(name, data);
-    job.attrs.type = 'single';
-    job.repeatEvery(interval, options);
-    job.computeNextRunAt();
-    job.save(cb);
-    return job;
-  };
-
-  /**
-   * Internal helper method that uses createJob to create jobs for an array of names
-   * @param {Number} interval run every X interval
-   * @param {*} names Strings of jobs to schedule
-   * @param {Object} data data to run for job
-   * @param {Object} options options to run job for
-   * @param {Function} cb called when schedule fails or passes
-   * @returns {*} array of jobs created
-   */
-  const createJobs = (interval, names, data, options, cb) => {
-    const results = [];
-    let pending = names.length;
-    let errored = false;
-    return names.map((name, i) => {
-      return createJob(interval, name, data, options, (err, result) => {
-        if (err) {
-          if (!errored) {
-            cb(err);
-          }
-          errored = true;
-          return;
-        }
-        results[i] = result;
-        if (--pending === 0 && cb) {
-          debug('every() -> all jobs created successfully');
-          cb(null, results);
-        } else {
-          debug('every() -> error creating one or more of the jobs');
-        }
-      });
-    });
-  };
-
-  if (typeof names === 'string' || names instanceof String) {
-    debug('Agenda.every(%s, %O, [Object], %O, cb)', interval, names, options);
-    return createJob(interval, names, data, options, cb);
-  } else if (Array.isArray(names)) {
-    debug('Agenda.every(%s, %s, [Object], %O, cb)', interval, names, options);
-    return createJobs(interval, names, data, options, cb);
-  }
-};
-
-
-/***/ }),
-/* 92 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:schedule');
-
-/**
- * Schedule a job or jobs at a specific time
- * @param {String} when when the job gets run
- * @param {*} names array of job names to run
- * @param {Object} data data to send to job
- * @param {Function} cb called when schedule fails or passes
- * @returns {*} job or jobs created
- */
-module.exports = function(when, names, data, cb) {
-  const self = this;
-
-  if (cb === undefined && typeof data === 'function') {
-    cb = data;
-    data = undefined;
-  }
-
-  /**
-   * Internal method that creates a job with given date
-   * @param {String} when when the job gets run
-   * @param {String} name of job to run
-   * @param {Object} data data to send to job
-   * @param {Function} cb called when job persistence in MongoDB fails or passes
-   * @returns {module.Job} instance of new job
-   */
-  const createJob = (when, name, data, cb) => {
-    const job = self.create(name, data);
-    job.schedule(when);
-    job.save(cb);
-    return job;
-  };
-
-  /**
-   * Internal helper method that calls createJob on a names array
-   * @param {String} when when the job gets run
-   * @param {*} names of jobs to run
-   * @param {Object} data data to send to job
-   * @param {Function} cb called when job(s) persistence in MongoDB fails or passes
-   * @returns {*} jobs that were created
-   */
-  const createJobs = (when, names, data, cb) => {
-    const results = [];
-    let pending = names.length;
-    let errored = false;
-    return names.map((name, i) => {
-      return createJob(when, name, data, (err, result) => {
-        if (err) {
-          if (!errored) {
-            cb(err);
-          }
-          errored = true;
-          return;
-        }
-        results[i] = result;
-        if (--pending === 0 && cb) {
-          debug('Agenda.schedule()::createJobs() -> all jobs created successfully');
-          cb(null, results);
-        } else {
-          debug('Agenda.schedule()::createJobs() -> error creating one or more of the jobs');
-        }
-      });
-    });
-  };
-
-  if (typeof names === 'string' || names instanceof String) {
-    debug('Agenda.schedule(%s, %O, [Object], cb)', when, names);
-    return createJob(when, names, data, cb);
-  } else if (Array.isArray(names)) {
-    debug('Agenda.schedule(%s, %O, [Object], cb)', when, names);
-    return createJobs(when, names, data, cb);
-  }
-};
-
-
-/***/ }),
-/* 93 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:now');
-
-/**
- * Create a job for this exact moment
- * @param {String} name name of job to schedule
- * @param {Object} data data to pass to job
- * @param {Function} cb called when job scheduling fails or passes
- * @returns {module.Job} new job instance created
- */
-module.exports = function(name, data, cb) {
-  if (!cb && typeof data === 'function') {
-    cb = data;
-    data = undefined;
-  }
-  debug('Agenda.now(%s, [Object])', name);
-  const job = this.create(name, data);
-  job.schedule(new Date());
-  job.save(cb);
-  return job;
-};
-
-
-/***/ }),
-/* 94 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:cancel');
-
-/**
- * Cancels any jobs matching the passed MongoDB query, and removes them from the database.
- *  @param {Object} query MongoDB query to use when cancelling
- *  @param {Function} cb callback(error, numRemoved) when cancellation fails or passes
- *  @caller client code, Agenda.purge(), Job.remove()
- *  @returns {undefined}
- */
-module.exports = function(query, cb) {
-  debug('attempting to cancel all Agenda jobs', query);
-  this._collection.deleteMany(query, (error, result) => {
-    if (cb) {
-      if (error) {
-        debug('error trying to delete jobs from MongoDB');
-      } else {
-        debug('jobs cancelled');
-      }
-      cb(error, result && result.result ? result.result.n : undefined);
-    }
-  });
-};
-
-
-/***/ }),
-/* 95 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:saveJob');
-const utils = __webpack_require__(5);
-
-const processJobs = utils.processJobs;
-
-/**
- * Save the properties on a job to MongoDB
- * @param {module.Job} job job to save into MongoDB
- * @param {Function} cb called when job is saved or errors
- * @returns {undefined}
- */
-module.exports = function(job, cb) {
-  debug('attempting to save a job into Agenda instance');
-
-  // Grab information needed to save job but that we don't want to persist in MongoDB
-  const fn = cb;
-  const self = this;
-  const id = job.attrs._id;
-  const unique = job.attrs.unique;
-  const uniqueOpts = job.attrs.uniqueOpts;
-
-  // Store job as JSON and remove props we don't want to store from object
-  const props = job.toJSON();
-  delete props._id;
-  delete props.unique;
-  delete props.uniqueOpts;
-
-  // Store name of agenda queue as last modifier in job data
-  props.lastModifiedBy = this._name;
-  debug('set job props: \n%O', props);
-
-  // Grab current time and set default query options for MongoDB
-  const now = new Date();
-  const protect = {};
-  let update = {$set: props};
-  debug('current time stored as %s', now.toISOString());
-
-  // If the job already had an ID, then update the properties of the job
-  // i.e, who last modified it, etc
-  if (id) {
-    // Update the job and process the resulting data'
-    debug('job already has _id, calling findOneAndUpdate() using _id as query');
-    this._collection.findOneAndUpdate({
-      _id: id
-    },
-    update, {
-      returnOriginal: false
-    },
-    processDbResult);
-  } else if (props.type === 'single') {
-    // Job type set to 'single' so...
-    // NOTE: Again, not sure about difference between 'single' here and 'once' in job.js
-    debug('job with type of "single" found');
-
-    // If the nextRunAt time is older than the current time, "protect" that property, meaning, don't change
-    // a scheduled job's next run time!
-    if (props.nextRunAt && props.nextRunAt <= now) {
-      debug('job has a scheduled nextRunAt time, protecting that field from upsert');
-      protect.nextRunAt = props.nextRunAt;
-      delete props.nextRunAt;
-    }
-
-    // If we have things to protect, set them in MongoDB using $setOnInsert
-    if (Object.keys(protect).length > 0) {
-      update.$setOnInsert = protect;
-    }
-
-    // Try an upsert
-    // NOTE: 'single' again, not exactly sure what it means
-    debug('calling findOneAndUpdate() with job name and type of "single" as query');
-    this._collection.findOneAndUpdate({
-      name: props.name,
-      type: 'single'
-    },
-    update, {
-      upsert: true,
-      returnOriginal: false
-    },
-    processDbResult);
-  } else if (unique) {
-    // If we want the job to be unique, then we can upsert based on the 'unique' query object that was passed in
-    const query = job.attrs.unique;
-    query.name = props.name;
-    if (uniqueOpts && uniqueOpts.insertOnly) {
-      update = {$setOnInsert: props};
-    }
-
-    // Use the 'unique' query object to find an existing job or create a new one
-    debug('calling findOneAndUpdate() with unique object as query: \n%O', query);
-    this._collection.findOneAndUpdate(query, update, {upsert: true, returnOriginal: false}, processDbResult);
-  } else {
-    // If all else fails, the job does not exist yet so we just insert it into MongoDB
-    debug('using default behavior, inserting new job via insertOne() with props that were set: \n%O', props);
-    this._collection.insertOne(props, processDbResult);
-  }
-
-  /**
-   * Given a result for findOneAndUpdate() or insert() above, determine whether to process
-   * the job immediately or to let the processJobs() interval pick it up later
-   * @param {Error} err error passed in via MongoDB call as to whether modify call failed or passed
-   * @param {*} result the data returned from the findOneAndUpdate() call or insertOne() call
-   * @access private
-   * @returns {undefined}
-   */
-  function processDbResult(err, result) {
-    // Check if there is an error and either cb(error) or throw if there is no callback
-    if (err) {
-      debug('processDbResult() received an error, job was not updated/created');
-      if (fn) {
-        return fn(err);
-      }
-      throw err;
-    } else if (result) {
-      debug('processDbResult() called with success, checking whether to process job immediately or not');
-
-      // We have a result from the above calls
-      // findAndModify() returns different results than insertOne() so check for that
-      let res = result.ops ? result.ops : result.value;
-      if (res) {
-        // If it is an array, grab the first job
-        if (Array.isArray(res)) {
-          res = res[0];
-        }
-
-        // Grab ID and nextRunAt from MongoDB and store it as an attribute on Job
-        job.attrs._id = res._id;
-        job.attrs.nextRunAt = res.nextRunAt;
-
-        // If the current job would have been processed in an older scan, process the job immediately
-        if (job.attrs.nextRunAt && job.attrs.nextRunAt < self._nextScanAt) {
-          debug('[%s:%s] job would have ran by nextScanAt, processing the job immediately', job.attrs.name, res._id);
-          processJobs.call(self, job);
-        }
-      }
-    }
-
-    // If we have a callback, return the Job instance
-    if (fn) {
-      fn(null, job);
-    }
-  }
-};
-
-
-/***/ }),
-/* 96 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:start');
-const utils = __webpack_require__(5);
-
-const processJobs = utils.processJobs;
-
-/**
- * Starts processing jobs using processJobs() methods, storing an interval ID
- * @returns {undefined}
- */
-module.exports = function() {
-  if (this._processInterval) {
-    debug('Agenda.start was already called, ignoring');
-  } else {
-    debug('Agenda.start called, creating interval to call processJobs every [%dms]', this._processEvery);
-    this._processInterval = setInterval(processJobs.bind(this), this._processEvery);
-    process.nextTick(processJobs.bind(this));
-  }
-};
-
-
-/***/ }),
-/* 97 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:stop');
-
-/**
- * Clear the interval that processes the jobs
- * @param {Function} cb called when job unlocking fails or passes
- * @returns {undefined}
- */
-module.exports = function(cb) {
-  const self = this;
-  /**
-   * Internal method to unlock jobs so that they can be re-run
-   * NOTE: May need to update what properties get set here, since job unlocking seems to fail
-   * @param {Function} done callback called when job unlocking fails or passes
-   * @access private
-   * @returns {undefined}
-   */
-  const _unlockJobs = function(done) {
-    debug('Agenda._unlockJobs()');
-    const jobIds = self._lockedJobs.map(job => job.attrs._id);
-
-    if (jobIds.length === 0) {
-      debug('no jobs to unlock');
-      return done();
-    }
-
-    debug('about to unlock jobs with ids: %O', jobIds);
-    self._collection.updateMany({_id: {$in: jobIds}}, {$set: {lockedAt: null}}, err => {
-      if (err) {
-        return done(err);
-      }
-
-      self._lockedJobs = [];
-      return done();
-    });
-  };
-
-  debug('Agenda.stop called, clearing interval for processJobs()');
-  cb = cb || function() {};
-  clearInterval(this._processInterval);
-  this._processInterval = undefined;
-  _unlockJobs(cb);
-};
-
-
-/***/ }),
-/* 98 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const debug = __webpack_require__(0)('agenda:_findAndLockNextJob');
-const utils = __webpack_require__(5);
-
-const createJob = utils.createJob;
-
-/**
- * Find and lock jobs
- * @param {String} jobName name of job to try to lock
- * @param {Object} definition definition used to tell how job is run
- * @param {Function} cb called when job lock fails or passes
- * @access protected
- * @caller jobQueueFilling() only
- * @returns {undefined}
- */
-module.exports = function(jobName, definition, cb) {
-  const self = this;
-  const now = new Date();
-  const lockDeadline = new Date(Date.now().valueOf() - definition.lockLifetime);
-  debug('_findAndLockNextJob(%s, [Function], cb)', jobName);
-
-  // Don't try and access MongoDB if we've lost connection to it.
-  // Trying to resolve crash on Dev PC when it resumes from sleep. NOTE: Does this still happen?
-  const s = this._mdb.s || this._mdb.db.s;
-  if (s.topology.connections().length === 0) {
-    if (s.topology.autoReconnect && !s.topology.isDestroyed()) {
-      // Continue processing but notify that Agenda has lost the connection
-      debug('Missing MongoDB connection, not attempting to find and lock a job');
-      self.emit('error', new Error('Lost MongoDB connection'));
-      cb();
-    } else {
-      // No longer recoverable
-      debug('topology.autoReconnect: %s, topology.isDestroyed(): %s', s.topology.autoReconnect, s.topology.isDestroyed());
-      cb(new Error('MongoDB connection is not recoverable, application restart required'));
-    }
-  } else {
-    /**
-    * Query used to find job to run
-    * @type {{$or: [*]}}
-    */
-    const JOB_PROCESS_WHERE_QUERY = {
-      $or: [{
-        name: jobName,
-        lockedAt: null,
-        nextRunAt: {$lte: this._nextScanAt},
-        disabled: {$ne: true}
-      }, {
-        name: jobName,
-        lockedAt: {$exists: false},
-        nextRunAt: {$lte: this._nextScanAt},
-        disabled: {$ne: true}
-      }, {
-        name: jobName,
-        lockedAt: {$lte: lockDeadline},
-        disabled: {$ne: true}
-      }]
-    };
-
-    /**
-    * Query used to set a job as locked
-    * @type {{$set: {lockedAt: Date}}}
-    */
-    const JOB_PROCESS_SET_QUERY = {$set: {lockedAt: now}};
-
-    /**
-    * Query used to affect what gets returned
-    * @type {{returnOriginal: boolean, sort: object}}
-    */
-    const JOB_RETURN_QUERY = {returnOriginal: false, sort: this._sort};
-
-    // Find ONE and ONLY ONE job and set the 'lockedAt' time so that job begins to be processed
-    this._collection.findOneAndUpdate(JOB_PROCESS_WHERE_QUERY, JOB_PROCESS_SET_QUERY, JOB_RETURN_QUERY, (err, result) => {
-      let job;
-      if (!err && result.value) {
-        debug('found a job available to lock, creating a new job on Agenda with id [%s]', result.value._id);
-        job = createJob(self, result.value);
-      }
-      if (err) {
-        debug('error occurred when running query to find and lock job');
-      }
-      cb(err, job);
-    });
-  }
-};
-
-
-/***/ }),
-/* 99 */
-/***/ (function(module, exports) {
-
-module.exports = require("lodash");
-
-/***/ }),
-/* 100 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _mongoose = __webpack_require__(2);
-
-var _mongoose2 = _interopRequireDefault(_mongoose);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var JourneyContentSchema = new _mongoose.Schema({
-  filePath: { type: String },
-  image: { type: String }
-}, {
-  timestamps: true
-});
-
-var JourneyContent = _mongoose2.default.model('JourneyContent', JourneyContentSchema);
-
-exports.default = JourneyContent;
 
 /***/ })
 /******/ ]);

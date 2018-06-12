@@ -1,0 +1,11 @@
+{
+  "marked": {
+    "client/res/images/CuriousLive-logo.png": "341f729cd6f70c37015fd5b519ccc8b1.png"
+  },
+  "chunks": {
+    "main": [
+      "./js/index.js",
+      "css/main.css"
+    ]
+  }
+}

@@ -178,7 +178,7 @@ class AutoCreatedJourneysQueue extends Component {
   render() {
     return (
       <div className='joinable-journeys'>
-        {state.joinableJourneys.map(journey => <JoinableJourneyCard journey={journey}/>)}
+        {state.joinableJourneys.map(journey => <JoinableJourneyCard key={journey._id} journey={journey}/>)}
       </div>
     )
   }
