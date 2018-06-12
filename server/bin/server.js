@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 22);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -112,8 +112,8 @@ exports.default = state;
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const createJob = __webpack_require__(16);
-const processJobs = __webpack_require__(61);
+const createJob = __webpack_require__(17);
+const processJobs = __webpack_require__(64);
 
 module.exports = {
   createJob,
@@ -177,6 +177,12 @@ module.exports = require("fs");
 
 /***/ }),
 /* 14 */
+/***/ (function(module, exports) {
+
+module.exports = require("events");
+
+/***/ }),
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -228,38 +234,38 @@ class Job {
   }
 }
 
-Job.prototype.toJSON = __webpack_require__(43);
-Job.prototype.computeNextRunAt = __webpack_require__(44);
-Job.prototype.repeatEvery = __webpack_require__(47);
-Job.prototype.repeatAt = __webpack_require__(48);
-Job.prototype.disable = __webpack_require__(49);
-Job.prototype.enable = __webpack_require__(50);
-Job.prototype.unique = __webpack_require__(51);
-Job.prototype.schedule = __webpack_require__(52);
-Job.prototype.priority = __webpack_require__(53);
-Job.prototype.fail = __webpack_require__(54);
-Job.prototype.run = __webpack_require__(55);
-Job.prototype.isRunning = __webpack_require__(56);
-Job.prototype.save = __webpack_require__(57);
-Job.prototype.remove = __webpack_require__(58);
-Job.prototype.touch = __webpack_require__(59);
+Job.prototype.toJSON = __webpack_require__(46);
+Job.prototype.computeNextRunAt = __webpack_require__(47);
+Job.prototype.repeatEvery = __webpack_require__(50);
+Job.prototype.repeatAt = __webpack_require__(51);
+Job.prototype.disable = __webpack_require__(52);
+Job.prototype.enable = __webpack_require__(53);
+Job.prototype.unique = __webpack_require__(54);
+Job.prototype.schedule = __webpack_require__(55);
+Job.prototype.priority = __webpack_require__(56);
+Job.prototype.fail = __webpack_require__(57);
+Job.prototype.run = __webpack_require__(58);
+Job.prototype.isRunning = __webpack_require__(59);
+Job.prototype.save = __webpack_require__(60);
+Job.prototype.remove = __webpack_require__(61);
+Job.prototype.touch = __webpack_require__(62);
 
 module.exports = Job;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = require("date.js");
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-const Job = __webpack_require__(14);
+const Job = __webpack_require__(15);
 
 /**
  * Create Job object from data
@@ -274,13 +280,13 @@ module.exports = (agenda, jobData) => {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok");
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -294,7 +300,7 @@ var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _anotherMongooseStatemachine = __webpack_require__(73);
+var _anotherMongooseStatemachine = __webpack_require__(76);
 
 var _anotherMongooseStatemachine2 = _interopRequireDefault(_anotherMongooseStatemachine);
 
@@ -313,6 +319,7 @@ var JourneySpaceSchema = new _mongoose.Schema({
   room: { type: String, index: true },
   name: { type: String, index: true },
   image: { type: String },
+  currentTime: { type: Number },
   sessionId: { type: String, index: true },
   journey: { type: String, default: '/journeys/Journey to A Spiderweb+Music.mp3' },
   startAt: { type: Date, default: function _default() {
@@ -326,13 +333,19 @@ var JourneySpaceSchema = new _mongoose.Schema({
 JourneySpaceSchema.plugin(_anotherMongooseStatemachine2.default, {
   states: {
     created: { default: true },
+    joined: {},
     started: {},
     completed: {},
-    expired: {}
+    ended: {},
+    expired: {},
+    failed: {}
   },
   transitions: {
-    start: { from: 'created', to: 'started' },
-    end: { from: '*', to: 'completed' },
+    joined: { from: 'created', to: 'joined' },
+    start: { from: ['joined', 'created', 'failed'], to: 'started' },
+    fail: { from: '*', to: 'failed' },
+    complete: { from: ['started', 'created'], to: 'completed' },
+    end: { from: '*', to: 'ended' },
     expire: { from: '*', to: 'expired' }
   }
 });
@@ -342,39 +355,99 @@ var JourneySpace = _mongoose2.default.model('JourneySpace', JourneySpaceSchema);
 exports.default = JourneySpace;
 
 /***/ }),
-/* 19 */
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _mongoose = __webpack_require__(2);
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var JourneyRSVPSchema = new _mongoose.Schema({
+  journey: { type: _mongoose.Schema.Types.ObjectId, ref: 'JourneySpace' },
+  user: { type: String }
+});
+
+var JourneyRSVP = _mongoose2.default.model('JourneyRSVP', JourneyRSVPSchema);
+
+exports.default = JourneyRSVP;
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _mongoose = __webpack_require__(2);
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var JourneyContentSchema = new _mongoose.Schema({
+  filePath: { type: String },
+  image: { type: String }
+}, {
+  timestamps: true
+});
+
+var JourneyContent = _mongoose2.default.model('JourneyContent', JourneyContentSchema);
+
+exports.default = JourneyContent;
+
+/***/ }),
+/* 22 */
 /***/ (function(module, exports) {
 
 module.exports = require("isomorphic-fetch");
 
 /***/ }),
-/* 20 */
+/* 23 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-router");
 
 /***/ }),
-/* 21 */
+/* 24 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-dom");
+
+/***/ }),
+/* 25 */
 /***/ (function(module, exports) {
 
 module.exports = require("prop-types");
 
 /***/ }),
-/* 22 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(23);
-module.exports = __webpack_require__(24);
+__webpack_require__(27);
+module.exports = __webpack_require__(28);
 
 
 /***/ }),
-/* 23 */
+/* 27 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-polyfill/lib/index");
 
 /***/ }),
-/* 24 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -386,24 +459,24 @@ dotenv.config();
 global.__CLIENT__ = false;
 global.__SERVER__ = true;
 
-var extendRequire = __webpack_require__(25);
+var extendRequire = __webpack_require__(29);
 
-__webpack_require__(26);
+__webpack_require__(30);
 
 extendRequire().then(function () {
-    __webpack_require__(75);
+    __webpack_require__(77);
 }).catch(function (err) {
     console.log(err);
 });
 
 /***/ }),
-/* 25 */
+/* 29 */
 /***/ (function(module, exports) {
 
 module.exports = require("isomorphic-loader/lib/extend-require");
 
 /***/ }),
-/* 26 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -417,15 +490,15 @@ var _path = __webpack_require__(6);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _Agenda = __webpack_require__(27);
+var _Agenda = __webpack_require__(31);
 
 var _Agenda2 = _interopRequireDefault(_Agenda);
 
-var _lodash = __webpack_require__(72);
+var _lodash = __webpack_require__(75);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _opentok = __webpack_require__(17);
+var _opentok = __webpack_require__(18);
 
 var _opentok2 = _interopRequireDefault(_opentok);
 
@@ -437,11 +510,15 @@ var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _journey_space = __webpack_require__(18);
+var _journey_space = __webpack_require__(19);
 
 var _journey_space2 = _interopRequireDefault(_journey_space);
 
-var _journey_content = __webpack_require__(74);
+var _journey_rsvp = __webpack_require__(20);
+
+var _journey_rsvp2 = _interopRequireDefault(_journey_rsvp);
+
+var _journey_content = __webpack_require__(21);
 
 var _journey_content2 = _interopRequireDefault(_journey_content);
 
@@ -478,9 +555,13 @@ agenda.define('create journey space', function () {
 
           case 7:
             _context.next = 9;
-            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
+            return agenda.schedule(journeySpace.startAt, 'start journey', { journey: journeySpace._id });
 
           case 9:
+            _context.next = 11;
+            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
+
+          case 11:
             globalSpace = _context.sent;
 
             if (globalSpace) {
@@ -491,22 +572,22 @@ agenda.define('create journey space', function () {
             } else {
               done();
             }
-            _context.next = 17;
+            _context.next = 19;
             break;
 
-          case 13:
-            _context.prev = 13;
+          case 15:
+            _context.prev = 15;
             _context.t0 = _context['catch'](0);
 
             console.log(_context.t0);
             done(_context.t0);
 
-          case 17:
+          case 19:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, this, [[0, 13]]);
+    }, _callee, this, [[0, 15]]);
   }));
 
   return function (_x, _x2) {
@@ -618,6 +699,70 @@ agenda.define('clear expired journeys', function () {
   };
 }());
 
+agenda.define('start journey', function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(job, done) {
+    var journey, journeySpace, rsvps;
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.prev = 0;
+            journey = job.attrs.data.journey;
+            _context3.next = 4;
+            return _journey_space2.default.findById(journey).exec();
+
+          case 4:
+            journeySpace = _context3.sent;
+            _context3.next = 7;
+            return _journey_rsvp2.default.find({ journey: journeySpace._id }).exec();
+
+          case 7:
+            rsvps = _context3.sent;
+
+            if (!(rsvps.length > 1)) {
+              _context3.next = 14;
+              break;
+            }
+
+            _context3.next = 11;
+            return journeySpace.start();
+
+          case 11:
+            opentok.signal(journeySpace.sessionId, null, { 'type': 'startJourney', 'data': JSON.stringify({ journey: journey }) }, function () {});
+            _context3.next = 17;
+            break;
+
+          case 14:
+            _context3.next = 16;
+            return journeySpace.fail();
+
+          case 16:
+            opentok.signal(journeySpace.sessionId, null, { 'type': 'failJourney', 'data': JSON.stringify({ journey: journey }) }, function () {});
+
+          case 17:
+            done();
+            _context3.next = 23;
+            break;
+
+          case 20:
+            _context3.prev = 20;
+            _context3.t0 = _context3['catch'](0);
+
+            done(_context3.t0);
+
+          case 23:
+          case 'end':
+            return _context3.stop();
+        }
+      }
+    }, _callee3, this, [[0, 20]]);
+  }));
+
+  return function (_x5, _x6) {
+    return _ref3.apply(this, arguments);
+  };
+}());
+
 agenda.on('ready', function () {
   agenda.every('1 minute', 'create journey space');
   agenda.every('1 minute', 'clear expired journeys');
@@ -626,16 +771,16 @@ agenda.on('ready', function () {
 });
 
 /***/ }),
-/* 27 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Agenda = __webpack_require__(28);
+const Agenda = __webpack_require__(32);
 
 module.exports = Agenda;
 
 
 /***/ }),
-/* 28 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -645,7 +790,7 @@ module.exports = Agenda;
  * - Refactor remaining deprecated MongoDB Native Driver methods: findAndModify()
  */
 
-const Emitter = __webpack_require__(29).EventEmitter;
+const Emitter = __webpack_require__(14).EventEmitter;
 const humanInterval = __webpack_require__(7);
 
 class Agenda extends Emitter {
@@ -682,41 +827,35 @@ class Agenda extends Emitter {
   }
 }
 
-Agenda.prototype.mongo = __webpack_require__(30);
-Agenda.prototype.database = __webpack_require__(31);
-Agenda.prototype.db_init = __webpack_require__(33); // eslint-disable-line camelcase
-Agenda.prototype.name = __webpack_require__(34);
-Agenda.prototype.processEvery = __webpack_require__(35);
-Agenda.prototype.maxConcurrency = __webpack_require__(36);
-Agenda.prototype.defaultConcurrency = __webpack_require__(37);
-Agenda.prototype.lockLimit = __webpack_require__(38);
-Agenda.prototype.defaultLockLimit = __webpack_require__(39);
-Agenda.prototype.defaultLockLifetime = __webpack_require__(40);
-Agenda.prototype.sort = __webpack_require__(41);
-Agenda.prototype.create = __webpack_require__(42);
-Agenda.prototype.jobs = __webpack_require__(60);
-Agenda.prototype.purge = __webpack_require__(62);
-Agenda.prototype.define = __webpack_require__(63);
-Agenda.prototype.every = __webpack_require__(64);
-Agenda.prototype.schedule = __webpack_require__(65);
-Agenda.prototype.now = __webpack_require__(66);
-Agenda.prototype.cancel = __webpack_require__(67);
-Agenda.prototype.saveJob = __webpack_require__(68);
-Agenda.prototype.start = __webpack_require__(69);
-Agenda.prototype.stop = __webpack_require__(70);
-Agenda.prototype._findAndLockNextJob = __webpack_require__(71);
+Agenda.prototype.mongo = __webpack_require__(33);
+Agenda.prototype.database = __webpack_require__(34);
+Agenda.prototype.db_init = __webpack_require__(36); // eslint-disable-line camelcase
+Agenda.prototype.name = __webpack_require__(37);
+Agenda.prototype.processEvery = __webpack_require__(38);
+Agenda.prototype.maxConcurrency = __webpack_require__(39);
+Agenda.prototype.defaultConcurrency = __webpack_require__(40);
+Agenda.prototype.lockLimit = __webpack_require__(41);
+Agenda.prototype.defaultLockLimit = __webpack_require__(42);
+Agenda.prototype.defaultLockLifetime = __webpack_require__(43);
+Agenda.prototype.sort = __webpack_require__(44);
+Agenda.prototype.create = __webpack_require__(45);
+Agenda.prototype.jobs = __webpack_require__(63);
+Agenda.prototype.purge = __webpack_require__(65);
+Agenda.prototype.define = __webpack_require__(66);
+Agenda.prototype.every = __webpack_require__(67);
+Agenda.prototype.schedule = __webpack_require__(68);
+Agenda.prototype.now = __webpack_require__(69);
+Agenda.prototype.cancel = __webpack_require__(70);
+Agenda.prototype.saveJob = __webpack_require__(71);
+Agenda.prototype.start = __webpack_require__(72);
+Agenda.prototype.stop = __webpack_require__(73);
+Agenda.prototype._findAndLockNextJob = __webpack_require__(74);
 
 module.exports = Agenda;
 
 
 /***/ }),
-/* 29 */
-/***/ (function(module, exports) {
-
-module.exports = require("events");
-
-/***/ }),
-/* 30 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -737,12 +876,12 @@ module.exports = function(mdb, collection, cb) {
 
 
 /***/ }),
-/* 31 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-const MongoClient = __webpack_require__(32).MongoClient;
+const MongoClient = __webpack_require__(35).MongoClient;
 const debug = __webpack_require__(0)('agenda:database');
 
 /**
@@ -786,13 +925,13 @@ module.exports = function(url, collection, options, cb) {
 
 
 /***/ }),
-/* 32 */
+/* 35 */
 /***/ (function(module, exports) {
 
 module.exports = require("mongodb");
 
 /***/ }),
-/* 33 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -849,7 +988,7 @@ module.exports = function(collection, cb) {
 
 
 /***/ }),
-/* 34 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -869,7 +1008,7 @@ module.exports = function(name) {
 
 
 /***/ }),
-/* 35 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -890,7 +1029,7 @@ module.exports = function(time) {
 
 
 /***/ }),
-/* 36 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -910,7 +1049,7 @@ module.exports = function(num) {
 
 
 /***/ }),
-/* 37 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -930,7 +1069,7 @@ module.exports = function(num) {
 
 
 /***/ }),
-/* 38 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -951,7 +1090,7 @@ module.exports = function(num) {
 
 
 /***/ }),
-/* 39 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -971,7 +1110,7 @@ module.exports = function(num) {
 
 
 /***/ }),
-/* 40 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -992,7 +1131,7 @@ module.exports = function(ms) {
 
 
 /***/ }),
-/* 41 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1013,13 +1152,13 @@ module.exports = function(query) {
 
 
 /***/ }),
-/* 42 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 const debug = __webpack_require__(0)('agenda:create');
-const Job = __webpack_require__(14);
+const Job = __webpack_require__(15);
 
 /**
  * Given a name and some data, create a new job
@@ -1037,7 +1176,7 @@ module.exports = function(name, data) {
 
 
 /***/ }),
-/* 43 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1070,15 +1209,15 @@ module.exports = function() {
 
 
 /***/ }),
-/* 44 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 const humanInterval = __webpack_require__(7);
-const CronTime = __webpack_require__(45).CronTime;
-const moment = __webpack_require__(46);
-const date = __webpack_require__(15);
+const CronTime = __webpack_require__(48).CronTime;
+const moment = __webpack_require__(49);
+const date = __webpack_require__(16);
 const debug = __webpack_require__(0)('agenda:job');
 
 /**
@@ -1169,19 +1308,19 @@ module.exports = function() {
 
 
 /***/ }),
-/* 45 */
+/* 48 */
 /***/ (function(module, exports) {
 
 module.exports = require("cron");
 
 /***/ }),
-/* 46 */
+/* 49 */
 /***/ (function(module, exports) {
 
 module.exports = require("moment-timezone");
 
 /***/ }),
-/* 47 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1202,7 +1341,7 @@ module.exports = function(interval, options) {
 
 
 /***/ }),
-/* 48 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1220,7 +1359,7 @@ module.exports = function(time) {
 
 
 /***/ }),
-/* 49 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1237,7 +1376,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 50 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1254,7 +1393,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 51 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1274,12 +1413,12 @@ module.exports = function(unique, opts) {
 
 
 /***/ }),
-/* 52 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-const date = __webpack_require__(15);
+const date = __webpack_require__(16);
 
 /**
  * Schedules a job to run at specified time
@@ -1293,7 +1432,7 @@ module.exports = function(time) {
 
 
 /***/ }),
-/* 53 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1330,7 +1469,7 @@ module.exports = function(priority) {
 
 
 /***/ }),
-/* 54 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1357,7 +1496,7 @@ module.exports = function(reason) {
 
 
 /***/ }),
-/* 55 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1433,7 +1572,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 56 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1461,7 +1600,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 57 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1479,7 +1618,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 58 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1496,7 +1635,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 59 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1514,7 +1653,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 60 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1542,7 +1681,7 @@ module.exports = function(query, cb) {
 
 
 /***/ }),
-/* 61 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1550,7 +1689,7 @@ module.exports = function(query, cb) {
 // @TODO: What should we use for internal util functions?
 //        Maybe we should use agenda:util:processJobs which would move agenda:* to agenda:agenda;*
 const debug = __webpack_require__(0)('agenda:internal:processJobs');
-const createJob = __webpack_require__(16);
+const createJob = __webpack_require__(17);
 
 /**
  * Process methods for jobs
@@ -1883,7 +2022,7 @@ module.exports = function(extraJob) {
 
 
 /***/ }),
-/* 62 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1904,7 +2043,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 63 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1938,7 +2077,7 @@ module.exports = function(name, options, processor) {
 
 
 /***/ }),
-/* 64 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2027,7 +2166,7 @@ module.exports = function(interval, names, data, options, cb) {
 
 
 /***/ }),
-/* 65 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2108,7 +2247,7 @@ module.exports = function(when, names, data, cb) {
 
 
 /***/ }),
-/* 66 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2136,7 +2275,7 @@ module.exports = function(name, data, cb) {
 
 
 /***/ }),
-/* 67 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2166,7 +2305,7 @@ module.exports = function(query, cb) {
 
 
 /***/ }),
-/* 68 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2316,7 +2455,7 @@ module.exports = function(job, cb) {
 
 
 /***/ }),
-/* 69 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2342,7 +2481,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 70 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2392,7 +2531,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 71 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2483,47 +2622,19 @@ module.exports = function(jobName, definition, cb) {
 
 
 /***/ }),
-/* 72 */
+/* 75 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash");
 
 /***/ }),
-/* 73 */
+/* 76 */
 /***/ (function(module, exports) {
 
 module.exports = require("another-mongoose-statemachine");
 
 /***/ }),
-/* 74 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _mongoose = __webpack_require__(2);
-
-var _mongoose2 = _interopRequireDefault(_mongoose);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var JourneyContentSchema = new _mongoose.Schema({
-  filePath: { type: String },
-  image: { type: String }
-}, {
-  timestamps: true
-});
-
-var JourneyContent = _mongoose2.default.model('JourneyContent', JourneyContentSchema);
-
-exports.default = JourneyContent;
-
-/***/ }),
-/* 75 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2537,31 +2648,31 @@ var _express = __webpack_require__(9);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _bodyParser = __webpack_require__(76);
+var _bodyParser = __webpack_require__(78);
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _api = __webpack_require__(77);
+var _api = __webpack_require__(79);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _ssr = __webpack_require__(80);
+var _ssr = __webpack_require__(81);
 
 var _ssr2 = _interopRequireDefault(_ssr);
 
-var _agenda = __webpack_require__(99);
+var _agenda = __webpack_require__(101);
 
 var _agenda2 = _interopRequireDefault(_agenda);
 
-var _agendash = __webpack_require__(100);
+var _agendash = __webpack_require__(102);
 
 var _agendash2 = _interopRequireDefault(_agendash);
 
-var _expressSession = __webpack_require__(101);
+var _expressSession = __webpack_require__(103);
 
 var _expressSession2 = _interopRequireDefault(_expressSession);
 
-var _connectMongo = __webpack_require__(102);
+var _connectMongo = __webpack_require__(104);
 
 var _connectMongo2 = _interopRequireDefault(_connectMongo);
 
@@ -2594,13 +2705,13 @@ app.listen(process.env.PORT || 5000, function () {
 });
 
 /***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, exports) {
 
 module.exports = require("body-parser");
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2624,7 +2735,7 @@ var _express = __webpack_require__(9);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _opentok = __webpack_require__(17);
+var _opentok = __webpack_require__(18);
 
 var _opentok2 = _interopRequireDefault(_opentok);
 
@@ -2632,17 +2743,21 @@ var _mongoose = __webpack_require__(2);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _journey_space = __webpack_require__(18);
+var _journey_space = __webpack_require__(19);
 
 var _journey_space2 = _interopRequireDefault(_journey_space);
 
-var _journey_participant = __webpack_require__(78);
+var _journey_participant = __webpack_require__(80);
 
 var _journey_participant2 = _interopRequireDefault(_journey_participant);
 
-var _journey_rsvp = __webpack_require__(79);
+var _journey_rsvp = __webpack_require__(20);
 
 var _journey_rsvp2 = _interopRequireDefault(_journey_rsvp);
+
+var _journey_content = __webpack_require__(21);
+
+var _journey_content2 = _interopRequireDefault(_journey_content);
 
 var _dotenv = __webpack_require__(12);
 
@@ -2654,7 +2769,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-__webpack_require__(19);
+__webpack_require__(22);
 
 _dotenv2.default.config();
 
@@ -2690,7 +2805,6 @@ function generateToken(sessionId) {
   tokenOptions.role = "publisher";
   // Generate a token.
   var token = opentok.generateToken(sessionId, tokenOptions);
-  console.log('return token', token);
   return token;
 }
 
@@ -2982,15 +3096,19 @@ router.post('/journeys/:id/rsvp', function () {
 
           case 2:
             journey = _context7.sent;
+            _context7.next = 5;
+            return journey.joined();
+
+          case 5:
             rsvp = new _journey_rsvp2.default({ journey: journey, user: req.session.id });
-            _context7.next = 6;
+            _context7.next = 8;
             return rsvp.save();
 
-          case 6:
-            _context7.next = 8;
+          case 8:
+            _context7.next = 10;
             return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
 
-          case 8:
+          case 10:
             globalSpace = _context7.sent;
 
             if (globalSpace) {
@@ -2998,7 +3116,7 @@ router.post('/journeys/:id/rsvp', function () {
             }
             res.sendStatus(200);
 
-          case 11:
+          case 13:
           case 'end':
             return _context7.stop();
         }
@@ -3011,41 +3129,34 @@ router.post('/journeys/:id/rsvp', function () {
   };
 }());
 
-// TEMP: Use get for convenience. hardcode temp-home-location for the room
-// Trigger a general announcement to everyone
-router.get('/sessions/test/temp-home-location', function () {
+router.post('/journeys/:id/completed', function () {
   var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(req, res) {
-    var existingSession, messageData;
+    var journey, globalSpace;
     return regeneratorRuntime.wrap(function _callee8$(_context8) {
       while (1) {
         switch (_context8.prev = _context8.next) {
           case 0:
             _context8.next = 2;
-            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
+            return _journey_space2.default.findById(req.params.id).exec();
 
           case 2:
-            existingSession = _context8.sent;
+            journey = _context8.sent;
+            _context8.next = 5;
+            return journey.complete();
 
-            if (!existingSession) {
-              _context8.next = 8;
-              break;
+          case 5:
+            _context8.next = 7;
+            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
+
+          case 7:
+            globalSpace = _context8.sent;
+
+            if (globalSpace) {
+              opentok.signal(globalSpace.sessionId, null, { 'type': 'completed', 'data': JSON.stringify(journey.toJSON()) }, function () {});
             }
-
-            console.log("**** SENDING SIGNAL");
-            messageData = {
-              userName: "Bob",
-              description: "some text",
-              url: "http://www.news.google.com"
-            };
-
-
-            signal(existingSession.sessionId, { type: 'displayJourneyRequest', data: JSON.stringify(messageData) });
-            return _context8.abrupt('return', res.sendStatus(200));
-
-          case 8:
             res.sendStatus(200);
 
-          case 9:
+          case 10:
           case 'end':
             return _context8.stop();
         }
@@ -3058,54 +3169,28 @@ router.get('/sessions/test/temp-home-location', function () {
   };
 }());
 
-router.get('/sessions/:room/connections/:connection/ready', function () {
+router.put('/journeys/:room/progress', function () {
   var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(req, res) {
-    var _req$params2, room, connection, existingSession, participant, allReady;
-
+    var currentTime, journey;
     return regeneratorRuntime.wrap(function _callee9$(_context9) {
       while (1) {
         switch (_context9.prev = _context9.next) {
           case 0:
-            _req$params2 = req.params, room = _req$params2.room, connection = _req$params2.connection;
+            currentTime = req.body.currentTime;
             _context9.next = 3;
-            return _journey_space2.default.findOne({ room: room }).exec();
+            return _journey_space2.default.findOne({ room: req.params.room }).exec();
 
           case 3:
-            existingSession = _context9.sent;
+            journey = _context9.sent;
 
-            if (!existingSession) {
-              _context9.next = 18;
-              break;
-            }
-
+            journey.currentTime = currentTime;
             _context9.next = 7;
-            return _journey_participant2.default.findOne({ session: existingSession, connectionId: connection });
+            return journey.save();
 
           case 7:
-            participant = _context9.sent;
-
-            participant.ready = true;
-            _context9.next = 11;
-            return participant.save();
-
-          case 11:
-            signal(existingSession.sessionId, { type: 'ready', data: 'foo' });
-            _context9.next = 14;
-            return _journey_participant2.default.count({ session: existingSession, ready: false, present: true });
-
-          case 14:
-            _context9.t0 = _context9.sent;
-            allReady = _context9.t0 === 0;
-
-            if (allReady) {
-              // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
-            }
-            return _context9.abrupt('return', res.sendStatus(200));
-
-          case 18:
             res.sendStatus(200);
 
-          case 19:
+          case 8:
           case 'end':
             return _context9.stop();
         }
@@ -3118,31 +3203,41 @@ router.get('/sessions/:room/connections/:connection/ready', function () {
   };
 }());
 
-router.get('/journeys', function () {
+// TEMP: Use get for convenience. hardcode temp-home-location for the room
+// Trigger a general announcement to everyone
+router.get('/sessions/test/temp-home-location', function () {
   var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(req, res) {
-    var readdirAsync, journeyFiles;
+    var existingSession, messageData;
     return regeneratorRuntime.wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
           case 0:
-            readdirAsync = promisify(_fs2.default.readdir);
-            _context10.next = 3;
-            return readdirAsync(_path2.default.join(__dirname, '..', 'public/journeys'));
+            _context10.next = 2;
+            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
 
-          case 3:
-            _context10.t0 = function (file) {
-              return _path2.default.extname(file) === '.mp3';
+          case 2:
+            existingSession = _context10.sent;
+
+            if (!existingSession) {
+              _context10.next = 8;
+              break;
+            }
+
+            console.log("**** SENDING SIGNAL");
+            messageData = {
+              userName: "Bob",
+              description: "some text",
+              url: "http://www.news.google.com"
             };
 
-            _context10.t1 = function (file) {
-              return '/journeys/' + file;
-            };
 
-            journeyFiles = _context10.sent.filter(_context10.t0).map(_context10.t1);
+            signal(existingSession.sessionId, { type: 'displayJourneyRequest', data: JSON.stringify(messageData) });
+            return _context10.abrupt('return', res.sendStatus(200));
 
-            res.json(journeyFiles);
+          case 8:
+            res.sendStatus(200);
 
-          case 7:
+          case 9:
           case 'end':
             return _context10.stop();
         }
@@ -3155,37 +3250,54 @@ router.get('/journeys', function () {
   };
 }());
 
-router.put('/sessions/:room/journey', function () {
+router.get('/sessions/:room/connections/:connection/ready', function () {
   var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(req, res) {
-    var journey, room, existingSession;
+    var _req$params2, room, connection, existingSession, participant, allReady;
+
     return regeneratorRuntime.wrap(function _callee11$(_context11) {
       while (1) {
         switch (_context11.prev = _context11.next) {
           case 0:
-            journey = req.body.journey;
-            room = req.params.room;
-            _context11.next = 4;
+            _req$params2 = req.params, room = _req$params2.room, connection = _req$params2.connection;
+            _context11.next = 3;
             return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 4:
+          case 3:
             existingSession = _context11.sent;
 
             if (!existingSession) {
-              _context11.next = 10;
+              _context11.next = 18;
               break;
             }
 
-            existingSession.journey = journey;
-            _context11.next = 9;
-            return existingSession.save();
+            _context11.next = 7;
+            return _journey_participant2.default.findOne({ session: existingSession, connectionId: connection });
 
-          case 9:
-            signal(existingSession.sessionId, { type: 'updatedJourney', data: journey });
+          case 7:
+            participant = _context11.sent;
 
-          case 10:
-            res.sendStatus(200);
+            participant.ready = true;
+            _context11.next = 11;
+            return participant.save();
 
           case 11:
+            signal(existingSession.sessionId, { type: 'ready', data: 'foo' });
+            _context11.next = 14;
+            return _journey_participant2.default.count({ session: existingSession, ready: false, present: true });
+
+          case 14:
+            _context11.t0 = _context11.sent;
+            allReady = _context11.t0 === 0;
+
+            if (allReady) {
+              // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
+            }
+            return _context11.abrupt('return', res.sendStatus(200));
+
+          case 18:
+            res.sendStatus(200);
+
+          case 19:
           case 'end':
             return _context11.stop();
         }
@@ -3198,33 +3310,22 @@ router.put('/sessions/:room/journey', function () {
   };
 }());
 
-// TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
-router.post('/sessions/:room/start', function () {
+router.get('/journeys', function () {
   var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12(req, res) {
-    var room, existingSession;
+    var journeys;
     return regeneratorRuntime.wrap(function _callee12$(_context12) {
       while (1) {
         switch (_context12.prev = _context12.next) {
           case 0:
-            room = req.params.room;
-            _context12.next = 3;
-            return _journey_space2.default.findOne({ room: room }).exec();
+            _context12.next = 2;
+            return _journey_content2.default.find().exec();
 
-          case 3:
-            existingSession = _context12.sent;
+          case 2:
+            journeys = _context12.sent;
 
-            if (!existingSession) {
-              _context12.next = 8;
-              break;
-            }
+            res.json(journeys);
 
-            _context12.next = 7;
-            return existingSession.start();
-
-          case 7:
-            signal(existingSession.sessionId, { type: 'startJourney', data: '' });
-
-          case 8:
+          case 4:
           case 'end':
             return _context12.stop();
         }
@@ -3237,43 +3338,41 @@ router.post('/sessions/:room/start', function () {
   };
 }());
 
-router.post('/sessions/:room/flag', function () {
+router.put('/sessions/:room/journey', function () {
   var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(req, res) {
-    var room, userId, existingSession, participants;
+    var journey, room, existingSession, journeyContent;
     return regeneratorRuntime.wrap(function _callee13$(_context13) {
       while (1) {
         switch (_context13.prev = _context13.next) {
           case 0:
+            journey = req.body.journey;
             room = req.params.room;
-
-            console.log('GOT ONE', req.sessionID);
-            userId = req.sessionID; // using sessionId as representation of user for now
-
-            _context13.next = 5;
+            _context13.next = 4;
             return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 5:
+          case 4:
             existingSession = _context13.sent;
+            _context13.next = 7;
+            return _journey_content2.default.findOne({ filePath: journey }).exec();
+
+          case 7:
+            journeyContent = _context13.sent;
 
             if (!existingSession) {
               _context13.next = 14;
               break;
             }
 
-            existingSession.flags.push({ user: userId });
-            _context13.next = 10;
+            existingSession.journey = journey;
+            existingSession['name'] = journeyContent.get('name');
+            _context13.next = 13;
             return existingSession.save();
 
-          case 10:
-            _context13.next = 12;
-            return _journey_participant2.default.find({ session: existingSession, present: true }).lean().exec();
-
-          case 12:
-            participants = _context13.sent;
-            return _context13.abrupt('return', res.json(_extends({}, existingSession.toJSON(), { participants: participants })));
+          case 13:
+            signal(existingSession.sessionId, { type: 'updatedJourney', data: journey });
 
           case 14:
-            res.sendStatus(404);
+            res.sendStatus(200);
 
           case 15:
           case 'end':
@@ -3288,80 +3387,33 @@ router.post('/sessions/:room/flag', function () {
   };
 }());
 
-router.post('/event', function () {
+// TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
+router.post('/sessions/:room/start', function () {
   var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14(req, res) {
-    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
-
+    var room, existingSession;
     return regeneratorRuntime.wrap(function _callee14$(_context14) {
       while (1) {
         switch (_context14.prev = _context14.next) {
           case 0:
-            console.log('GOT EVENT', req.body);
-            res.sendStatus(200);
-            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
-            _context14.next = 5;
-            return _journey_space2.default.findOne({ sessionId: sessionId }).exec();
+            room = req.params.room;
+            _context14.next = 3;
+            return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 5:
-            session = _context14.sent;
+          case 3:
+            existingSession = _context14.sent;
 
-
-            console.log("*******" + req.body);
-
-            _context14.t0 = req.body.event;
-            _context14.next = _context14.t0 === 'connectionCreated' ? 10 : _context14.t0 === 'connectionDestroyed' ? 20 : 29;
-            break;
-
-          case 10:
-            if (!session) {
-              _context14.next = 19;
+            if (!existingSession) {
+              _context14.next = 8;
               break;
             }
 
-            _context14.next = 13;
-            return _journey_participant2.default.count({ session: session, connectionId: connection.id });
+            _context14.next = 7;
+            return existingSession.start();
 
-          case 13:
-            _context14.t1 = _context14.sent;
-            participantExists = _context14.t1 > 0;
+          case 7:
+            signal(existingSession.sessionId, { type: 'startJourney', data: '' });
 
-            if (participantExists) {
-              _context14.next = 19;
-              break;
-            }
-
-            participant = new _journey_participant2.default({ session: session, connectionId: connection.id });
-            _context14.next = 19;
-            return participant.save();
-
-          case 19:
-            return _context14.abrupt('break', 29);
-
-          case 20:
-            if (!session) {
-              _context14.next = 28;
-              break;
-            }
-
-            _context14.next = 23;
-            return _journey_participant2.default.findOne({ session: session, connectionId: connection.id });
-
-          case 23:
-            _participant = _context14.sent;
-
-            if (!_participant) {
-              _context14.next = 28;
-              break;
-            }
-
-            _participant.present = false;
-            _context14.next = 28;
-            return _participant.save();
-
-          case 28:
-            return _context14.abrupt('break', 29);
-
-          case 29:
+          case 8:
           case 'end':
             return _context14.stop();
         }
@@ -3371,6 +3423,141 @@ router.post('/event', function () {
 
   return function (_x27, _x28) {
     return _ref14.apply(this, arguments);
+  };
+}());
+
+router.post('/sessions/:room/flag', function () {
+  var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15(req, res) {
+    var room, userId, existingSession, participants;
+    return regeneratorRuntime.wrap(function _callee15$(_context15) {
+      while (1) {
+        switch (_context15.prev = _context15.next) {
+          case 0:
+            room = req.params.room;
+            userId = req.sessionID; // using sessionId as representation of user for now
+
+            _context15.next = 4;
+            return _journey_space2.default.findOne({ room: room }).exec();
+
+          case 4:
+            existingSession = _context15.sent;
+
+            if (!existingSession) {
+              _context15.next = 13;
+              break;
+            }
+
+            existingSession.flags.push({ user: userId });
+            _context15.next = 9;
+            return existingSession.save();
+
+          case 9:
+            _context15.next = 11;
+            return _journey_participant2.default.find({ session: existingSession, present: true }).lean().exec();
+
+          case 11:
+            participants = _context15.sent;
+            return _context15.abrupt('return', res.json(_extends({}, existingSession.toJSON(), { participants: participants })));
+
+          case 13:
+            res.sendStatus(404);
+
+          case 14:
+          case 'end':
+            return _context15.stop();
+        }
+      }
+    }, _callee15, undefined);
+  }));
+
+  return function (_x29, _x30) {
+    return _ref15.apply(this, arguments);
+  };
+}());
+
+router.post('/event', function () {
+  var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16(req, res) {
+    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
+
+    return regeneratorRuntime.wrap(function _callee16$(_context16) {
+      while (1) {
+        switch (_context16.prev = _context16.next) {
+          case 0:
+            console.log('GOT EVENT', req.body);
+            res.sendStatus(200);
+            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
+            _context16.next = 5;
+            return _journey_space2.default.findOne({ sessionId: sessionId }).exec();
+
+          case 5:
+            session = _context16.sent;
+
+
+            console.log("*******" + req.body);
+
+            _context16.t0 = req.body.event;
+            _context16.next = _context16.t0 === 'connectionCreated' ? 10 : _context16.t0 === 'connectionDestroyed' ? 20 : 29;
+            break;
+
+          case 10:
+            if (!session) {
+              _context16.next = 19;
+              break;
+            }
+
+            _context16.next = 13;
+            return _journey_participant2.default.count({ session: session, connectionId: connection.id });
+
+          case 13:
+            _context16.t1 = _context16.sent;
+            participantExists = _context16.t1 > 0;
+
+            if (participantExists) {
+              _context16.next = 19;
+              break;
+            }
+
+            participant = new _journey_participant2.default({ session: session, connectionId: connection.id });
+            _context16.next = 19;
+            return participant.save();
+
+          case 19:
+            return _context16.abrupt('break', 29);
+
+          case 20:
+            if (!session) {
+              _context16.next = 28;
+              break;
+            }
+
+            _context16.next = 23;
+            return _journey_participant2.default.findOne({ session: session, connectionId: connection.id });
+
+          case 23:
+            _participant = _context16.sent;
+
+            if (!_participant) {
+              _context16.next = 28;
+              break;
+            }
+
+            _participant.present = false;
+            _context16.next = 28;
+            return _participant.save();
+
+          case 28:
+            return _context16.abrupt('break', 29);
+
+          case 29:
+          case 'end':
+            return _context16.stop();
+        }
+      }
+    }, _callee16, undefined);
+  }));
+
+  return function (_x31, _x32) {
+    return _ref16.apply(this, arguments);
   };
 }());
 
@@ -3404,7 +3591,7 @@ function signal(sessionId, data) {
 exports.default = router;
 
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3433,33 +3620,7 @@ var JourneyParticipant = _mongoose2.default.model('JourneyParticipant', JourneyP
 exports.default = JourneyParticipant;
 
 /***/ }),
-/* 79 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _mongoose = __webpack_require__(2);
-
-var _mongoose2 = _interopRequireDefault(_mongoose);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var JourneyRSVPSchema = new _mongoose.Schema({
-  journey: { type: _mongoose.Schema.Types.ObjectId, ref: 'JourneySpace' },
-  user: { type: String }
-});
-
-var JourneyRSVP = _mongoose2.default.model('JourneyRSVP', JourneyRSVPSchema);
-
-exports.default = JourneyRSVP;
-
-/***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3477,17 +3638,17 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _server = __webpack_require__(81);
+var _server = __webpack_require__(82);
 
 var _server2 = _interopRequireDefault(_server);
 
-var _redux = __webpack_require__(82);
+var _redux = __webpack_require__(83);
 
-var _reactRedux = __webpack_require__(83);
+var _reactRedux = __webpack_require__(84);
 
-var _reactRouter = __webpack_require__(20);
+var _reactRouter = __webpack_require__(23);
 
-var _app = __webpack_require__(84);
+var _app = __webpack_require__(85);
 
 var _app2 = _interopRequireDefault(_app);
 
@@ -3535,25 +3696,25 @@ router.get('/', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom/server");
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports) {
 
 module.exports = require("redux");
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-redux");
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3571,13 +3732,13 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(85);
+var _reactRouterDom = __webpack_require__(24);
 
-var _reactRouter = __webpack_require__(20);
+var _reactRouter = __webpack_require__(23);
 
 var _reactEasyState = __webpack_require__(5);
 
-var _propTypes = __webpack_require__(21);
+var _propTypes = __webpack_require__(25);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -3876,7 +4037,7 @@ var AutoCreatedJourneysQueue = function (_Component3) {
         'div',
         { className: 'joinable-journeys' },
         _state2.default.joinableJourneys.map(function (journey) {
-          return _react2.default.createElement(JoinableJourneyCard, { journey: journey });
+          return _react2.default.createElement(JoinableJourneyCard, { key: journey._id, journey: journey });
         })
       );
     }
@@ -3917,12 +4078,6 @@ var App = function (_Component4) {
 }(_react.Component);
 
 exports.default = (0, _reactRouter.withRouter)((0, _reactEasyState.view)(App));
-
-/***/ }),
-/* 85 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-router-dom");
 
 /***/ }),
 /* 86 */
@@ -4711,27 +4866,41 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _events = __webpack_require__(14);
+
+var _events2 = _interopRequireDefault(_events);
+
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
 var _reactEasyState = __webpack_require__(5);
 
+var _reactRouterDom = __webpack_require__(24);
+
+var _signature_pad = __webpack_require__(96);
+
+var _signature_pad2 = _interopRequireDefault(_signature_pad);
+
 var _state = __webpack_require__(3);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _propTypes = __webpack_require__(21);
+var _propTypes = __webpack_require__(25);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _uuid = __webpack_require__(96);
+var _uuid = __webpack_require__(97);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _opentokLayoutJs = __webpack_require__(97);
+var _opentokLayoutJs = __webpack_require__(98);
+
+__webpack_require__(99);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -4739,8 +4908,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-__webpack_require__(98).polyfill();
-__webpack_require__(19);
+__webpack_require__(100).polyfill();
+__webpack_require__(22);
 
 var _ref = {},
     OTSession = _ref.OTSession,
@@ -4760,7 +4929,107 @@ if (__CLIENT__) {
 
   var OT = __webpack_require__(11);
   window.state = _state2.default;
+  window.signpad = _signature_pad2.default;
 }
+
+var AbstractTimerEmitter = function (_EventEmitter) {
+  _inherits(AbstractTimerEmitter, _EventEmitter);
+
+  function AbstractTimerEmitter() {
+    _classCallCheck(this, AbstractTimerEmitter);
+
+    return _possibleConstructorReturn(this, (AbstractTimerEmitter.__proto__ || Object.getPrototypeOf(AbstractTimerEmitter)).apply(this, arguments));
+  }
+
+  _createClass(AbstractTimerEmitter, [{
+    key: '_displayTime',
+    value: function _displayTime(millisec) {
+      if (millisec < 0) {
+        return '0:00';
+      }
+      var normalizeTime = function normalizeTime(time) {
+        return time.length === 1 ? time.padStart(2, '0') : time;
+      };
+
+      var seconds = (millisec / 1000).toFixed(0);
+      var minutes = Math.floor(parseInt(seconds) / 60).toString();
+      var hours = '';
+
+      if (parseInt(minutes) > 59) {
+        hours = normalizeTime(Math.floor(parseInt(minutes) / 60).toString());
+        minutes = normalizeTime((parseInt(minutes) - parseInt(hours) * 60).toString());
+      }
+      seconds = normalizeTime(Math.floor(parseInt(seconds) % 60).toString());
+
+      if (hours !== '') {
+        return hours + ':' + minutes + ':' + seconds;
+      }
+      return minutes + ':' + seconds;
+    }
+  }]);
+
+  return AbstractTimerEmitter;
+}(_events2.default);
+
+var SecondsTimerEmitter = function (_AbstractTimerEmitter) {
+  _inherits(SecondsTimerEmitter, _AbstractTimerEmitter);
+
+  function SecondsTimerEmitter(createdAt, startAt) {
+    _classCallCheck(this, SecondsTimerEmitter);
+
+    var _this3 = _possibleConstructorReturn(this, (SecondsTimerEmitter.__proto__ || Object.getPrototypeOf(SecondsTimerEmitter)).call(this));
+
+    _this3.start = createdAt.getTime();
+    _this3.total = startAt.getTime() - _this3.start;
+    _this3.passed = new Date().getTime() - _this3.start;
+    _this3.interval = setInterval(function () {
+      _this3.passed = new Date().getTime() - _this3.start;
+      if (_this3.passed >= _this3.total) {
+        clearInterval(_this3.interval);
+      }
+      _this3.emit('tick', _this3.passed);
+    }, 100);
+    return _this3;
+  }
+
+  _createClass(SecondsTimerEmitter, [{
+    key: 'displayTime',
+    value: function displayTime() {
+      return this._displayTime(this.total - this.passed);
+    }
+  }]);
+
+  return SecondsTimerEmitter;
+}(AbstractTimerEmitter);
+
+var AudioPlayTickEmitter = function (_AbstractTimerEmitter2) {
+  _inherits(AudioPlayTickEmitter, _AbstractTimerEmitter2);
+
+  function AudioPlayTickEmitter(audioElement) {
+    _classCallCheck(this, AudioPlayTickEmitter);
+
+    var _this4 = _possibleConstructorReturn(this, (AudioPlayTickEmitter.__proto__ || Object.getPrototypeOf(AudioPlayTickEmitter)).call(this));
+
+    _this4.onTimeUpdate = function (e) {
+      _this4.currentTime = e.target.currentTime;
+      _this4.emit('tick', e.target.currentTime);
+    };
+
+    _this4.currentTime = audioElement.currentTime || 0;
+    _this4.total = audioElement.duration;
+    audioElement.addEventListener('timeupdate', _this4.onTimeUpdate);
+    return _this4;
+  }
+
+  _createClass(AudioPlayTickEmitter, [{
+    key: 'displayTime',
+    value: function displayTime() {
+      return this._displayTime((this.total - this.currentTime) * 1000);
+    }
+  }]);
+
+  return AudioPlayTickEmitter;
+}(AbstractTimerEmitter);
 
 var FlagControl = function FlagControl(_ref2) {
   var currentUserHasFlaggedJourney = _ref2.currentUserHasFlaggedJourney,
@@ -4777,33 +5046,191 @@ var FlagControl = function FlagControl(_ref2) {
   );
 };
 
-var Room = function (_Component) {
-  _inherits(Room, _Component);
+var Waiting = function (_Component) {
+  _inherits(Waiting, _Component);
+
+  function Waiting(props) {
+    _classCallCheck(this, Waiting);
+
+    var _this5 = _possibleConstructorReturn(this, (Waiting.__proto__ || Object.getPrototypeOf(Waiting)).call(this, props));
+
+    _this5.onToggle = function (e) {
+      _this5.setState({
+        open: !_this5.state.open
+      });
+    };
+
+    _this5.state = {
+      open: true
+    };
+    return _this5;
+  }
+
+  _createClass(Waiting, [{
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      if (this.canvas) {
+        var _fadeOut = function _fadeOut() {
+          var ctx = _this.canvas.getContext('2d');
+          ctx.fillStyle = "rgba(0,0,0,0.01)";
+          ctx.fillRect(0, 0, _this.canvas.width, _this.canvas.height);
+          setTimeout(_fadeOut, 100);
+        };
+
+        var signaturePad = new _signature_pad2.default(this.canvas, {
+          backgroundColor: 'rgb(255, 255, 255)',
+          penColor: '#666',
+          minWidth: 1,
+          maxWidth: 10
+        });
+
+        var _this = this;
+
+
+        var ctx = _this.canvas.getContext('2d');
+        ctx.fillStyle = "rgba(42,42,42,1)";
+        ctx.fillRect(0, 0, _this.canvas.width, _this.canvas.height);
+
+        _fadeOut();
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this6 = this;
+
+      return _react2.default.createElement(
+        'div',
+        { style: { overflow: 'hidden', position: 'relative' } },
+        !this.state.open && _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'p',
+            null,
+            'Chill out, draw something:'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'wrapper' },
+            _react2.default.createElement('canvas', { className: 'signature-pad', ref: function ref(el) {
+                return _this6.canvas = el;
+              }, width: 400, height: 400 })
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'waiting', style: { transform: 'translateY(' + (this.state.open ? '0' : '94%') + ')', position: '' + (this.state.open ? 'relative' : 'absolute') } },
+          _react2.default.createElement(
+            'a',
+            { className: 'text-right mr-3', style: { display: 'block', color: 'white' }, href: '#', onClick: this.onToggle },
+            this.state.open ? 'Close X' : 'Open ^'
+          ),
+          _react2.default.createElement('iframe', { height: '100%', width: '100%', style: { width: '100%', height: '400px', border: 'none' }, src: '/pdf.html' })
+        )
+      );
+    }
+  }]);
+
+  return Waiting;
+}(_react.Component);
+
+var JourneyStateProgressBar = function (_Component2) {
+  _inherits(JourneyStateProgressBar, _Component2);
+
+  function JourneyStateProgressBar(props) {
+    _classCallCheck(this, JourneyStateProgressBar);
+
+    var _this7 = _possibleConstructorReturn(this, (JourneyStateProgressBar.__proto__ || Object.getPrototypeOf(JourneyStateProgressBar)).call(this, props));
+
+    props.timer.on('tick', function (current) {
+      _this7.setState({
+        timerValue: current
+      });
+    });
+    _this7.state = {
+      timerValue: 0,
+      total: props.timer.total
+    };
+    return _this7;
+  }
+
+  _createClass(JourneyStateProgressBar, [{
+    key: 'formatState',
+    value: function formatState(state) {
+      switch (this.props.journey.state) {
+        case 'joined':
+          return 'Waiting';
+        case 'started':
+          return 'The Journey';
+        case 'ended':
+          return 'The Sharing';
+        case 'failed':
+          return 'No one joined';
+        default:
+          return 'Waiting';
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'journeyspace-progress pl-3 pr-3' },
+        _react2.default.createElement(
+          'small',
+          null,
+          'Current Section'
+        ),
+        _react2.default.createElement('progress', { max: this.props.timer.total, value: this.state.timerValue, style: { width: '100%' } }),
+        _react2.default.createElement(
+          'div',
+          { style: { display: 'flex' } },
+          _react2.default.createElement(
+            'p',
+            null,
+            this.formatState(this.props.journey.state)
+          ),
+          _react2.default.createElement(
+            'p',
+            { style: { marginLeft: 'auto' } },
+            '-',
+            this.props.timer.displayTime()
+          )
+        )
+      );
+    }
+  }]);
+
+  return JourneyStateProgressBar;
+}(_react.Component);
+
+var Room = function (_Component3) {
+  _inherits(Room, _Component3);
 
   function Room(props) {
     _classCallCheck(this, Room);
 
-    var _this = _possibleConstructorReturn(this, (Room.__proto__ || Object.getPrototypeOf(Room)).call(this, props));
+    var _this8 = _possibleConstructorReturn(this, (Room.__proto__ || Object.getPrototypeOf(Room)).call(this, props));
 
-    _this.refreshSession = function () {
-      fetch('/api/sessions/' + _this.props.match.params.room).then(function (res) {
+    _this8.refreshSession = function () {
+      fetch('/api/sessions/' + _this8.props.match.params.room).then(function (res) {
         return res.json();
       }).then(function (json) {
         _state2.default.session = json;
       });
     };
 
-    _this.onInitPublisher = function () {
+    _this8.onInitPublisher = function () {
       console.log('initialized publisher');
     };
 
-    _this.onConfirmReady = function (e) {
-      fetch('/api/sessions/' + _this.props.match.params.room + '/connections/' + _this.sessionHelper.session.connection.id + '/ready');
+    _this8.onConfirmReady = function (e) {
+      fetch('/api/sessions/' + _this8.props.match.params.room + '/connections/' + _this8.sessionHelper.session.connection.id + '/ready');
     };
 
-    _this.onChangeJourney = function (e) {
-      console.log('CHANGE', e.target.value);
-      fetch('/api/sessions/' + _this.props.match.params.room + '/journey', {
+    _this8.onChangeJourney = function (e) {
+      fetch('/api/sessions/' + _this8.props.match.params.room + '/journey', {
         body: JSON.stringify({ journey: e.target.value }), // must match 'Content-Type' header
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, same-origin, *omit
@@ -4818,8 +5245,8 @@ var Room = function (_Component) {
       });
     };
 
-    _this.onStartSession = function (e) {
-      fetch('/api/sessions/' + _this.props.match.params.room + '/start', {
+    _this8.onStartSession = function (e) {
+      fetch('/api/sessions/' + _this8.props.match.params.room + '/start', {
         cache: 'no-cache',
         credentials: 'same-origin',
         headers: {
@@ -4831,26 +5258,39 @@ var Room = function (_Component) {
       });
     };
 
-    _this.onLoadedMetadata = function (e) {
-      _this.setState({
+    _this8.onLoadedMetadata = function (e) {
+      _this8.setState({
         journeyDuration: e.target.duration
       });
-      _this.audioTag.removeEventListener('timeupdate', _this.onTimeUpdate);
-      _this.audioTag.addEventListener('timeupdate', _this.onTimeUpdate);
+      _this8.audioTag.removeEventListener('timeupdate', _this8.onTimeUpdate);
+      _this8.audioTag.addEventListener('timeupdate', _this8.onTimeUpdate);
     };
 
-    _this.onTimeUpdate = function (e) {
-      _this.setState({
+    _this8.onTimeUpdate = function (e) {
+      _this8.setState({
         playerProgress: e.target.currentTime / e.target.duration * 100,
         playerProgressMS: e.target.currentTime
       });
+      if (_this8.isHostUser) {
+        fetch('/api/journeys/' + _this8.props.match.params.room + '/progress', {
+          body: JSON.stringify({ currentTime: e.target.currentTime }),
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            'user-agent': 'Mozilla/4.0 MDN Example',
+            'content-type': 'application/json'
+          },
+          method: 'PUT',
+          mode: 'cors'
+        });
+      }
     };
 
-    _this.onFlag = function (e) {
+    _this8.onFlag = function (e) {
       e.preventDefault();
-      fetch('/api/sessions/' + _this.props.match.params.room + '/flag', {
+      fetch('/api/sessions/' + _this8.props.match.params.room + '/flag', {
         cache: 'no-cache',
-        body: JSON.stringify({ connectionId: _this.state.session.connection.id }),
+        body: JSON.stringify({ connectionId: _this8.state.session.connection.id }),
         credentials: 'same-origin',
         headers: {
           'user-agent': 'Mozilla/4.0 MDN Example',
@@ -4865,7 +5305,15 @@ var Room = function (_Component) {
       });
     };
 
-    _this.state = {
+    _this8.onShare = function (e) {
+      navigator.share({
+        title: 'Take a Journey With Me!',
+        text: 'Join me on ' + _state2.default.session.name,
+        url: window.location.protocol + '//' + window.location.host + '/' + _state2.default.session.room
+      });
+    };
+
+    _this8.state = {
       streams: [],
       publisherId: '',
       session: null,
@@ -4875,20 +5323,35 @@ var Room = function (_Component) {
       journeyDuration: 0,
       currentlyActivePublisher: null
     };
-    _this.publisher = {};
-    _this.audioTag = {};
-    return _this;
+    _this8.publisher = {};
+    _this8.audioTag = {};
+    return _this8;
   }
 
   _createClass(Room, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this2 = this;
+      var _this9 = this;
 
       this.audioTag.addEventListener('ended', function (event) {
-        _this2.publisher.state.publisher.publishAudio(true);
-        _this2.setState({
+        if (_this9.publisher && _this9.publisher.state && _this9.publisher.state.publisher) {
+          _this9.publisher.state.publisher.publishAudio(true);
+        }
+        _this9.setState({
           playerState: 'ended'
+        });
+
+        fetch('/api/journeys/' + _this9.props.match.params.room + '/completed', {
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, same-origin, *omit
+          headers: {
+            'user-agent': 'Mozilla/4.0 MDN Example',
+            'content-type': 'application/json'
+          },
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, cors, *same-origin
+          redirect: 'follow', // manual, *follow, error
+          referrer: 'no-referrer' // *client, no-referrer
         });
       });
 
@@ -4896,59 +5359,78 @@ var Room = function (_Component) {
         return res.json();
       }).then(function (json) {
         _state2.default.session = json;
-        _this2.sessionHelper = createSession({
+        _this9.sessionHelper = createSession({
           apiKey: _state2.default.openTokKey,
           sessionId: _state2.default.session.sessionId,
           token: _state2.default.session.token,
           onConnect: function onConnect() {
-            console.log('assigned connection to publisher', _this2.sessionHelper.session.connection);
-            setTimeout(_this2.refreshSession, 1000);
+            console.log('assigned connection to publisher', _this9.sessionHelper.session.connection);
+            setTimeout(_this9.refreshSession, 1000);
           },
           onStreamsUpdated: function onStreamsUpdated(streams) {
             console.log('Current subscriber streams:', streams);
-            _this2.setState({ streams: streams });
-            if (!_this2.state.currentlyActivePublisher) {
-              _this2.setState({
+            _this9.setState({ streams: streams });
+            if (!_this9.state.currentlyActivePublisher) {
+              _this9.setState({
                 currentlyActivePublisher: streams[0]
               });
             }
           }
         });
-        _this2.sessionHelper.session.on("connectionDestroyed", function (event) {
+        _this9.sessionHelper.session.on("connectionDestroyed", function (event) {
           var data = {
-            sessionId: _this2.sessionHelper.session.sessionId,
+            sessionId: _this9.sessionHelper.session.sessionId,
             connection: {
               id: event.connection.id
             },
             event: 'connectionDestroyed'
           };
-          _this2.refreshSession();
+          _this9.refreshSession();
         });
-        _this2.sessionHelper.session.on("connectionCreated", function (event) {
+        _this9.sessionHelper.session.on("connectionCreated", function (event) {
           console.log('CREATED', event);
           var data = {
-            sessionId: _this2.sessionHelper.session.sessionId,
+            sessionId: _this9.sessionHelper.session.sessionId,
             connection: {
               id: event.connection.id
             },
             event: 'connectionCreated'
           };
-          _this2.refreshSession();
+          _this9.refreshSession();
         });
-        _this2.sessionHelper.session.on("signal", function (event) {
+        _this9.sessionHelper.session.on('signal', function (event) {
           console.log("Signal sent from connection ", event);
-          _this2.refreshSession();
-          if (event.type === 'signal:startJourney') {
-            _this2.publisher.state.publisher.publishAudio(false);
-            _this2.audioTag.play();
-            _this2.setState({
-              playerState: 'playing'
-            });
+          _this9.refreshSession();
+        });
+
+        _this9.sessionHelper.session.on("signal:startJourney", function (event) {
+          _this9.publisher.state.publisher.publishAudio(false);
+          _this9.audioTag.play();
+          _this9.setState({
+            playerState: 'playing'
+          });
+        });
+
+        _this9.sessionHelper.session.on("signal:fail", function (event) {
+          _state2.default.session.state = 'failed';
+        });
+
+        _this9.setState({
+          session: _this9.sessionHelper.session
+        });
+
+        var onAudioCanPlay = function onAudioCanPlay(event) {
+          if (_state2.default.session.state === 'started') {
+            _this9.audioTag.play();
+            if (!isNaN(_state2.default.session.currentTime)) {
+              _this9.audioTag.currentTime = _state2.default.session.currentTime;
+            }
           }
-        });
-        _this2.setState({
-          session: _this2.sessionHelper.session
-        });
+          _this9.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
+        };
+
+        _this9.audioTag.addEventListener('canplaythrough', onAudioCanPlay, false);
+        _this9.audioTag.load();
       });
       fetch('/api/journeys').then(function (res) {
         return res.json();
@@ -4966,10 +5448,10 @@ var Room = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this10 = this;
 
-      var currentParticipant = this.state.session && _state2.default.session && _state2.default.session.participants.find(function (participant) {
-        return participant.connectionId === _this3.state.session.connection.id;
+      var currentParticipant = this.state.session && this.state.session.connection && _state2.default.session && _state2.default.session.participants.find(function (participant) {
+        return participant.connectionId === _this10.state.session.connection.id;
       });
       var currentUserHasFlaggedJourney = _state2.default.session && _state2.default.session.flags.map(function (flag) {
         return flag.user;
@@ -4983,7 +5465,7 @@ var Room = function (_Component) {
           _react2.default.createElement(
             'audio',
             { style: { display: 'none' }, onLoadedMetadata: this.onLoadedMetadata, key: _state2.default.session && _state2.default.session.journey, controls: 'true', ref: function ref(audioTag) {
-                _this3.audioTag = audioTag;
+                _this10.audioTag = audioTag;
               } },
             _react2.default.createElement('source', { src: _state2.default.session && _state2.default.session.journey, type: 'audio/mpeg' })
           ),
@@ -4992,23 +5474,42 @@ var Room = function (_Component) {
             null,
             _react2.default.createElement(
               'div',
-              { className: 'journeyspace-meta p-3' },
+              { className: 'journeyspace-meta pr-3 pl-3 pt-3' },
               _react2.default.createElement(
-                'h2',
-                { className: 'journeyspace-title' },
-                _state2.default.session.name
+                'div',
+                { style: { display: 'flex' } },
+                _react2.default.createElement(
+                  'h2',
+                  { style: { flex: 5 }, className: 'journeyspace-title' },
+                  _state2.default.session.name
+                ),
+                _react2.default.createElement(
+                  'div',
+                  _defineProperty({ className: 'journeyspace-attendeeCount', style: { flex: 1 } }, 'className', 'journeyspace-attendeeCount'),
+                  _react2.default.createElement(
+                    'h4',
+                    { className: 'journeyspace-attendeeCountLabel' },
+                    'Attendees'
+                  ),
+                  _react2.default.createElement(
+                    'p',
+                    { className: 'journeyspace-attendeeCountCount' },
+                    _state2.default.session.rsvps.length,
+                    ' of 3'
+                  )
+                )
               ),
-              currentParticipant && _state2.default.session.participants.indexOf(currentParticipant) === 0 && _react2.default.createElement(
+              this.isHostUser && _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(
+                false && _state2.default.session.state === 'created' || _state2.default.session.state === 'joined' && _react2.default.createElement(
                   'select',
                   { onChange: this.onChangeJourney, value: _state2.default.session && _state2.default.session.journey },
                   _state2.default.journeys.map(function (journey) {
                     return _react2.default.createElement(
                       'option',
-                      { value: journey },
-                      journey.split('/')[journey.split('/').length - 1]
+                      { value: journey.filePath },
+                      journey.name
                     );
                   })
                 ),
@@ -5019,13 +5520,23 @@ var Room = function (_Component) {
                     'button',
                     { onClick: this.onStartSession, className: 'btn btn-primary' },
                     'Start session ',
-                    _react2.default.createElement('i', { className: 'fa fa-play', ariaHidden: 'true' })
+                    _react2.default.createElement('i', { className: 'fa fa-play' })
                   )
                 )
               ),
               _react2.default.createElement(
                 'div',
-                null,
+                { className: 'journeyspace-share text-right' },
+                _react2.default.createElement(
+                  'a',
+                  { href: '#', onClick: this.onShare },
+                  'Share ',
+                  _react2.default.createElement('i', { className: 'fa fa-share-square-o' })
+                )
+              ),
+              _react2.default.createElement(
+                'div',
+                { style: { display: 'none' } },
                 _react2.default.createElement(
                   'div',
                   null,
@@ -5047,24 +5558,37 @@ var Room = function (_Component) {
                 )
               )
             ),
-            _react2.default.createElement(
+            _react2.default.createElement(JourneyStateProgressBar, { journey: _state2.default.session, timer: this.journeyStateTimer }),
+            _state2.default.session.state === 'failed' && _react2.default.createElement(
+              'p',
+              { className: 'p-3' },
+              ':( No one else joined this journey with you. \xA0',
+              _react2.default.createElement(
+                _reactRouterDom.Link,
+                { to: '/join' },
+                'Go Back to the list'
+              ),
+              ' and pick a different one, or \xA0 ',
+              _react2.default.createElement(
+                'button',
+                { className: 'btn', onClick: this.onStartSession },
+                'Start the journey'
+              )
+            ),
+            _state2.default.session.state === 'joined' && _react2.default.createElement(Waiting, null),
+            _state2.default.session.state === 'started' && _react2.default.createElement(
               'div',
               { className: 'journeyspace-container journeyspace-streams-count-' + (this.state.streams.length + 1) + ' ' + (this.state.streams.length >= 2 ? 'journeyspace-grid-layout' : '') },
-              this.state.streams.length == 0 && _react2.default.createElement(
-                'p',
-                null,
-                'Waiting for others to join this journey...'
-              ),
               this.state.streams.map(function (stream) {
                 var participant = _state2.default.session.participants.find(function (participant) {
                   return participant.connectionId === stream.connection.id;
                 });
                 return _react2.default.createElement(
                   'div',
-                  { className: 'journeyspace-stream ' + (_this3.state.currentlyActivePublisher ? 'journeyspace-active-stream' : '') },
+                  { className: 'journeyspace-stream ' + (_this10.state.currentlyActivePublisher ? 'journeyspace-active-stream' : '') },
                   _react2.default.createElement(OTSubscriber, {
                     key: stream.id,
-                    session: _this3.sessionHelper.session,
+                    session: _this10.sessionHelper.session,
                     stream: stream,
                     properties: {
                       width: '100%',
@@ -5081,7 +5605,7 @@ var Room = function (_Component) {
                   session: this.sessionHelper.session,
                   onInit: this.onInitPublisher,
                   ref: function ref(publisher) {
-                    _this3.publisher = publisher;
+                    _this10.publisher = publisher;
                   }
                 })
               )
@@ -5125,6 +5649,26 @@ var Room = function (_Component) {
       var remainingSeconds = (seconds % 60).toFixed(0);
       return minutes + ":" + (remainingSeconds < 10 ? '0' : '') + remainingSeconds;
     }
+  }, {
+    key: 'isHostUser',
+    get: function get() {
+      var _this11 = this;
+
+      var currentParticipant = this.state.session && this.state.session.connection && _state2.default.session && _state2.default.session.participants.find(function (participant) {
+        return participant.connectionId === _this11.state.session.connection.id;
+      });
+      return currentParticipant && _state2.default.session.participants.indexOf(currentParticipant) === 0;
+    }
+  }, {
+    key: 'journeyStateTimer',
+    get: function get() {
+      switch (_state2.default.session.state) {
+        case 'started':
+          return new AudioPlayTickEmitter(this.audioTag);
+        default:
+          return new SecondsTimerEmitter(new Date(_state2.default.session.createdAt), new Date(_state2.default.session.startAt));
+      }
+    }
   }]);
 
   return Room;
@@ -5134,42 +5678,725 @@ exports.default = (0, _reactEasyState.view)(Room);
 
 /***/ }),
 /* 96 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("uuid");
+"use strict";
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/*!
+ * Signature Pad v3.0.0-beta.2 | https://github.com/szimek/signature_pad
+ * (c) 2018 Szymon Nowak | Released under the MIT license
+ */
+
+(function (global, factory) {
+    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory() :  true ? !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : global.SignaturePad = factory();
+})(undefined, function () {
+    'use strict';
+
+    var Point = function () {
+        function Point(x, y, time) {
+            this.x = x;
+            this.y = y;
+            this.time = time || Date.now();
+        }
+        Point.prototype.distanceTo = function (start) {
+            return Math.sqrt(Math.pow(this.x - start.x, 2) + Math.pow(this.y - start.y, 2));
+        };
+        Point.prototype.equals = function (other) {
+            return this.x === other.x && this.y === other.y && this.time === other.time;
+        };
+        Point.prototype.velocityFrom = function (start) {
+            return this.time !== start.time ? this.distanceTo(start) / (this.time - start.time) : 0;
+        };
+        return Point;
+    }();
+
+    var Bezier = function () {
+        function Bezier(startPoint, control2, control1, endPoint, startWidth, endWidth) {
+            this.startPoint = startPoint;
+            this.control2 = control2;
+            this.control1 = control1;
+            this.endPoint = endPoint;
+            this.startWidth = startWidth;
+            this.endWidth = endWidth;
+        }
+        Bezier.fromPoints = function (points, widths) {
+            var c2 = this.calculateControlPoints(points[0], points[1], points[2]).c2;
+            var c3 = this.calculateControlPoints(points[1], points[2], points[3]).c1;
+            return new Bezier(points[1], c2, c3, points[2], widths.start, widths.end);
+        };
+        Bezier.calculateControlPoints = function (s1, s2, s3) {
+            var dx1 = s1.x - s2.x;
+            var dy1 = s1.y - s2.y;
+            var dx2 = s2.x - s3.x;
+            var dy2 = s2.y - s3.y;
+            var m1 = { x: (s1.x + s2.x) / 2.0, y: (s1.y + s2.y) / 2.0 };
+            var m2 = { x: (s2.x + s3.x) / 2.0, y: (s2.y + s3.y) / 2.0 };
+            var l1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+            var l2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+            var dxm = m1.x - m2.x;
+            var dym = m1.y - m2.y;
+            var k = l2 / (l1 + l2);
+            var cm = { x: m2.x + dxm * k, y: m2.y + dym * k };
+            var tx = s2.x - cm.x;
+            var ty = s2.y - cm.y;
+            return {
+                c1: new Point(m1.x + tx, m1.y + ty),
+                c2: new Point(m2.x + tx, m2.y + ty)
+            };
+        };
+        Bezier.prototype.length = function () {
+            var steps = 10;
+            var length = 0;
+            var px;
+            var py;
+            for (var i = 0; i <= steps; i += 1) {
+                var t = i / steps;
+                var cx = this.point(t, this.startPoint.x, this.control1.x, this.control2.x, this.endPoint.x);
+                var cy = this.point(t, this.startPoint.y, this.control1.y, this.control2.y, this.endPoint.y);
+                if (i > 0) {
+                    var xdiff = cx - px;
+                    var ydiff = cy - py;
+                    length += Math.sqrt(xdiff * xdiff + ydiff * ydiff);
+                }
+                px = cx;
+                py = cy;
+            }
+            return length;
+        };
+        Bezier.prototype.point = function (t, start, c1, c2, end) {
+            return start * (1.0 - t) * (1.0 - t) * (1.0 - t) + 3.0 * c1 * (1.0 - t) * (1.0 - t) * t + 3.0 * c2 * (1.0 - t) * t * t + end * t * t * t;
+        };
+        return Bezier;
+    }();
+
+    function throttle(fn, wait) {
+        if (wait === void 0) {
+            wait = 250;
+        }
+        var previous = 0;
+        var timeout = null;
+        var result;
+        var storedContext;
+        var storedArgs;
+        var later = function later() {
+            previous = Date.now();
+            timeout = null;
+            result = fn.apply(storedContext, storedArgs);
+            if (!timeout) {
+                storedContext = null;
+                storedArgs = [];
+            }
+        };
+        return function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            var now = Date.now();
+            var remaining = wait - (now - previous);
+            storedContext = this;
+            storedArgs = args;
+            if (remaining <= 0 || remaining > wait) {
+                if (timeout) {
+                    clearTimeout(timeout);
+                    timeout = null;
+                }
+                previous = now;
+                result = fn.apply(storedContext, storedArgs);
+                if (!timeout) {
+                    storedContext = null;
+                    storedArgs = [];
+                }
+            } else if (!timeout) {
+                timeout = setTimeout(later, remaining);
+            }
+            return result;
+        };
+    }
+
+    var SignaturePad = function () {
+        function SignaturePad(canvas, options) {
+            if (options === void 0) {
+                options = {};
+            }
+            var _this = this;
+            this.canvas = canvas;
+            this.options = options;
+            this._handleMouseDown = function (event) {
+                if (event.which === 1) {
+                    _this._mouseButtonDown = true;
+                    _this._strokeBegin(event);
+                }
+            };
+            this._handleMouseMove = function (event) {
+                if (_this._mouseButtonDown) {
+                    _this._strokeMoveUpdate(event);
+                }
+            };
+            this._handleMouseUp = function (event) {
+                if (event.which === 1 && _this._mouseButtonDown) {
+                    _this._mouseButtonDown = false;
+                    _this._strokeEnd(event);
+                }
+            };
+            this._handleTouchStart = function (event) {
+                event.preventDefault();
+                if (event.targetTouches.length === 1) {
+                    var touch = event.changedTouches[0];
+                    _this._strokeBegin(touch);
+                }
+            };
+            this._handleTouchMove = function (event) {
+                event.preventDefault();
+                var touch = event.targetTouches[0];
+                _this._strokeMoveUpdate(touch);
+            };
+            this._handleTouchEnd = function (event) {
+                var wasCanvasTouched = event.target === _this.canvas;
+                if (wasCanvasTouched) {
+                    event.preventDefault();
+                    var touch = event.changedTouches[0];
+                    _this._strokeEnd(touch);
+                }
+            };
+            this.velocityFilterWeight = options.velocityFilterWeight || 0.7;
+            this.minWidth = options.minWidth || 0.5;
+            this.maxWidth = options.maxWidth || 2.5;
+            this.throttle = "throttle" in options ? options.throttle : 16;
+            this.minDistance = "minDistance" in options ? options.minDistance : 5;
+            if (this.throttle) {
+                this._strokeMoveUpdate = throttle(SignaturePad.prototype._strokeUpdate, this.throttle);
+            } else {
+                this._strokeMoveUpdate = SignaturePad.prototype._strokeUpdate;
+            }
+            this.dotSize = options.dotSize || function () {
+                return (this.minWidth + this.maxWidth) / 2;
+            };
+            this.penColor = options.penColor || "black";
+            this.backgroundColor = options.backgroundColor || "rgba(0,0,0,0)";
+            this.onBegin = options.onBegin;
+            this.onEnd = options.onEnd;
+            this._ctx = canvas.getContext("2d");
+            this.clear();
+            this.on();
+        }
+        SignaturePad.prototype.clear = function () {
+            var ctx = this._ctx;
+            var canvas = this.canvas;
+            ctx.fillStyle = this.backgroundColor;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            this._data = [];
+            this._reset();
+            this._isEmpty = true;
+        };
+        SignaturePad.prototype.fromDataURL = function (dataUrl, options, callback) {
+            var _this = this;
+            if (options === void 0) {
+                options = {};
+            }
+            var image = new Image();
+            var ratio = options.ratio || window.devicePixelRatio || 1;
+            var width = options.width || this.canvas.width / ratio;
+            var height = options.height || this.canvas.height / ratio;
+            this._reset();
+            image.onload = function () {
+                _this._ctx.drawImage(image, 0, 0, width, height);
+                if (callback) {
+                    callback();
+                }
+            };
+            image.onerror = function (error) {
+                if (callback) {
+                    callback(error);
+                }
+            };
+            image.src = dataUrl;
+            this._isEmpty = false;
+        };
+        SignaturePad.prototype.toDataURL = function (type, encoderOptions) {
+            if (type === void 0) {
+                type = "image/png";
+            }
+            switch (type) {
+                case "image/svg+xml":
+                    return this._toSVG();
+                default:
+                    return this.canvas.toDataURL(type, encoderOptions);
+            }
+        };
+        SignaturePad.prototype.on = function () {
+            this._handleMouseEvents();
+            if ("ontouchstart" in window) {
+                this._handleTouchEvents();
+            }
+        };
+        SignaturePad.prototype.off = function () {
+            this.canvas.style.msTouchAction = "auto";
+            this.canvas.style.touchAction = "auto";
+            this.canvas.removeEventListener("mousedown", this._handleMouseDown);
+            this.canvas.removeEventListener("mousemove", this._handleMouseMove);
+            document.removeEventListener("mouseup", this._handleMouseUp);
+            this.canvas.removeEventListener("touchstart", this._handleTouchStart);
+            this.canvas.removeEventListener("touchmove", this._handleTouchMove);
+            this.canvas.removeEventListener("touchend", this._handleTouchEnd);
+        };
+        SignaturePad.prototype.isEmpty = function () {
+            return this._isEmpty;
+        };
+        SignaturePad.prototype.fromData = function (pointGroups) {
+            var _this = this;
+            this.clear();
+            this._fromData(pointGroups, function (_a) {
+                var color = _a.color,
+                    curve = _a.curve;
+                return _this._drawCurve({ color: color, curve: curve });
+            }, function (_a) {
+                var color = _a.color,
+                    point = _a.point;
+                return _this._drawDot({ color: color, point: point });
+            });
+            this._data = pointGroups;
+        };
+        SignaturePad.prototype.toData = function () {
+            return this._data;
+        };
+        SignaturePad.prototype._strokeBegin = function (event) {
+            var newPointGroup = {
+                color: this.penColor,
+                points: []
+            };
+            this._data.push(newPointGroup);
+            this._reset();
+            this._strokeUpdate(event);
+            if (typeof this.onBegin === "function") {
+                this.onBegin(event);
+            }
+        };
+        SignaturePad.prototype._strokeUpdate = function (event) {
+            var x = event.clientX;
+            var y = event.clientY;
+            var point = this._createPoint(x, y);
+            var lastPointGroup = this._data[this._data.length - 1];
+            var lastPoints = lastPointGroup.points;
+            var lastPoint = lastPoints.length > 0 && lastPoints[lastPoints.length - 1];
+            var isLastPointTooClose = lastPoint ? point.distanceTo(lastPoint) <= this.minDistance : false;
+            var color = lastPointGroup.color;
+            if (!lastPoint || !(lastPoint && isLastPointTooClose)) {
+                var curve = this._addPoint(point);
+                if (!lastPoint) {
+                    this._drawDot({ color: color, point: point });
+                } else if (curve) {
+                    this._drawCurve({ color: color, curve: curve });
+                }
+                lastPoints.push({
+                    time: point.time,
+                    x: point.x,
+                    y: point.y
+                });
+            }
+        };
+        SignaturePad.prototype._strokeEnd = function (event) {
+            this._strokeUpdate(event);
+            if (typeof this.onEnd === "function") {
+                this.onEnd(event);
+            }
+        };
+        SignaturePad.prototype._handleMouseEvents = function () {
+            this._mouseButtonDown = false;
+            this.canvas.addEventListener("mousedown", this._handleMouseDown);
+            this.canvas.addEventListener("mousemove", this._handleMouseMove);
+            document.addEventListener("mouseup", this._handleMouseUp);
+        };
+        SignaturePad.prototype._handleTouchEvents = function () {
+            this.canvas.style.msTouchAction = "none";
+            this.canvas.style.touchAction = "none";
+            this.canvas.addEventListener("touchstart", this._handleTouchStart);
+            this.canvas.addEventListener("touchmove", this._handleTouchMove);
+            this.canvas.addEventListener("touchend", this._handleTouchEnd);
+        };
+        SignaturePad.prototype._reset = function () {
+            this._points = [];
+            this._lastVelocity = 0;
+            this._lastWidth = (this.minWidth + this.maxWidth) / 2;
+            this._ctx.fillStyle = this.penColor;
+        };
+        SignaturePad.prototype._createPoint = function (x, y) {
+            var rect = this.canvas.getBoundingClientRect();
+            return new Point(x - rect.left, y - rect.top, new Date().getTime());
+        };
+        SignaturePad.prototype._addPoint = function (point) {
+            var _points = this._points;
+            _points.push(point);
+            if (_points.length > 2) {
+                if (_points.length === 3) {
+                    _points.unshift(_points[0]);
+                }
+                var widths = this._calculateCurveWidths(_points[1], _points[2]);
+                var curve = Bezier.fromPoints(_points, widths);
+                _points.shift();
+                return curve;
+            }
+            return null;
+        };
+        SignaturePad.prototype._calculateCurveWidths = function (startPoint, endPoint) {
+            var velocity = this.velocityFilterWeight * endPoint.velocityFrom(startPoint) + (1 - this.velocityFilterWeight) * this._lastVelocity;
+            var newWidth = this._strokeWidth(velocity);
+            var widths = {
+                end: newWidth,
+                start: this._lastWidth
+            };
+            this._lastVelocity = velocity;
+            this._lastWidth = newWidth;
+            return widths;
+        };
+        SignaturePad.prototype._strokeWidth = function (velocity) {
+            return Math.max(this.maxWidth / (velocity + 1), this.minWidth);
+        };
+        SignaturePad.prototype._drawCurveSegment = function (x, y, width) {
+            var ctx = this._ctx;
+            ctx.moveTo(x, y);
+            ctx.arc(x, y, width, 0, 2 * Math.PI, false);
+            this._isEmpty = false;
+        };
+        SignaturePad.prototype._drawCurve = function (_a) {
+            var color = _a.color,
+                curve = _a.curve;
+            var ctx = this._ctx;
+            var widthDelta = curve.endWidth - curve.startWidth;
+            var drawSteps = Math.floor(curve.length()) * 2;
+            ctx.beginPath();
+            ctx.fillStyle = color;
+            for (var i = 0; i < drawSteps; i += 1) {
+                var t = i / drawSteps;
+                var tt = t * t;
+                var ttt = tt * t;
+                var u = 1 - t;
+                var uu = u * u;
+                var uuu = uu * u;
+                var x = uuu * curve.startPoint.x;
+                x += 3 * uu * t * curve.control1.x;
+                x += 3 * u * tt * curve.control2.x;
+                x += ttt * curve.endPoint.x;
+                var y = uuu * curve.startPoint.y;
+                y += 3 * uu * t * curve.control1.y;
+                y += 3 * u * tt * curve.control2.y;
+                y += ttt * curve.endPoint.y;
+                var width = curve.startWidth + ttt * widthDelta;
+                this._drawCurveSegment(x, y, width);
+            }
+            ctx.closePath();
+            ctx.fill();
+        };
+        SignaturePad.prototype._drawDot = function (_a) {
+            var color = _a.color,
+                point = _a.point;
+            var ctx = this._ctx;
+            var width = typeof this.dotSize === "function" ? this.dotSize() : this.dotSize;
+            ctx.beginPath();
+            this._drawCurveSegment(point.x, point.y, width);
+            ctx.closePath();
+            ctx.fillStyle = color;
+            ctx.fill();
+        };
+        SignaturePad.prototype._fromData = function (pointGroups, drawCurve, drawDot) {
+            for (var _i = 0, pointGroups_1 = pointGroups; _i < pointGroups_1.length; _i++) {
+                var group = pointGroups_1[_i];
+                var color = group.color,
+                    points = group.points;
+                if (points.length > 1) {
+                    for (var j = 0; j < points.length; j += 1) {
+                        var basicPoint = points[j];
+                        var point = new Point(basicPoint.x, basicPoint.y, basicPoint.time);
+                        this.penColor = color;
+                        if (j === 0) {
+                            this._reset();
+                        }
+                        var curve = this._addPoint(point);
+                        if (curve) {
+                            drawCurve({ color: color, curve: curve });
+                        }
+                    }
+                } else {
+                    this._reset();
+                    drawDot({
+                        color: color,
+                        point: points[0]
+                    });
+                }
+            }
+        };
+        SignaturePad.prototype._toSVG = function () {
+            var _this = this;
+            var pointGroups = this._data;
+            var ratio = Math.max(window.devicePixelRatio || 1, 1);
+            var minX = 0;
+            var minY = 0;
+            var maxX = this.canvas.width / ratio;
+            var maxY = this.canvas.height / ratio;
+            var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svg.setAttribute("width", this.canvas.width.toString());
+            svg.setAttribute("height", this.canvas.height.toString());
+            this._fromData(pointGroups, function (_a) {
+                var color = _a.color,
+                    curve = _a.curve;
+                var path = document.createElement("path");
+                if (!isNaN(curve.control1.x) && !isNaN(curve.control1.y) && !isNaN(curve.control2.x) && !isNaN(curve.control2.y)) {
+                    var attr = "M " + curve.startPoint.x.toFixed(3) + "," + curve.startPoint.y.toFixed(3) + " " + ("C " + curve.control1.x.toFixed(3) + "," + curve.control1.y.toFixed(3) + " ") + (curve.control2.x.toFixed(3) + "," + curve.control2.y.toFixed(3) + " ") + (curve.endPoint.x.toFixed(3) + "," + curve.endPoint.y.toFixed(3));
+                    path.setAttribute("d", attr);
+                    path.setAttribute("stroke-width", (curve.endWidth * 2.25).toFixed(3));
+                    path.setAttribute("stroke", color);
+                    path.setAttribute("fill", "none");
+                    path.setAttribute("stroke-linecap", "round");
+                    svg.appendChild(path);
+                }
+            }, function (_a) {
+                var color = _a.color,
+                    point = _a.point;
+                var circle = document.createElement("circle");
+                var dotSize = typeof _this.dotSize === "function" ? _this.dotSize() : _this.dotSize;
+                circle.setAttribute("r", dotSize.toString());
+                circle.setAttribute("cx", point.x.toString());
+                circle.setAttribute("cy", point.y.toString());
+                circle.setAttribute("fill", color);
+                svg.appendChild(circle);
+            });
+            var prefix = "data:image/svg+xml;base64,";
+            var header = "<svg" + " xmlns=\"http://www.w3.org/2000/svg\"" + " xmlns:xlink=\"http://www.w3.org/1999/xlink\"" + (" viewBox=\"" + minX + " " + minY + " " + maxX + " " + maxY + "\"") + (" width=\"" + maxX + "\"") + (" height=\"" + maxY + "\"") + ">";
+            var body = svg.innerHTML;
+            if (body === undefined) {
+                var dummy = document.createElement("dummy");
+                var nodes = svg.childNodes;
+                dummy.innerHTML = "";
+                for (var i = 0; i < nodes.length; i += 1) {
+                    dummy.appendChild(nodes[i].cloneNode(true));
+                }
+                body = dummy.innerHTML;
+            }
+            var footer = "</svg>";
+            var data = header + body + footer;
+            return prefix + btoa(data);
+        };
+        return SignaturePad;
+    }();
+
+    return SignaturePad;
+});
 
 /***/ }),
 /* 97 */
 /***/ (function(module, exports) {
 
-module.exports = require("opentok-layout-js");
+module.exports = require("uuid");
 
 /***/ }),
 /* 98 */
 /***/ (function(module, exports) {
 
-module.exports = require("es6-promise");
+module.exports = require("opentok-layout-js");
 
 /***/ }),
 /* 99 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("agenda");
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+if (__CLIENT__) {
+  navigator.share = navigator.share || function () {
+    if (navigator.share) {
+      return navigator.share;
+    }
+
+    var android = navigator.userAgent.match(/Android/i);
+    var ios = navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    var isDesktop = !(ios || android); // on those two support "mobile deep links", so HTTP based fallback for all others.
+
+    // sms on ios 'sms:;body='+payload, on Android 'sms:?body='+payload
+    var shareUrls = {
+      whatsapp: function whatsapp(payload) {
+        return (isDesktop ? 'https://api.whatsapp.com/send?text=' : 'whatsapp://send?text=') + payload;
+      },
+      telegram: function telegram(payload) {
+        return (isDesktop ? 'https://telegram.me/share/msg?url=' + location.host + '&text=' : 'tg://msg?text=') + payload;
+      },
+      facebook: function facebook(payload, fbid, url) {
+        return 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+      },
+      email: function email(payload, title) {
+        return 'mailto:?subject=' + title + '&body=' + payload;
+      },
+      sms: function sms(payload) {
+        return 'sms:?body=' + payload;
+      }
+    };
+
+    var WebShareUI = function () {
+      function WebShareUI() {
+        _classCallCheck(this, WebShareUI);
+      }
+
+      _createClass(WebShareUI, [{
+        key: '_init',
+
+        /*async*/
+        value: function _init() {
+          var _this = this;
+
+          if (this._initialized) return Promise.resolve();
+          this._initialized = true;
+
+          var template = '\n        <div class="web-share" style="display: none">\n          <div class="web-share-container web-share-grid">\n              <div class="web-share-title">SHARE VIA</div>\n            <a target=\'_blank\' class="web-share-item web-share-facebook">\n                  <div class="fa fa-facebook-official fa-3x"></div>\n                  <div class="web-share-item-desc">Facebook</div>\n              </a>\n              <a class="web-share-item web-share-email">\n              <div class="fa fa-envelope fa-3x"></div>\n              <div class="web-share-item-desc">Email</div>\n            </a>\n              <a class="web-share-item web-share-sms">\n              <div class="fa fa-commenting fa-3x"></div>\n              <div class="web-share-item-desc">SMS</div>\n            </a>\n            <a class="web-share-item web-share-copy">\n                  <div class="fa fa-clone fa-3x"></div>\n                  <div class="web-share-item-desc">Copy</div>\n              </a>\n          </div>\n          <div class="web-share-container web-share-cancel">Cancel</div>\n        </div>\n        ';
+
+          var el = document.createElement('div');
+          el.innerHTML = template;
+
+          this.$root = el.querySelector('.web-share');
+          this.$whatsapp = el.querySelector('.web-share-whatsapp');
+          this.$facebook = el.querySelector('.web-share-facebook');
+          this.$telegram = el.querySelector('.web-share-telegram');
+          this.$email = el.querySelector('.web-share-email');
+          this.$sms = el.querySelector('.web-share-sms');
+          this.$copy = el.querySelector('.web-share-copy');
+          this.$copy.onclick = function () {
+            return _this._copy();
+          };
+          this.$root.onclick = function () {
+            return _this._hide();
+          };
+          this.$root.classList.toggle('desktop', isDesktop);
+
+          document.body.appendChild(el);
+        }
+      }, {
+        key: '_setPayload',
+        value: function _setPayload(payloadObj) {
+          var payload = payloadObj.text + ' ' + payloadObj.url;
+          var title = payloadObj.title;
+          var facebookId = payloadObj.facebookId || '158651941570418';
+          this.url = payloadObj.url;
+          payload = encodeURIComponent(payload);
+          title = encodeURIComponent(title);
+          this.$whatsapp && (this.$whatsapp.href = shareUrls.whatsapp(payload));
+          this.$facebook.href = shareUrls.facebook(payload, facebookId, payloadObj.url);
+          this.$telegram && (this.$telegram.href = shareUrls.telegram(payload));
+          this.$email.href = shareUrls.email(payload, title);
+          this.$sms.href = shareUrls.sms(payload);
+        }
+      }, {
+        key: '_copy',
+        value: function _copy() {
+          // A <span> contains the text to copy
+          var span = document.createElement('span');
+          span.textContent = this.url;
+          span.style.whiteSpace = 'pre'; // Preserve consecutive spaces and newlines
+
+          // Paint the span outside the viewport
+          span.style.position = 'absolute';
+          span.style.left = '-9999px';
+          span.style.top = '-9999px';
+
+          var win = window;
+          var selection = win.getSelection();
+          win.document.body.appendChild(span);
+
+          var range = win.document.createRange();
+          selection.removeAllRanges();
+          range.selectNode(span);
+          selection.addRange(range);
+
+          var success = false;
+          try {
+            success = win.document.execCommand('copy');
+          } catch (err) {}
+
+          selection.removeAllRanges();
+          span.remove();
+
+          return success;
+        }
+
+        /*async*/
+
+      }, {
+        key: 'show',
+        value: function show(payloadObj) {
+          this._init();
+          clearTimeout(this._hideTimer);
+          this._setPayload(payloadObj);
+          this.$root.style.display = 'flex';
+          this.$root.offsetWidth; // style update
+          this.$root.style.background = 'rgba(0,0,0,.4)';
+          document.querySelectorAll('.web-share-container').forEach(function (el) {
+            el.style.transform = 'translateY(0)';
+            el.style.opacity = 1;
+          });
+        }
+      }, {
+        key: '_hide',
+        value: function _hide() {
+          var _this2 = this;
+
+          this.$root.style.background = null;
+          document.querySelectorAll('.web-share-container').forEach(function (el) {
+            el.style.transform = null;
+            el.style.opacity = null;
+          });
+          this._hideTimer = setTimeout(function () {
+            return _this2.$root.style.display = null;
+          }, 400);
+        }
+      }]);
+
+      return WebShareUI;
+    }();
+
+    var shareUi = new WebShareUI();
+
+    /* async */
+    return function (data) {
+      return shareUi.show(data);
+    };
+  }();
+}
 
 /***/ }),
 /* 100 */
 /***/ (function(module, exports) {
 
-module.exports = require("agendash");
+module.exports = require("es6-promise");
 
 /***/ }),
 /* 101 */
 /***/ (function(module, exports) {
 
-module.exports = require("express-session");
+module.exports = require("agenda");
 
 /***/ }),
 /* 102 */
+/***/ (function(module, exports) {
+
+module.exports = require("agendash");
+
+/***/ }),
+/* 103 */
+/***/ (function(module, exports) {
+
+module.exports = require("express-session");
+
+/***/ }),
+/* 104 */
 /***/ (function(module, exports) {
 
 module.exports = require("connect-mongo");
