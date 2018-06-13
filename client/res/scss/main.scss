@@ -150,6 +150,11 @@ h2 {
   display: flex;
   margin-bottom: 20px;
 
+  .image {
+    flex: 1;
+    max-width: 200px;
+  }
+
   .image img {
     border-radius: 10px;
     width: 100%;
@@ -157,6 +162,7 @@ h2 {
   }
 
   .content {
+    flex: 2;
     margin-left: 10px;
   }
 }

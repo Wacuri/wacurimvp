@@ -8702,11 +8702,15 @@ h2 {
 .joinable-journey-card {
   display: flex;
   margin-bottom: 20px; }
+  .joinable-journey-card .image {
+    flex: 1;
+    max-width: 200px; }
   .joinable-journey-card .image img {
     border-radius: 10px;
     width: 100%;
     max-width: 200px; }
   .joinable-journey-card .content {
+    flex: 2;
     margin-left: 10px; }
 
 .journeyspace-attendeeCount {
