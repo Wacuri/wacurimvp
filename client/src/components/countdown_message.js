@@ -64,17 +64,24 @@ class CountdownMessage extends Component {
 
 
   render() {
-    if(this.state.total/1000 > 0) {
+    var totalTimeInMinutes = this.state.total/1000/60
+    if(totalTimeInMinutes > 0 && totalTimeInMinutes < 5) {
       var message = `Starting in: ${this.state.minutes > 0 ? this.state.minutes + "min" : ""} ${this.state.seconds}sec`
     } else {
       var message = "Started"
     }
 
-    return (
-      <div id='countdown-time' className='btn btn-info' ref='countdown_ref'>
-        {message}
-      </div>
-    );
+    if (totalTimeInMinutes < 5) {
+      return (
+        <div id='countdown-time' className='btn btn-info' ref='countdown_ref'>
+          {message}
+        </div>
+      );
+    } else {
+      return (
+        <div></div>
+        )
+    }
   }
 }
 
