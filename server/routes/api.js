@@ -52,6 +52,12 @@ router.get('/sessions/:room', async (req, res) => {
     }
     const participants = await JourneyParticipant.find({session: existingSession, present: true}).lean().exec();
     const rsvps = await JourneyRSVP.find({journey: existingSession}).lean().exec();
+    const currentUserHasRSVP = rsvps.findIndex(rsvp => rsvp.user === req.session.id) > -1;
+    if (!currentUserHasRSVP) {
+      const rsvp = new JourneyRSVP({journey: existingSession, user: req.session.id});
+      await rsvp.save();
+      rsvps.push(rsvp);
+    }
     const response = existingSession.toJSON();
     response.participants = participants;
     response.rsvps = rsvps;

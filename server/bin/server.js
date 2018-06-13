@@ -2811,7 +2811,7 @@ function generateToken(sessionId) {
 // TODO: switch to POST, just using GET for easier testing
 router.get('/sessions/:room', function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res) {
-    var room, existingSession, session, participants, rsvps, response;
+    var room, existingSession, session, participants, rsvps, currentUserHasRSVP, rsvp, response;
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
@@ -2824,7 +2824,7 @@ router.get('/sessions/:room', function () {
             existingSession = _context3.sent;
 
             if (!existingSession) {
-              _context3.next = 24;
+              _context3.next = 30;
               break;
             }
 
@@ -2876,6 +2876,23 @@ router.get('/sessions/:room', function () {
 
           case 17:
             rsvps = _context3.sent;
+            currentUserHasRSVP = rsvps.findIndex(function (rsvp) {
+              return rsvp.user === req.session.id;
+            }) > -1;
+
+            if (currentUserHasRSVP) {
+              _context3.next = 24;
+              break;
+            }
+
+            rsvp = new _journey_rsvp2.default({ journey: existingSession, user: req.session.id });
+            _context3.next = 23;
+            return rsvp.save();
+
+          case 23:
+            rsvps.push(rsvp);
+
+          case 24:
             response = existingSession.toJSON();
 
             response.participants = participants;
@@ -2883,10 +2900,10 @@ router.get('/sessions/:room', function () {
             res.json(_extends({}, response, {
               token: generateToken(existingSession.sessionId)
             }));
-            _context3.next = 25;
+            _context3.next = 31;
             break;
 
-          case 24:
+          case 30:
             opentok.createSession(function () {
               var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(err, session) {
                 var newSession, response;
@@ -2929,7 +2946,7 @@ router.get('/sessions/:room', function () {
               };
             }());
 
-          case 25:
+          case 31:
           case 'end':
             return _context3.stop();
         }
@@ -4117,8 +4134,6 @@ var _CuriousLiveLogo2 = _interopRequireDefault(_CuriousLiveLogo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-console.log("LOGO IS", _CuriousLiveLogo2.default);
-
 var Header = function Header() {
   return _react2.default.createElement(
     'div',
@@ -5024,20 +5039,28 @@ var AudioPlayTickEmitter = function (_AbstractTimerEmitter2) {
     var _this4 = _possibleConstructorReturn(this, (AudioPlayTickEmitter.__proto__ || Object.getPrototypeOf(AudioPlayTickEmitter)).call(this));
 
     _this4.onTimeUpdate = function (e) {
-      _this4.currentTime = e.target.currentTime;
-      _this4.emit('tick', e.target.currentTime);
+      _this4.currentTime = e.target.currentTime * 1000;
+      _this4.emit('tick', _this4.currentTime);
     };
 
-    _this4.currentTime = audioElement.currentTime || 0;
-    _this4.total = audioElement.duration;
-    audioElement.addEventListener('timeupdate', _this4.onTimeUpdate);
+    _this4.currentTime = (audioElement.currentTime || 0) * 1000;
+    _this4.total = audioElement.duration * 1000;
+    if (audioElement.readyState === 4) {
+      audioElement.addEventListener('timeupdate', _this4.onTimeUpdate);
+      _this4.emit('tick', audioElement.currentTime * 1000);
+    }
+
+    audioElement.addEventListener('loadedmetadata', function (e) {
+      audioElement.addEventListener('timeupdate', _this4.onTimeUpdate);
+      _this4.emit('tick', audioElement.currentTime * 1000);
+    });
     return _this4;
   }
 
   _createClass(AudioPlayTickEmitter, [{
     key: 'displayTime',
     value: function displayTime() {
-      return this._displayTime((this.total - this.currentTime) * 1000);
+      return this._displayTime(this.total - this.currentTime);
     }
   }]);
 
@@ -5085,7 +5108,7 @@ var Waiting = function (_Component) {
       if (this.canvas) {
         var _fadeOut = function _fadeOut() {
           var ctx = _this.canvas.getContext('2d');
-          ctx.fillStyle = "rgba(0,0,0,0.1)";
+          ctx.fillStyle = "rgba(0,0,0,0.01)";
           ctx.fillRect(0, 0, _this.canvas.width, _this.canvas.height);
           setTimeout(_fadeOut, 100);
         };
@@ -5173,6 +5196,17 @@ var JourneyStateProgressBar = function (_Component2) {
   }
 
   _createClass(JourneyStateProgressBar, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(newProps) {
+      var _this8 = this;
+
+      newProps.timer.on('tick', function (current) {
+        _this8.setState({
+          timerValue: current
+        });
+      });
+    }
+  }, {
     key: 'formatState',
     value: function formatState(state) {
       switch (this.props.journey.state) {
@@ -5228,26 +5262,26 @@ var Room = function (_Component3) {
   function Room(props) {
     _classCallCheck(this, Room);
 
-    var _this8 = _possibleConstructorReturn(this, (Room.__proto__ || Object.getPrototypeOf(Room)).call(this, props));
+    var _this9 = _possibleConstructorReturn(this, (Room.__proto__ || Object.getPrototypeOf(Room)).call(this, props));
 
-    _this8.refreshSession = function () {
-      fetch('/api/sessions/' + _this8.props.match.params.room).then(function (res) {
+    _this9.refreshSession = function () {
+      fetch('/api/sessions/' + _this9.props.match.params.room, { credentials: 'include' }).then(function (res) {
         return res.json();
       }).then(function (json) {
         _state2.default.session = json;
       });
     };
 
-    _this8.onInitPublisher = function () {
+    _this9.onInitPublisher = function () {
       console.log('initialized publisher');
     };
 
-    _this8.onConfirmReady = function (e) {
-      fetch('/api/sessions/' + _this8.props.match.params.room + '/connections/' + _this8.sessionHelper.session.connection.id + '/ready');
+    _this9.onConfirmReady = function (e) {
+      fetch('/api/sessions/' + _this9.props.match.params.room + '/connections/' + _this9.sessionHelper.session.connection.id + '/ready');
     };
 
-    _this8.onChangeJourney = function (e) {
-      fetch('/api/sessions/' + _this8.props.match.params.room + '/journey', {
+    _this9.onChangeJourney = function (e) {
+      fetch('/api/sessions/' + _this9.props.match.params.room + '/journey', {
         body: JSON.stringify({ journey: e.target.value }), // must match 'Content-Type' header
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, same-origin, *omit
@@ -5262,8 +5296,8 @@ var Room = function (_Component3) {
       });
     };
 
-    _this8.onStartSession = function (e) {
-      fetch('/api/sessions/' + _this8.props.match.params.room + '/start', {
+    _this9.onStartSession = function (e) {
+      fetch('/api/sessions/' + _this9.props.match.params.room + '/start', {
         cache: 'no-cache',
         credentials: 'same-origin',
         headers: {
@@ -5275,21 +5309,21 @@ var Room = function (_Component3) {
       });
     };
 
-    _this8.onLoadedMetadata = function (e) {
-      _this8.setState({
+    _this9.onLoadedMetadata = function (e) {
+      _this9.setState({
         journeyDuration: e.target.duration
       });
-      _this8.audioTag.removeEventListener('timeupdate', _this8.onTimeUpdate);
-      _this8.audioTag.addEventListener('timeupdate', _this8.onTimeUpdate);
+      _this9.audioTag.removeEventListener('timeupdate', _this9.onTimeUpdate);
+      _this9.audioTag.addEventListener('timeupdate', _this9.onTimeUpdate);
     };
 
-    _this8.onTimeUpdate = function (e) {
-      _this8.setState({
+    _this9.onTimeUpdate = function (e) {
+      _this9.setState({
         playerProgress: e.target.currentTime / e.target.duration * 100,
         playerProgressMS: e.target.currentTime
       });
-      if (_this8.isHostUser) {
-        fetch('/api/journeys/' + _this8.props.match.params.room + '/progress', {
+      if (_this9.isHostUser) {
+        fetch('/api/journeys/' + _this9.props.match.params.room + '/progress', {
           body: JSON.stringify({ currentTime: e.target.currentTime }),
           cache: 'no-cache',
           credentials: 'same-origin',
@@ -5303,11 +5337,11 @@ var Room = function (_Component3) {
       }
     };
 
-    _this8.onFlag = function (e) {
+    _this9.onFlag = function (e) {
       e.preventDefault();
-      fetch('/api/sessions/' + _this8.props.match.params.room + '/flag', {
+      fetch('/api/sessions/' + _this9.props.match.params.room + '/flag', {
         cache: 'no-cache',
-        body: JSON.stringify({ connectionId: _this8.state.session.connection.id }),
+        body: JSON.stringify({ connectionId: _this9.state.session.connection.id }),
         credentials: 'same-origin',
         headers: {
           'user-agent': 'Mozilla/4.0 MDN Example',
@@ -5322,7 +5356,7 @@ var Room = function (_Component3) {
       });
     };
 
-    _this8.onShare = function (e) {
+    _this9.onShare = function (e) {
       navigator.share({
         title: 'Take a Journey With Me!',
         text: 'Join me on ' + _state2.default.session.name,
@@ -5330,7 +5364,7 @@ var Room = function (_Component3) {
       });
     };
 
-    _this8.state = {
+    _this9.state = {
       streams: [],
       publisherId: '',
       session: null,
@@ -5340,25 +5374,25 @@ var Room = function (_Component3) {
       journeyDuration: 0,
       currentlyActivePublisher: null
     };
-    _this8.publisher = {};
-    _this8.audioTag = {};
-    return _this8;
+    _this9.publisher = {};
+    _this9.audioTag = {};
+    return _this9;
   }
 
   _createClass(Room, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this9 = this;
+      var _this10 = this;
 
       this.audioTag.addEventListener('ended', function (event) {
-        if (_this9.publisher && _this9.publisher.state && _this9.publisher.state.publisher) {
-          _this9.publisher.state.publisher.publishAudio(true);
+        if (_this10.publisher && _this10.publisher.state && _this10.publisher.state.publisher) {
+          _this10.publisher.state.publisher.publishAudio(true);
         }
-        _this9.setState({
+        _this10.setState({
           playerState: 'ended'
         });
 
-        fetch('/api/journeys/' + _this9.props.match.params.room + '/completed', {
+        fetch('/api/journeys/' + _this10.props.match.params.room + '/completed', {
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
           credentials: 'same-origin', // include, same-origin, *omit
           headers: {
@@ -5372,82 +5406,85 @@ var Room = function (_Component3) {
         });
       });
 
-      fetch('/api/sessions/' + this.props.match.params.room).then(function (res) {
+      console.log('GET SESSION');
+      fetch('/api/sessions/' + this.props.match.params.room, { credentials: 'include' }).then(function (res) {
         return res.json();
       }).then(function (json) {
         _state2.default.session = json;
-        _this9.sessionHelper = createSession({
+        _this10.sessionHelper = createSession({
           apiKey: _state2.default.openTokKey,
           sessionId: _state2.default.session.sessionId,
           token: _state2.default.session.token,
           onConnect: function onConnect() {
-            console.log('assigned connection to publisher', _this9.sessionHelper.session.connection);
-            setTimeout(_this9.refreshSession, 1000);
+            console.log('assigned connection to publisher', _this10.sessionHelper.session.connection);
+            setTimeout(_this10.refreshSession, 1000);
           },
           onStreamsUpdated: function onStreamsUpdated(streams) {
             console.log('Current subscriber streams:', streams);
-            _this9.setState({ streams: streams });
-            if (!_this9.state.currentlyActivePublisher) {
-              _this9.setState({
+            _this10.setState({ streams: streams });
+            if (!_this10.state.currentlyActivePublisher) {
+              _this10.setState({
                 currentlyActivePublisher: streams[0]
               });
             }
           }
         });
-        _this9.sessionHelper.session.on("connectionDestroyed", function (event) {
+        _this10.sessionHelper.session.on("connectionDestroyed", function (event) {
           var data = {
-            sessionId: _this9.sessionHelper.session.sessionId,
+            sessionId: _this10.sessionHelper.session.sessionId,
             connection: {
               id: event.connection.id
             },
             event: 'connectionDestroyed'
           };
-          _this9.refreshSession();
+          _this10.refreshSession();
         });
-        _this9.sessionHelper.session.on("connectionCreated", function (event) {
+        _this10.sessionHelper.session.on("connectionCreated", function (event) {
           console.log('CREATED', event);
           var data = {
-            sessionId: _this9.sessionHelper.session.sessionId,
+            sessionId: _this10.sessionHelper.session.sessionId,
             connection: {
               id: event.connection.id
             },
             event: 'connectionCreated'
           };
-          _this9.refreshSession();
+          _this10.refreshSession();
         });
-        _this9.sessionHelper.session.on('signal', function (event) {
+        _this10.sessionHelper.session.on('signal', function (event) {
           console.log("Signal sent from connection ", event);
-          _this9.refreshSession();
+          _this10.refreshSession();
         });
 
-        _this9.sessionHelper.session.on("signal:startJourney", function (event) {
-          _this9.publisher.state.publisher.publishAudio(false);
-          _this9.audioTag.play();
-          _this9.setState({
+        _this10.sessionHelper.session.on("signal:startJourney", function (event) {
+          if (_this10.publisher && _this10.publisher.state && _this10.publisher.state.publisher) {
+            _this10.publisher.state.publisher.publishAudio(false);
+          }
+          _this10.audioTag.play();
+          _this10.setState({
             playerState: 'playing'
           });
         });
 
-        _this9.sessionHelper.session.on("signal:fail", function (event) {
+        _this10.sessionHelper.session.on("signal:fail", function (event) {
           _state2.default.session.state = 'failed';
         });
 
-        _this9.setState({
-          session: _this9.sessionHelper.session
+        _this10.setState({
+          session: _this10.sessionHelper.session
         });
 
         var onAudioCanPlay = function onAudioCanPlay(event) {
           if (_state2.default.session.state === 'started') {
-            _this9.audioTag.play();
+            _this10.audioTag.play();
             if (!isNaN(_state2.default.session.currentTime)) {
-              _this9.audioTag.currentTime = _state2.default.session.currentTime;
+              _this10.audioTag.currentTime = _state2.default.session.currentTime;
             }
           }
-          _this9.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
+          _this10.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
         };
 
-        _this9.audioTag.addEventListener('canplaythrough', onAudioCanPlay, false);
-        _this9.audioTag.load();
+        _this10.audioTag.addEventListener('canplaythrough', onAudioCanPlay, false);
+        _this10.audioTag.load();
       });
       fetch('/api/journeys').then(function (res) {
         return res.json();
@@ -5465,10 +5502,10 @@ var Room = function (_Component3) {
   }, {
     key: 'render',
     value: function render() {
-      var _this10 = this;
+      var _this11 = this;
 
       var currentParticipant = this.state.session && this.state.session.connection && _state2.default.session && _state2.default.session.participants.find(function (participant) {
-        return participant.connectionId === _this10.state.session.connection.id;
+        return participant.connectionId === _this11.state.session.connection.id;
       });
       var currentUserHasFlaggedJourney = _state2.default.session && _state2.default.session.flags.map(function (flag) {
         return flag.user;
@@ -5482,7 +5519,7 @@ var Room = function (_Component3) {
           _react2.default.createElement(
             'audio',
             { style: { display: 'none' }, onLoadedMetadata: this.onLoadedMetadata, key: _state2.default.session && _state2.default.session.journey, controls: 'true', ref: function ref(audioTag) {
-                _this10.audioTag = audioTag;
+                _this11.audioTag = audioTag;
               } },
             _react2.default.createElement('source', { src: _state2.default.session && _state2.default.session.journey, type: 'audio/mpeg' })
           ),
@@ -5602,10 +5639,10 @@ var Room = function (_Component3) {
                 });
                 return _react2.default.createElement(
                   'div',
-                  { className: 'journeyspace-stream ' + (_this10.state.currentlyActivePublisher ? 'journeyspace-active-stream' : '') },
+                  { className: 'journeyspace-stream ' + (_this11.state.currentlyActivePublisher ? 'journeyspace-active-stream' : '') },
                   _react2.default.createElement(OTSubscriber, {
                     key: stream.id,
-                    session: _this10.sessionHelper.session,
+                    session: _this11.sessionHelper.session,
                     stream: stream,
                     properties: {
                       width: '100%',
@@ -5622,7 +5659,7 @@ var Room = function (_Component3) {
                   session: this.sessionHelper.session,
                   onInit: this.onInitPublisher,
                   ref: function ref(publisher) {
-                    _this10.publisher = publisher;
+                    _this11.publisher = publisher;
                   }
                 })
               )
@@ -5669,10 +5706,10 @@ var Room = function (_Component3) {
   }, {
     key: 'isHostUser',
     get: function get() {
-      var _this11 = this;
+      var _this12 = this;
 
       var currentParticipant = this.state.session && this.state.session.connection && _state2.default.session && _state2.default.session.participants.find(function (participant) {
-        return participant.connectionId === _this11.state.session.connection.id;
+        return participant.connectionId === _this12.state.session.connection.id;
       });
       return currentParticipant && _state2.default.session.participants.indexOf(currentParticipant) === 0;
     }
@@ -6255,7 +6292,7 @@ if (__CLIENT__) {
         return 'mailto:?subject=' + title + '&body=' + payload;
       },
       sms: function sms(payload) {
-        return 'sms:?body=' + payload;
+        return 'sms:/&body=' + payload;
       }
     };
 

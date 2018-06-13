@@ -67,19 +67,27 @@ class SecondsTimerEmitter extends AbstractTimerEmitter {
 class AudioPlayTickEmitter extends AbstractTimerEmitter {
   constructor(audioElement) {
     super();
-    this.currentTime = audioElement.currentTime || 0;
-    this.total = audioElement.duration;
-    audioElement.addEventListener('timeupdate', this.onTimeUpdate);
+    this.currentTime = (audioElement.currentTime || 0) * 1000;
+    this.total = audioElement.duration * 1000;
+    if (audioElement.readyState === 4) {
+      audioElement.addEventListener('timeupdate', this.onTimeUpdate);
+      this.emit('tick', audioElement.currentTime * 1000);
+    }
+
+    audioElement.addEventListener('loadedmetadata', (e) => {
+      audioElement.addEventListener('timeupdate', this.onTimeUpdate);
+      this.emit('tick', audioElement.currentTime * 1000);
+    });
   }
 
 
   onTimeUpdate = (e) => {
-    this.currentTime = e.target.currentTime;
-    this.emit('tick', e.target.currentTime);
+    this.currentTime = e.target.currentTime * 1000;
+    this.emit('tick', this.currentTime);
   }
 
   displayTime() {
-    return this._displayTime((this.total - this.currentTime) * 1000);
+    return this._displayTime(this.total - this.currentTime);
   }
 }
 
@@ -169,6 +177,13 @@ class JourneyStateProgressBar extends Component {
     }
   }
 
+  componentWillReceiveProps(newProps) {
+    newProps.timer.on('tick', (current) => {
+      this.setState({
+        timerValue: current
+      });
+    });
+  }
     
   formatState(state: number) {
     switch(this.props.journey.state) {
@@ -240,7 +255,8 @@ class Room extends Component {
       });
     });
 
-		fetch(`/api/sessions/${this.props.match.params.room}`)
+    console.log('GET SESSION');
+		fetch(`/api/sessions/${this.props.match.params.room}`, {credentials: 'include'})
 			.then(res => res.json())
 			.then(json => {
 				state.session = json;
@@ -289,7 +305,9 @@ class Room extends Component {
         });
 
         this.sessionHelper.session.on("signal:startJourney", (event) => {
-          this.publisher.state.publisher.publishAudio(false);
+          if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+            this.publisher.state.publisher.publishAudio(false);
+          }
           this.audioTag.play();
           this.setState({
             playerState: 'playing'
@@ -332,7 +350,7 @@ class Room extends Component {
   }
 
   refreshSession = () => {
-		fetch(`/api/sessions/${this.props.match.params.room}`)
+		fetch(`/api/sessions/${this.props.match.params.room}`, {credentials: 'include'})
 			.then(res => res.json())
 			.then(json => {
 				state.session = json;
