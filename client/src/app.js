@@ -7,6 +7,7 @@ import moment from 'moment';
 import Header from './components/header';
 import Home from './components/home';
 import Room from './components/Room';
+import CountdownMessage from './components/countdown_message';
 import state from './state';
 
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
@@ -44,7 +45,7 @@ class Login extends Component {
       name: ''
     }
   }
-  
+
   onChange(field) {
     return (e) => {
       this.setState({
@@ -107,12 +108,14 @@ class JoinableJourneyCard extends Component {
   render() {
     const {journey} = this.props;
     const currentUserHasRSVP = (journey.rsvps || []).find(rsvp => rsvp.user === state.sessionId) != null;
+
     return (
       <div className='joinable-journey-card'>
         <div className='image'>
           <img src={journey.image}/>
         </div>
         <div className='content'>
+        <CountdownMessage endTime={journey.startAt} />
           <h4>{journey.name}</h4>
           <p>Starts at: {moment(journey.startAt).format('LT')}</p>
           <p>{journey.rsvps.length} / 3</p>
@@ -129,7 +132,7 @@ class JoinableJourneyCard extends Component {
 }
 
 class AutoCreatedJourneysQueue extends Component {
-  
+
   componentDidMount() {
     const roomUrl = 'temp-home-location'
 
@@ -163,7 +166,7 @@ class AutoCreatedJourneysQueue extends Component {
           journey.rsvps.push(rsvp);
           state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), journey, ...state.joinableJourneys.slice(idx + 1)];
         });
-        
+
       });
 
 
