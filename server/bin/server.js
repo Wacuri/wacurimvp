@@ -3986,8 +3986,8 @@ var JoinableJourneyCard = function (_Component2) {
             'Join'
           ),
           currentUserHasRSVP && _react2.default.createElement(
-            'a',
-            { href: '/' + journey.room, className: 'btn btn-primary' },
+            _reactRouterDom.Link,
+            { to: '/' + journey.room, className: 'btn btn-primary' },
             'Go there now'
           )
         )

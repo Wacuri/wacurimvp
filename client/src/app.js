@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { Route, Redirect, Switch, Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { view } from 'react-easy-state';
 import PropTypes from 'prop-types';
@@ -120,7 +120,7 @@ class JoinableJourneyCard extends Component {
             <a href={`/${journey.room}`} onClick={this.onJoin} className='btn btn-primary'>Join</a>
           }
           { currentUserHasRSVP &&
-            <a href={`/${journey.room}`} className='btn btn-primary'>Go there now</a>
+            <Link to={`/${journey.room}`} className='btn btn-primary'>Go there now</Link>
           }
         </div>
       </div>
