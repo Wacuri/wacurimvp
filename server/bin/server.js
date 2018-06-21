@@ -4948,8 +4948,6 @@ __webpack_require__(99);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -5276,32 +5274,164 @@ var JourneyStateProgressBar = function (_Component2) {
   return JourneyStateProgressBar;
 }(_react.Component);
 
-var Room = function (_Component3) {
-  _inherits(Room, _Component3);
+var JourneyTimeline = function (_Component3) {
+  _inherits(JourneyTimeline, _Component3);
+
+  function JourneyTimeline() {
+    _classCallCheck(this, JourneyTimeline);
+
+    return _possibleConstructorReturn(this, (JourneyTimeline.__proto__ || Object.getPrototypeOf(JourneyTimeline)).apply(this, arguments));
+  }
+
+  _createClass(JourneyTimeline, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(newProps) {
+      var _this10 = this;
+
+      newProps.timer.on('tick', function (current) {
+        _this10.setState({
+          timerValue: current
+        });
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var journey = this.props.journey;
+
+      return _react2.default.createElement(
+        'ul',
+        { className: 'journey-timeline' },
+        _react2.default.createElement(
+          'li',
+          { className: journey.state === 'joined' ? 'active' : '' },
+          _react2.default.createElement(
+            'h4',
+            null,
+            'Prepare'
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            'Breathe and center yourself'
+          ),
+          journey.state === 'joined' && _react2.default.createElement(
+            'p',
+            { className: 'timer' },
+            this.props.timer.displayTime()
+          )
+        ),
+        _react2.default.createElement(
+          'li',
+          { className: journey.state === 'started' ? 'active' : '' },
+          _react2.default.createElement(
+            'h4',
+            null,
+            'Journey'
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            'Listen and imagine'
+          ),
+          journey.state === 'started' && _react2.default.createElement(
+            'p',
+            { className: 'timer' },
+            this.props.timer.displayTime()
+          )
+        ),
+        _react2.default.createElement(
+          'li',
+          null,
+          _react2.default.createElement(
+            'h4',
+            null,
+            'Sharing'
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            'Feelings and thoughts'
+          )
+        )
+      );
+    }
+  }]);
+
+  return JourneyTimeline;
+}(_react.Component);
+
+var JourneyStartsIn = function (_Component4) {
+  _inherits(JourneyStartsIn, _Component4);
+
+  function JourneyStartsIn() {
+    _classCallCheck(this, JourneyStartsIn);
+
+    return _possibleConstructorReturn(this, (JourneyStartsIn.__proto__ || Object.getPrototypeOf(JourneyStartsIn)).apply(this, arguments));
+  }
+
+  _createClass(JourneyStartsIn, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(newProps) {
+      var _this12 = this;
+
+      newProps.timer.on('tick', function (current) {
+        _this12.setState({
+          timerValue: current
+        });
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var journey = this.props.journey;
+
+      return _react2.default.createElement(
+        'p',
+        { style: { padding: '10px 10px 10px', display: 'flex', borderBottom: '1px solid rgb(88, 88, 88)' } },
+        _react2.default.createElement(
+          'span',
+          null,
+          'Journey starts in:'
+        ),
+        _react2.default.createElement(
+          'span',
+          { style: { marginLeft: 'auto' } },
+          this.props.timer.displayTime()
+        )
+      );
+    }
+  }]);
+
+  return JourneyStartsIn;
+}(_react.Component);
+
+var Room = function (_Component5) {
+  _inherits(Room, _Component5);
 
   function Room(props) {
     _classCallCheck(this, Room);
 
-    var _this9 = _possibleConstructorReturn(this, (Room.__proto__ || Object.getPrototypeOf(Room)).call(this, props));
+    var _this13 = _possibleConstructorReturn(this, (Room.__proto__ || Object.getPrototypeOf(Room)).call(this, props));
 
-    _this9.refreshSession = function () {
-      fetch('/api/sessions/' + _this9.props.match.params.room, { credentials: 'include' }).then(function (res) {
+    _this13.refreshSession = function () {
+      fetch('/api/sessions/' + _this13.props.match.params.room, { credentials: 'include' }).then(function (res) {
         return res.json();
       }).then(function (json) {
         _state2.default.session = json;
       });
     };
 
-    _this9.onInitPublisher = function () {
+    _this13.onInitPublisher = function () {
       console.log('initialized publisher');
     };
 
-    _this9.onConfirmReady = function (e) {
-      fetch('/api/sessions/' + _this9.props.match.params.room + '/connections/' + _this9.sessionHelper.session.connection.id + '/ready');
+    _this13.onConfirmReady = function (e) {
+      fetch('/api/sessions/' + _this13.props.match.params.room + '/connections/' + _this13.sessionHelper.session.connection.id + '/ready');
     };
 
-    _this9.onChangeJourney = function (e) {
-      fetch('/api/sessions/' + _this9.props.match.params.room + '/journey', {
+    _this13.onChangeJourney = function (e) {
+      fetch('/api/sessions/' + _this13.props.match.params.room + '/journey', {
         body: JSON.stringify({ journey: e.target.value }), // must match 'Content-Type' header
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, same-origin, *omit
@@ -5316,8 +5446,8 @@ var Room = function (_Component3) {
       });
     };
 
-    _this9.onStartSession = function (e) {
-      fetch('/api/sessions/' + _this9.props.match.params.room + '/start', {
+    _this13.onStartSession = function (e) {
+      fetch('/api/sessions/' + _this13.props.match.params.room + '/start', {
         cache: 'no-cache',
         credentials: 'same-origin',
         headers: {
@@ -5329,21 +5459,21 @@ var Room = function (_Component3) {
       });
     };
 
-    _this9.onLoadedMetadata = function (e) {
-      _this9.setState({
+    _this13.onLoadedMetadata = function (e) {
+      _this13.setState({
         journeyDuration: e.target.duration
       });
-      _this9.audioTag.removeEventListener('timeupdate', _this9.onTimeUpdate);
-      _this9.audioTag.addEventListener('timeupdate', _this9.onTimeUpdate);
+      _this13.audioTag.removeEventListener('timeupdate', _this13.onTimeUpdate);
+      _this13.audioTag.addEventListener('timeupdate', _this13.onTimeUpdate);
     };
 
-    _this9.onTimeUpdate = function (e) {
-      _this9.setState({
+    _this13.onTimeUpdate = function (e) {
+      _this13.setState({
         playerProgress: e.target.currentTime / e.target.duration * 100,
         playerProgressMS: e.target.currentTime
       });
-      if (_this9.isHostUser) {
-        fetch('/api/journeys/' + _this9.props.match.params.room + '/progress', {
+      if (_this13.isHostUser) {
+        fetch('/api/journeys/' + _this13.props.match.params.room + '/progress', {
           body: JSON.stringify({ currentTime: e.target.currentTime }),
           cache: 'no-cache',
           credentials: 'same-origin',
@@ -5357,11 +5487,11 @@ var Room = function (_Component3) {
       }
     };
 
-    _this9.onFlag = function (e) {
+    _this13.onFlag = function (e) {
       e.preventDefault();
-      fetch('/api/sessions/' + _this9.props.match.params.room + '/flag', {
+      fetch('/api/sessions/' + _this13.props.match.params.room + '/flag', {
         cache: 'no-cache',
-        body: JSON.stringify({ connectionId: _this9.state.session.connection.id }),
+        body: JSON.stringify({ connectionId: _this13.state.session.connection.id }),
         credentials: 'same-origin',
         headers: {
           'user-agent': 'Mozilla/4.0 MDN Example',
@@ -5376,7 +5506,7 @@ var Room = function (_Component3) {
       });
     };
 
-    _this9.onShare = function (e) {
+    _this13.onShare = function (e) {
       navigator.share({
         title: 'Take a Journey With Me!',
         text: 'Join me on ' + _state2.default.session.name,
@@ -5384,7 +5514,7 @@ var Room = function (_Component3) {
       });
     };
 
-    _this9.state = {
+    _this13.state = {
       streams: [],
       publisherId: '',
       session: null,
@@ -5394,25 +5524,25 @@ var Room = function (_Component3) {
       journeyDuration: 0,
       currentlyActivePublisher: null
     };
-    _this9.publisher = {};
-    _this9.audioTag = {};
-    return _this9;
+    _this13.publisher = {};
+    _this13.audioTag = {};
+    return _this13;
   }
 
   _createClass(Room, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this10 = this;
+      var _this14 = this;
 
       this.audioTag.addEventListener('ended', function (event) {
-        if (_this10.publisher && _this10.publisher.state && _this10.publisher.state.publisher) {
-          _this10.publisher.state.publisher.publishAudio(true);
+        if (_this14.publisher && _this14.publisher.state && _this14.publisher.state.publisher) {
+          _this14.publisher.state.publisher.publishAudio(true);
         }
-        _this10.setState({
+        _this14.setState({
           playerState: 'ended'
         });
 
-        fetch('/api/journeys/' + _this10.props.match.params.room + '/completed', {
+        fetch('/api/journeys/' + _this14.props.match.params.room + '/completed', {
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
           credentials: 'same-origin', // include, same-origin, *omit
           headers: {
@@ -5431,80 +5561,80 @@ var Room = function (_Component3) {
         return res.json();
       }).then(function (json) {
         _state2.default.session = json;
-        _this10.sessionHelper = createSession({
+        _this14.sessionHelper = createSession({
           apiKey: _state2.default.openTokKey,
           sessionId: _state2.default.session.sessionId,
           token: _state2.default.session.token,
           onConnect: function onConnect() {
-            console.log('assigned connection to publisher', _this10.sessionHelper.session.connection);
-            setTimeout(_this10.refreshSession, 1000);
+            console.log('assigned connection to publisher', _this14.sessionHelper.session.connection);
+            setTimeout(_this14.refreshSession, 1000);
           },
           onStreamsUpdated: function onStreamsUpdated(streams) {
             console.log('Current subscriber streams:', streams);
-            _this10.setState({ streams: streams });
-            if (!_this10.state.currentlyActivePublisher) {
-              _this10.setState({
+            _this14.setState({ streams: streams });
+            if (!_this14.state.currentlyActivePublisher) {
+              _this14.setState({
                 currentlyActivePublisher: streams[0]
               });
             }
           }
         });
-        _this10.sessionHelper.session.on("connectionDestroyed", function (event) {
+        _this14.sessionHelper.session.on("connectionDestroyed", function (event) {
           var data = {
-            sessionId: _this10.sessionHelper.session.sessionId,
+            sessionId: _this14.sessionHelper.session.sessionId,
             connection: {
               id: event.connection.id
             },
             event: 'connectionDestroyed'
           };
-          _this10.refreshSession();
+          _this14.refreshSession();
         });
-        _this10.sessionHelper.session.on("connectionCreated", function (event) {
+        _this14.sessionHelper.session.on("connectionCreated", function (event) {
           console.log('CREATED', event);
           var data = {
-            sessionId: _this10.sessionHelper.session.sessionId,
+            sessionId: _this14.sessionHelper.session.sessionId,
             connection: {
               id: event.connection.id
             },
             event: 'connectionCreated'
           };
-          _this10.refreshSession();
+          _this14.refreshSession();
         });
-        _this10.sessionHelper.session.on('signal', function (event) {
+        _this14.sessionHelper.session.on('signal', function (event) {
           console.log("Signal sent from connection ", event);
-          _this10.refreshSession();
+          _this14.refreshSession();
         });
 
-        _this10.sessionHelper.session.on("signal:startJourney", function (event) {
-          if (_this10.publisher && _this10.publisher.state && _this10.publisher.state.publisher) {
-            _this10.publisher.state.publisher.publishAudio(false);
+        _this14.sessionHelper.session.on("signal:startJourney", function (event) {
+          if (_this14.publisher && _this14.publisher.state && _this14.publisher.state.publisher) {
+            _this14.publisher.state.publisher.publishAudio(false);
           }
-          _this10.audioTag.play();
-          _this10.setState({
+          _this14.audioTag.play();
+          _this14.setState({
             playerState: 'playing'
           });
         });
 
-        _this10.sessionHelper.session.on("signal:fail", function (event) {
+        _this14.sessionHelper.session.on("signal:fail", function (event) {
           _state2.default.session.state = 'failed';
         });
 
-        _this10.setState({
-          session: _this10.sessionHelper.session
+        _this14.setState({
+          session: _this14.sessionHelper.session
         });
 
         var onAudioCanPlay = function onAudioCanPlay(event) {
           if (_state2.default.session.state === 'started') {
-            _this10.audioTag.play();
+            _this14.audioTag.play();
             if (!isNaN(_state2.default.session.currentTime)) {
-              _this10.audioTag.currentTime = _state2.default.session.currentTime;
+              _this14.audioTag.currentTime = _state2.default.session.currentTime;
             }
           }
-          _this10.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
+          _this14.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
         };
 
-        _this10.audioTag.addEventListener('canplaythrough', onAudioCanPlay, false);
-        _this10.audioTag.load();
+        _this14.audioTag.addEventListener('canplaythrough', onAudioCanPlay, false);
+        _this14.audioTag.load();
       });
       fetch('/api/journeys').then(function (res) {
         return res.json();
@@ -5522,10 +5652,10 @@ var Room = function (_Component3) {
   }, {
     key: 'render',
     value: function render() {
-      var _this11 = this;
+      var _this15 = this;
 
       var currentParticipant = this.state.session && this.state.session.connection && _state2.default.session && _state2.default.session.participants.find(function (participant) {
-        return participant.connectionId === _this11.state.session.connection.id;
+        return participant.connectionId === _this15.state.session.connection.id;
       });
       var currentUserHasFlaggedJourney = _state2.default.session && _state2.default.session.flags.map(function (flag) {
         return flag.user;
@@ -5539,149 +5669,159 @@ var Room = function (_Component3) {
           _react2.default.createElement(
             'audio',
             { style: { display: 'none' }, onLoadedMetadata: this.onLoadedMetadata, key: _state2.default.session && _state2.default.session.journey, controls: 'true', ref: function ref(audioTag) {
-                _this11.audioTag = audioTag;
+                _this15.audioTag = audioTag;
               } },
             _react2.default.createElement('source', { src: _state2.default.session && _state2.default.session.journey, type: 'audio/mpeg' })
           ),
           this.state.session && _react2.default.createElement(
             'div',
-            null,
+            { className: 'row no-gutters' },
             _react2.default.createElement(
               'div',
-              { className: 'journeyspace-meta pr-3 pl-3 pt-3' },
+              { className: 'col-5' },
               _react2.default.createElement(
-                'div',
-                { style: { display: 'flex' } },
+                'ul',
+                { className: 'journeyspace-streams', style: { margin: 0 } },
                 _react2.default.createElement(
-                  'h2',
-                  { style: { flex: 5 }, className: 'journeyspace-title' },
-                  _state2.default.session.name
+                  'li',
+                  null,
+                  _react2.default.createElement('img', { style: { width: '100%' }, src: _state2.default.session.image }),
+                  _react2.default.createElement(
+                    'h2',
+                    { style: { flex: 5 }, className: 'journeyspace-title' },
+                    _state2.default.session.name
+                  )
                 ),
                 _react2.default.createElement(
-                  'div',
-                  _defineProperty({ className: 'journeyspace-attendeeCount', style: { flex: 1 } }, 'className', 'journeyspace-attendeeCount'),
-                  _react2.default.createElement(
-                    'h4',
-                    { className: 'journeyspace-attendeeCountLabel' },
-                    'Attendees'
-                  ),
-                  _react2.default.createElement(
-                    'p',
-                    { className: 'journeyspace-attendeeCountCount' },
-                    _state2.default.session.rsvps.length,
-                    ' of 3'
-                  )
-                )
-              ),
-              this.isHostUser && _react2.default.createElement(
-                'div',
-                null,
-                false && _state2.default.session.state === 'created' || _state2.default.session.state === 'joined' && _react2.default.createElement(
-                  'select',
-                  { onChange: this.onChangeJourney, value: _state2.default.session && _state2.default.session.journey },
-                  _state2.default.journeys.map(function (journey) {
-                    return _react2.default.createElement(
-                      'option',
-                      { value: journey.filePath },
-                      journey.name
-                    );
+                  'li',
+                  { className: 'journeyspace-stream journeyspace-me' },
+                  _react2.default.createElement(OTPublisher, {
+                    properties: { width: '100%', height: '100%' },
+                    session: this.sessionHelper.session,
+                    onInit: this.onInitPublisher,
+                    ref: function ref(publisher) {
+                      _this15.publisher = publisher;
+                    }
                   })
                 ),
-                _state2.default.session.state === 'created' && _react2.default.createElement(
-                  'div',
-                  null,
-                  _react2.default.createElement(
-                    'button',
-                    { onClick: this.onStartSession, className: 'btn btn-primary' },
-                    'Start session ',
-                    _react2.default.createElement('i', { className: 'fa fa-play' })
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'journeyspace-share text-right' },
-                _react2.default.createElement(
-                  'a',
-                  { href: '#', onClick: this.onShare },
-                  'Share ',
-                  _react2.default.createElement('i', { className: 'fa fa-share-square-o' })
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { style: { display: 'none' } },
-                _react2.default.createElement(
-                  'div',
-                  null,
-                  _react2.default.createElement('progress', { max: '100', value: this.state.playerProgress, style: { width: '100%' } }),
-                  _react2.default.createElement(
-                    'p',
-                    { style: { display: 'flex' } },
+                this.state.streams.map(function (stream) {
+                  var participant = _state2.default.session.participants.find(function (participant) {
+                    return participant.connectionId === stream.connection.id;
+                  });
+                  return _react2.default.createElement(
+                    'li',
+                    { className: 'journeyspace-stream ' + (_this15.state.currentlyActivePublisher ? 'journeyspace-active-stream' : '') },
+                    _react2.default.createElement(OTSubscriber, {
+                      key: stream.id,
+                      session: _this15.sessionHelper.session,
+                      stream: stream,
+                      properties: {
+                        width: '100%',
+                        height: '100%'
+                      }
+                    })
+                  );
+                }),
+                Array(2 - this.state.streams.length).fill({}).map(function (empty) {
+                  return _react2.default.createElement(
+                    'li',
+                    { className: 'video-placeholder' },
                     _react2.default.createElement(
-                      'strong',
-                      { style: { flex: 1 } },
-                      'Time remaining:'
-                    ),
-                    _react2.default.createElement(
-                      'span',
+                      'div',
                       null,
-                      this.timeRemaining
+                      _react2.default.createElement('i', { className: 'fa fa-user' }),
+                      _react2.default.createElement(
+                        'p',
+                        null,
+                        'waiting...'
+                      )
+                    )
+                  );
+                })
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col-7', style: { backgroundColor: 'white' } },
+              _state2.default.session.state === 'joined' && _react2.default.createElement(JourneyStartsIn, { journey: _state2.default.session, timer: this.journeyStateTimer }),
+              _react2.default.createElement(JourneyTimeline, { journey: _state2.default.session, timer: this.journeyStateTimer }),
+              _react2.default.createElement(
+                'div',
+                { className: 'journeyspace-meta pr-3 pl-3 pt-3' },
+                this.isHostUser && _react2.default.createElement(
+                  'div',
+                  null,
+                  false && _state2.default.session.state === 'created' || _state2.default.session.state === 'joined' && _react2.default.createElement(
+                    'select',
+                    { onChange: this.onChangeJourney, value: _state2.default.session && _state2.default.session.journey },
+                    _state2.default.journeys.map(function (journey) {
+                      return _react2.default.createElement(
+                        'option',
+                        { value: journey.filePath },
+                        journey.name
+                      );
+                    })
+                  ),
+                  _state2.default.session.state === 'created' && _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                      'button',
+                      { onClick: this.onStartSession, className: 'btn btn-primary' },
+                      'Start session ',
+                      _react2.default.createElement('i', { className: 'fa fa-play' })
+                    )
+                  )
+                ),
+                _react2.default.createElement(
+                  'div',
+                  { className: 'journeyspace-share text-right' },
+                  _react2.default.createElement(
+                    'a',
+                    { href: '#', onClick: this.onShare },
+                    'Share ',
+                    _react2.default.createElement('i', { className: 'fa fa-share-square-o' })
+                  )
+                ),
+                _react2.default.createElement(
+                  'div',
+                  { style: { display: 'none' } },
+                  _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement('progress', { max: '100', value: this.state.playerProgress, style: { width: '100%' } }),
+                    _react2.default.createElement(
+                      'p',
+                      { style: { display: 'flex' } },
+                      _react2.default.createElement(
+                        'strong',
+                        { style: { flex: 1 } },
+                        'Time remaining:'
+                      ),
+                      _react2.default.createElement(
+                        'span',
+                        null,
+                        this.timeRemaining
+                      )
                     )
                   )
                 )
-              )
-            ),
-            _react2.default.createElement(JourneyStateProgressBar, { journey: _state2.default.session, timer: this.journeyStateTimer }),
-            _state2.default.session.state === 'failed' && _react2.default.createElement(
-              'p',
-              { className: 'p-3' },
-              ':( No one else joined this journey with you. \xA0',
-              _react2.default.createElement(
-                _reactRouterDom.Link,
-                { to: '/join' },
-                'Go Back to the list'
               ),
-              ' and pick a different one, or \xA0 ',
-              _react2.default.createElement(
-                'button',
-                { className: 'btn', onClick: this.onStartSession },
-                'Start the journey'
-              )
-            ),
-            _state2.default.session.state === 'joined' && _react2.default.createElement(Waiting, null),
-            _state2.default.session.state === 'started' && _react2.default.createElement(
-              'div',
-              { className: 'journeyspace-container journeyspace-streams-count-' + (this.state.streams.length + 1) + ' ' + (this.state.streams.length >= 2 ? 'journeyspace-grid-layout' : '') },
-              this.state.streams.map(function (stream) {
-                var participant = _state2.default.session.participants.find(function (participant) {
-                  return participant.connectionId === stream.connection.id;
-                });
-                return _react2.default.createElement(
-                  'div',
-                  { className: 'journeyspace-stream ' + (_this11.state.currentlyActivePublisher ? 'journeyspace-active-stream' : '') },
-                  _react2.default.createElement(OTSubscriber, {
-                    key: stream.id,
-                    session: _this11.sessionHelper.session,
-                    stream: stream,
-                    properties: {
-                      width: '100%',
-                      height: '100%'
-                    }
-                  })
-                );
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'journeyspace-stream journeyspace-me' },
-                _react2.default.createElement(OTPublisher, {
-                  properties: { width: '100%', height: '100%' },
-                  session: this.sessionHelper.session,
-                  onInit: this.onInitPublisher,
-                  ref: function ref(publisher) {
-                    _this11.publisher = publisher;
-                  }
-                })
+              _state2.default.session.state === 'failed' && _react2.default.createElement(
+                'p',
+                { className: 'p-3' },
+                ':( No one else joined this journey with you. \xA0',
+                _react2.default.createElement(
+                  _reactRouterDom.Link,
+                  { to: '/join' },
+                  'Go Back to the list'
+                ),
+                ' and pick a different one, or \xA0 ',
+                _react2.default.createElement(
+                  'button',
+                  { className: 'btn', onClick: this.onStartSession },
+                  'Start the journey'
+                )
               )
             )
           )
@@ -5726,10 +5866,10 @@ var Room = function (_Component3) {
   }, {
     key: 'isHostUser',
     get: function get() {
-      var _this12 = this;
+      var _this16 = this;
 
       var currentParticipant = this.state.session && this.state.session.connection && _state2.default.session && _state2.default.session.participants.find(function (participant) {
-        return participant.connectionId === _this12.state.session.connection.id;
+        return participant.connectionId === _this16.state.session.connection.id;
       });
       return currentParticipant && _state2.default.session.participants.indexOf(currentParticipant) === 0;
     }
@@ -6500,7 +6640,12 @@ var CountdownMessage = function (_Component) {
   _createClass(CountdownMessage, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var intervalId = setInterval(this.countdown, 1000);
+      this.intervalId = setInterval(this.countdown, 1000);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      clearInterval(this.intervalId);
     }
   }, {
     key: 'countdown',

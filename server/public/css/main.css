@@ -8628,17 +8628,36 @@ h2 {
   background: #fcbd51; }
 
 .journeyspace-title {
-  color: white; }
-
-.journeyspace-content p {
-  color: white; }
+  color: white;
+  font-size: 12px;
+  font-weight: normal; }
 
 .journeyspace-container {
   position: relative; }
 
+.journeyspace-streams {
+  padding: 15px 10px 0 10px; }
+  .journeyspace-streams li {
+    border: 1px solid #535353;
+    min-height: calc(100vw * .4);
+    margin-bottom: 10px; }
+  .journeyspace-streams li:first-child {
+    border: none; }
+
+.video-placeholder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; }
+  .video-placeholder > div {
+    text-align: center; }
+  .video-placeholder i {
+    color: #535353;
+    font-size: 22px; }
+  .video-placeholder p {
+    color: #535353; }
+
 .journeyspace-stream {
-  width: 100vw;
-  height: calc(100vw * 3/4);
   position: relative; }
   .journeyspace-stream > div {
     width: 100%;
@@ -8649,29 +8668,6 @@ h2 {
 
 .journeyspace-streams-count-1 .journeyspace-me {
   display: none; }
-
-.journeyspace-streams-count-2 {
-  position: relative; }
-  .journeyspace-streams-count-2 .journeyspace-active-stream {
-    position: relative; }
-  .journeyspace-streams-count-2 .journeyspace-me {
-    position: absolute;
-    right: 0;
-    bottom: -50px;
-    width: 25vw;
-    height: calc(25vw * 3/4); }
-
-.journeyspace-grid-layout {
-  display: flex;
-  flex-wrap: wrap; }
-  .journeyspace-grid-layout .journeyspace-stream:first-child {
-    flex: 1;
-    flex-basis: 100%; }
-  .journeyspace-grid-layout .journeyspace-stream:nth-child(n+2) {
-    flex: 1;
-    flex-basis: 1%;
-    height: 0;
-    padding-top: 50%; }
 
 .journeyspace-share a {
   color: white; }
@@ -8826,5 +8822,37 @@ h2 {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none; }
+
+.journey-timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+  .journey-timeline li {
+    border-bottom: 1px solid #585858;
+    padding: 10px; }
+
+.journey-timeline h4 {
+  font-size: 16px;
+  font-weight: bold; }
+
+.journey-timeline p {
+  font-size: 12px;
+  margin-bottom: 0; }
+
+.journey-timeline li.active {
+  position: relative; }
+  .journey-timeline li.active:after {
+    position: absolute;
+    font: normal normal normal 14px/1 FontAwesome;
+    content: '\F0D9';
+    display: block;
+    height: 100%;
+    top: 0;
+    right: -4px;
+    font-size: 100px;
+    color: #fdbe45; }
+
+.journey-timeline .timer {
+  font-weight: bold; }
 
 /*# sourceMappingURL=main.css.map*/
