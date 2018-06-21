@@ -2654,37 +2654,42 @@ var _express = __webpack_require__(9);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _bodyParser = __webpack_require__(78);
+var _sslExpressWww = __webpack_require__(78);
+
+var _sslExpressWww2 = _interopRequireDefault(_sslExpressWww);
+
+var _bodyParser = __webpack_require__(79);
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _api = __webpack_require__(79);
+var _api = __webpack_require__(80);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _ssr = __webpack_require__(81);
+var _ssr = __webpack_require__(82);
 
 var _ssr2 = _interopRequireDefault(_ssr);
 
-var _agenda = __webpack_require__(102);
+var _agenda = __webpack_require__(103);
 
 var _agenda2 = _interopRequireDefault(_agenda);
 
-var _agendash = __webpack_require__(103);
+var _agendash = __webpack_require__(104);
 
 var _agendash2 = _interopRequireDefault(_agendash);
 
-var _expressSession = __webpack_require__(104);
+var _expressSession = __webpack_require__(105);
 
 var _expressSession2 = _interopRequireDefault(_expressSession);
 
-var _connectMongo = __webpack_require__(105);
+var _connectMongo = __webpack_require__(106);
 
 var _connectMongo2 = _interopRequireDefault(_connectMongo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
+app.use(_sslExpressWww2.default);
 var agenda = new _agenda2.default({ db: { address: process.env.MONGODB_URI || process.env.MONGO_URL } });
 
 app.use((0, _expressSession2.default)({
@@ -2714,10 +2719,16 @@ app.listen(process.env.PORT || 5000, function () {
 /* 78 */
 /***/ (function(module, exports) {
 
-module.exports = require("body-parser");
+module.exports = require("ssl-express-www");
 
 /***/ }),
 /* 79 */
+/***/ (function(module, exports) {
+
+module.exports = require("body-parser");
+
+/***/ }),
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2753,7 +2764,7 @@ var _journey_space = __webpack_require__(19);
 
 var _journey_space2 = _interopRequireDefault(_journey_space);
 
-var _journey_participant = __webpack_require__(80);
+var _journey_participant = __webpack_require__(81);
 
 var _journey_participant2 = _interopRequireDefault(_journey_participant);
 
@@ -3625,7 +3636,7 @@ function signal(sessionId, data) {
 exports.default = router;
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3654,7 +3665,7 @@ var JourneyParticipant = _mongoose2.default.model('JourneyParticipant', JourneyP
 exports.default = JourneyParticipant;
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3672,17 +3683,17 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _server = __webpack_require__(82);
+var _server = __webpack_require__(83);
 
 var _server2 = _interopRequireDefault(_server);
 
-var _redux = __webpack_require__(83);
+var _redux = __webpack_require__(84);
 
-var _reactRedux = __webpack_require__(84);
+var _reactRedux = __webpack_require__(85);
 
 var _reactRouter = __webpack_require__(23);
 
-var _app = __webpack_require__(85);
+var _app = __webpack_require__(86);
 
 var _app2 = _interopRequireDefault(_app);
 
@@ -3730,25 +3741,25 @@ router.get('/', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom/server");
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports) {
 
 module.exports = require("redux");
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-redux");
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3780,19 +3791,19 @@ var _moment = __webpack_require__(8);
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _header = __webpack_require__(86);
+var _header = __webpack_require__(87);
 
 var _header2 = _interopRequireDefault(_header);
 
-var _home = __webpack_require__(88);
+var _home = __webpack_require__(89);
 
 var _home2 = _interopRequireDefault(_home);
 
-var _Room = __webpack_require__(95);
+var _Room = __webpack_require__(96);
 
 var _Room2 = _interopRequireDefault(_Room);
 
-var _countdown_message = __webpack_require__(101);
+var _countdown_message = __webpack_require__(102);
 
 var _countdown_message2 = _interopRequireDefault(_countdown_message);
 
@@ -4128,7 +4139,7 @@ var App = function (_Component4) {
 exports.default = (0, _reactRouter.withRouter)((0, _reactEasyState.view)(App));
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4148,7 +4159,7 @@ var _state = __webpack_require__(3);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _CuriousLiveLogo = __webpack_require__(87);
+var _CuriousLiveLogo = __webpack_require__(88);
 
 var _CuriousLiveLogo2 = _interopRequireDefault(_CuriousLiveLogo);
 
@@ -4184,13 +4195,13 @@ var Header = function Header() {
 exports.default = (0, _reactEasyState.view)(Header);
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "f8a62333255a9846821aec2c092c395e.png";
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4206,19 +4217,19 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _user_list = __webpack_require__(89);
+var _user_list = __webpack_require__(90);
 
 var _user_list2 = _interopRequireDefault(_user_list);
 
-var _generator_form = __webpack_require__(90);
+var _generator_form = __webpack_require__(91);
 
 var _generator_form2 = _interopRequireDefault(_generator_form);
 
-var _event_message = __webpack_require__(91);
+var _event_message = __webpack_require__(92);
 
 var _event_message2 = _interopRequireDefault(_event_message);
 
-var _journey_space_form = __webpack_require__(92);
+var _journey_space_form = __webpack_require__(93);
 
 var _journey_space_form2 = _interopRequireDefault(_journey_space_form);
 
@@ -4407,7 +4418,7 @@ var Home = function (_Component) {
 exports.default = Home;
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4474,7 +4485,7 @@ var UserList = function (_Component) {
 exports.default = UserList;
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4565,7 +4576,7 @@ var GeneratorForm = function (_Component) {
 exports.default = GeneratorForm;
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4611,7 +4622,7 @@ var EventMessage = function EventMessage(props) {
 exports.default = EventMessage;
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4627,7 +4638,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _journey_detail_entry = __webpack_require__(93);
+var _journey_detail_entry = __webpack_require__(94);
 
 var _journey_detail_entry2 = _interopRequireDefault(_journey_detail_entry);
 
@@ -4691,7 +4702,7 @@ var JourneySpaceForm = function (_Component) {
 exports.default = JourneySpaceForm;
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4707,7 +4718,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _session_info = __webpack_require__(94);
+var _session_info = __webpack_require__(95);
 
 var _session_info2 = _interopRequireDefault(_session_info);
 
@@ -4810,7 +4821,7 @@ var JourneyDetailEntry = function (_Component) {
 exports.default = JourneyDetailEntry;
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4902,7 +4913,7 @@ var SessionInfo = function (_Component) {
 exports.default = SessionInfo;
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4926,7 +4937,7 @@ var _reactEasyState = __webpack_require__(5);
 
 var _reactRouterDom = __webpack_require__(24);
 
-var _signature_pad = __webpack_require__(96);
+var _signature_pad = __webpack_require__(97);
 
 var _signature_pad2 = _interopRequireDefault(_signature_pad);
 
@@ -4938,13 +4949,13 @@ var _propTypes = __webpack_require__(25);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _uuid = __webpack_require__(97);
+var _uuid = __webpack_require__(98);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _opentokLayoutJs = __webpack_require__(98);
+var _opentokLayoutJs = __webpack_require__(99);
 
-__webpack_require__(99);
+__webpack_require__(100);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4954,7 +4965,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-__webpack_require__(100).polyfill();
+__webpack_require__(101).polyfill();
 __webpack_require__(22);
 
 var _ref = {},
@@ -5891,7 +5902,7 @@ var Room = function (_Component5) {
 exports.default = (0, _reactEasyState.view)(Room);
 
 /***/ }),
-/* 96 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6405,19 +6416,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 97 */
+/* 98 */
 /***/ (function(module, exports) {
 
 module.exports = require("uuid");
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ (function(module, exports) {
 
 module.exports = require("opentok-layout-js");
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6586,13 +6597,13 @@ if (__CLIENT__) {
 }
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ (function(module, exports) {
 
 module.exports = require("es6-promise");
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6689,25 +6700,25 @@ var CountdownMessage = function (_Component) {
 exports.default = CountdownMessage;
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ (function(module, exports) {
 
 module.exports = require("agenda");
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ (function(module, exports) {
 
 module.exports = require("agendash");
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ (function(module, exports) {
 
 module.exports = require("express-session");
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ (function(module, exports) {
 
 module.exports = require("connect-mongo");
