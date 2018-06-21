@@ -701,7 +701,7 @@ agenda.define('clear expired journeys', function () {
 
 agenda.define('start journey', function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(job, done) {
-    var journey, journeySpace, rsvps;
+    var journey, journeySpace, globalSpace, rsvps;
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
@@ -714,48 +714,54 @@ agenda.define('start journey', function () {
           case 4:
             journeySpace = _context3.sent;
             _context3.next = 7;
-            return _journey_rsvp2.default.find({ journey: journeySpace._id }).exec();
+            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
 
           case 7:
+            globalSpace = _context3.sent;
+            _context3.next = 10;
+            return _journey_rsvp2.default.find({ journey: journeySpace._id }).exec();
+
+          case 10:
             rsvps = _context3.sent;
 
             if (!(rsvps.length > 1)) {
-              _context3.next = 14;
+              _context3.next = 17;
               break;
             }
 
-            _context3.next = 11;
+            _context3.next = 14;
             return journeySpace.start();
 
-          case 11:
-            opentok.signal(journeySpace.sessionId, null, { 'type': 'startJourney', 'data': JSON.stringify({ journey: journey }) }, function () {});
-            _context3.next = 17;
-            break;
-
           case 14:
-            _context3.next = 16;
-            return journeySpace.fail();
-
-          case 16:
-            opentok.signal(journeySpace.sessionId, null, { 'type': 'failJourney', 'data': JSON.stringify({ journey: journey }) }, function () {});
+            opentok.signal(journeySpace.sessionId, null, { 'type': 'startJourney', 'data': JSON.stringify({ journey: journey }) }, function () {});
+            _context3.next = 21;
+            break;
 
           case 17:
+            _context3.next = 19;
+            return journeySpace.fail();
+
+          case 19:
+            opentok.signal(journeySpace.sessionId, null, { 'type': 'failJourney', 'data': JSON.stringify({ journey: journey }) }, function () {});
+            opentok.signal(globalSpace.sessionId, null, { 'type': 'failJourney', 'data': JSON.stringify(journeySpace.toJSON()) }, function () {});
+
+          case 21:
             done();
-            _context3.next = 23;
+            _context3.next = 27;
             break;
 
-          case 20:
-            _context3.prev = 20;
+          case 24:
+            _context3.prev = 24;
             _context3.t0 = _context3['catch'](0);
 
             done(_context3.t0);
 
-          case 23:
+          case 27:
           case 'end':
             return _context3.stop();
         }
       }
-    }, _callee3, this, [[0, 20]]);
+    }, _callee3, this, [[0, 24]]);
   }));
 
   return function (_x5, _x6) {
@@ -2660,19 +2666,19 @@ var _ssr = __webpack_require__(81);
 
 var _ssr2 = _interopRequireDefault(_ssr);
 
-var _agenda = __webpack_require__(101);
+var _agenda = __webpack_require__(102);
 
 var _agenda2 = _interopRequireDefault(_agenda);
 
-var _agendash = __webpack_require__(102);
+var _agendash = __webpack_require__(103);
 
 var _agendash2 = _interopRequireDefault(_agendash);
 
-var _expressSession = __webpack_require__(103);
+var _expressSession = __webpack_require__(104);
 
 var _expressSession2 = _interopRequireDefault(_expressSession);
 
-var _connectMongo = __webpack_require__(104);
+var _connectMongo = __webpack_require__(105);
 
 var _connectMongo2 = _interopRequireDefault(_connectMongo);
 
@@ -3786,6 +3792,10 @@ var _Room = __webpack_require__(95);
 
 var _Room2 = _interopRequireDefault(_Room);
 
+var _countdown_message = __webpack_require__(101);
+
+var _countdown_message2 = _interopRequireDefault(_countdown_message);
+
 var _state = __webpack_require__(3);
 
 var _state2 = _interopRequireDefault(_state);
@@ -3952,6 +3962,7 @@ var JoinableJourneyCard = function (_Component2) {
       var currentUserHasRSVP = (journey.rsvps || []).find(function (rsvp) {
         return rsvp.user === _state2.default.sessionId;
       }) != null;
+
       return _react2.default.createElement(
         'div',
         { className: 'joinable-journey-card' },
@@ -3963,6 +3974,7 @@ var JoinableJourneyCard = function (_Component2) {
         _react2.default.createElement(
           'div',
           { className: 'content' },
+          _react2.default.createElement(_countdown_message2.default, { endTime: journey.startAt }),
           _react2.default.createElement(
             'h4',
             null,
@@ -4031,6 +4043,14 @@ var AutoCreatedJourneysQueue = function (_Component3) {
         });
 
         _this5.sessionHelper.session.on("signal:expiredJourney", function (event) {
+          var journey = JSON.parse(event.data);
+          var idx = _state2.default.joinableJourneys.findIndex(function (j) {
+            return j._id === journey._id;
+          });
+          _state2.default.joinableJourneys = [].concat(_toConsumableArray(_state2.default.joinableJourneys.slice(0, idx)), _toConsumableArray(_state2.default.joinableJourneys.slice(idx + 1)));
+        });
+
+        _this5.sessionHelper.session.on("signal:failJourney", function (event) {
           var journey = JSON.parse(event.data);
           var idx = _state2.default.joinableJourneys.findIndex(function (j) {
             return j._id === journey._id;
@@ -6433,24 +6453,116 @@ module.exports = require("es6-promise");
 
 /***/ }),
 /* 101 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("agenda");
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CountdownMessage = function (_Component) {
+  _inherits(CountdownMessage, _Component);
+
+  function CountdownMessage(props) {
+    _classCallCheck(this, CountdownMessage);
+
+    var _this = _possibleConstructorReturn(this, (CountdownMessage.__proto__ || Object.getPrototypeOf(CountdownMessage)).call(this, props));
+
+    _this.state = {
+      currentCount: 10,
+      total: '',
+      days: '',
+      hours: '',
+      minutes: '',
+      seconds: ''
+    };
+
+    _this.countdown = _this.countdown.bind(_this);
+    return _this;
+  }
+
+  _createClass(CountdownMessage, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var intervalId = setInterval(this.countdown, 1000);
+    }
+  }, {
+    key: 'countdown',
+    value: function countdown() {
+      var deadline = Date.parse(this.props.endTime);
+      var now = Date.parse(new Date());
+      var timeRemaining = deadline - now;
+
+      var seconds = Math.floor(timeRemaining / 1000 % 60);
+      var minutes = Math.floor(timeRemaining / 1000 / 60 % 60);
+      var hours = Math.floor(timeRemaining / (1000 * 60 * 60) % 24);
+      var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+
+      this.setState({ total: timeRemaining, minutes: minutes, seconds: seconds });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var totalTimeInMinutes = this.state.total / 1000 / 60;
+      if (totalTimeInMinutes > 0 && totalTimeInMinutes < 5) {
+        var message = 'Starting in: ' + (this.state.minutes > 0 ? this.state.minutes + "min" : "") + ' ' + this.state.seconds + 'sec';
+      } else {
+        var message = "Started";
+      }
+
+      if (totalTimeInMinutes < 5) {
+        return _react2.default.createElement(
+          'div',
+          { id: 'countdown-time', className: 'btn btn-info', ref: 'countdown_ref' },
+          message
+        );
+      } else {
+        return _react2.default.createElement('div', null);
+      }
+    }
+  }]);
+
+  return CountdownMessage;
+}(_react.Component);
+
+exports.default = CountdownMessage;
 
 /***/ }),
 /* 102 */
 /***/ (function(module, exports) {
 
-module.exports = require("agendash");
+module.exports = require("agenda");
 
 /***/ }),
 /* 103 */
 /***/ (function(module, exports) {
 
-module.exports = require("express-session");
+module.exports = require("agendash");
 
 /***/ }),
 /* 104 */
+/***/ (function(module, exports) {
+
+module.exports = require("express-session");
+
+/***/ }),
+/* 105 */
 /***/ (function(module, exports) {
 
 module.exports = require("connect-mongo");
