@@ -44,21 +44,50 @@ h2 {
 
 .journeyspace-title {
   color: white;
-}
-
-.journeyspace-content {
-  p {
-    color: white;
-  }
+  font-size: 12px;
+  font-weight: normal;
 }
 
 .journeyspace-container {
   position: relative;
 }
 
+.journeyspace-streams {
+  padding: 15px 10px 0 10px;
+
+  li {
+    border: 1px solid rgb(83, 83, 83);
+    min-height: calc(100vw * .4);
+    margin-bottom: 10px; 
+  }
+
+  li:first-child {
+    border: none;
+  }
+}
+
+.video-placeholder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  > div {
+    text-align: center;
+  }
+
+  i {
+    color: rgb(83, 83, 83);
+    font-size: 22px;
+  }
+
+  p {
+    color: rgb(83, 83, 83);
+  }
+
+}
+
 .journeyspace-stream {
-  width: 100vw;
-  height: calc(100vw * 3/4);
   position: relative;
   
   >div {
@@ -74,40 +103,6 @@ h2 {
   .journeyspace-me {
     display: none;
   }
-}
-
-.journeyspace-streams-count-2 {
-  position: relative;
-
-  .journeyspace-active-stream {
-    position: relative;
-  }
-
-  .journeyspace-me {
-    position: absolute;
-    right: 0;
-    bottom: -50px;
-    width: 25vw;
-    height: calc(25vw * 3/4);
-  }
-}
-
-.journeyspace-grid-layout {
-  display: flex;
-  flex-wrap: wrap;
-
-  .journeyspace-stream:first-child {
-    flex: 1;
-    flex-basis: 100%;
-  }
-
-  .journeyspace-stream:nth-child(n+2) {
-    flex: 1;
-    flex-basis: 1%;
-    height: 0;
-    padding-top: 50%;
-  }
-
 }
 
 .journeyspace-share {
@@ -303,4 +298,46 @@ h2 {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.journey-timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    border-bottom: 1px solid rgb(88, 88, 88);
+    padding: 10px;
+  }
+}
+
+.journey-timeline {
+  h4 {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  p {
+    font-size: 12px;
+    margin-bottom: 0;
+  }
+
+  li.active {
+    position: relative;
+    &:after {
+      position: absolute;
+      font: normal normal normal 14px/1 FontAwesome;
+      content: '\F0D9';
+      display: block;
+      height: 100%;
+      top: 0;
+      right: -4px;
+      font-size: 100px;
+      color: rgb(253, 190, 69);
+    }
+  }
+
+  .timer {
+    font-weight: bold;
+  }
 }

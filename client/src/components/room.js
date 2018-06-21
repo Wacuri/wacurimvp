@@ -214,6 +214,65 @@ class JourneyStateProgressBar extends Component {
   }
 }
 
+class JourneyTimeline extends Component {
+
+  componentWillReceiveProps(newProps) {
+    newProps.timer.on('tick', (current) => {
+      this.setState({
+        timerValue: current
+      });
+    });
+  }
+
+  render() {
+    const {journey} = this.props;
+    return (
+      <ul className='journey-timeline'>
+        <li className={journey.state === 'joined' ? 'active' : ''}>
+          <h4>Prepare</h4>
+          <p>Breathe and center yourself</p>
+          {journey.state === 'joined' &&
+            <p className='timer'>{this.props.timer.displayTime()}</p>
+          }
+        </li>
+        <li className={journey.state === 'started' ? 'active' : ''}>
+          <h4>Journey</h4>
+          <p>Listen and imagine</p>
+          {journey.state === 'started' &&
+            <p className='timer'>{this.props.timer.displayTime()}</p>
+          }
+        </li>
+        <li>
+          <h4>Sharing</h4>
+          <p>Feelings and thoughts</p>
+        </li>
+      </ul>
+    )
+  }
+}
+
+class JourneyStartsIn extends Component {
+
+  componentWillReceiveProps(newProps) {
+    newProps.timer.on('tick', (current) => {
+      this.setState({
+        timerValue: current
+      });
+    });
+  }
+
+  render() {
+    const {journey} = this.props;
+    return (
+      <p style={{padding: '10px 10px 10px', display: 'flex', borderBottom: '1px solid rgb(88, 88, 88)'}}>
+        <span>Journey starts in:</span>
+        <span style={{marginLeft: 'auto'}}>{this.props.timer.displayTime()}</span>
+      </p>
+    )
+  }
+}
+
+
 class Room extends Component {
 
   constructor(props) {
@@ -478,63 +537,27 @@ class Room extends Component {
            <source src={state.session && state.session.journey} type="audio/mpeg"/>
           </audio>
           {this.state.session &&
-            <div>
-              <div className='journeyspace-meta pr-3 pl-3 pt-3'>
-                <div style={{display: 'flex'}}>
-                  <h2 style={{flex: 5}} className='journeyspace-title'>{state.session.name}</h2>
-                  <div className='journeyspace-attendeeCount' style={{flex: 1}} className='journeyspace-attendeeCount'>
-                    <h4 className='journeyspace-attendeeCountLabel'>Attendees</h4>
-                    <p className='journeyspace-attendeeCountCount'>{state.session.rsvps.length} of 3</p>
-                  </div>
-                </div>
-                { this.isHostUser &&
-                  <div>
-                    {false && state.session.state === 'created' || state.session.state === 'joined' &&
-                      <select onChange={this.onChangeJourney} value={state.session && state.session.journey}>
-                        {state.journeys.map(journey => (
-                          <option value={journey.filePath}>{journey.name}</option>
-                        ))}
-                      </select>
-                    }
-                    { state.session.state === 'created' &&
-                      <div >
-                        <button onClick={this.onStartSession} className='btn btn-primary'>Start session <i className="fa fa-play"></i></button>
-                      </div>
-                    }
-                  </div>
-                }
-                <div className='journeyspace-share text-right'>
-                  <a href='#' onClick={this.onShare}>Share <i className="fa fa-share-square-o"></i></a>
-                </div>
+            <div className='row no-gutters'>
+              <div className='col-5'>
+                <ul className='journeyspace-streams' style={{margin: 0}}>
+                  <li>
+                    <img style={{width: '100%'}} src={state.session.image}/>
+                    <h2 style={{flex: 5}} className='journeyspace-title'>{state.session.name}</h2>
 
-                <div style={{display: 'none'}}>
-                  <div>
-                    <progress max="100" value={this.state.playerProgress} style={{width: '100%'}}></progress>
-                    <p style={{display: 'flex'}}><strong style={{flex: 1}}>Time remaining:</strong><span>{this.timeRemaining}</span></p>
-                  </div>
-                </div>
-              </div>
-              
-              
-              <JourneyStateProgressBar journey={state.session} timer={this.journeyStateTimer}/>
+                  </li>
+                  <li className='journeyspace-stream journeyspace-me'>
+                      <OTPublisher 
+                        properties={{width: '100%', height: '100%'}}
+                        session={this.sessionHelper.session}
+                        onInit={this.onInitPublisher}
+                        ref={publisher => {this.publisher = publisher}}
+                      />
+                  </li>
 
-              {state.session.state === 'failed' &&
-                <p className='p-3'>:( No one else joined this journey with you.  
-                  &nbsp;<Link to='/join'>Go Back to the list</Link> and pick a different one, or
-                  &nbsp; <button className='btn' onClick={this.onStartSession}>Start the journey</button>
-                </p>
-              }
-
-              {state.session.state === 'joined' &&
-                <Waiting/>
-              }
-              
-              { state.session.state === 'started' &&
-                <div className={`journeyspace-container journeyspace-streams-count-${this.state.streams.length + 1} ${this.state.streams.length >= 2 ? 'journeyspace-grid-layout' : ''}`}>
                   {this.state.streams.map(stream => {
                     const participant = state.session.participants.find(participant => participant.connectionId === stream.connection.id);
                     return (
-                      <div className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+                      <li className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
                           <OTSubscriber
                             key={stream.id}
                             session={this.sessionHelper.session}
@@ -544,19 +567,62 @@ class Room extends Component {
                               height: '100%',
                             }}
                           />
-                      </div>
+                      </li>
                     );
                   })}
-                  <div className='journeyspace-stream journeyspace-me'>
-                      <OTPublisher 
-                        properties={{width: '100%', height: '100%'}}
-                        session={this.sessionHelper.session}
-                        onInit={this.onInitPublisher}
-                        ref={publisher => {this.publisher = publisher}}
-                      />
+                  
+                  {Array(2 - this.state.streams.length).fill({}).map(empty => (
+                    <li className='video-placeholder'>
+                      <div>
+                        <i className='fa fa-user'></i>
+                        <p>waiting...</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className='col-7' style={{backgroundColor: 'white'}}>
+                
+                {state.session.state === 'joined' && <JourneyStartsIn journey={state.session} timer={this.journeyStateTimer}/> }
+                <JourneyTimeline journey={state.session} timer={this.journeyStateTimer}/>
+
+                <div className='journeyspace-meta pr-3 pl-3 pt-3'>
+                  { this.isHostUser &&
+                    <div>
+                      {false && state.session.state === 'created' || state.session.state === 'joined' &&
+                        <select onChange={this.onChangeJourney} value={state.session && state.session.journey}>
+                          {state.journeys.map(journey => (
+                            <option value={journey.filePath}>{journey.name}</option>
+                          ))}
+                        </select>
+                      }
+                      { state.session.state === 'created' &&
+                        <div >
+                          <button onClick={this.onStartSession} className='btn btn-primary'>Start session <i className="fa fa-play"></i></button>
+                        </div>
+                      }
+                    </div>
+                  }
+                  <div className='journeyspace-share text-right'>
+                    <a href='#' onClick={this.onShare}>Share <i className="fa fa-share-square-o"></i></a>
+                  </div>
+
+                  <div style={{display: 'none'}}>
+                    <div>
+                      <progress max="100" value={this.state.playerProgress} style={{width: '100%'}}></progress>
+                      <p style={{display: 'flex'}}><strong style={{flex: 1}}>Time remaining:</strong><span>{this.timeRemaining}</span></p>
+                    </div>
                   </div>
                 </div>
-              }
+                
+                {state.session.state === 'failed' &&
+                  <p className='p-3'>:( No one else joined this journey with you.  
+                    &nbsp;<Link to='/join'>Go Back to the list</Link> and pick a different one, or
+                    &nbsp; <button className='btn' onClick={this.onStartSession}>Start the journey</button>
+                  </p>
+                }
+
+              </div>
             </div>
           }
         
