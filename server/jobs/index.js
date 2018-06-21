@@ -60,6 +60,7 @@ agenda.define('start journey', async function(job, done) {
   try {
     const {journey} = job.attrs.data;
     const journeySpace = await JourneySpace.findById(journey).exec();
+    const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
     const rsvps = await JourneyRSVP.find({journey: journeySpace._id}).exec();
     if (rsvps.length > 1) {
       await journeySpace.start();
@@ -67,6 +68,7 @@ agenda.define('start journey', async function(job, done) {
     } else {
       await journeySpace.fail();
       opentok.signal(journeySpace.sessionId, null, { 'type': 'failJourney', 'data': JSON.stringify({journey}) }, () => {});
+      opentok.signal(globalSpace.sessionId, null, { 'type': 'failJourney', 'data': JSON.stringify(journeySpace.toJSON()) }, () => {});
     }
     done();
   } catch(e) {

@@ -159,6 +159,12 @@ class AutoCreatedJourneysQueue extends Component {
           state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), ...state.joinableJourneys.slice(idx + 1)];
         });
 
+        this.sessionHelper.session.on("signal:failJourney", (event) => {
+          const journey = JSON.parse(event.data);
+          const idx = state.joinableJourneys.findIndex(j => j._id === journey._id);
+          state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), ...state.joinableJourneys.slice(idx + 1)];
+        });
+
         this.sessionHelper.session.on('signal:newRSVP', (event) => {
           const rsvp = JSON.parse(event.data);
           const journey = state.joinableJourneys.find(j => j._id == rsvp.journey._id);
