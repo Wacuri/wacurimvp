@@ -462,6 +462,12 @@ class JourneySpace extends Component {
       this.sharingPromptAudioPlayer.play();
     });
 
+    this.sharingPromptAudioPlayer.addEventListener('ended', (event) => {
+      if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+        this.publisher.state.publisher.publishAudio(true);
+      }
+    });
+
     console.log('GET SESSION');
 		fetch(`/api/sessions/${this.props.match.params.room}`, {credentials: 'include'})
 			.then(res => res.json())
