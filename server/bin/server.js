@@ -2704,9 +2704,9 @@ var _express = __webpack_require__(9);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _sslExpressWww = __webpack_require__(78);
+var _expressSsl = __webpack_require__(78);
 
-var _sslExpressWww2 = _interopRequireDefault(_sslExpressWww);
+var _expressSsl2 = _interopRequireDefault(_expressSsl);
 
 var _bodyParser = __webpack_require__(79);
 
@@ -2739,7 +2739,7 @@ var _connectMongo2 = _interopRequireDefault(_connectMongo);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
-app.use(_sslExpressWww2.default);
+app.use(_expressSsl2.default);
 var agenda = new _agenda2.default({ db: { address: process.env.MONGODB_URI || process.env.MONGO_URL } });
 
 app.use((0, _expressSession2.default)({
@@ -2769,7 +2769,7 @@ app.listen(process.env.PORT || 5000, function () {
 /* 78 */
 /***/ (function(module, exports) {
 
-module.exports = require("ssl-express-www");
+module.exports = require("express-ssl");
 
 /***/ }),
 /* 79 */
