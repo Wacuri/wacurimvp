@@ -2,6 +2,12 @@
 $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome.scss";
 
+// Bootstrap overrides
+
+.btn-secondary {
+  background-color: rgb(220, 220, 220);
+}
+
 h2 {
   font-size: 1.7rem;
 }
@@ -59,6 +65,13 @@ h2 {
     border: 1px solid rgb(83, 83, 83);
     min-height: calc(100vw * .4);
     margin-bottom: 10px; 
+
+    @media (min-width: 992px) {
+      & {
+        min-height: calc(100vw * .25);
+      }
+    }
+    
   }
 
   li:first-child {
@@ -300,7 +313,7 @@ h2 {
   user-select: none;
 }
 
-.journey-timeline {
+.journey-timeline ul {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -312,6 +325,27 @@ h2 {
 }
 
 .journey-timeline {
+  position: relative;
+
+  .fa-caret-left {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .arrow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 64px;
+    transition: all 200ms ease-in-out;
+
+    svg {
+      fill: rgb(251, 188, 90);
+    }
+  }
+
+
   h4 {
     font-size: 16px;
     font-weight: bold;
@@ -322,22 +356,9 @@ h2 {
     margin-bottom: 0;
   }
 
-  li.active {
-    position: relative;
-    &:after {
-      position: absolute;
-      font: normal normal normal 14px/1 FontAwesome;
-      content: '\F0D9';
-      display: block;
-      height: 100%;
-      top: 0;
-      right: -4px;
-      font-size: 100px;
-      color: rgb(253, 190, 69);
-    }
-  }
-
   .timer {
     font-weight: bold;
   }
 }
+
+

@@ -40,6 +40,24 @@ JourneySpaceSchema.plugin(statemachine, {
   }
 });
 
+JourneySpaceSchema.methods.skip = async function() {
+  switch(this.state) {
+    case 'joined':
+      await this.start();
+      break;
+    case 'started':
+      await this.complete();
+      break;
+    case 'completed':
+      await this.end();
+      break;
+    case 'ended':
+      await this.expire();
+      break;
+  }
+  return;
+}
+
 const JourneySpace = mongoose.model('JourneySpace', JourneySpaceSchema);
 
 export default JourneySpace;

@@ -168,6 +168,15 @@ router.put('/journeys/:room/progress', async (req, res) => {
   res.sendStatus(200);
 });
 
+router.post('/journeys/:id/skip', async (req, res) => {
+  const journey = await JourneySpace.findOne({room: req.params.id}).exec();
+  await journey.skip();
+  const response = journey.toJSON();
+  const participants = await JourneyParticipant.find({session: journey, present: true}).lean().exec();
+  response.participants = participants;
+  opentok.signal(journey.sessionId, null, { 'type': 'journeyUpdated', 'data': JSON.stringify(response) }, () => {});
+});
+
 // TEMP: Use get for convenience. hardcode temp-home-location for the room
 // Trigger a general announcement to everyone
 router.get('/sessions/test/temp-home-location', async (req, res) => {

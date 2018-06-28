@@ -50,12 +50,18 @@ class SecondsTimerEmitter extends AbstractTimerEmitter {
     this.total = startAt.getTime() - this.start;
     this.passed = new Date().getTime() - this.start;
     this.interval = setInterval(() => {
+      console.log('STILL TICKING', this.interval);
       this.passed = new Date().getTime() - this.start;
       if (this.passed >= this.total) {
         clearInterval(this.interval);
       }
       this.emit('tick', this.passed);
     }, 100);
+  }
+
+  clear() {
+    console.log("DO IT YO", this.interval);
+    clearInterval(this.interval);
   }
 
   displayTime() {
@@ -84,6 +90,10 @@ class AudioPlayTickEmitter extends AbstractTimerEmitter {
   onTimeUpdate = (e) => {
     this.currentTime = e.target.currentTime * 1000;
     this.emit('tick', this.currentTime);
+  }
+
+  clear() {
+    
   }
 
   displayTime() {
@@ -184,7 +194,11 @@ class JourneyStateProgressBar extends Component {
       });
     });
   }
-    
+
+  componentWillUnmount() {
+    this.props.timer.clear();
+  }
+
   formatState(state: number) {
     switch(this.props.journey.state) {
       case 'joined':
@@ -224,29 +238,154 @@ class JourneyTimeline extends Component {
     });
   }
 
+  get stepIndex() {
+    switch(this.props.journey.state) {
+      case 'joined':
+        return 0;
+      case 'started':
+        return 1;
+      default:
+        return 2;
+    }
+  }
+
+  get positionForCaret() {
+    if (!this.container) { return 0; }
+    const idx = this.stepIndex;
+    const items = this.container.querySelectorAll('li');
+    console.log('POSITION FOR CARET', idx);
+    return Array(idx + 1).fill(0).reduce((memo, i, j) => {
+      console.log('FOR J', j);
+      if (j == 0) {
+        return 0;
+      } else {
+        console.log('CALC IT UP', items[j - 0].offsetHeight);
+        return memo + items[j - 0].offsetHeight;
+      }
+    }, 0);
+  }
+  
+  get heightForActive() {
+    if (!this.container) { return 0; }
+    const idx = this.stepIndex;
+    const items = this.container.querySelectorAll('li');
+    return items[idx].offsetHeight;
+  }
+
   render() {
     const {journey} = this.props;
     return (
-      <ul className='journey-timeline'>
-        <li className={journey.state === 'joined' ? 'active' : ''}>
-          <h4>Prepare</h4>
-          <p>Breathe and center yourself</p>
-          {journey.state === 'joined' &&
-            <p className='timer'>{this.props.timer.displayTime()}</p>
-          }
-        </li>
-        <li className={journey.state === 'started' ? 'active' : ''}>
-          <h4>Journey</h4>
-          <p>Listen and imagine</p>
-          {journey.state === 'started' &&
-            <p className='timer'>{this.props.timer.displayTime()}</p>
-          }
-        </li>
-        <li>
-          <h4>Sharing</h4>
-          <p>Feelings and thoughts</p>
-        </li>
-      </ul>
+      <div ref={el => {this.container = el}} className={`journey-timeline step-${this.stepIndex.toString()}`}>
+        <ul>
+          <li className={journey.state === 'joined' ? 'active' : ''}>
+            <h4>Prepare</h4>
+            <div style={{display: 'flex'}}>
+              <p>Breathe and center yourself</p>
+              {journey.state === 'joined' &&
+                <p className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</p>
+              }
+            </div>
+          </li>
+          <li className={journey.state === 'started' ? 'active' : ''}>
+            <h4>Journey</h4>
+            <div style={{display: 'flex'}}>
+              <p>Listen and imagine</p>
+              {journey.state === 'started' &&
+                <p className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</p>
+              }
+            </div>
+          </li>
+          <li>
+            <h4>Sharing</h4>
+            <p>Feelings and thoughts</p>
+          </li>
+        </ul>
+        <div className='arrow' style={{height: `${this.heightForActive}px`, transform: `translateY(${this.positionForCaret}px)`}}>
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-triangle" width='100' height='100%' viewBox="0 0 95 90" preserveAspectRatio="none" shapeRendering="geometricPrecision">
+            <path d="M 70,50 99,5 99,95 Z"/>
+          </svg>
+        </div>
+      </div>
+    )
+  }
+}
+
+class SkipButton extends Component {
+
+  skipToNext = (e) => {
+    e.preventDefault();
+    fetch(`/api/journeys/${this.props.journey.room}/skip`, {
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, same-origin, *omit
+      headers: {
+        'user-agent': 'Mozilla/4.0 MDN Example',
+        'content-type': 'application/json'
+      },
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, cors, *same-origin
+      redirect: 'follow', // manual, *follow, error
+      referrer: 'no-referrer', // *client, no-referrer
+    });
+  }
+
+  render() {
+    return (
+      this.props.journey.state != 'completed' ? <button className='btn btn-secondary' onClick={this.skipToNext}><i className='fa fa-forward'></i></button> : <span/>
+    )
+  }
+}
+
+class VideoButton extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      publishing: true
+    }
+  }
+
+  toggle = (e) => {
+    e.preventDefault();
+    const {publisher} = this.props;
+    if (publisher && publisher.state && publisher.state.publisher) {
+      publisher.state.publisher.publishVideo(!this.state.publishing);
+      this.setState({
+        publishing: !this.state.publishing
+      });
+    }
+  }
+
+  render() {
+    return (
+      <button style={this.props.style || {}} onClick={this.toggle} className={`btn btn-${this.state.publishing ? 'primary' : 'secondary'}`}><i className="fa fa-video-camera"></i></button>
+    )
+  }
+}
+
+class AudioButton extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      publishing: true
+    }
+  }
+
+  toggle = (e) => {
+    e.preventDefault();
+    const {publisher} = this.props;
+    if (publisher && publisher.state && publisher.state.publisher) {
+      publisher.state.publisher.publishAudio(!this.state.publishing);
+      this.setState({
+        publishing: !this.state.publishing
+      });
+    }
+  }
+  
+
+  render() {
+    return (
+      <button style={this.props.style || {}} onClick={this.toggle} className={`btn btn-${this.state.publishing ? 'primary' : 'secondary'}`}><i className="fa fa-microphone"></i></button>
     )
   }
 }
@@ -254,11 +393,18 @@ class JourneyTimeline extends Component {
 class JourneyStartsIn extends Component {
 
   componentWillReceiveProps(newProps) {
+    console.log('GOT NEW');
     newProps.timer.on('tick', (current) => {
+      console.log('TICK TICK');
       this.setState({
         timerValue: current
       });
     });
+  }
+
+  componentWillUnmount() {
+    console.log('CLEAR IT OUT');
+    this.props.timer.clear();
   }
 
   render() {
@@ -273,7 +419,7 @@ class JourneyStartsIn extends Component {
 }
 
 
-class Room extends Component {
+class JourneySpace extends Component {
 
   constructor(props) {
     super(props);
@@ -312,6 +458,8 @@ class Room extends Component {
         redirect: 'follow', // manual, *follow, error
         referrer: 'no-referrer', // *client, no-referrer
       });
+
+      this.sharingPromptAudioPlayer.play();
     });
 
     console.log('GET SESSION');
@@ -373,6 +521,33 @@ class Room extends Component {
           });
         });
 
+        this.sessionHelper.session.on("signal:journeyUpdated", (event) => {
+          const journey = JSON.parse(event.data);
+          state.session = journey;
+
+          if (state.session.state === 'started') {
+
+            if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+              this.publisher.state.publisher.publishAudio(false);
+            }
+            this.audioTag.play();
+            this.setState({
+              playerState: 'playing'
+            });
+          } else {
+            console.log('PAUSE IT YO');
+            this.audioTag.pause();
+            this.setState({
+              playerState: 'paused'
+            });
+          }
+
+          if (state.session.state === 'completed') {
+            this.sharingPromptAudioPlayer.play();
+          }
+        });
+        
+
         this.sessionHelper.session.on("signal:fail", (event) => {
           state.session.state = 'failed';
         });
@@ -433,7 +608,10 @@ class Room extends Component {
       case 'started':
         return new AudioPlayTickEmitter(this.audioTag);
       default:
-        return new SecondsTimerEmitter(new Date(state.session.createdAt), new Date(state.session.startAt));
+        if (!this.secondsEmitter) {
+          this.secondsEmitter = new SecondsTimerEmitter(new Date(state.session.createdAt), new Date(state.session.startAt));
+        }
+        return this.secondsEmitter;
     }
   }
 
@@ -536,9 +714,12 @@ class Room extends Component {
           <audio style={{display: 'none'}} onLoadedMetadata={this.onLoadedMetadata} key={state.session && state.session.journey} controls="true" ref={audioTag => { this.audioTag = audioTag }}>
            <source src={state.session && state.session.journey} type="audio/mpeg"/>
           </audio>
+          <audio style={{display: 'none'}} ref={el => {this.sharingPromptAudioPlayer = el}}>
+            <source src='/sharing.mp3' type='audio/mpeg'/>
+          </audio>
           {this.state.session &&
             <div className='row no-gutters'>
-              <div className='col-5'>
+              <div className='col-5 col-lg-3'>
                 <ul className='journeyspace-streams' style={{margin: 0}}>
                   <li>
                     <img style={{width: '100%'}} src={state.session.image}/>
@@ -581,9 +762,16 @@ class Room extends Component {
                   ))}
                 </ul>
               </div>
-              <div className='col-7' style={{backgroundColor: 'white'}}>
+              <div className='col-7 col-lg-9' style={{backgroundColor: 'white'}}>
                 
                 {state.session.state === 'joined' && <JourneyStartsIn journey={state.session} timer={this.journeyStateTimer}/> }
+                <div style={{display: 'flex', padding: '10px 10px 0'}}>
+                  <SkipButton journey={state.session}/>
+                </div>
+                <div style={{display: 'flex', padding: '10px 10px 0'}}>
+                  <VideoButton publisher={this.publisher}/>
+                  <AudioButton style={{marginLeft: '10px'}} publisher={this.publisher}/>
+                </div>
                 <JourneyTimeline journey={state.session} timer={this.journeyStateTimer}/>
 
                 <div className='journeyspace-meta pr-3 pl-3 pt-3'>
@@ -643,4 +831,4 @@ class Room extends Component {
 	}
 }
 
-export default view(Room);
+export default view(JourneySpace);
