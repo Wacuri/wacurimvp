@@ -5872,6 +5872,12 @@ var JourneySpace = function (_Component8) {
         _this18.sharingPromptAudioPlayer.play();
       });
 
+      this.sharingPromptAudioPlayer.addEventListener('ended', function (event) {
+        if (_this18.publisher && _this18.publisher.state && _this18.publisher.state.publisher) {
+          _this18.publisher.state.publisher.publishAudio(true);
+        }
+      });
+
       console.log('GET SESSION');
       fetch('/api/sessions/' + this.props.match.params.room, { credentials: 'include' }).then(function (res) {
         return res.json();
