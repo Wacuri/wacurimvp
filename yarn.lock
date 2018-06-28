@@ -2779,6 +2779,10 @@ express-session@^1.15.6:
     uid-safe "~2.1.5"
     utils-merge "1.0.1"
 
+express-ssl@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/express-ssl/-/express-ssl-3.1.0.tgz#dbe513f6f7e24a71681e34006182929db7903ca4"
+
 express@^4.0.0, express@^4.14.0, express@^4.16.2:
   version "4.16.3"
   resolved "https://registry.yarnpkg.com/express/-/express-4.16.3.tgz#6af8a502350db3246ecc4becf6b5a34d22f7ed53"
@@ -6758,12 +6762,6 @@ sshpk@^1.7.0:
     ecc-jsbn "~0.1.1"
     jsbn "~0.1.0"
     tweetnacl "~0.14.0"
-
-ssl-express-www@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ssl-express-www/-/ssl-express-www-3.0.0.tgz#4b0c59bd7ecb01b35cf7e56f51c4c4828bd9a6c2"
-  dependencies:
-    express "^4.16.2"
 
 stackframe@^0.3.1:
   version "0.3.1"
