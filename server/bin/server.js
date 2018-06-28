@@ -310,6 +310,8 @@ var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 var FlagSchema = new _mongoose.Schema({
   user: { type: String },
   reason: { type: String }
@@ -349,6 +351,54 @@ JourneySpaceSchema.plugin(_anotherMongooseStatemachine2.default, {
     expire: { from: '*', to: 'expired' }
   }
 });
+
+JourneySpaceSchema.methods.skip = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+  return regeneratorRuntime.wrap(function _callee$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          _context.t0 = this.state;
+          _context.next = _context.t0 === 'joined' ? 3 : _context.t0 === 'started' ? 6 : _context.t0 === 'completed' ? 9 : _context.t0 === 'ended' ? 12 : 15;
+          break;
+
+        case 3:
+          _context.next = 5;
+          return this.start();
+
+        case 5:
+          return _context.abrupt('break', 15);
+
+        case 6:
+          _context.next = 8;
+          return this.complete();
+
+        case 8:
+          return _context.abrupt('break', 15);
+
+        case 9:
+          _context.next = 11;
+          return this.end();
+
+        case 11:
+          return _context.abrupt('break', 15);
+
+        case 12:
+          _context.next = 14;
+          return this.expire();
+
+        case 14:
+          return _context.abrupt('break', 15);
+
+        case 15:
+          return _context.abrupt('return');
+
+        case 16:
+        case 'end':
+          return _context.stop();
+      }
+    }
+  }, _callee, this);
+}));
 
 var JourneySpace = _mongoose2.default.model('JourneySpace', JourneySpaceSchema);
 
@@ -3248,41 +3298,33 @@ router.put('/journeys/:room/progress', function () {
   };
 }());
 
-// TEMP: Use get for convenience. hardcode temp-home-location for the room
-// Trigger a general announcement to everyone
-router.get('/sessions/test/temp-home-location', function () {
+router.post('/journeys/:id/skip', function () {
   var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(req, res) {
-    var existingSession, messageData;
+    var journey, response, participants;
     return regeneratorRuntime.wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
           case 0:
             _context10.next = 2;
-            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
+            return _journey_space2.default.findOne({ room: req.params.id }).exec();
 
           case 2:
-            existingSession = _context10.sent;
+            journey = _context10.sent;
+            _context10.next = 5;
+            return journey.skip();
 
-            if (!existingSession) {
-              _context10.next = 8;
-              break;
-            }
-
-            console.log("**** SENDING SIGNAL");
-            messageData = {
-              userName: "Bob",
-              description: "some text",
-              url: "http://www.news.google.com"
-            };
-
-
-            signal(existingSession.sessionId, { type: 'displayJourneyRequest', data: JSON.stringify(messageData) });
-            return _context10.abrupt('return', res.sendStatus(200));
+          case 5:
+            response = journey.toJSON();
+            _context10.next = 8;
+            return _journey_participant2.default.find({ session: journey, present: true }).lean().exec();
 
           case 8:
-            res.sendStatus(200);
+            participants = _context10.sent;
 
-          case 9:
+            response.participants = participants;
+            opentok.signal(journey.sessionId, null, { 'type': 'journeyUpdated', 'data': JSON.stringify(response) }, function () {});
+
+          case 11:
           case 'end':
             return _context10.stop();
         }
@@ -3295,54 +3337,41 @@ router.get('/sessions/test/temp-home-location', function () {
   };
 }());
 
-router.get('/sessions/:room/connections/:connection/ready', function () {
+// TEMP: Use get for convenience. hardcode temp-home-location for the room
+// Trigger a general announcement to everyone
+router.get('/sessions/test/temp-home-location', function () {
   var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(req, res) {
-    var _req$params2, room, connection, existingSession, participant, allReady;
-
+    var existingSession, messageData;
     return regeneratorRuntime.wrap(function _callee11$(_context11) {
       while (1) {
         switch (_context11.prev = _context11.next) {
           case 0:
-            _req$params2 = req.params, room = _req$params2.room, connection = _req$params2.connection;
-            _context11.next = 3;
-            return _journey_space2.default.findOne({ room: room }).exec();
+            _context11.next = 2;
+            return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
 
-          case 3:
+          case 2:
             existingSession = _context11.sent;
 
             if (!existingSession) {
-              _context11.next = 18;
+              _context11.next = 8;
               break;
             }
 
-            _context11.next = 7;
-            return _journey_participant2.default.findOne({ session: existingSession, connectionId: connection });
+            console.log("**** SENDING SIGNAL");
+            messageData = {
+              userName: "Bob",
+              description: "some text",
+              url: "http://www.news.google.com"
+            };
 
-          case 7:
-            participant = _context11.sent;
 
-            participant.ready = true;
-            _context11.next = 11;
-            return participant.save();
-
-          case 11:
-            signal(existingSession.sessionId, { type: 'ready', data: 'foo' });
-            _context11.next = 14;
-            return _journey_participant2.default.count({ session: existingSession, ready: false, present: true });
-
-          case 14:
-            _context11.t0 = _context11.sent;
-            allReady = _context11.t0 === 0;
-
-            if (allReady) {
-              // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
-            }
+            signal(existingSession.sessionId, { type: 'displayJourneyRequest', data: JSON.stringify(messageData) });
             return _context11.abrupt('return', res.sendStatus(200));
 
-          case 18:
+          case 8:
             res.sendStatus(200);
 
-          case 19:
+          case 9:
           case 'end':
             return _context11.stop();
         }
@@ -3355,22 +3384,54 @@ router.get('/sessions/:room/connections/:connection/ready', function () {
   };
 }());
 
-router.get('/journeys', function () {
+router.get('/sessions/:room/connections/:connection/ready', function () {
   var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12(req, res) {
-    var journeys;
+    var _req$params2, room, connection, existingSession, participant, allReady;
+
     return regeneratorRuntime.wrap(function _callee12$(_context12) {
       while (1) {
         switch (_context12.prev = _context12.next) {
           case 0:
-            _context12.next = 2;
-            return _journey_content2.default.find().exec();
+            _req$params2 = req.params, room = _req$params2.room, connection = _req$params2.connection;
+            _context12.next = 3;
+            return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 2:
-            journeys = _context12.sent;
+          case 3:
+            existingSession = _context12.sent;
 
-            res.json(journeys);
+            if (!existingSession) {
+              _context12.next = 18;
+              break;
+            }
 
-          case 4:
+            _context12.next = 7;
+            return _journey_participant2.default.findOne({ session: existingSession, connectionId: connection });
+
+          case 7:
+            participant = _context12.sent;
+
+            participant.ready = true;
+            _context12.next = 11;
+            return participant.save();
+
+          case 11:
+            signal(existingSession.sessionId, { type: 'ready', data: 'foo' });
+            _context12.next = 14;
+            return _journey_participant2.default.count({ session: existingSession, ready: false, present: true });
+
+          case 14:
+            _context12.t0 = _context12.sent;
+            allReady = _context12.t0 === 0;
+
+            if (allReady) {
+              // signal(existingSession.sessionId, {type: 'startJourney', data: 'foo'});
+            }
+            return _context12.abrupt('return', res.sendStatus(200));
+
+          case 18:
+            res.sendStatus(200);
+
+          case 19:
           case 'end':
             return _context12.stop();
         }
@@ -3383,43 +3444,22 @@ router.get('/journeys', function () {
   };
 }());
 
-router.put('/sessions/:room/journey', function () {
+router.get('/journeys', function () {
   var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(req, res) {
-    var journey, room, existingSession, journeyContent;
+    var journeys;
     return regeneratorRuntime.wrap(function _callee13$(_context13) {
       while (1) {
         switch (_context13.prev = _context13.next) {
           case 0:
-            journey = req.body.journey;
-            room = req.params.room;
-            _context13.next = 4;
-            return _journey_space2.default.findOne({ room: room }).exec();
+            _context13.next = 2;
+            return _journey_content2.default.find().exec();
+
+          case 2:
+            journeys = _context13.sent;
+
+            res.json(journeys);
 
           case 4:
-            existingSession = _context13.sent;
-            _context13.next = 7;
-            return _journey_content2.default.findOne({ filePath: journey }).exec();
-
-          case 7:
-            journeyContent = _context13.sent;
-
-            if (!existingSession) {
-              _context13.next = 14;
-              break;
-            }
-
-            existingSession.journey = journey;
-            existingSession['name'] = journeyContent.get('name');
-            _context13.next = 13;
-            return existingSession.save();
-
-          case 13:
-            signal(existingSession.sessionId, { type: 'updatedJourney', data: journey });
-
-          case 14:
-            res.sendStatus(200);
-
-          case 15:
           case 'end':
             return _context13.stop();
         }
@@ -3432,33 +3472,43 @@ router.put('/sessions/:room/journey', function () {
   };
 }());
 
-// TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
-router.post('/sessions/:room/start', function () {
+router.put('/sessions/:room/journey', function () {
   var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14(req, res) {
-    var room, existingSession;
+    var journey, room, existingSession, journeyContent;
     return regeneratorRuntime.wrap(function _callee14$(_context14) {
       while (1) {
         switch (_context14.prev = _context14.next) {
           case 0:
+            journey = req.body.journey;
             room = req.params.room;
-            _context14.next = 3;
+            _context14.next = 4;
             return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 3:
+          case 4:
             existingSession = _context14.sent;
+            _context14.next = 7;
+            return _journey_content2.default.findOne({ filePath: journey }).exec();
+
+          case 7:
+            journeyContent = _context14.sent;
 
             if (!existingSession) {
-              _context14.next = 8;
+              _context14.next = 14;
               break;
             }
 
-            _context14.next = 7;
-            return existingSession.start();
+            existingSession.journey = journey;
+            existingSession['name'] = journeyContent.get('name');
+            _context14.next = 13;
+            return existingSession.save();
 
-          case 7:
-            signal(existingSession.sessionId, { type: 'startJourney', data: '' });
+          case 13:
+            signal(existingSession.sessionId, { type: 'updatedJourney', data: journey });
 
-          case 8:
+          case 14:
+            res.sendStatus(200);
+
+          case 15:
           case 'end':
             return _context14.stop();
         }
@@ -3471,43 +3521,33 @@ router.post('/sessions/:room/start', function () {
   };
 }());
 
-router.post('/sessions/:room/flag', function () {
+// TODO: this should really verify that the user hitting this endpoint is authorized to do so (e.g. that they are the journey's host)
+router.post('/sessions/:room/start', function () {
   var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15(req, res) {
-    var room, userId, existingSession, participants;
+    var room, existingSession;
     return regeneratorRuntime.wrap(function _callee15$(_context15) {
       while (1) {
         switch (_context15.prev = _context15.next) {
           case 0:
             room = req.params.room;
-            userId = req.sessionID; // using sessionId as representation of user for now
-
-            _context15.next = 4;
+            _context15.next = 3;
             return _journey_space2.default.findOne({ room: room }).exec();
 
-          case 4:
+          case 3:
             existingSession = _context15.sent;
 
             if (!existingSession) {
-              _context15.next = 13;
+              _context15.next = 8;
               break;
             }
 
-            existingSession.flags.push({ user: userId });
-            _context15.next = 9;
-            return existingSession.save();
+            _context15.next = 7;
+            return existingSession.start();
 
-          case 9:
-            _context15.next = 11;
-            return _journey_participant2.default.find({ session: existingSession, present: true }).lean().exec();
+          case 7:
+            signal(existingSession.sessionId, { type: 'startJourney', data: '' });
 
-          case 11:
-            participants = _context15.sent;
-            return _context15.abrupt('return', res.json(_extends({}, existingSession.toJSON(), { participants: participants })));
-
-          case 13:
-            res.sendStatus(404);
-
-          case 14:
+          case 8:
           case 'end':
             return _context15.stop();
         }
@@ -3520,80 +3560,43 @@ router.post('/sessions/:room/flag', function () {
   };
 }());
 
-router.post('/event', function () {
+router.post('/sessions/:room/flag', function () {
   var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16(req, res) {
-    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
-
+    var room, userId, existingSession, participants;
     return regeneratorRuntime.wrap(function _callee16$(_context16) {
       while (1) {
         switch (_context16.prev = _context16.next) {
           case 0:
-            console.log('GOT EVENT', req.body);
-            res.sendStatus(200);
-            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
-            _context16.next = 5;
-            return _journey_space2.default.findOne({ sessionId: sessionId }).exec();
+            room = req.params.room;
+            userId = req.sessionID; // using sessionId as representation of user for now
 
-          case 5:
-            session = _context16.sent;
+            _context16.next = 4;
+            return _journey_space2.default.findOne({ room: room }).exec();
 
+          case 4:
+            existingSession = _context16.sent;
 
-            console.log("*******" + req.body);
-
-            _context16.t0 = req.body.event;
-            _context16.next = _context16.t0 === 'connectionCreated' ? 10 : _context16.t0 === 'connectionDestroyed' ? 20 : 29;
-            break;
-
-          case 10:
-            if (!session) {
-              _context16.next = 19;
+            if (!existingSession) {
+              _context16.next = 13;
               break;
             }
 
-            _context16.next = 13;
-            return _journey_participant2.default.count({ session: session, connectionId: connection.id });
+            existingSession.flags.push({ user: userId });
+            _context16.next = 9;
+            return existingSession.save();
+
+          case 9:
+            _context16.next = 11;
+            return _journey_participant2.default.find({ session: existingSession, present: true }).lean().exec();
+
+          case 11:
+            participants = _context16.sent;
+            return _context16.abrupt('return', res.json(_extends({}, existingSession.toJSON(), { participants: participants })));
 
           case 13:
-            _context16.t1 = _context16.sent;
-            participantExists = _context16.t1 > 0;
+            res.sendStatus(404);
 
-            if (participantExists) {
-              _context16.next = 19;
-              break;
-            }
-
-            participant = new _journey_participant2.default({ session: session, connectionId: connection.id });
-            _context16.next = 19;
-            return participant.save();
-
-          case 19:
-            return _context16.abrupt('break', 29);
-
-          case 20:
-            if (!session) {
-              _context16.next = 28;
-              break;
-            }
-
-            _context16.next = 23;
-            return _journey_participant2.default.findOne({ session: session, connectionId: connection.id });
-
-          case 23:
-            _participant = _context16.sent;
-
-            if (!_participant) {
-              _context16.next = 28;
-              break;
-            }
-
-            _participant.present = false;
-            _context16.next = 28;
-            return _participant.save();
-
-          case 28:
-            return _context16.abrupt('break', 29);
-
-          case 29:
+          case 14:
           case 'end':
             return _context16.stop();
         }
@@ -3603,6 +3606,92 @@ router.post('/event', function () {
 
   return function (_x31, _x32) {
     return _ref16.apply(this, arguments);
+  };
+}());
+
+router.post('/event', function () {
+  var _ref17 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17(req, res) {
+    var _req$body, sessionId, connection, session, participantExists, participant, _participant;
+
+    return regeneratorRuntime.wrap(function _callee17$(_context17) {
+      while (1) {
+        switch (_context17.prev = _context17.next) {
+          case 0:
+            console.log('GOT EVENT', req.body);
+            res.sendStatus(200);
+            _req$body = req.body, sessionId = _req$body.sessionId, connection = _req$body.connection;
+            _context17.next = 5;
+            return _journey_space2.default.findOne({ sessionId: sessionId }).exec();
+
+          case 5:
+            session = _context17.sent;
+
+
+            console.log("*******" + req.body);
+
+            _context17.t0 = req.body.event;
+            _context17.next = _context17.t0 === 'connectionCreated' ? 10 : _context17.t0 === 'connectionDestroyed' ? 20 : 29;
+            break;
+
+          case 10:
+            if (!session) {
+              _context17.next = 19;
+              break;
+            }
+
+            _context17.next = 13;
+            return _journey_participant2.default.count({ session: session, connectionId: connection.id });
+
+          case 13:
+            _context17.t1 = _context17.sent;
+            participantExists = _context17.t1 > 0;
+
+            if (participantExists) {
+              _context17.next = 19;
+              break;
+            }
+
+            participant = new _journey_participant2.default({ session: session, connectionId: connection.id });
+            _context17.next = 19;
+            return participant.save();
+
+          case 19:
+            return _context17.abrupt('break', 29);
+
+          case 20:
+            if (!session) {
+              _context17.next = 28;
+              break;
+            }
+
+            _context17.next = 23;
+            return _journey_participant2.default.findOne({ session: session, connectionId: connection.id });
+
+          case 23:
+            _participant = _context17.sent;
+
+            if (!_participant) {
+              _context17.next = 28;
+              break;
+            }
+
+            _participant.present = false;
+            _context17.next = 28;
+            return _participant.save();
+
+          case 28:
+            return _context17.abrupt('break', 29);
+
+          case 29:
+          case 'end':
+            return _context17.stop();
+        }
+      }
+    }, _callee17, undefined);
+  }));
+
+  return function (_x33, _x34) {
+    return _ref17.apply(this, arguments);
   };
 }());
 
@@ -5040,6 +5129,7 @@ var SecondsTimerEmitter = function (_AbstractTimerEmitter) {
     _this3.total = startAt.getTime() - _this3.start;
     _this3.passed = new Date().getTime() - _this3.start;
     _this3.interval = setInterval(function () {
+      console.log('STILL TICKING', _this3.interval);
       _this3.passed = new Date().getTime() - _this3.start;
       if (_this3.passed >= _this3.total) {
         clearInterval(_this3.interval);
@@ -5050,6 +5140,12 @@ var SecondsTimerEmitter = function (_AbstractTimerEmitter) {
   }
 
   _createClass(SecondsTimerEmitter, [{
+    key: 'clear',
+    value: function clear() {
+      console.log("DO IT YO", this.interval);
+      clearInterval(this.interval);
+    }
+  }, {
     key: 'displayTime',
     value: function displayTime() {
       return this._displayTime(this.total - this.passed);
@@ -5087,6 +5183,9 @@ var AudioPlayTickEmitter = function (_AbstractTimerEmitter2) {
   }
 
   _createClass(AudioPlayTickEmitter, [{
+    key: 'clear',
+    value: function clear() {}
+  }, {
     key: 'displayTime',
     value: function displayTime() {
       return this._displayTime(this.total - this.currentTime);
@@ -5236,6 +5335,11 @@ var JourneyStateProgressBar = function (_Component2) {
       });
     }
   }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.props.timer.clear();
+    }
+  }, {
     key: 'formatState',
     value: function formatState(state) {
       switch (this.props.journey.state) {
@@ -5308,72 +5412,263 @@ var JourneyTimeline = function (_Component3) {
   }, {
     key: 'render',
     value: function render() {
+      var _this11 = this;
+
       var journey = this.props.journey;
 
       return _react2.default.createElement(
-        'ul',
-        { className: 'journey-timeline' },
+        'div',
+        { ref: function ref(el) {
+            _this11.container = el;
+          }, className: 'journey-timeline step-' + this.stepIndex.toString() },
         _react2.default.createElement(
-          'li',
-          { className: journey.state === 'joined' ? 'active' : '' },
-          _react2.default.createElement(
-            'h4',
-            null,
-            'Prepare'
-          ),
-          _react2.default.createElement(
-            'p',
-            null,
-            'Breathe and center yourself'
-          ),
-          journey.state === 'joined' && _react2.default.createElement(
-            'p',
-            { className: 'timer' },
-            this.props.timer.displayTime()
-          )
-        ),
-        _react2.default.createElement(
-          'li',
-          { className: journey.state === 'started' ? 'active' : '' },
-          _react2.default.createElement(
-            'h4',
-            null,
-            'Journey'
-          ),
-          _react2.default.createElement(
-            'p',
-            null,
-            'Listen and imagine'
-          ),
-          journey.state === 'started' && _react2.default.createElement(
-            'p',
-            { className: 'timer' },
-            this.props.timer.displayTime()
-          )
-        ),
-        _react2.default.createElement(
-          'li',
+          'ul',
           null,
           _react2.default.createElement(
-            'h4',
-            null,
-            'Sharing'
+            'li',
+            { className: journey.state === 'joined' ? 'active' : '' },
+            _react2.default.createElement(
+              'h4',
+              null,
+              'Prepare'
+            ),
+            _react2.default.createElement(
+              'div',
+              { style: { display: 'flex' } },
+              _react2.default.createElement(
+                'p',
+                null,
+                'Breathe and center yourself'
+              ),
+              journey.state === 'joined' && _react2.default.createElement(
+                'p',
+                { className: 'timer', style: { marginLeft: '10px' } },
+                this.props.timer.displayTime()
+              )
+            )
           ),
           _react2.default.createElement(
-            'p',
+            'li',
+            { className: journey.state === 'started' ? 'active' : '' },
+            _react2.default.createElement(
+              'h4',
+              null,
+              'Journey'
+            ),
+            _react2.default.createElement(
+              'div',
+              { style: { display: 'flex' } },
+              _react2.default.createElement(
+                'p',
+                null,
+                'Listen and imagine'
+              ),
+              journey.state === 'started' && _react2.default.createElement(
+                'p',
+                { className: 'timer', style: { marginLeft: '10px' } },
+                this.props.timer.displayTime()
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'li',
             null,
-            'Feelings and thoughts'
+            _react2.default.createElement(
+              'h4',
+              null,
+              'Sharing'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'Feelings and thoughts'
+            )
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'arrow', style: { height: this.heightForActive + 'px', transform: 'translateY(' + this.positionForCaret + 'px)' } },
+          _react2.default.createElement(
+            'svg',
+            { xmlns: 'http://www.w3.org/2000/svg', version: '1.1', 'class': 'svg-triangle', width: '100', height: '100%', viewBox: '0 0 95 90', preserveAspectRatio: 'none', shapeRendering: 'geometricPrecision' },
+            _react2.default.createElement('path', { d: 'M 70,50 99,5 99,95 Z' })
           )
         )
       );
+    }
+  }, {
+    key: 'stepIndex',
+    get: function get() {
+      switch (this.props.journey.state) {
+        case 'joined':
+          return 0;
+        case 'started':
+          return 1;
+        default:
+          return 2;
+      }
+    }
+  }, {
+    key: 'positionForCaret',
+    get: function get() {
+      if (!this.container) {
+        return 0;
+      }
+      var idx = this.stepIndex;
+      var items = this.container.querySelectorAll('li');
+      console.log('POSITION FOR CARET', idx);
+      return Array(idx + 1).fill(0).reduce(function (memo, i, j) {
+        console.log('FOR J', j);
+        if (j == 0) {
+          return 0;
+        } else {
+          console.log('CALC IT UP', items[j - 0].offsetHeight);
+          return memo + items[j - 0].offsetHeight;
+        }
+      }, 0);
+    }
+  }, {
+    key: 'heightForActive',
+    get: function get() {
+      if (!this.container) {
+        return 0;
+      }
+      var idx = this.stepIndex;
+      var items = this.container.querySelectorAll('li');
+      return items[idx].offsetHeight;
     }
   }]);
 
   return JourneyTimeline;
 }(_react.Component);
 
-var JourneyStartsIn = function (_Component4) {
-  _inherits(JourneyStartsIn, _Component4);
+var SkipButton = function (_Component4) {
+  _inherits(SkipButton, _Component4);
+
+  function SkipButton() {
+    var _ref3;
+
+    var _temp, _this12, _ret;
+
+    _classCallCheck(this, SkipButton);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this12 = _possibleConstructorReturn(this, (_ref3 = SkipButton.__proto__ || Object.getPrototypeOf(SkipButton)).call.apply(_ref3, [this].concat(args))), _this12), _this12.skipToNext = function (e) {
+      e.preventDefault();
+      fetch('/api/journeys/' + _this12.props.journey.room + '/skip', {
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, same-origin, *omit
+        headers: {
+          'user-agent': 'Mozilla/4.0 MDN Example',
+          'content-type': 'application/json'
+        },
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, cors, *same-origin
+        redirect: 'follow', // manual, *follow, error
+        referrer: 'no-referrer' // *client, no-referrer
+      });
+    }, _temp), _possibleConstructorReturn(_this12, _ret);
+  }
+
+  _createClass(SkipButton, [{
+    key: 'render',
+    value: function render() {
+      return this.props.journey.state != 'completed' ? _react2.default.createElement(
+        'button',
+        { className: 'btn btn-secondary', onClick: this.skipToNext },
+        _react2.default.createElement('i', { className: 'fa fa-forward' })
+      ) : _react2.default.createElement('span', null);
+    }
+  }]);
+
+  return SkipButton;
+}(_react.Component);
+
+var VideoButton = function (_Component5) {
+  _inherits(VideoButton, _Component5);
+
+  function VideoButton(props) {
+    _classCallCheck(this, VideoButton);
+
+    var _this13 = _possibleConstructorReturn(this, (VideoButton.__proto__ || Object.getPrototypeOf(VideoButton)).call(this, props));
+
+    _this13.toggle = function (e) {
+      e.preventDefault();
+      var publisher = _this13.props.publisher;
+
+      if (publisher && publisher.state && publisher.state.publisher) {
+        publisher.state.publisher.publishVideo(!_this13.state.publishing);
+        _this13.setState({
+          publishing: !_this13.state.publishing
+        });
+      }
+    };
+
+    _this13.state = {
+      publishing: true
+    };
+    return _this13;
+  }
+
+  _createClass(VideoButton, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'button',
+        { style: this.props.style || {}, onClick: this.toggle, className: 'btn btn-' + (this.state.publishing ? 'primary' : 'secondary') },
+        _react2.default.createElement('i', { className: 'fa fa-video-camera' })
+      );
+    }
+  }]);
+
+  return VideoButton;
+}(_react.Component);
+
+var AudioButton = function (_Component6) {
+  _inherits(AudioButton, _Component6);
+
+  function AudioButton(props) {
+    _classCallCheck(this, AudioButton);
+
+    var _this14 = _possibleConstructorReturn(this, (AudioButton.__proto__ || Object.getPrototypeOf(AudioButton)).call(this, props));
+
+    _this14.toggle = function (e) {
+      e.preventDefault();
+      var publisher = _this14.props.publisher;
+
+      if (publisher && publisher.state && publisher.state.publisher) {
+        publisher.state.publisher.publishAudio(!_this14.state.publishing);
+        _this14.setState({
+          publishing: !_this14.state.publishing
+        });
+      }
+    };
+
+    _this14.state = {
+      publishing: true
+    };
+    return _this14;
+  }
+
+  _createClass(AudioButton, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'button',
+        { style: this.props.style || {}, onClick: this.toggle, className: 'btn btn-' + (this.state.publishing ? 'primary' : 'secondary') },
+        _react2.default.createElement('i', { className: 'fa fa-microphone' })
+      );
+    }
+  }]);
+
+  return AudioButton;
+}(_react.Component);
+
+var JourneyStartsIn = function (_Component7) {
+  _inherits(JourneyStartsIn, _Component7);
 
   function JourneyStartsIn() {
     _classCallCheck(this, JourneyStartsIn);
@@ -5384,13 +5679,21 @@ var JourneyStartsIn = function (_Component4) {
   _createClass(JourneyStartsIn, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(newProps) {
-      var _this12 = this;
+      var _this16 = this;
 
+      console.log('GOT NEW');
       newProps.timer.on('tick', function (current) {
-        _this12.setState({
+        console.log('TICK TICK');
+        _this16.setState({
           timerValue: current
         });
       });
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      console.log('CLEAR IT OUT');
+      this.props.timer.clear();
     }
   }, {
     key: 'render',
@@ -5417,32 +5720,32 @@ var JourneyStartsIn = function (_Component4) {
   return JourneyStartsIn;
 }(_react.Component);
 
-var Room = function (_Component5) {
-  _inherits(Room, _Component5);
+var JourneySpace = function (_Component8) {
+  _inherits(JourneySpace, _Component8);
 
-  function Room(props) {
-    _classCallCheck(this, Room);
+  function JourneySpace(props) {
+    _classCallCheck(this, JourneySpace);
 
-    var _this13 = _possibleConstructorReturn(this, (Room.__proto__ || Object.getPrototypeOf(Room)).call(this, props));
+    var _this17 = _possibleConstructorReturn(this, (JourneySpace.__proto__ || Object.getPrototypeOf(JourneySpace)).call(this, props));
 
-    _this13.refreshSession = function () {
-      fetch('/api/sessions/' + _this13.props.match.params.room, { credentials: 'include' }).then(function (res) {
+    _this17.refreshSession = function () {
+      fetch('/api/sessions/' + _this17.props.match.params.room, { credentials: 'include' }).then(function (res) {
         return res.json();
       }).then(function (json) {
         _state2.default.session = json;
       });
     };
 
-    _this13.onInitPublisher = function () {
+    _this17.onInitPublisher = function () {
       console.log('initialized publisher');
     };
 
-    _this13.onConfirmReady = function (e) {
-      fetch('/api/sessions/' + _this13.props.match.params.room + '/connections/' + _this13.sessionHelper.session.connection.id + '/ready');
+    _this17.onConfirmReady = function (e) {
+      fetch('/api/sessions/' + _this17.props.match.params.room + '/connections/' + _this17.sessionHelper.session.connection.id + '/ready');
     };
 
-    _this13.onChangeJourney = function (e) {
-      fetch('/api/sessions/' + _this13.props.match.params.room + '/journey', {
+    _this17.onChangeJourney = function (e) {
+      fetch('/api/sessions/' + _this17.props.match.params.room + '/journey', {
         body: JSON.stringify({ journey: e.target.value }), // must match 'Content-Type' header
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, same-origin, *omit
@@ -5457,8 +5760,8 @@ var Room = function (_Component5) {
       });
     };
 
-    _this13.onStartSession = function (e) {
-      fetch('/api/sessions/' + _this13.props.match.params.room + '/start', {
+    _this17.onStartSession = function (e) {
+      fetch('/api/sessions/' + _this17.props.match.params.room + '/start', {
         cache: 'no-cache',
         credentials: 'same-origin',
         headers: {
@@ -5470,21 +5773,21 @@ var Room = function (_Component5) {
       });
     };
 
-    _this13.onLoadedMetadata = function (e) {
-      _this13.setState({
+    _this17.onLoadedMetadata = function (e) {
+      _this17.setState({
         journeyDuration: e.target.duration
       });
-      _this13.audioTag.removeEventListener('timeupdate', _this13.onTimeUpdate);
-      _this13.audioTag.addEventListener('timeupdate', _this13.onTimeUpdate);
+      _this17.audioTag.removeEventListener('timeupdate', _this17.onTimeUpdate);
+      _this17.audioTag.addEventListener('timeupdate', _this17.onTimeUpdate);
     };
 
-    _this13.onTimeUpdate = function (e) {
-      _this13.setState({
+    _this17.onTimeUpdate = function (e) {
+      _this17.setState({
         playerProgress: e.target.currentTime / e.target.duration * 100,
         playerProgressMS: e.target.currentTime
       });
-      if (_this13.isHostUser) {
-        fetch('/api/journeys/' + _this13.props.match.params.room + '/progress', {
+      if (_this17.isHostUser) {
+        fetch('/api/journeys/' + _this17.props.match.params.room + '/progress', {
           body: JSON.stringify({ currentTime: e.target.currentTime }),
           cache: 'no-cache',
           credentials: 'same-origin',
@@ -5498,11 +5801,11 @@ var Room = function (_Component5) {
       }
     };
 
-    _this13.onFlag = function (e) {
+    _this17.onFlag = function (e) {
       e.preventDefault();
-      fetch('/api/sessions/' + _this13.props.match.params.room + '/flag', {
+      fetch('/api/sessions/' + _this17.props.match.params.room + '/flag', {
         cache: 'no-cache',
-        body: JSON.stringify({ connectionId: _this13.state.session.connection.id }),
+        body: JSON.stringify({ connectionId: _this17.state.session.connection.id }),
         credentials: 'same-origin',
         headers: {
           'user-agent': 'Mozilla/4.0 MDN Example',
@@ -5517,7 +5820,7 @@ var Room = function (_Component5) {
       });
     };
 
-    _this13.onShare = function (e) {
+    _this17.onShare = function (e) {
       navigator.share({
         title: 'Take a Journey With Me!',
         text: 'Join me on ' + _state2.default.session.name,
@@ -5525,7 +5828,7 @@ var Room = function (_Component5) {
       });
     };
 
-    _this13.state = {
+    _this17.state = {
       streams: [],
       publisherId: '',
       session: null,
@@ -5535,25 +5838,25 @@ var Room = function (_Component5) {
       journeyDuration: 0,
       currentlyActivePublisher: null
     };
-    _this13.publisher = {};
-    _this13.audioTag = {};
-    return _this13;
+    _this17.publisher = {};
+    _this17.audioTag = {};
+    return _this17;
   }
 
-  _createClass(Room, [{
+  _createClass(JourneySpace, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this14 = this;
+      var _this18 = this;
 
       this.audioTag.addEventListener('ended', function (event) {
-        if (_this14.publisher && _this14.publisher.state && _this14.publisher.state.publisher) {
-          _this14.publisher.state.publisher.publishAudio(true);
+        if (_this18.publisher && _this18.publisher.state && _this18.publisher.state.publisher) {
+          _this18.publisher.state.publisher.publishAudio(true);
         }
-        _this14.setState({
+        _this18.setState({
           playerState: 'ended'
         });
 
-        fetch('/api/journeys/' + _this14.props.match.params.room + '/completed', {
+        fetch('/api/journeys/' + _this18.props.match.params.room + '/completed', {
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
           credentials: 'same-origin', // include, same-origin, *omit
           headers: {
@@ -5565,6 +5868,8 @@ var Room = function (_Component5) {
           redirect: 'follow', // manual, *follow, error
           referrer: 'no-referrer' // *client, no-referrer
         });
+
+        _this18.sharingPromptAudioPlayer.play();
       });
 
       console.log('GET SESSION');
@@ -5572,80 +5877,106 @@ var Room = function (_Component5) {
         return res.json();
       }).then(function (json) {
         _state2.default.session = json;
-        _this14.sessionHelper = createSession({
+        _this18.sessionHelper = createSession({
           apiKey: _state2.default.openTokKey,
           sessionId: _state2.default.session.sessionId,
           token: _state2.default.session.token,
           onConnect: function onConnect() {
-            console.log('assigned connection to publisher', _this14.sessionHelper.session.connection);
-            setTimeout(_this14.refreshSession, 1000);
+            console.log('assigned connection to publisher', _this18.sessionHelper.session.connection);
+            setTimeout(_this18.refreshSession, 1000);
           },
           onStreamsUpdated: function onStreamsUpdated(streams) {
             console.log('Current subscriber streams:', streams);
-            _this14.setState({ streams: streams });
-            if (!_this14.state.currentlyActivePublisher) {
-              _this14.setState({
+            _this18.setState({ streams: streams });
+            if (!_this18.state.currentlyActivePublisher) {
+              _this18.setState({
                 currentlyActivePublisher: streams[0]
               });
             }
           }
         });
-        _this14.sessionHelper.session.on("connectionDestroyed", function (event) {
+        _this18.sessionHelper.session.on("connectionDestroyed", function (event) {
           var data = {
-            sessionId: _this14.sessionHelper.session.sessionId,
+            sessionId: _this18.sessionHelper.session.sessionId,
             connection: {
               id: event.connection.id
             },
             event: 'connectionDestroyed'
           };
-          _this14.refreshSession();
+          _this18.refreshSession();
         });
-        _this14.sessionHelper.session.on("connectionCreated", function (event) {
+        _this18.sessionHelper.session.on("connectionCreated", function (event) {
           console.log('CREATED', event);
           var data = {
-            sessionId: _this14.sessionHelper.session.sessionId,
+            sessionId: _this18.sessionHelper.session.sessionId,
             connection: {
               id: event.connection.id
             },
             event: 'connectionCreated'
           };
-          _this14.refreshSession();
+          _this18.refreshSession();
         });
-        _this14.sessionHelper.session.on('signal', function (event) {
+        _this18.sessionHelper.session.on('signal', function (event) {
           console.log("Signal sent from connection ", event);
-          _this14.refreshSession();
+          _this18.refreshSession();
         });
 
-        _this14.sessionHelper.session.on("signal:startJourney", function (event) {
-          if (_this14.publisher && _this14.publisher.state && _this14.publisher.state.publisher) {
-            _this14.publisher.state.publisher.publishAudio(false);
+        _this18.sessionHelper.session.on("signal:startJourney", function (event) {
+          if (_this18.publisher && _this18.publisher.state && _this18.publisher.state.publisher) {
+            _this18.publisher.state.publisher.publishAudio(false);
           }
-          _this14.audioTag.play();
-          _this14.setState({
+          _this18.audioTag.play();
+          _this18.setState({
             playerState: 'playing'
           });
         });
 
-        _this14.sessionHelper.session.on("signal:fail", function (event) {
+        _this18.sessionHelper.session.on("signal:journeyUpdated", function (event) {
+          var journey = JSON.parse(event.data);
+          _state2.default.session = journey;
+
+          if (_state2.default.session.state === 'started') {
+
+            if (_this18.publisher && _this18.publisher.state && _this18.publisher.state.publisher) {
+              _this18.publisher.state.publisher.publishAudio(false);
+            }
+            _this18.audioTag.play();
+            _this18.setState({
+              playerState: 'playing'
+            });
+          } else {
+            console.log('PAUSE IT YO');
+            _this18.audioTag.pause();
+            _this18.setState({
+              playerState: 'paused'
+            });
+          }
+
+          if (_state2.default.session.state === 'completed') {
+            _this18.sharingPromptAudioPlayer.play();
+          }
+        });
+
+        _this18.sessionHelper.session.on("signal:fail", function (event) {
           _state2.default.session.state = 'failed';
         });
 
-        _this14.setState({
-          session: _this14.sessionHelper.session
+        _this18.setState({
+          session: _this18.sessionHelper.session
         });
 
         var onAudioCanPlay = function onAudioCanPlay(event) {
           if (_state2.default.session.state === 'started') {
-            _this14.audioTag.play();
+            _this18.audioTag.play();
             if (!isNaN(_state2.default.session.currentTime)) {
-              _this14.audioTag.currentTime = _state2.default.session.currentTime;
+              _this18.audioTag.currentTime = _state2.default.session.currentTime;
             }
           }
-          _this14.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
+          _this18.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
         };
 
-        _this14.audioTag.addEventListener('canplaythrough', onAudioCanPlay, false);
-        _this14.audioTag.load();
+        _this18.audioTag.addEventListener('canplaythrough', onAudioCanPlay, false);
+        _this18.audioTag.load();
       });
       fetch('/api/journeys').then(function (res) {
         return res.json();
@@ -5663,10 +5994,10 @@ var Room = function (_Component5) {
   }, {
     key: 'render',
     value: function render() {
-      var _this15 = this;
+      var _this19 = this;
 
       var currentParticipant = this.state.session && this.state.session.connection && _state2.default.session && _state2.default.session.participants.find(function (participant) {
-        return participant.connectionId === _this15.state.session.connection.id;
+        return participant.connectionId === _this19.state.session.connection.id;
       });
       var currentUserHasFlaggedJourney = _state2.default.session && _state2.default.session.flags.map(function (flag) {
         return flag.user;
@@ -5680,16 +6011,23 @@ var Room = function (_Component5) {
           _react2.default.createElement(
             'audio',
             { style: { display: 'none' }, onLoadedMetadata: this.onLoadedMetadata, key: _state2.default.session && _state2.default.session.journey, controls: 'true', ref: function ref(audioTag) {
-                _this15.audioTag = audioTag;
+                _this19.audioTag = audioTag;
               } },
             _react2.default.createElement('source', { src: _state2.default.session && _state2.default.session.journey, type: 'audio/mpeg' })
+          ),
+          _react2.default.createElement(
+            'audio',
+            { style: { display: 'none' }, ref: function ref(el) {
+                _this19.sharingPromptAudioPlayer = el;
+              } },
+            _react2.default.createElement('source', { src: '/sharing.mp3', type: 'audio/mpeg' })
           ),
           this.state.session && _react2.default.createElement(
             'div',
             { className: 'row no-gutters' },
             _react2.default.createElement(
               'div',
-              { className: 'col-5' },
+              { className: 'col-5 col-lg-3' },
               _react2.default.createElement(
                 'ul',
                 { className: 'journeyspace-streams', style: { margin: 0 } },
@@ -5711,7 +6049,7 @@ var Room = function (_Component5) {
                     session: this.sessionHelper.session,
                     onInit: this.onInitPublisher,
                     ref: function ref(publisher) {
-                      _this15.publisher = publisher;
+                      _this19.publisher = publisher;
                     }
                   })
                 ),
@@ -5721,10 +6059,10 @@ var Room = function (_Component5) {
                   });
                   return _react2.default.createElement(
                     'li',
-                    { className: 'journeyspace-stream ' + (_this15.state.currentlyActivePublisher ? 'journeyspace-active-stream' : '') },
+                    { className: 'journeyspace-stream ' + (_this19.state.currentlyActivePublisher ? 'journeyspace-active-stream' : '') },
                     _react2.default.createElement(OTSubscriber, {
                       key: stream.id,
-                      session: _this15.sessionHelper.session,
+                      session: _this19.sessionHelper.session,
                       stream: stream,
                       properties: {
                         width: '100%',
@@ -5753,8 +6091,19 @@ var Room = function (_Component5) {
             ),
             _react2.default.createElement(
               'div',
-              { className: 'col-7', style: { backgroundColor: 'white' } },
+              { className: 'col-7 col-lg-9', style: { backgroundColor: 'white' } },
               _state2.default.session.state === 'joined' && _react2.default.createElement(JourneyStartsIn, { journey: _state2.default.session, timer: this.journeyStateTimer }),
+              _react2.default.createElement(
+                'div',
+                { style: { display: 'flex', padding: '10px 10px 0' } },
+                _react2.default.createElement(SkipButton, { journey: _state2.default.session })
+              ),
+              _react2.default.createElement(
+                'div',
+                { style: { display: 'flex', padding: '10px 10px 0' } },
+                _react2.default.createElement(VideoButton, { publisher: this.publisher }),
+                _react2.default.createElement(AudioButton, { style: { marginLeft: '10px' }, publisher: this.publisher })
+              ),
               _react2.default.createElement(JourneyTimeline, { journey: _state2.default.session, timer: this.journeyStateTimer }),
               _react2.default.createElement(
                 'div',
@@ -5877,10 +6226,10 @@ var Room = function (_Component5) {
   }, {
     key: 'isHostUser',
     get: function get() {
-      var _this16 = this;
+      var _this20 = this;
 
       var currentParticipant = this.state.session && this.state.session.connection && _state2.default.session && _state2.default.session.participants.find(function (participant) {
-        return participant.connectionId === _this16.state.session.connection.id;
+        return participant.connectionId === _this20.state.session.connection.id;
       });
       return currentParticipant && _state2.default.session.participants.indexOf(currentParticipant) === 0;
     }
@@ -5891,15 +6240,18 @@ var Room = function (_Component5) {
         case 'started':
           return new AudioPlayTickEmitter(this.audioTag);
         default:
-          return new SecondsTimerEmitter(new Date(_state2.default.session.createdAt), new Date(_state2.default.session.startAt));
+          if (!this.secondsEmitter) {
+            this.secondsEmitter = new SecondsTimerEmitter(new Date(_state2.default.session.createdAt), new Date(_state2.default.session.startAt));
+          }
+          return this.secondsEmitter;
       }
     }
   }]);
 
-  return Room;
+  return JourneySpace;
 }(_react.Component);
 
-exports.default = (0, _reactEasyState.view)(Room);
+exports.default = (0, _reactEasyState.view)(JourneySpace);
 
 /***/ }),
 /* 97 */

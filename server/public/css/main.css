@@ -8597,6 +8597,9 @@ a.text-dark:hover, a.text-dark:focus {
   overflow: visible;
   clip: auto; }
 
+.btn-secondary {
+  background-color: gainsboro; }
+
 h2 {
   font-size: 1.7rem; }
 
@@ -8641,6 +8644,9 @@ h2 {
     border: 1px solid #535353;
     min-height: calc(100vw * .4);
     margin-bottom: 10px; }
+    @media (min-width: 992px) {
+      .journeyspace-streams li {
+        min-height: calc(100vw * .25); } }
   .journeyspace-streams li:first-child {
     border: none; }
 
@@ -8823,36 +8829,35 @@ h2 {
   -ms-user-select: none;
   user-select: none; }
 
-.journey-timeline {
+.journey-timeline ul {
   margin: 0;
   padding: 0;
   list-style: none; }
-  .journey-timeline li {
+  .journey-timeline ul li {
     border-bottom: 1px solid #585858;
     padding: 10px; }
 
-.journey-timeline h4 {
-  font-size: 16px;
-  font-weight: bold; }
-
-.journey-timeline p {
-  font-size: 12px;
-  margin-bottom: 0; }
-
-.journey-timeline li.active {
+.journey-timeline {
   position: relative; }
-  .journey-timeline li.active:after {
+  .journey-timeline .fa-caret-left {
     position: absolute;
-    font: normal normal normal 14px/1 FontAwesome;
-    content: '\F0D9';
-    display: block;
-    height: 100%;
     top: 0;
-    right: -4px;
-    font-size: 100px;
-    color: #fdbe45; }
-
-.journey-timeline .timer {
-  font-weight: bold; }
+    right: 0; }
+  .journey-timeline .arrow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 64px;
+    transition: all 200ms ease-in-out; }
+    .journey-timeline .arrow svg {
+      fill: #fbbc5a; }
+  .journey-timeline h4 {
+    font-size: 16px;
+    font-weight: bold; }
+  .journey-timeline p {
+    font-size: 12px;
+    margin-bottom: 0; }
+  .journey-timeline .timer {
+    font-weight: bold; }
 
 /*# sourceMappingURL=main.css.map*/
