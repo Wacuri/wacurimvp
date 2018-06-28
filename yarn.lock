@@ -6765,7 +6765,7 @@ sshpk@^1.7.0:
 
 "ssl-express-www@https://github.com/keithnorm/ssl-express-www":
   version "3.0.0"
-  resolved "https://github.com/keithnorm/ssl-express-www#f4c7ec4a0f57708e13f73f0ce43899053a4ec511"
+  resolved "https://github.com/keithnorm/ssl-express-www#9fe46ff3afacb79a24e0a52de8ddee7a9c971384"
   dependencies:
     express "^4.16.2"
 
