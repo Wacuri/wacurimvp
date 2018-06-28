@@ -6763,6 +6763,12 @@ sshpk@^1.7.0:
     jsbn "~0.1.0"
     tweetnacl "~0.14.0"
 
+"ssl-express-www@https://github.com/keithnorm/ssl-express-www":
+  version "3.0.0"
+  resolved "https://github.com/keithnorm/ssl-express-www#f4c7ec4a0f57708e13f73f0ce43899053a4ec511"
+  dependencies:
+    express "^4.16.2"
+
 stackframe@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/stackframe/-/stackframe-0.3.1.tgz#33aa84f1177a5548c8935533cbfeb3420975f5a4"

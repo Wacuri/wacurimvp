@@ -1,6 +1,6 @@
 import path from 'path';
 import express from 'express';
-import ssl from 'express-ssl';
+import secure from 'ssl-express-www';
 import bodyParser from 'body-parser';
 import api from './api';
 import ssr from './ssr';
@@ -13,7 +13,7 @@ import createMongoStore from 'connect-mongo';
 
 
 const app = express();
-app.use(ssl);
+app.use(secure);
 const agenda = new Agenda({db: {address: process.env.MONGODB_URI || process.env.MONGO_URL}});
 
 app.use(session({
