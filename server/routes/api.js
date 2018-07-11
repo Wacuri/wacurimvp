@@ -68,8 +68,23 @@ router.get('/sessions/:room', async (req, res) => {
 	} else {
 		opentok.createSession(async (err, session) => {
 		  if (err) throw err;
-			// save the sessionId
-			const newSession = new JourneySpace({room, sessionId: session.sessionId});
+			// create new journey space, save tok session id
+      const db = mongoose.connection;
+      let selectedJourney;
+      if (req.query.journey) {
+        selectedJourney = await JourneyContent.findOne({name: req.query.journey}).lean().exec();
+      }
+      if (!selectedJourney) {
+        const randomJourney = (await db.collection('journeycontents').aggregate([{$sample: {size: 1}}]).toArray())[0];
+        selectedJourney = randomJourney;
+      }
+      const newSession = new JourneySpace({
+        room, 
+        sessionId: session.sessionId,
+        journey: selectedJourney.filePath,
+        name: selectedJourney.name,
+        image: selectedJourney.image,
+      });
 			await newSession.save();
       const response = newSession.toJSON();
       response.participants = [];
