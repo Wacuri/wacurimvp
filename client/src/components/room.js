@@ -415,7 +415,7 @@ class SharePrompt extends Component {
   render() {
     return (
       <div className='journeyspace-sharePrompt' style={{textAlign: 'center'}}>
-        <p style={{fontFamily: 'Playfair Display, serif', fontSize: '25px', lineHeight: 0.8}}>If you would like to invite a friend you can make this a permanent JourneySpace:`</p>
+        <p style={{fontFamily: 'Playfair Display, serif', fontSize: '25px', lineHeight: 0.8}}>If you would like to invite a friend you can make this a permanent JourneySpace:</p>
         <button className='btn btn-secondary' onClick={this.props.onInvite}>Invite Friends</button>
       </div>
     )
@@ -497,6 +497,9 @@ class InviteModal extends Component {
   render() {
     return (
       <div style={{width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(89, 153, 222, 0.8)'}} className='journeyspace-invite'>
+        <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px'}}>
+          <i className='fa fa-times' style={{fontSize: '22px', color: 'white'}}/>
+        </a>
         <div style={{textAlign: 'center', position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '0 20px', minWidth: '90%'}}>
           <p style={{fontSize: '26px', lineHeight: 0.8, fontFamily: 'Playfair Display, serif', color: 'white'}}>Share your new permanent CuriousLive Space with Friends</p>
           <input type='text' value={this.state.journeySpaceName} onChange={this.onChange} placeholder='Name Your Space'/>
@@ -812,6 +815,13 @@ class JourneySpace extends Component {
     });
   }
 
+  onCloseShareModal = (e) => {
+    e.preventDefault();
+    this.setState({
+      showShareModal: false
+    });
+  }
+
   onCompleteShare = (url) => {
     console.log('complete share', url, this.props);
     this.setState({
@@ -939,7 +949,7 @@ class JourneySpace extends Component {
           </div>
         </div>
         {this.state.showShareModal &&
-          <InviteModal journey={this.state.session} onComplete={this.onCompleteShare}/>
+          <InviteModal journey={this.state.session} onComplete={this.onCompleteShare} onClose={this.onCloseShareModal}/>
         }
 
 
