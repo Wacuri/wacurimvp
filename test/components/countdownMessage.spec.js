@@ -2,7 +2,7 @@ import React from 'react';
 import CountdownMessage from '../../client/src/components/countdown_message';
 
 describe('CountdownMessage', () => {
-  it('renders Started message', () => {
+  it('renders journey space message', () => {
     const date = new Date();
     const minutes = 0;
     const startAt = new Date(date.getTime() + minutes * 60000);
