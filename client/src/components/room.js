@@ -413,7 +413,8 @@ class PlayButton extends Component {
   }
 
   toggle = (e) => {
-    if (this.state.paused) {
+    e.preventDefault();
+    if (this.props.player.paused) {
       fetch(`/api/sessions/${this.props.journey.room}/start`, {
         cache: 'no-cache',
         credentials: 'same-origin',
@@ -969,7 +970,7 @@ class JourneySpace extends Component {
                 }
                 
                 <div style={{display: 'flex', padding: '10px 10px 0'}}>
-                  {!state.session.startAt &&
+                  {(!state.session.startAt || ['started', 'paused'].indexOf(state.session.state) > -1) &&
                     <PlayButton journey={state.session} player={this.audioTag}/>
                   }
                   <SkipButton style={{marginLeft: 'auto'}} journey={state.session}/>
@@ -986,10 +987,10 @@ class JourneySpace extends Component {
                 </div>
                 
                 {state.session.state === 'failed' &&
-                  <p className='p-3'>:( No one else joined this journey with you.  
-                    &nbsp;<Link to='/join'>Go Back to the list</Link> and pick a different one, or
-                    &nbsp; <button className='btn btn-secondary' onClick={this.onStartSession}>Start the journey</button>
-                  </p>
+                    <p className='p-3'>Nobody else has joined this Journey Space. 
+                      You can either <a href='#' onClick={this.onStartSession}>hit play</a> and take the Journey by
+                      yourself of return to the <Link to='/join'>JourneyBoard</Link> to find another Journey Space
+                    </p>
                 }
 
               </div>
