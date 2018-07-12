@@ -3021,7 +3021,7 @@ router.get('/sessions/:room', function () {
                           room: room,
                           sessionId: session.sessionId,
                           journey: selectedJourney.filePath,
-                          name: selectedJourney.name,
+                          name: req.query.name || selectedJourney.name,
                           image: selectedJourney.image
                         });
                         _context2.next = 16;
@@ -4361,11 +4361,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Header = function Header() {
   return _react2.default.createElement(
     'div',
-    { className: 'header' },
+    { className: 'header', style: { display: 'flex', alignItems: 'center' } },
     _react2.default.createElement(
       'h1',
       { className: 'logo' },
       _react2.default.createElement('img', { src: _CuriousLiveLogo2.default })
+    ),
+    _state2.default.session && !_state2.default.session.startAt && _react2.default.createElement(
+      'h2',
+      { style: { color: 'white', fontSize: '16px' } },
+      _state2.default.session.name
     ),
     false && _state2.default.loggedIn && _state2.default.user && _react2.default.createElement(
       'div',
@@ -5949,7 +5954,7 @@ var InviteModal = function (_Component10) {
         var url = window.location.protocol + '//' + window.location.host + '/' + urlFriendlyName;
         var success = _this19._copy(url);
         if (success) {
-          _this19.props.onComplete(url);
+          _this19.props.onComplete(url, name);
         } else {
           _this19.setState({
             error: 'failed to copy url'
@@ -6167,12 +6172,12 @@ var JourneySpace = function (_Component11) {
       });
     };
 
-    _this20.onCompleteShare = function (url) {
+    _this20.onCompleteShare = function (url, name) {
       console.log('complete share', url, _this20.props);
       _this20.setState({
         showShareModal: false
       });
-      window.location = url + ('?journey=' + _state2.default.session.name);
+      window.location = url + ('?journey=' + _state2.default.session.name + '&name=' + name);
     };
 
     _this20.state = {
