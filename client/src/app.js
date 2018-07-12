@@ -9,6 +9,7 @@ import Home from './components/home';
 import Room from './components/Room';
 import CountdownMessage from './components/countdown_message';
 import state from './state';
+import AutoCreatedJourneysQueue from './auto_created_journeys_queue'
 
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 
@@ -82,112 +83,6 @@ class Login extends Component {
           </div>
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>
-      </div>
-    )
-  }
-}
-
-class JoinableJourneyCard extends Component {
-
-  onJoin = (e) => {
-    e.preventDefault();
-    fetch(`/api/journeys/${this.props.journey._id}/rsvp`, {
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, same-origin, *omit
-      headers: {
-        'user-agent': 'Mozilla/4.0 MDN Example',
-        'content-type': 'application/json'
-      },
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, cors, *same-origin
-      redirect: 'follow', // manual, *follow, error
-      referrer: 'no-referrer', // *client, no-referrer
-    });
-  }
-
-  render() {
-    const {journey} = this.props;
-    const currentUserHasRSVP = (journey.rsvps || []).find(rsvp => rsvp.user === state.sessionId) != null;
-
-    return (
-      <div className='joinable-journey-card'>
-        <div className='image'>
-          <img src={journey.image}/>
-        </div>
-        <div className='content'>
-        <CountdownMessage endTime={journey.startAt} />
-          <h4>{journey.name}</h4>
-          <p>Starts at: {moment(journey.startAt).format('LT')}</p>
-          <p>{journey.rsvps.length} / 3</p>
-          { journey.rsvps.length < 3 && !currentUserHasRSVP &&
-            <a href={`/${journey.room}`} onClick={this.onJoin} className='btn btn-primary'>Join</a>
-          }
-          { currentUserHasRSVP &&
-            <Link to={`/${journey.room}`} className='btn btn-primary'>Go there now</Link>
-          }
-        </div>
-      </div>
-    )
-  }
-}
-
-class AutoCreatedJourneysQueue extends Component {
-
-  componentDidMount() {
-    const roomUrl = 'temp-home-location'
-
-    // subscribe to global events
-    fetch(`/api/sessions/${roomUrl}`)
-      .then(res => res.json())
-      .then(json => {
-        state.session = json;
-        this.sessionHelper = createSession({
-          apiKey: state.openTokKey,
-          sessionId: state.session.sessionId,
-          token: state.session.token,
-          onConnect: () => {
-          }
-        });
-
-        this.sessionHelper.session.on("signal:createdNewJourney", (event) => {
-          state.joinableJourneys.push(JSON.parse(event.data));
-        });
-
-        this.sessionHelper.session.on("signal:expiredJourney", (event) => {
-          const journey = JSON.parse(event.data);
-          const idx = state.joinableJourneys.findIndex(j => j._id === journey._id);
-          state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), ...state.joinableJourneys.slice(idx + 1)];
-        });
-
-        this.sessionHelper.session.on("signal:failJourney", (event) => {
-          const journey = JSON.parse(event.data);
-          const idx = state.joinableJourneys.findIndex(j => j._id === journey._id);
-          state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), ...state.joinableJourneys.slice(idx + 1)];
-        });
-
-        this.sessionHelper.session.on('signal:newRSVP', (event) => {
-          const rsvp = JSON.parse(event.data);
-          const journey = state.joinableJourneys.find(j => j._id == rsvp.journey._id);
-          const idx = state.joinableJourneys.findIndex(j => j._id === journey._id);
-          journey.rsvps.push(rsvp);
-          state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), journey, ...state.joinableJourneys.slice(idx + 1)];
-        });
-
-      });
-
-
-    // fetch currently active journeys
-    fetch('/api/active_journeys')
-      .then(res => res.json())
-      .then(json => {
-        state.joinableJourneys = json;
-      });
-  }
-
-  render() {
-    return (
-      <div className='joinable-journeys'>
-        {state.joinableJourneys.map(journey => <JoinableJourneyCard key={journey._id} journey={journey}/>)}
       </div>
     )
   }
