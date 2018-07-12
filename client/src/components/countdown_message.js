@@ -17,7 +17,9 @@ class CountdownMessage extends Component {
   }
 
   componentDidMount() {
-    var intervalId = setInterval(this.countdown, 1000);
+    if(this.props.bypassInterval != true) {
+      var intervalId = setInterval(this.countdown, 1000);
+    }
   }
 
   countdown() {

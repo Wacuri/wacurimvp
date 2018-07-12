@@ -7,7 +7,7 @@ describe('CountdownMessage', () => {
     const minutes = 0;
     const startAt = new Date(date.getTime() + minutes * 60000);
 
-    const wrapper = shallow(<CountdownMessage endTime={startAt} />);
+    const wrapper = shallow(<CountdownMessage endTime={startAt} bypassInterval={true} />);
     expect(wrapper.find('#countdown-time')).to.have.length(1)
     expect(wrapper.contains("Started")).to.equal(true);
   });
