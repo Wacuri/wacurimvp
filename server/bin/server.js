@@ -5782,7 +5782,8 @@ var PlayButton = function (_Component7) {
     var _this15 = _possibleConstructorReturn(this, (PlayButton.__proto__ || Object.getPrototypeOf(PlayButton)).call(this, props));
 
     _this15.toggle = function (e) {
-      if (_this15.state.paused) {
+      e.preventDefault();
+      if (_this15.props.player.paused) {
         fetch('/api/sessions/' + _this15.props.journey.room + '/start', {
           cache: 'no-cache',
           credentials: 'same-origin',
@@ -6471,7 +6472,7 @@ var JourneySpace = function (_Component11) {
               _react2.default.createElement(
                 'div',
                 { style: { display: 'flex', padding: '10px 10px 0' } },
-                !_state2.default.session.startAt && _react2.default.createElement(PlayButton, { journey: _state2.default.session, player: this.audioTag }),
+                (!_state2.default.session.startAt || ['started', 'paused'].indexOf(_state2.default.session.state) > -1) && _react2.default.createElement(PlayButton, { journey: _state2.default.session, player: this.audioTag }),
                 _react2.default.createElement(SkipButton, { style: { marginLeft: 'auto' }, journey: _state2.default.session })
               ),
               _react2.default.createElement(
@@ -6489,18 +6490,19 @@ var JourneySpace = function (_Component11) {
               _state2.default.session.state === 'failed' && _react2.default.createElement(
                 'p',
                 { className: 'p-3' },
-                ':( No one else joined this journey with you. \xA0',
+                'Nobody else has joined this Journey Space. You can either ',
+                _react2.default.createElement(
+                  'a',
+                  { href: '#', onClick: this.onStartSession },
+                  'hit play'
+                ),
+                ' and take the Journey by yourself of return to the ',
                 _react2.default.createElement(
                   _reactRouterDom.Link,
                   { to: '/join' },
-                  'Go Back to the list'
+                  'JourneyBoard'
                 ),
-                ' and pick a different one, or \xA0 ',
-                _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-secondary', onClick: this.onStartSession },
-                  'Start the journey'
-                )
+                ' to find another Journey Space'
               )
             )
           )
