@@ -516,7 +516,7 @@ class InviteModal extends Component {
       const url = `${window.location.protocol}//${window.location.host}/${urlFriendlyName}`;
       const success = this._copy(url);
       if (success) {
-        this.props.onComplete(url);
+        this.props.onComplete(url, name);
       } else {
         this.setState({
           error: 'failed to copy url'
@@ -890,12 +890,12 @@ class JourneySpace extends Component {
     });
   }
 
-  onCompleteShare = (url) => {
+  onCompleteShare = (url, name) => {
     console.log('complete share', url, this.props);
     this.setState({
       showShareModal: false
     });
-    window.location = url + `?journey=${state.session.name}`;
+    window.location = url + `?journey=${state.session.name}&name=${name}`;
   }
 
 	render() {

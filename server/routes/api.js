@@ -82,7 +82,7 @@ router.get('/sessions/:room', async (req, res) => {
         room, 
         sessionId: session.sessionId,
         journey: selectedJourney.filePath,
-        name: selectedJourney.name,
+        name: req.query.name || selectedJourney.name,
         image: selectedJourney.image,
       });
 			await newSession.save();
