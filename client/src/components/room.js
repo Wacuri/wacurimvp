@@ -18,7 +18,6 @@ if (__CLIENT__) {
 	var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
 	const OT = require('@opentok/client');
 	window.state = state;
-  window.signpad = SignaturePad;
 }
 
 class AbstractTimerEmitter extends EventEmitter {
@@ -200,8 +199,10 @@ class JourneyStateProgressBar extends Component {
   formatState(state: number) {
     switch(this.props.journey.state) {
       case 'joined':
+      case 'created':
         return 'Waiting';
       case 'started':
+      case 'paused':
         return 'The Journey';
       case 'ended':
         return 'The Sharing';
@@ -239,8 +240,10 @@ class JourneyTimeline extends Component {
   get stepIndex() {
     switch(this.props.journey.state) {
       case 'joined':
+      case 'created':
         return 0;
       case 'started':
+      case 'paused':
         return 1;
       default:
         return 2;
@@ -281,12 +284,17 @@ class JourneyTimeline extends Component {
               }
             </div>
           </li>
-          <li className={journey.state === 'started' ? 'active' : ''}>
+          <li className={journey.state === 'started' ? 'active' : ''} style={{position: 'relative'}}>
             <h4>Journey</h4>
             <div style={{display: 'flex'}}>
               <p>Listen and imagine</p>
-              {journey.state === 'started' &&
+              {(journey.state === 'started' || journey.state === 'paused') &&
                 <p className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</p>
+              }
+              {(journey.state === 'started' || journey.state === 'paused') &&
+                <div style={{position: 'absolute', bottom: '-12px', left: '10px', right: '10px'}}>
+                  <progress max={this.props.timer.total} value={this.props.timer.currentTime} style={{width: '100%'}}></progress>
+                </div>
               }
             </div>
           </li>
@@ -313,7 +321,6 @@ class SkipButton extends Component {
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
       credentials: 'same-origin', // include, same-origin, *omit
       headers: {
-        'user-agent': 'Mozilla/4.0 MDN Example',
         'content-type': 'application/json'
       },
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -325,7 +332,7 @@ class SkipButton extends Component {
 
   render() {
     return (
-      this.props.journey.state != 'completed' ? <button className='btn btn-secondary' onClick={this.skipToNext}><i className='fa fa-forward'></i></button> : <span/>
+      this.props.journey.state != 'completed' ? <button style={this.props.style || {}} className='btn btn-secondary' onClick={this.skipToNext}><i className='fa fa-forward'></i></button> : <span/>
     )
   }
 }
@@ -384,6 +391,60 @@ class AudioButton extends Component {
     )
   }
 }
+
+class PlayButton extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      paused: (props.player && props.player.paused) || true
+    }
+    props.player.addEventListener('play', () => {
+      this.setState({
+        paused: false
+      });
+    });
+
+    props.player.addEventListener('pause', () => {
+      this.setState({
+        paused: true
+      });
+    });
+  }
+
+  toggle = (e) => {
+    if (this.state.paused) {
+      fetch(`/api/sessions/${this.props.journey.room}/start`, {
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+        mode: 'cors',
+      });
+    } else {
+      fetch(`/api/sessions/${this.props.journey.room}/pause`, {
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+        mode: 'cors',
+      });
+    }
+  }
+
+  render() {
+    return (
+      <button style={this.props.style || {}} onClick={this.toggle} className={`btn btn-secondary`}>
+        <i className={`fa fa-${this.state.paused ? 'play' : 'pause'}`}></i>
+      </button>
+    )
+  }
+}
+
 
 class JourneyStartsIn extends Component {
 
@@ -496,7 +557,7 @@ class InviteModal extends Component {
 
   render() {
     return (
-      <div style={{width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(89, 153, 222, 0.8)'}} className='journeyspace-invite'>
+      <div style={{width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(89, 153, 222, 0.9)'}} className='journeyspace-invite'>
         <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px'}}>
           <i className='fa fa-times' style={{fontSize: '22px', color: 'white'}}/>
         </a>
@@ -549,7 +610,6 @@ class JourneySpace extends Component {
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, same-origin, *omit
         headers: {
-          'user-agent': 'Mozilla/4.0 MDN Example',
           'content-type': 'application/json'
         },
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -622,6 +682,16 @@ class JourneySpace extends Component {
           this.audioTag.play();
           this.setState({
             playerState: 'playing'
+          });
+        });
+
+        this.sessionHelper.session.on("signal:pauseJourney", (event) => {
+          if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+            this.publisher.state.publisher.publishAudio(true);
+          }
+          this.audioTag.pause();
+          this.setState({
+            playerState: 'paused'
           });
         });
 
@@ -709,6 +779,7 @@ class JourneySpace extends Component {
   get journeyStateTimer() {
     switch(state.session.state) {
       case 'started':
+      case 'paused':
         return new AudioPlayTickEmitter(this.audioTag);
       default:
         if (!this.secondsEmitter) {
@@ -732,7 +803,6 @@ class JourneySpace extends Component {
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
       credentials: 'same-origin', // include, same-origin, *omit
       headers: {
-        'user-agent': 'Mozilla/4.0 MDN Example',
         'content-type': 'application/json'
       },
       method: 'PUT', // *GET, POST, PUT, DELETE, etc.
@@ -747,7 +817,6 @@ class JourneySpace extends Component {
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
-        'user-agent': 'Mozilla/4.0 MDN Example',
         'content-type': 'application/json'
       },
       method: 'POST',
@@ -774,7 +843,6 @@ class JourneySpace extends Component {
         cache: 'no-cache',
         credentials: 'same-origin',
         headers: {
-          'user-agent': 'Mozilla/4.0 MDN Example',
           'content-type': 'application/json'
         },
         method: 'PUT',
@@ -790,7 +858,6 @@ class JourneySpace extends Component {
       body: JSON.stringify({connectionId: this.state.session.connection.id}),
       credentials: 'same-origin',
       headers: {
-        'user-agent': 'Mozilla/4.0 MDN Example',
         'content-type': 'application/json'
       },
       method: 'POST',
@@ -890,8 +957,22 @@ class JourneySpace extends Component {
               <div className='col-7 col-lg-9' style={{backgroundColor: 'white'}}>
                 
                 {state.session.state === 'joined' && <JourneyStartsIn journey={state.session} timer={this.journeyStateTimer}/> }
+
+                {!state.session.startAt && (state.session.state === 'created' || state.session.state === 'joined') &&
+                  <div style={{padding: '10px'}}>
+                    <select onChange={this.onChangeJourney} value={state.session && state.session.journey}>
+                      {state.journeys.map(journey => (
+                        <option value={journey.filePath}>{journey.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                }
+                
                 <div style={{display: 'flex', padding: '10px 10px 0'}}>
-                  <SkipButton journey={state.session}/>
+                  {!state.session.startAt &&
+                    <PlayButton journey={state.session} player={this.audioTag}/>
+                  }
+                  <SkipButton style={{marginLeft: 'auto'}} journey={state.session}/>
                 </div>
                 <div style={{display: 'flex', padding: '10px 10px 0'}}>
                   <VideoButton publisher={this.publisher}/>
@@ -900,31 +981,8 @@ class JourneySpace extends Component {
                 <JourneyTimeline journey={state.session} timer={this.journeyStateTimer}/>
 
                 <div className='journeyspace-meta pr-3 pl-3 pt-3'>
-                  { this.isHostUser &&
-                    <div>
-                      {false && state.session.state === 'created' || state.session.state === 'joined' &&
-                        <select onChange={this.onChangeJourney} value={state.session && state.session.journey}>
-                          {state.journeys.map(journey => (
-                            <option value={journey.filePath}>{journey.name}</option>
-                          ))}
-                        </select>
-                      }
-                      { state.session.state === 'created' &&
-                        <div >
-                          <button onClick={this.onStartSession} className='btn btn-primary'>Start session <i className="fa fa-play"></i></button>
-                        </div>
-                      }
-                    </div>
-                  }
 
                   {state.session.startAt && <SharePrompt onInvite={this.onInvite}/>}
-
-                  <div style={{display: 'none'}}>
-                    <div>
-                      <progress max="100" value={this.state.playerProgress} style={{width: '100%'}}></progress>
-                      <p style={{display: 'flex'}}><strong style={{flex: 1}}>Time remaining:</strong><span>{this.timeRemaining}</span></p>
-                    </div>
-                  </div>
                 </div>
                 
                 {state.session.state === 'failed' &&

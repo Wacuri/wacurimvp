@@ -234,15 +234,19 @@ router.get('/journeys', async (req, res) => {
 });
 
 router.put('/sessions/:room/journey', async (req, res) => {
-  const {journey} = req.body;
+  const {journey: journeyFile} = req.body;
   const {room} = req.params;
-  const existingSession = await JourneySpace.findOne({room}).exec();
-  const journeyContent = await JourneyContent.findOne({filePath: journey}).exec();
-	if (existingSession) {
-    existingSession.journey = journey;
-    existingSession['name'] = journeyContent.get('name');
-    await existingSession.save();
-    signal(existingSession.sessionId, {type: 'updatedJourney', data: journey});
+  const journey = await JourneySpace.findOne({room}).exec();
+  const journeyContent = await JourneyContent.findOne({filePath: journeyFile}).exec();
+	if (journey) {
+    journey.journey = journeyContent.filePath;
+    journey.image = journeyContent.image;
+    journey['name'] = journeyContent.get('name');
+    await journey.save();
+    const response = journey.toJSON();
+    const participants = await JourneyParticipant.find({session: journey, present: true}).lean().exec();
+    response.participants = participants;
+    opentok.signal(journey.sessionId, null, { 'type': 'journeyUpdated', 'data': JSON.stringify(response) }, () => {});
   }
   res.sendStatus(200);
 });
@@ -252,10 +256,28 @@ router.post('/sessions/:room/start', async (req, res) => {
   const {room} = req.params;
   const existingSession = await JourneySpace.findOne({room}).exec();
 	if (existingSession) {
-    await existingSession.start();
+    try {
+      await existingSession.start();
+    } catch(e) {
+      console.log('error starting journey', e);
+    }
     signal(existingSession.sessionId, {type: 'startJourney', data: ''});
   }
 });
+
+router.post('/sessions/:room/pause', async (req, res) => {
+  const {room} = req.params;
+  const existingSession = await JourneySpace.findOne({room}).exec();
+	if (existingSession) {
+    try {
+      await existingSession.pause();
+    } catch(e) {
+      console.log('error starting journey', e);
+    }
+    signal(existingSession.sessionId, {type: 'pauseJourney', data: ''});
+  }
+});
+
 
 router.post('/sessions/:room/flag', async (req, res) => {
   const {room} = req.params;
@@ -272,7 +294,6 @@ router.post('/sessions/:room/flag', async (req, res) => {
 
 router.post('/event', async (req, res) => {
   console.log('GOT EVENT', req.body);
-  res.sendStatus(200);
   const {sessionId, connection} = req.body;
   const session = await JourneySpace.findOne({sessionId}).exec();
 
