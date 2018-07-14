@@ -362,3 +362,62 @@ h2 {
 }
 
 
+
+.intro {
+  h2 {
+    color: white;
+    font-size: 16px;
+  }
+
+  h3 {
+    font-family: Playfair Display, serif;
+    color: rgb(132, 253, 49);
+    font-size: 20px;
+  }
+
+  .intro-screen p {
+    font-family: Playfair Display, serif;
+    font-size: 16px;
+    color: white;
+  }
+
+  .journey-starts-in {
+    border: none !important;
+
+    .label {
+      white-space: nowrap;
+      margin-right: 10px;
+    }
+  }
+
+  .react-swipeable-view-container {
+    text-align: center;
+  }
+
+  .intro-screen {
+    display: inline-block;
+    text-align: left;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    display: block;
+    border-radius: 50%;
+    background: gray;
+
+  }
+
+  .active .dot {
+    background: white;
+  }
+
+  .intro-skip {
+    position: absolute;
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    bottom: 10px;
+    right: 10px;
+  }
+}

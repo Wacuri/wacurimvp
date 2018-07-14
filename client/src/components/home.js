@@ -5,7 +5,6 @@ import EventMessage from './event_message'
 import JourneySpaceForm from './journey_space_form'
 import state from '../state'
 
-
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 
 if (__CLIENT__) {

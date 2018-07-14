@@ -2,6 +2,8 @@ import EventEmitter from 'events';
 import React, {Component} from 'react';
 import { view } from 'react-easy-state'
 import { Link } from 'react-router-dom';
+import Cookie from 'js-cookie';
+import SwipeableViews from 'react-swipeable-views';
 import SignaturePad from './signature_pad';
 import state from '../state';
 import PropTypes from 'prop-types';
@@ -449,6 +451,15 @@ class PlayButton extends Component {
 
 class JourneyStartsIn extends Component {
 
+  constructor(props) {
+    super(props);
+    props.timer.on('tick', (current) => {
+      this.setState({
+        timerValue: current
+      });
+    });
+  }
+
   componentWillReceiveProps(newProps) {
     newProps.timer.on('tick', (current) => {
       this.setState({
@@ -464,9 +475,9 @@ class JourneyStartsIn extends Component {
   render() {
     const {journey} = this.props;
     return (
-      <p style={{padding: '10px 10px 10px', display: 'flex', borderBottom: '1px solid rgb(88, 88, 88)'}}>
-        <span>Journey starts in:</span>
-        <span style={{marginLeft: 'auto'}}>{this.props.timer.displayTime()}</span>
+      <p className='journey-starts-in' style={{padding: '10px 10px 10px', display: 'flex', borderBottom: '1px solid rgb(88, 88, 88)'}}>
+        <span className='label'>Journey starts in:</span>
+        <span className='time' style={{marginLeft: 'auto'}}>{this.props.timer.displayTime()}</span>
       </p>
     )
   }
@@ -579,6 +590,153 @@ class InviteModal extends Component {
   }
 }
 
+class Intro extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      views: [
+        <div className='intro-screen'>
+          <h3>1. Welcome to CuriousLive&hellip; A fine-minute guided journey &ndash; plus sharing &ndash; with others.</h3>
+          <p>
+            You are now in the JourneySpace and the
+            journey will begin shortly when the timer
+            above elapses and you hear the chime.
+          </p>
+          <p>
+            If more spots are available for this journey,
+            we invite you to invite a friend to two… use
+            the INVITE FRIENDS button.
+          </p>
+          <p>
+            Then we’ll mute your microphones and for
+            five minutes and you’ll hear your Journey
+            Guide taking you on the journey.
+          </p>
+          <p>
+            The goal is relaxation and joy, so settle in
+            by breathing slowly and deeply and adjust
+            your posture to be comfortable.
+          </p>
+        </div>,
+
+        <div className='intro-screen'>
+          <h3>2. Next comes the Journey&hellip;</h3>
+          <p>
+            The CuriousLive&trade; experience is
+            intentionally short so busy people can find
+            the time to do it regularly. That's when you
+            get the real benefits.
+          </p>
+          <p>
+            CuriousLive Journeys are captured Live
+            and Unplugged, never scripted. Your
+            Journey Guide will help you relax into the
+            JourneySpace and go deep into the Journey.
+          </p>
+          <p>
+            Your microphone will be automatically
+            muted.
+            <br/>
+            Some people like to leave their cameras on
+            during the journey to increase the feeling
+            of a shared experience. It is up to you.
+          </p>
+        </div>,
+
+        <div className='intro-screen'>
+          <h3>3. After the Journey comes the Sharing and Connecting.</h3>
+          <p>
+            Now you’ll have the opportunity to briefly
+            share with others your insights and
+            experience. Each person takes 1 or 2
+            minutes.
+          </p>
+          <p>
+            When you’re ready, click on the “Share”
+            button to start your Share. Go deep. Drop
+            in to your insights and intuitions and o!er
+            the others something special about your
+            experience.
+          </p>
+          <p>
+            And when others are sharing, please listen
+            deeply, and in turn they will listen more
+            deeply to you.
+          </p>
+        </div>,
+
+        <div className='intro-screen'>
+          <h3>4. How was your experience? We Love Feedback from Our Community.</h3>
+          <p>
+            We welcome your feedback about the
+            process and the Wacuri Method even
+            after the group experience. Please take
+            a moment to rate your experience and
+            give us your valuable feedback.
+          </p>
+        </div>
+      
+      ],
+      index: 0
+    }
+  }
+
+  goTo = (index) => {
+    this.setState({
+      index: index
+    });
+  }
+
+  onChangeIndex = (index, last, {reason}) => {
+    this.setState({
+      index: index
+    });
+  }
+
+  onSkip = (e) => {
+    e.preventDefault();
+    this.props.onClose();
+  }
+
+  componentDidMount() {
+    Cookie.set('saw intro', true, {expires: 365});
+  }
+
+  render() {
+    return (
+      <div className='intro' style={{minHeight: 'calc(100vh - 46px)', position: 'relative', display: 'flex', flexDirection: 'column', backgroundColor: 'rgba(81, 148, 220)', padding: '20px'}}>
+        {state.session &&
+          <div>
+            <div style={{display: 'flex', alignItems: 'baseline'}}>
+              <h2 style={{margin: 0}}>{state.session.name}</h2>
+              <div style={{marginLeft: 'auto', display: 'flex'}}>
+                <JourneyStartsIn journey={this.props.journey} timer={this.props.timer}/>
+              </div>
+            </div>
+            
+            <div style={{textAlign: 'center'}}>
+              <img style={{height: '150px'}} src={state.session.image}/>
+            </div>
+          </div>
+        }
+        
+        <SwipeableViews onChangeIndex={this.onChangeIndex} index={this.state.index} enableMouseEvents ref={swipeable => this.swipeable = swipeable}>
+          {this.state.views}
+        </SwipeableViews>
+        <ul className='dots' style={{alignSelf: 'center', listStyle: 'none', padding: 0, margin: 'auto 0 0 0', display: 'flex'}}>
+          {this.state.views.map((view, i) => (
+            <li style={{marginRight: '10px', cursor: 'pointer'}} onClick={() => this.goTo(i)} className={this.state.index === i ? 'active' : ''}><span className='dot'></span></li>
+          ))}
+        </ul>
+        <a href='#' className='intro-skip' onClick={this.onSkip}>{this.state.index === this.state.views.length - 1 ? 'Begin Journey!' : 'skip'}</a>
+      </div>
+    )
+      
+  }
+
+}
+
 class JourneySpace extends Component {
 
   constructor(props) {
@@ -593,6 +751,7 @@ class JourneySpace extends Component {
       journeyDuration: 0,
       currentlyActivePublisher: null,
       showShareModal: false,
+      showIntro: true,
     }
     this.publisher = {};
     this.audioTag = {};
@@ -903,118 +1062,152 @@ class JourneySpace extends Component {
     let currentUserHasFlaggedJourney = state.session && state.session.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
 		return (
 			<div className='journeyspace' style={{position: 'relative'}}>
-        <div className='journeyspace-content'>
-          <audio style={{display: 'none'}} onLoadedMetadata={this.onLoadedMetadata} key={state.session && state.session.journey} controls="true" ref={audioTag => { this.audioTag = audioTag }}>
-           <source src={state.session && state.session.journey} type="audio/mpeg"/>
-          </audio>
-          <audio style={{display: 'none'}} ref={el => {this.sharingPromptAudioPlayer = el}}>
-            <source src='/sharing.mp3' type='audio/mpeg'/>
-          </audio>
-          {this.state.session &&
-            <div className='row no-gutters'>
-              <div className='col-5 col-lg-3'>
-                <ul className='journeyspace-streams' style={{margin: 0}}>
-                  <li>
-                    <img style={{width: '100%'}} src={state.session.image}/>
-                    <h2 style={{flex: 5}} className='journeyspace-title'>{state.session.name}</h2>
 
-                  </li>
-                  <li className='journeyspace-stream journeyspace-me'>
-                      <OTPublisher 
-                        properties={{width: '100%', height: '100%'}}
-                        session={this.sessionHelper.session}
-                        onInit={this.onInitPublisher}
-                        ref={publisher => {this.publisher = publisher}}
-                      />
-                  </li>
+          <div className='journeyspace-content'>
+            <audio style={{display: 'none'}} onLoadedMetadata={this.onLoadedMetadata} key={state.session && state.session.journey} controls="true" ref={audioTag => { this.audioTag = audioTag }}>
+             <source src={state.session && state.session.journey} type="audio/mpeg"/>
+            </audio>
+            <audio style={{display: 'none'}} ref={el => {this.sharingPromptAudioPlayer = el}}>
+              <source src='/sharing.mp3' type='audio/mpeg'/>
+            </audio>
+            {this.state.session &&
+              <div className='row no-gutters'>
+                <div className='col-5 col-lg-3'>
+                  <ul className='journeyspace-streams' style={{margin: 0}}>
+                    <li>
+                      <img style={{width: '100%'}} src={state.session.image}/>
+                      <h2 style={{flex: 5}} className='journeyspace-title'>{state.session.name}</h2>
 
-                  {this.state.streams.map(stream => {
-                    const participant = state.session.participants.find(participant => participant.connectionId === stream.connection.id);
-                    return (
-                      <li className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
-                          <OTSubscriber
-                            key={stream.id}
-                            session={this.sessionHelper.session}
-                            stream={stream}
-                            properties={{
-                              width: '100%',
-                              height: '100%',
-                            }}
-                          />
-                      </li>
-                    );
-                  })}
-                  
-                  {Array(2 - this.state.streams.length).fill({}).map(empty => (
-                    <li className='video-placeholder'>
-                      <div>
-                        <i className='fa fa-user'></i>
-                        <p>waiting...</p>
-                      </div>
                     </li>
-                  ))}
-                </ul>
-              </div>
-              <div className='col-7 col-lg-9' style={{backgroundColor: 'white'}}>
-                
-                {state.session.state === 'joined' && <JourneyStartsIn journey={state.session} timer={this.journeyStateTimer}/> }
+                    <li className='journeyspace-stream journeyspace-me'>
+                        <OTPublisher 
+                          properties={{width: '100%', height: '100%'}}
+                          session={this.sessionHelper.session}
+                          onInit={this.onInitPublisher}
+                          ref={publisher => {this.publisher = publisher}}
+                        />
+                    </li>
 
-                {!state.session.startAt && (state.session.state === 'created' || state.session.state === 'joined') &&
-                  <div style={{padding: '10px'}}>
-                    <select onChange={this.onChangeJourney} value={state.session && state.session.journey}>
-                      {state.journeys.map(journey => (
-                        <option value={journey.filePath}>{journey.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                }
-                
-                <div style={{display: 'flex', padding: '10px 10px 0'}}>
-                  {(!state.session.startAt || ['started', 'paused'].indexOf(state.session.state) > -1) &&
-                    <PlayButton journey={state.session} player={this.audioTag}/>
+                    {this.state.streams.map(stream => {
+                      const participant = state.session.participants.find(participant => participant.connectionId === stream.connection.id);
+                      return (
+                        <li className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+                            <OTSubscriber
+                              key={stream.id}
+                              session={this.sessionHelper.session}
+                              stream={stream}
+                              properties={{
+                                width: '100%',
+                                height: '100%',
+                              }}
+                            />
+                        </li>
+                      );
+                    })}
+                    
+                    {Array(2 - this.state.streams.length).fill({}).map(empty => (
+                      <li className='video-placeholder'>
+                        <div>
+                          <i className='fa fa-user'></i>
+                          <p>waiting...</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className='col-7 col-lg-9' style={{backgroundColor: 'white'}}>
+                  
+                  {state.session.state === 'joined' && <JourneyStartsIn journey={state.session} timer={this.journeyStateTimer}/> }
+
+                  {!state.session.startAt && (state.session.state === 'created' || state.session.state === 'joined') &&
+                    <div style={{padding: '10px'}}>
+                      <select onChange={this.onChangeJourney} value={state.session && state.session.journey}>
+                        {state.journeys.map(journey => (
+                          <option value={journey.filePath}>{journey.name}</option>
+                        ))}
+                      </select>
+                    </div>
                   }
-                  <SkipButton style={{marginLeft: 'auto'}} journey={state.session}/>
-                </div>
-                <div style={{display: 'flex', padding: '10px 10px 0'}}>
-                  <VideoButton publisher={this.publisher}/>
-                  <AudioButton style={{marginLeft: '10px'}} publisher={this.publisher}/>
-                </div>
-                <JourneyTimeline journey={state.session} timer={this.journeyStateTimer}/>
+                  
+                  <div style={{display: 'flex', padding: '10px 10px 0'}}>
+                    {(!state.session.startAt || ['started', 'paused'].indexOf(state.session.state) > -1) &&
+                      <PlayButton journey={state.session} player={this.audioTag}/>
+                    }
+                    <SkipButton style={{marginLeft: 'auto'}} journey={state.session}/>
+                  </div>
+                  <div style={{display: 'flex', padding: '10px 10px 0'}}>
+                    <VideoButton publisher={this.publisher}/>
+                    <AudioButton style={{marginLeft: '10px'}} publisher={this.publisher}/>
+                  </div>
+                  <JourneyTimeline journey={state.session} timer={this.journeyStateTimer}/>
 
-                <div className='journeyspace-meta pr-3 pl-3 pt-3'>
+                  <div className='journeyspace-meta pr-3 pl-3 pt-3'>
 
-                  {state.session.startAt && <SharePrompt onInvite={this.onInvite}/>}
+                    {state.session.startAt && <SharePrompt onInvite={this.onInvite}/>}
+                  </div>
+                  
+                  {state.session.state === 'failed' &&
+                      <p className='p-3'>Nobody else has joined this Journey Space. 
+                        You can either <a href='#' onClick={this.onStartSession}>hit play</a> and take the Journey by
+                        yourself of return to the <Link to='/join'>JourneyBoard</Link> to find another Journey Space
+                      </p>
+                  }
+
                 </div>
-                
-                {state.session.state === 'failed' &&
-                    <p className='p-3'>Nobody else has joined this Journey Space. 
-                      You can either <a href='#' onClick={this.onStartSession}>hit play</a> and take the Journey by
-                      yourself of return to the <Link to='/join'>JourneyBoard</Link> to find another Journey Space
-                    </p>
-                }
-
               </div>
+            }
+          
+          </div>
+          <div className='journeyspace-footer' style={{display: 'flex'}}>
+            <div style={{flex: 1}}>
+              <FlagControl currentUserHasFlaggedJourney={currentUserHasFlaggedJourney} onFlag={this.onFlag}>
+                {currentUserHasFlaggedJourney ? "Reported" : "Report"}
+              </FlagControl>
             </div>
+            <div style={{marginLeft: 'auto', marginRight: '10px', alignSelf: 'center'}}>
+            </div>
+          </div>
+          {this.state.showShareModal &&
+            <InviteModal journey={this.state.session} onComplete={this.onCompleteShare} onClose={this.onCloseShareModal}/>
           }
-        
-        </div>
-        <div className='journeyspace-footer' style={{display: 'flex'}}>
-          <div style={{flex: 1}}>
-            <FlagControl currentUserHasFlaggedJourney={currentUserHasFlaggedJourney} onFlag={this.onFlag}>
-              {currentUserHasFlaggedJourney ? "Reported" : "Report"}
-            </FlagControl>
-          </div>
-          <div style={{marginLeft: 'auto', marginRight: '10px', alignSelf: 'center'}}>
-          </div>
-        </div>
-        {this.state.showShareModal &&
-          <InviteModal journey={this.state.session} onComplete={this.onCompleteShare} onClose={this.onCloseShareModal}/>
-        }
-
-
 			</div>
 		)
 	}
 }
 
-export default view(JourneySpace);
+class IntroWrapper extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showIntro: !Cookie.get('saw intro')
+    }
+  }
+
+  componentDidMount() {
+		fetch(`/api/sessions/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
+			.then(res => res.json())
+			.then(json => {
+				state.session = json;
+      });
+  }
+
+  onClose = () => {
+    this.setState({
+      showIntro: false
+    });
+  }
+
+  render() {
+    if (state.session) {
+      if (this.state.showIntro) {
+        return <Intro onClose={this.onClose} journey={state.session} timer={new SecondsTimerEmitter(new Date(state.session.createdAt), new Date(state.session.startAt))}/>
+      } else {
+        return <JourneySpace {...this.props}/>
+      }
+    } else {
+      return <p>Loading...</p>
+    }
+  }
+}
+
+export default view(IntroWrapper);
