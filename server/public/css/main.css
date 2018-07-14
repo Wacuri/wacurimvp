@@ -8860,4 +8860,49 @@ h2 {
   .journey-timeline .timer {
     font-weight: bold; }
 
+.intro h2 {
+  color: white;
+  font-size: 16px; }
+
+.intro h3 {
+  font-family: Playfair Display, serif;
+  color: #84fd31;
+  font-size: 20px; }
+
+.intro .intro-screen p {
+  font-family: Playfair Display, serif;
+  font-size: 16px;
+  color: white; }
+
+.intro .journey-starts-in {
+  border: none !important; }
+  .intro .journey-starts-in .label {
+    white-space: nowrap;
+    margin-right: 10px; }
+
+.intro .react-swipeable-view-container {
+  text-align: center; }
+
+.intro .intro-screen {
+  display: inline-block;
+  text-align: left; }
+
+.intro .dot {
+  width: 10px;
+  height: 10px;
+  display: block;
+  border-radius: 50%;
+  background: gray; }
+
+.intro .active .dot {
+  background: white; }
+
+.intro .intro-skip {
+  position: absolute;
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+  bottom: 10px;
+  right: 10px; }
+
 /*# sourceMappingURL=main.css.map*/
