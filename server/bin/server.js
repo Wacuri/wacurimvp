@@ -6853,7 +6853,7 @@ var IntroWrapper = function (_Component14) {
 
     _this27.onClose = function () {
       _this27.setState({
-        showIntro: false
+        showIntro: !_jsCookie2.default.get('saw intro')
       });
     };
 
