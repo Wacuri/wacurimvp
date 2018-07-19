@@ -1166,9 +1166,7 @@ class JourneySpace extends Component {
                   }
                   
                   <div style={{display: 'flex', padding: '10px 10px 0'}}>
-                    {(!state.session.startAt || ['started', 'paused'].indexOf(state.session.state) > -1) &&
-                      <PlayButton journey={state.session} player={state.audioTag}/>
-                    }
+                    <PlayButton journey={state.session} player={state.audioTag}/>
                     { false &&
                       <SkipButton style={{marginLeft: 'auto'}} journey={state.session}/>
                     }
