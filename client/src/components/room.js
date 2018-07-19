@@ -1219,7 +1219,7 @@ class IntroWrapper extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showIntro: false
+      showIntro: !Cookie.get('saw intro')
     }
   }
 
@@ -1233,7 +1233,7 @@ class IntroWrapper extends Component {
 
   onClose = () => {
     this.setState({
-      showIntro: !Cookie.get('saw intro')
+      showIntro: false
     });
   }
 
