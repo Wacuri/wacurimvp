@@ -4159,7 +4159,6 @@ var JoinableJourneyCard = function (_Component2) {
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, same-origin, *omit
         headers: {
-          'user-agent': 'Mozilla/4.0 MDN Example',
           'content-type': 'application/json'
         },
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -4243,7 +4242,7 @@ var AutoCreatedJourneysQueue = function (_Component3) {
       var roomUrl = 'temp-home-location';
 
       // subscribe to global events
-      fetch('/api/sessions/' + roomUrl).then(function (res) {
+      fetch('/api/sessions/' + roomUrl, { credentials: 'include' }).then(function (res) {
         return res.json();
       }).then(function (json) {
         _state2.default.session = json;
@@ -4282,7 +4281,11 @@ var AutoCreatedJourneysQueue = function (_Component3) {
           var idx = _state2.default.joinableJourneys.findIndex(function (j) {
             return j._id === journey._id;
           });
-          journey.rsvps.push(rsvp);
+          if (journey.rsvps.findIndex(function (rsvp) {
+            return rsvp._id === rsvp._id;
+          }) === -1) {
+            journey.rsvps.push(rsvp);
+          }
           _state2.default.joinableJourneys = [].concat(_toConsumableArray(_state2.default.joinableJourneys.slice(0, idx)), [journey], _toConsumableArray(_state2.default.joinableJourneys.slice(idx + 1)));
         });
       });
