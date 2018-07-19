@@ -5882,6 +5882,9 @@ var LeaveRoomButton = function (_Component8) {
 
     return _ret2 = (_temp2 = (_this16 = _possibleConstructorReturn(this, (_ref4 = LeaveRoomButton.__proto__ || Object.getPrototypeOf(LeaveRoomButton)).call.apply(_ref4, [this].concat(args))), _this16), _this16.onLeave = function (e) {
       e.preventDefault();
+      if (!_state2.default.audioTag.paused) {
+        _state2.default.audioTag.pause();
+      }
       _this16.props.history.push('/join');
     }, _temp2), _possibleConstructorReturn(_this16, _ret2);
   }
@@ -6744,7 +6747,7 @@ var JourneySpace = function (_Component13) {
                 'div',
                 { style: { display: 'flex', padding: '10px 10px 0' } },
                 (!_state2.default.session.startAt || ['started', 'paused'].indexOf(_state2.default.session.state) > -1) && _react2.default.createElement(PlayButton, { journey: _state2.default.session, player: _state2.default.audioTag }),
-                _react2.default.createElement(SkipButton, { style: { marginLeft: 'auto' }, journey: _state2.default.session })
+                false && _react2.default.createElement(SkipButton, { style: { marginLeft: 'auto' }, journey: _state2.default.session })
               ),
               _react2.default.createElement(
                 'div',
