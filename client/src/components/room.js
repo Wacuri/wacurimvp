@@ -375,6 +375,23 @@ class AudioButton extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const {publisher} = nextProps;
+    if (publisher && publisher.state && publisher.state.publisher) {
+      publisher.state.publisher.on('audioLevelUpdated', (event) => {
+        if (event.audioLevel === 0) {
+          this.setState({
+            publishing: false
+          });
+        } else {
+          this.setState({
+            publishing: true
+          });
+        }
+      });
+    }
+  }
+
   toggle = (e) => {
     e.preventDefault();
     const {publisher} = this.props;
