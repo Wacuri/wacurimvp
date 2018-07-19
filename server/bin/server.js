@@ -3247,7 +3247,7 @@ router.post('/journeys/:id/rsvp', function () {
             if (globalSpace) {
               opentok.signal(globalSpace.sessionId, null, { 'type': 'newRSVP', 'data': JSON.stringify(rsvp) }, function () {});
             }
-            res.sendStatus(200);
+            res.json(rsvp);
 
           case 19:
           case 'end':
@@ -4142,18 +4142,15 @@ Login.propTypes = {
 var JoinableJourneyCard = function (_Component2) {
   _inherits(JoinableJourneyCard, _Component2);
 
-  function JoinableJourneyCard() {
-    var _ref3;
-
-    var _temp, _this3, _ret;
-
+  function JoinableJourneyCard(props) {
     _classCallCheck(this, JoinableJourneyCard);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    var _this3 = _possibleConstructorReturn(this, (JoinableJourneyCard.__proto__ || Object.getPrototypeOf(JoinableJourneyCard)).call(this, props));
 
-    return _ret = (_temp = (_this3 = _possibleConstructorReturn(this, (_ref3 = JoinableJourneyCard.__proto__ || Object.getPrototypeOf(JoinableJourneyCard)).call.apply(_ref3, [this].concat(args))), _this3), _this3.onJoin = function (e) {
+    _this3.onJoin = function (e) {
+      _this3.setState({
+        loading: true
+      });
       e.preventDefault();
       fetch('/api/journeys/' + _this3.props.journey._id + '/rsvp', {
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -4165,8 +4162,31 @@ var JoinableJourneyCard = function (_Component2) {
         mode: 'cors', // no-cors, cors, *same-origin
         redirect: 'follow', // manual, *follow, error
         referrer: 'no-referrer' // *client, no-referrer
+      }).then(function (res) {
+        return res.json();
+      }).then(function (rsvp) {
+        _this3.setState({
+          loading: false
+        });
+        var journey = _state2.default.joinableJourneys.find(function (j) {
+          return j._id == rsvp.journey._id;
+        });
+        var idx = _state2.default.joinableJourneys.findIndex(function (j) {
+          return j._id === journey._id;
+        });
+        if (journey.rsvps.findIndex(function (_rsvp) {
+          return _rsvp._id === rsvp._id;
+        }) === -1) {
+          journey.rsvps.push(rsvp);
+        }
+        _state2.default.joinableJourneys = [].concat(_toConsumableArray(_state2.default.joinableJourneys.slice(0, idx)), [journey], _toConsumableArray(_state2.default.joinableJourneys.slice(idx + 1)));
       });
-    }, _temp), _possibleConstructorReturn(_this3, _ret);
+    };
+
+    _this3.state = {
+      loading: false
+    };
+    return _this3;
   }
 
   _createClass(JoinableJourneyCard, [{
@@ -4208,9 +4228,9 @@ var JoinableJourneyCard = function (_Component2) {
             ' / 3'
           ),
           journey.rsvps.length < 3 && !currentUserHasRSVP && _react2.default.createElement(
-            'a',
-            { href: '/' + journey.room, onClick: this.onJoin, className: 'btn btn-primary' },
-            'Join'
+            'button',
+            { disabled: this.state.loading, href: '/' + journey.room, onClick: this.onJoin, className: 'btn btn-primary' },
+            this.state.loading ? 'Joining...' : 'Join'
           ),
           currentUserHasRSVP && _react2.default.createElement(
             _reactRouterDom.Link,
@@ -4281,8 +4301,8 @@ var AutoCreatedJourneysQueue = function (_Component3) {
           var idx = _state2.default.joinableJourneys.findIndex(function (j) {
             return j._id === journey._id;
           });
-          if (journey.rsvps.findIndex(function (rsvp) {
-            return rsvp._id === rsvp._id;
+          if (journey.rsvps.findIndex(function (_rsvp) {
+            return _rsvp._id === rsvp._id;
           }) === -1) {
             journey.rsvps.push(rsvp);
           }
