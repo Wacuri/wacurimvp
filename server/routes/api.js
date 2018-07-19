@@ -162,7 +162,7 @@ router.post('/journeys/:id/rsvp', async (req, res) => {
   if (globalSpace) {
     opentok.signal(globalSpace.sessionId, null, { 'type': 'newRSVP', 'data': JSON.stringify(rsvp) }, () => {});
   }
-  res.sendStatus(200);
+  res.json(rsvp);
 });
 
 router.post('/journeys/:room/completed', async (req, res) => {

@@ -96,7 +96,17 @@ class Login extends Component {
 
 class JoinableJourneyCard extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false 
+    }
+  }
+
   onJoin = (e) => {
+    this.setState({
+      loading: true
+    });
     e.preventDefault();
     fetch(`/api/journeys/${this.props.journey._id}/rsvp`, {
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -108,7 +118,18 @@ class JoinableJourneyCard extends Component {
       mode: 'cors', // no-cors, cors, *same-origin
       redirect: 'follow', // manual, *follow, error
       referrer: 'no-referrer', // *client, no-referrer
-    });
+    }).then(res => res.json())
+      .then(rsvp => {
+        this.setState({
+          loading: false
+        });
+        const journey = state.joinableJourneys.find(j => j._id == rsvp.journey._id);
+        const idx = state.joinableJourneys.findIndex(j => j._id === journey._id);
+        if (journey.rsvps.findIndex(_rsvp => _rsvp._id === rsvp._id) === -1) {
+          journey.rsvps.push(rsvp);
+        }
+        state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), journey, ...state.joinableJourneys.slice(idx + 1)];
+      });
   }
 
   render() {
@@ -126,7 +147,7 @@ class JoinableJourneyCard extends Component {
           <p>Starts at: {moment(journey.startAt).format('LT')}</p>
           <p>{journey.rsvps.length} / 3</p>
           { journey.rsvps.length < 3 && !currentUserHasRSVP &&
-            <a href={`/${journey.room}`} onClick={this.onJoin} className='btn btn-primary'>Join</a>
+            <button disabled={this.state.loading} href={`/${journey.room}`} onClick={this.onJoin} className='btn btn-primary'>{this.state.loading ? 'Joining...' : 'Join'}</button>
           }
           { currentUserHasRSVP &&
             <Link to={`/${journey.room}`} className='btn btn-primary'>Go there now</Link>
@@ -175,7 +196,7 @@ class AutoCreatedJourneysQueue extends Component {
           const rsvp = JSON.parse(event.data);
           const journey = state.joinableJourneys.find(j => j._id == rsvp.journey._id);
           const idx = state.joinableJourneys.findIndex(j => j._id === journey._id);
-          if (journey.rsvps.findIndex(rsvp => rsvp._id === rsvp._id) === -1) {
+          if (journey.rsvps.findIndex(_rsvp => _rsvp._id === rsvp._id) === -1) {
             journey.rsvps.push(rsvp);
           }
           state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), journey, ...state.joinableJourneys.slice(idx + 1)];
