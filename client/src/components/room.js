@@ -1233,7 +1233,7 @@ class IntroWrapper extends Component {
 
   onClose = () => {
     this.setState({
-      showIntro: false
+      showIntro: !Cookie.get('saw intro')
     });
   }
 
