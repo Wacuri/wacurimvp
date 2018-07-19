@@ -5810,6 +5810,27 @@ var AudioButton = function (_Component6) {
   }
 
   _createClass(AudioButton, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      var _this15 = this;
+
+      var publisher = nextProps.publisher;
+
+      if (publisher && publisher.state && publisher.state.publisher) {
+        publisher.state.publisher.on('audioLevelUpdated', function (event) {
+          if (event.audioLevel === 0) {
+            _this15.setState({
+              publishing: false
+            });
+          } else {
+            _this15.setState({
+              publishing: true
+            });
+          }
+        });
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -5829,13 +5850,13 @@ var PlayButton = function (_Component7) {
   function PlayButton(props) {
     _classCallCheck(this, PlayButton);
 
-    var _this15 = _possibleConstructorReturn(this, (PlayButton.__proto__ || Object.getPrototypeOf(PlayButton)).call(this, props));
+    var _this16 = _possibleConstructorReturn(this, (PlayButton.__proto__ || Object.getPrototypeOf(PlayButton)).call(this, props));
 
-    _this15.toggle = function (e) {
+    _this16.toggle = function (e) {
       e.preventDefault();
       setTimeout(function () {
         if (_state2.default.audioTag.paused) {
-          fetch('/api/sessions/' + _this15.props.journey.room + '/start', {
+          fetch('/api/sessions/' + _this16.props.journey.room + '/start', {
             cache: 'no-cache',
             credentials: 'same-origin',
             headers: {
@@ -5845,7 +5866,7 @@ var PlayButton = function (_Component7) {
             mode: 'cors'
           });
         } else {
-          fetch('/api/sessions/' + _this15.props.journey.room + '/pause', {
+          fetch('/api/sessions/' + _this16.props.journey.room + '/pause', {
             cache: 'no-cache',
             credentials: 'same-origin',
             headers: {
@@ -5858,21 +5879,21 @@ var PlayButton = function (_Component7) {
       }, 20);
     };
 
-    _this15.state = {
+    _this16.state = {
       paused: props.player && props.player.paused || true
     };
     props.player.addEventListener('play', function () {
-      _this15.setState({
+      _this16.setState({
         paused: false
       });
     });
 
     props.player.addEventListener('pause', function () {
-      _this15.setState({
+      _this16.setState({
         paused: true
       });
     });
-    return _this15;
+    return _this16;
   }
 
   _createClass(PlayButton, [{
@@ -5895,7 +5916,7 @@ var LeaveRoomButton = function (_Component8) {
   function LeaveRoomButton() {
     var _ref4;
 
-    var _temp2, _this16, _ret2;
+    var _temp2, _this17, _ret2;
 
     _classCallCheck(this, LeaveRoomButton);
 
@@ -5903,13 +5924,13 @@ var LeaveRoomButton = function (_Component8) {
       args[_key2] = arguments[_key2];
     }
 
-    return _ret2 = (_temp2 = (_this16 = _possibleConstructorReturn(this, (_ref4 = LeaveRoomButton.__proto__ || Object.getPrototypeOf(LeaveRoomButton)).call.apply(_ref4, [this].concat(args))), _this16), _this16.onLeave = function (e) {
+    return _ret2 = (_temp2 = (_this17 = _possibleConstructorReturn(this, (_ref4 = LeaveRoomButton.__proto__ || Object.getPrototypeOf(LeaveRoomButton)).call.apply(_ref4, [this].concat(args))), _this17), _this17.onLeave = function (e) {
       e.preventDefault();
       if (!_state2.default.audioTag.paused) {
         _state2.default.audioTag.pause();
       }
-      _this16.props.history.push('/join');
-    }, _temp2), _possibleConstructorReturn(_this16, _ret2);
+      _this17.props.history.push('/join');
+    }, _temp2), _possibleConstructorReturn(_this17, _ret2);
   }
 
   _createClass(LeaveRoomButton, [{
@@ -5932,23 +5953,23 @@ var JourneyStartsIn = function (_Component9) {
   function JourneyStartsIn(props) {
     _classCallCheck(this, JourneyStartsIn);
 
-    var _this17 = _possibleConstructorReturn(this, (JourneyStartsIn.__proto__ || Object.getPrototypeOf(JourneyStartsIn)).call(this, props));
+    var _this18 = _possibleConstructorReturn(this, (JourneyStartsIn.__proto__ || Object.getPrototypeOf(JourneyStartsIn)).call(this, props));
 
     props.timer.on('tick', function (current) {
-      _this17.setState({
+      _this18.setState({
         timerValue: current
       });
     });
-    return _this17;
+    return _this18;
   }
 
   _createClass(JourneyStartsIn, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(newProps) {
-      var _this18 = this;
+      var _this19 = this;
 
       newProps.timer.on('tick', function (current) {
-        _this18.setState({
+        _this19.setState({
           timerValue: current
         });
       });
@@ -6021,44 +6042,44 @@ var InviteModal = function (_Component11) {
   function InviteModal(props) {
     _classCallCheck(this, InviteModal);
 
-    var _this20 = _possibleConstructorReturn(this, (InviteModal.__proto__ || Object.getPrototypeOf(InviteModal)).call(this, props));
+    var _this21 = _possibleConstructorReturn(this, (InviteModal.__proto__ || Object.getPrototypeOf(InviteModal)).call(this, props));
 
-    _this20.onChange = function (e) {
-      _this20.setState({
+    _this21.onChange = function (e) {
+      _this21.setState({
         journeySpaceName: e.target.value,
-        error: _this20.state.error && e.target.value != ''
+        error: _this21.state.error && e.target.value != ''
       });
     };
 
-    _this20.onCopy = function (e) {
+    _this21.onCopy = function (e) {
       e.preventDefault();
-      if (_this20.state.journeySpaceName === '') {
-        _this20.setState({
+      if (_this21.state.journeySpaceName === '') {
+        _this21.setState({
           error: 'please enter a name'
         });
       } else {
-        _this20.setState({
+        _this21.setState({
           error: false
         });
-        var name = _this20.state.journeySpaceName;
+        var name = _this21.state.journeySpaceName;
         var urlFriendlyName = name.replace(/\s+/g, '-').toLowerCase();
         var url = window.location.protocol + '//' + window.location.host + '/' + urlFriendlyName;
-        var success = _this20._copy(url);
+        var success = _this21._copy(url);
         if (success) {
-          _this20.props.onComplete(url, name);
+          _this21.props.onComplete(url, name);
         } else {
-          _this20.setState({
+          _this21.setState({
             error: 'failed to copy url'
           });
         }
       }
     };
 
-    _this20.state = {
+    _this21.state = {
       journeySpaceName: '',
       error: false
     };
-    return _this20;
+    return _this21;
   }
 
   _createClass(InviteModal, [{
@@ -6151,28 +6172,28 @@ var Intro = function (_Component12) {
   function Intro(props) {
     _classCallCheck(this, Intro);
 
-    var _this21 = _possibleConstructorReturn(this, (Intro.__proto__ || Object.getPrototypeOf(Intro)).call(this, props));
+    var _this22 = _possibleConstructorReturn(this, (Intro.__proto__ || Object.getPrototypeOf(Intro)).call(this, props));
 
-    _this21.goTo = function (index) {
-      _this21.setState({
+    _this22.goTo = function (index) {
+      _this22.setState({
         index: index
       });
     };
 
-    _this21.onChangeIndex = function (index, last, _ref5) {
+    _this22.onChangeIndex = function (index, last, _ref5) {
       var reason = _ref5.reason;
 
-      _this21.setState({
+      _this22.setState({
         index: index
       });
     };
 
-    _this21.onSkip = function (e) {
+    _this22.onSkip = function (e) {
       e.preventDefault();
-      _this21.props.onClose();
+      _this22.props.onClose();
     };
 
-    _this21.state = {
+    _this22.state = {
       views: [_react2.default.createElement(
         'div',
         { className: 'intro-screen' },
@@ -6265,7 +6286,7 @@ var Intro = function (_Component12) {
       )],
       index: 0
     };
-    return _this21;
+    return _this22;
   }
 
   _createClass(Intro, [{
@@ -6276,7 +6297,7 @@ var Intro = function (_Component12) {
   }, {
     key: 'render',
     value: function render() {
-      var _this22 = this;
+      var _this23 = this;
 
       return _react2.default.createElement(
         'div',
@@ -6307,7 +6328,7 @@ var Intro = function (_Component12) {
         _react2.default.createElement(
           _reactSwipeableViews2.default,
           { onChangeIndex: this.onChangeIndex, index: this.state.index, enableMouseEvents: true, ref: function ref(swipeable) {
-              return _this22.swipeable = swipeable;
+              return _this23.swipeable = swipeable;
             } },
           this.state.views
         ),
@@ -6318,8 +6339,8 @@ var Intro = function (_Component12) {
             return _react2.default.createElement(
               'li',
               { style: { marginRight: '10px', cursor: 'pointer' }, onClick: function onClick() {
-                  return _this22.goTo(i);
-                }, className: _this22.state.index === i ? 'active' : '' },
+                  return _this23.goTo(i);
+                }, className: _this23.state.index === i ? 'active' : '' },
               _react2.default.createElement('span', { className: 'dot' })
             );
           })
@@ -6342,26 +6363,26 @@ var JourneySpace = function (_Component13) {
   function JourneySpace(props) {
     _classCallCheck(this, JourneySpace);
 
-    var _this23 = _possibleConstructorReturn(this, (JourneySpace.__proto__ || Object.getPrototypeOf(JourneySpace)).call(this, props));
+    var _this24 = _possibleConstructorReturn(this, (JourneySpace.__proto__ || Object.getPrototypeOf(JourneySpace)).call(this, props));
 
-    _this23.refreshSession = function () {
-      fetch('/api/sessions/' + _this23.props.match.params.room, { credentials: 'include' }).then(function (res) {
+    _this24.refreshSession = function () {
+      fetch('/api/sessions/' + _this24.props.match.params.room, { credentials: 'include' }).then(function (res) {
         return res.json();
       }).then(function (json) {
         _state2.default.session = json;
       });
     };
 
-    _this23.onInitPublisher = function () {
+    _this24.onInitPublisher = function () {
       console.log('initialized publisher');
     };
 
-    _this23.onConfirmReady = function (e) {
-      fetch('/api/sessions/' + _this23.props.match.params.room + '/connections/' + _this23.sessionHelper.session.connection.id + '/ready');
+    _this24.onConfirmReady = function (e) {
+      fetch('/api/sessions/' + _this24.props.match.params.room + '/connections/' + _this24.sessionHelper.session.connection.id + '/ready');
     };
 
-    _this23.onChangeJourney = function (e) {
-      fetch('/api/sessions/' + _this23.props.match.params.room + '/journey', {
+    _this24.onChangeJourney = function (e) {
+      fetch('/api/sessions/' + _this24.props.match.params.room + '/journey', {
         body: JSON.stringify({ journey: e.target.value }), // must match 'Content-Type' header
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, same-origin, *omit
@@ -6375,8 +6396,8 @@ var JourneySpace = function (_Component13) {
       });
     };
 
-    _this23.onStartSession = function (e) {
-      fetch('/api/sessions/' + _this23.props.match.params.room + '/start', {
+    _this24.onStartSession = function (e) {
+      fetch('/api/sessions/' + _this24.props.match.params.room + '/start', {
         cache: 'no-cache',
         credentials: 'same-origin',
         headers: {
@@ -6387,21 +6408,21 @@ var JourneySpace = function (_Component13) {
       });
     };
 
-    _this23.onLoadedMetadata = function (e) {
-      _this23.setState({
+    _this24.onLoadedMetadata = function (e) {
+      _this24.setState({
         journeyDuration: e.target.duration
       });
-      _state2.default.audioTag.removeEventListener('timeupdate', _this23.onTimeUpdate);
-      _state2.default.audioTag.addEventListener('timeupdate', _this23.onTimeUpdate);
+      _state2.default.audioTag.removeEventListener('timeupdate', _this24.onTimeUpdate);
+      _state2.default.audioTag.addEventListener('timeupdate', _this24.onTimeUpdate);
     };
 
-    _this23.onTimeUpdate = function (e) {
-      _this23.setState({
+    _this24.onTimeUpdate = function (e) {
+      _this24.setState({
         playerProgress: e.target.currentTime / e.target.duration * 100,
         playerProgressMS: e.target.currentTime
       });
-      if (_this23.isHostUser) {
-        fetch('/api/journeys/' + _this23.props.match.params.room + '/progress', {
+      if (_this24.isHostUser) {
+        fetch('/api/journeys/' + _this24.props.match.params.room + '/progress', {
           body: JSON.stringify({ currentTime: e.target.currentTime }),
           cache: 'no-cache',
           credentials: 'same-origin',
@@ -6414,11 +6435,11 @@ var JourneySpace = function (_Component13) {
       }
     };
 
-    _this23.onFlag = function (e) {
+    _this24.onFlag = function (e) {
       e.preventDefault();
-      fetch('/api/sessions/' + _this23.props.match.params.room + '/flag', {
+      fetch('/api/sessions/' + _this24.props.match.params.room + '/flag', {
         cache: 'no-cache',
-        body: JSON.stringify({ connectionId: _this23.state.session.connection.id }),
+        body: JSON.stringify({ connectionId: _this24.state.session.connection.id }),
         credentials: 'same-origin',
         headers: {
           'content-type': 'application/json'
@@ -6432,7 +6453,7 @@ var JourneySpace = function (_Component13) {
       });
     };
 
-    _this23.onShare = function (e) {
+    _this24.onShare = function (e) {
       navigator.share({
         title: 'Take a Journey With Me!',
         text: 'Join me on ' + _state2.default.session.name,
@@ -6440,28 +6461,28 @@ var JourneySpace = function (_Component13) {
       });
     };
 
-    _this23.onInvite = function (e) {
+    _this24.onInvite = function (e) {
       e.preventDefault();
-      _this23.setState({
+      _this24.setState({
         showShareModal: true
       });
     };
 
-    _this23.onCloseShareModal = function (e) {
+    _this24.onCloseShareModal = function (e) {
       e.preventDefault();
-      _this23.setState({
+      _this24.setState({
         showShareModal: false
       });
     };
 
-    _this23.onCompleteShare = function (url, name) {
-      _this23.setState({
+    _this24.onCompleteShare = function (url, name) {
+      _this24.setState({
         showShareModal: false
       });
       window.location = url + ('?journey=' + _state2.default.session.name + '&name=' + name);
     };
 
-    _this23.state = {
+    _this24.state = {
       streams: [],
       publisherId: '',
       session: null,
@@ -6473,26 +6494,26 @@ var JourneySpace = function (_Component13) {
       showShareModal: false,
       showIntro: true
     };
-    _this23.publisher = {};
-    _this23.audioTag = {};
-    return _this23;
+    _this24.publisher = {};
+    _this24.audioTag = {};
+    return _this24;
   }
 
   _createClass(JourneySpace, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this24 = this;
+      var _this25 = this;
 
       _state2.default.audioTag.addEventListener('ended', function (event) {
         if (!/sharing\.mp3/.test(_state2.default.audioTag.src)) {
-          if (_this24.publisher && _this24.publisher.state && _this24.publisher.state.publisher) {
-            _this24.publisher.state.publisher.publishAudio(true);
+          if (_this25.publisher && _this25.publisher.state && _this25.publisher.state.publisher) {
+            _this25.publisher.state.publisher.publishAudio(true);
           }
-          _this24.setState({
+          _this25.setState({
             playerState: 'ended'
           });
 
-          fetch('/api/journeys/' + _this24.props.match.params.room + '/completed', {
+          fetch('/api/journeys/' + _this25.props.match.params.room + '/completed', {
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             credentials: 'same-origin', // include, same-origin, *omit
             headers: {
@@ -6510,8 +6531,8 @@ var JourneySpace = function (_Component13) {
           _state2.default.audioTag.play();
         } else {
           // sharing audio ended
-          if (_this24.publisher && _this24.publisher.state && _this24.publisher.state.publisher) {
-            _this24.publisher.state.publisher.publishAudio(true);
+          if (_this25.publisher && _this25.publisher.state && _this25.publisher.state.publisher) {
+            _this25.publisher.state.publisher.publishAudio(true);
           }
         }
       });
@@ -6524,53 +6545,53 @@ var JourneySpace = function (_Component13) {
         _state2.default.audioTag.src = _state2.default.session.journey;
         _state2.default.audioTag.currentTime = 0;
 
-        _this24.sessionHelper = createSession({
+        _this25.sessionHelper = createSession({
           apiKey: _state2.default.openTokKey,
           sessionId: _state2.default.session.sessionId,
           token: _state2.default.session.token,
           onConnect: function onConnect() {
-            console.log('assigned connection to publisher', _this24.sessionHelper.session.connection);
-            setTimeout(_this24.refreshSession, 1000);
+            console.log('assigned connection to publisher', _this25.sessionHelper.session.connection);
+            setTimeout(_this25.refreshSession, 1000);
           },
           onStreamsUpdated: function onStreamsUpdated(streams) {
             console.log('Current subscriber streams:', streams);
-            _this24.setState({ streams: streams });
-            if (!_this24.state.currentlyActivePublisher) {
-              _this24.setState({
+            _this25.setState({ streams: streams });
+            if (!_this25.state.currentlyActivePublisher) {
+              _this25.setState({
                 currentlyActivePublisher: streams[0]
               });
             }
           }
         });
-        _this24.sessionHelper.session.on("connectionDestroyed", function (event) {
+        _this25.sessionHelper.session.on("connectionDestroyed", function (event) {
           var data = {
-            sessionId: _this24.sessionHelper.session.sessionId,
+            sessionId: _this25.sessionHelper.session.sessionId,
             connection: {
               id: event.connection.id
             },
             event: 'connectionDestroyed'
           };
-          _this24.refreshSession();
+          _this25.refreshSession();
         });
-        _this24.sessionHelper.session.on("connectionCreated", function (event) {
+        _this25.sessionHelper.session.on("connectionCreated", function (event) {
           console.log('CREATED', event);
           var data = {
-            sessionId: _this24.sessionHelper.session.sessionId,
+            sessionId: _this25.sessionHelper.session.sessionId,
             connection: {
               id: event.connection.id
             },
             event: 'connectionCreated'
           };
-          _this24.refreshSession();
+          _this25.refreshSession();
         });
-        _this24.sessionHelper.session.on('signal', function (event) {
+        _this25.sessionHelper.session.on('signal', function (event) {
           console.log("Signal sent from connection ", event);
-          _this24.refreshSession();
+          _this25.refreshSession();
         });
 
-        _this24.sessionHelper.session.on("signal:startJourney", function (event) {
-          if (_this24.publisher && _this24.publisher.state && _this24.publisher.state.publisher) {
-            _this24.publisher.state.publisher.publishAudio(false);
+        _this25.sessionHelper.session.on("signal:startJourney", function (event) {
+          if (_this25.publisher && _this25.publisher.state && _this25.publisher.state.publisher) {
+            _this25.publisher.state.publisher.publishAudio(false);
           }
           var playPromise = _state2.default.audioTag.play();
           if (playPromise !== undefined) {
@@ -6582,22 +6603,22 @@ var JourneySpace = function (_Component13) {
               console.error(e);
             });
           }
-          _this24.setState({
+          _this25.setState({
             playerState: 'playing'
           });
         });
 
-        _this24.sessionHelper.session.on("signal:pauseJourney", function (event) {
-          if (_this24.publisher && _this24.publisher.state && _this24.publisher.state.publisher) {
-            _this24.publisher.state.publisher.publishAudio(true);
+        _this25.sessionHelper.session.on("signal:pauseJourney", function (event) {
+          if (_this25.publisher && _this25.publisher.state && _this25.publisher.state.publisher) {
+            _this25.publisher.state.publisher.publishAudio(true);
           }
           _state2.default.audioTag.pause();
-          _this24.setState({
+          _this25.setState({
             playerState: 'paused'
           });
         });
 
-        _this24.sessionHelper.session.on("signal:journeyUpdated", function (event) {
+        _this25.sessionHelper.session.on("signal:journeyUpdated", function (event) {
           var journey = JSON.parse(event.data);
           _state2.default.session = journey;
 
@@ -6609,16 +6630,16 @@ var JourneySpace = function (_Component13) {
 
           if (_state2.default.session.state === 'started') {
 
-            if (_this24.publisher && _this24.publisher.state && _this24.publisher.state.publisher) {
-              _this24.publisher.state.publisher.publishAudio(false);
+            if (_this25.publisher && _this25.publisher.state && _this25.publisher.state.publisher) {
+              _this25.publisher.state.publisher.publishAudio(false);
             }
             _state2.default.audioTag.play();
-            _this24.setState({
+            _this25.setState({
               playerState: 'playing'
             });
           } else {
             _state2.default.audioTag.pause();
-            _this24.setState({
+            _this25.setState({
               playerState: 'paused'
             });
           }
@@ -6629,12 +6650,12 @@ var JourneySpace = function (_Component13) {
           }
         });
 
-        _this24.sessionHelper.session.on("signal:fail", function (event) {
+        _this25.sessionHelper.session.on("signal:fail", function (event) {
           _state2.default.session.state = 'failed';
         });
 
-        _this24.setState({
-          session: _this24.sessionHelper.session
+        _this25.setState({
+          session: _this25.sessionHelper.session
         });
 
         var onAudioCanPlay = function onAudioCanPlay(event) {
@@ -6666,10 +6687,10 @@ var JourneySpace = function (_Component13) {
   }, {
     key: 'render',
     value: function render() {
-      var _this25 = this;
+      var _this26 = this;
 
       var currentParticipant = this.state.session && this.state.session.connection && _state2.default.session && _state2.default.session.participants.find(function (participant) {
-        return participant.connectionId === _this25.state.session.connection.id;
+        return participant.connectionId === _this26.state.session.connection.id;
       });
       var currentUserHasFlaggedJourney = _state2.default.session && _state2.default.session.flags.map(function (flag) {
         return flag.user;
@@ -6707,7 +6728,7 @@ var JourneySpace = function (_Component13) {
                     session: this.sessionHelper.session,
                     onInit: this.onInitPublisher,
                     ref: function ref(publisher) {
-                      _this25.publisher = publisher;
+                      _this26.publisher = publisher;
                     }
                   })
                 ),
@@ -6717,10 +6738,10 @@ var JourneySpace = function (_Component13) {
                   });
                   return _react2.default.createElement(
                     'li',
-                    { className: 'journeyspace-stream ' + (_this25.state.currentlyActivePublisher ? 'journeyspace-active-stream' : '') },
+                    { className: 'journeyspace-stream ' + (_this26.state.currentlyActivePublisher ? 'journeyspace-active-stream' : '') },
                     _react2.default.createElement(OTSubscriber, {
                       key: stream.id,
-                      session: _this25.sessionHelper.session,
+                      session: _this26.sessionHelper.session,
                       stream: stream,
                       properties: {
                         width: '100%',
@@ -6769,7 +6790,7 @@ var JourneySpace = function (_Component13) {
               _react2.default.createElement(
                 'div',
                 { style: { display: 'flex', padding: '10px 10px 0' } },
-                (!_state2.default.session.startAt || ['started', 'paused'].indexOf(_state2.default.session.state) > -1) && _react2.default.createElement(PlayButton, { journey: _state2.default.session, player: _state2.default.audioTag }),
+                _react2.default.createElement(PlayButton, { journey: _state2.default.session, player: _state2.default.audioTag }),
                 false && _react2.default.createElement(SkipButton, { style: { marginLeft: 'auto' }, journey: _state2.default.session })
               ),
               _react2.default.createElement(
@@ -6837,10 +6858,10 @@ var JourneySpace = function (_Component13) {
   }, {
     key: 'isHostUser',
     get: function get() {
-      var _this26 = this;
+      var _this27 = this;
 
       var currentParticipant = this.state.session && this.state.session.connection && _state2.default.session && _state2.default.session.participants.find(function (participant) {
-        return participant.connectionId === _this26.state.session.connection.id;
+        return participant.connectionId === _this27.state.session.connection.id;
       });
       return currentParticipant && _state2.default.session.participants.indexOf(currentParticipant) === 0;
     }
@@ -6869,18 +6890,18 @@ var IntroWrapper = function (_Component14) {
   function IntroWrapper(props) {
     _classCallCheck(this, IntroWrapper);
 
-    var _this27 = _possibleConstructorReturn(this, (IntroWrapper.__proto__ || Object.getPrototypeOf(IntroWrapper)).call(this, props));
+    var _this28 = _possibleConstructorReturn(this, (IntroWrapper.__proto__ || Object.getPrototypeOf(IntroWrapper)).call(this, props));
 
-    _this27.onClose = function () {
-      _this27.setState({
+    _this28.onClose = function () {
+      _this28.setState({
         showIntro: false
       });
     };
 
-    _this27.state = {
+    _this28.state = {
       showIntro: !_jsCookie2.default.get('saw intro')
     };
-    return _this27;
+    return _this28;
   }
 
   _createClass(IntroWrapper, [{
