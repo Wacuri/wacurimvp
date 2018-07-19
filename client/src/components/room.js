@@ -454,6 +454,9 @@ class LeaveRoomButton extends Component {
 
   onLeave = (e) => {
     e.preventDefault();
+    if (!state.audioTag.paused) {
+      state.audioTag.pause();
+    }
     this.props.history.push('/join');
   }
 
@@ -1166,7 +1169,9 @@ class JourneySpace extends Component {
                     {(!state.session.startAt || ['started', 'paused'].indexOf(state.session.state) > -1) &&
                       <PlayButton journey={state.session} player={state.audioTag}/>
                     }
-                    <SkipButton style={{marginLeft: 'auto'}} journey={state.session}/>
+                    { false &&
+                      <SkipButton style={{marginLeft: 'auto'}} journey={state.session}/>
+                    }
                   </div>
                   <div style={{display: 'flex', padding: '10px 10px 0 10px'}}>
                     <VideoButton publisher={this.publisher}/>
