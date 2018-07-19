@@ -4,6 +4,12 @@ $fa-font-path: "~font-awesome/fonts";
 
 // Bootstrap overrides
 
+@media (max-width: 767.98px) { 
+  body {
+    cursor: pointer;
+  }
+}
+
 .btn-secondary {
   background-color: rgb(220, 220, 220);
 }

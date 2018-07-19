@@ -305,9 +305,9 @@ class JourneyTimeline extends Component {
             <p>Feelings and thoughts</p>
           </li>
         </ul>
-        <div className='arrow' style={{height: `${this.heightForActive}px`, transform: `translateY(${this.positionForCaret}px)`}}>
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-triangle" width='100' height='100%' viewBox="0 0 95 90" preserveAspectRatio="none" shapeRendering="geometricPrecision">
-            <path d="M 70,50 99,5 99,95 Z"/>
+        <div className='arrow' style={{height: `${this.heightForActive}px`, width: `${this.heightForActive}px`, transform: `translateY(${this.positionForCaret}px)`}}>
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-triangle" viewBox="0 0 100 100" preserveAspectRatio="none" shapeRendering="geometricPrecision">
+            <path d="M 70 50 100 5 100 100 Z"/>
           </svg>
         </div>
       </div>
@@ -416,38 +416,53 @@ class PlayButton extends Component {
 
   toggle = (e) => {
     e.preventDefault();
-    if (this.props.player.paused) {
-      fetch(`/api/sessions/${this.props.journey.room}/start`, {
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-          'content-type': 'application/json'
-        },
-        method: 'POST',
-        mode: 'cors',
-      });
-    } else {
-      fetch(`/api/sessions/${this.props.journey.room}/pause`, {
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-          'content-type': 'application/json'
-        },
-        method: 'POST',
-        mode: 'cors',
-      });
-    }
+    setTimeout(() => {
+      if (state.audioTag.paused) {
+        fetch(`/api/sessions/${this.props.journey.room}/start`, {
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST',
+          mode: 'cors',
+        });
+      } else {
+        fetch(`/api/sessions/${this.props.journey.room}/pause`, {
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST',
+          mode: 'cors',
+        });
+      }
+    }, 20);
   }
 
   render() {
     return (
       <button style={this.props.style || {}} onClick={this.toggle} className={`btn btn-secondary`}>
-        <i className={`fa fa-${this.state.paused ? 'play' : 'pause'}`}></i>
+        <i className={`fa fa-${state.audioTag.paused ? 'play' : 'pause'}`}></i>
       </button>
     )
   }
 }
 
+class LeaveRoomButton extends Component {
+
+  onLeave = (e) => {
+    e.preventDefault();
+    this.props.history.push('/join');
+  }
+
+  render() {
+    return (
+      <button onClick={this.onLeave} className='btn btn-secondary'>Leave</button>
+    )
+  }
+}
 
 class JourneyStartsIn extends Component {
 
@@ -597,7 +612,7 @@ class Intro extends Component {
     this.state = {
       views: [
         <div className='intro-screen'>
-          <h3>1. Welcome to CuriousLive&hellip; A fine-minute guided journey &ndash; plus sharing &ndash; with others.</h3>
+          <h3>1. Welcome to CuriousLive&hellip; A five-minute guided journey &ndash; plus sharing &ndash; with others.</h3>
           <p>
             You are now in the JourneySpace and the
             journey will begin shortly when the timer
@@ -705,7 +720,7 @@ class Intro extends Component {
 
   render() {
     return (
-      <div className='intro' style={{minHeight: 'calc(100vh - 46px)', position: 'relative', display: 'flex', flexDirection: 'column', backgroundColor: 'rgba(81, 148, 220)', padding: '20px'}}>
+      <div className='intro' style={{minHeight: 'calc(100vh - 46px)', position: 'relative', display: 'flex', flexDirection: 'column', backgroundColor: 'rgb(81, 148, 220)', padding: '20px'}}>
         {state.session &&
           <div>
             <div style={{display: 'flex', alignItems: 'baseline'}}>
@@ -758,32 +773,36 @@ class JourneySpace extends Component {
   }
 
 	componentDidMount() {
-    this.audioTag.addEventListener('ended', (event) => {
-      if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-        this.publisher.state.publisher.publishAudio(true);
-      }
-      this.setState({
-        playerState: 'ended'
-      });
+    state.audioTag.addEventListener('ended', (event) => {
+      if (!/sharing\.mp3/.test(state.audioTag.src)) {
+        if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+          this.publisher.state.publisher.publishAudio(true);
+        }
+        this.setState({
+          playerState: 'ended'
+        });
 
-      fetch(`/api/journeys/${this.props.match.params.room}/completed`, {
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, same-origin, *omit
-        headers: {
-          'content-type': 'application/json'
-        },
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, cors, *same-origin
-        redirect: 'follow', // manual, *follow, error
-        referrer: 'no-referrer', // *client, no-referrer
-      });
+        fetch(`/api/journeys/${this.props.match.params.room}/completed`, {
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, same-origin, *omit
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, cors, *same-origin
+          redirect: 'follow', // manual, *follow, error
+          referrer: 'no-referrer', // *client, no-referrer
+        });
 
-      this.sharingPromptAudioPlayer.play();
-    });
-
-    this.sharingPromptAudioPlayer.addEventListener('ended', (event) => {
-      if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-        this.publisher.state.publisher.publishAudio(true);
+        state.audioTag.pause();
+        state.audioTag.currentTime = 0;
+        state.audioTag.src = '/sharing.mp3';
+        state.audioTag.play();
+      } else {
+        // sharing audio ended
+        if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+          this.publisher.state.publisher.publishAudio(true);
+        }
       }
     });
 
@@ -791,6 +810,10 @@ class JourneySpace extends Component {
 			.then(res => res.json())
 			.then(json => {
 				state.session = json;
+
+        state.audioTag.src = state.session.journey;
+        state.audioTag.currentTime = 0;
+
         this.sessionHelper = createSession({
           apiKey: state.openTokKey,
           sessionId: state.session.sessionId,
@@ -839,7 +862,17 @@ class JourneySpace extends Component {
           if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
             this.publisher.state.publisher.publishAudio(false);
           }
-          this.audioTag.play();
+          const playPromise = state.audioTag.play();
+          if (playPromise !== undefined) {
+            playPromise
+            .then(() => {
+              console.log('audio promise resolve');
+            })
+            // Safety first!
+            .catch(e => {
+              console.error(e);
+            });
+          }
           this.setState({
             playerState: 'playing'
           });
@@ -849,7 +882,7 @@ class JourneySpace extends Component {
           if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
             this.publisher.state.publisher.publishAudio(true);
           }
-          this.audioTag.pause();
+          state.audioTag.pause();
           this.setState({
             playerState: 'paused'
           });
@@ -859,24 +892,31 @@ class JourneySpace extends Component {
           const journey = JSON.parse(event.data);
           state.session = journey;
 
+          if (state.session.state != 'completed') {
+            // if we are in completed state, then audio may be playing the sharing prompt
+            state.audioTag.src = state.session.journey;
+            state.audioTag.currentTime = 0;
+          }
+
           if (state.session.state === 'started') {
 
             if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
               this.publisher.state.publisher.publishAudio(false);
             }
-            this.audioTag.play();
+            state.audioTag.play();
             this.setState({
               playerState: 'playing'
             });
           } else {
-            this.audioTag.pause();
+            state.audioTag.pause();
             this.setState({
               playerState: 'paused'
             });
           }
 
           if (state.session.state === 'completed') {
-            this.sharingPromptAudioPlayer.play();
+            state.audioTag.src = '/sharing.mp3';
+            state.audioTag.play();
           }
         });
         
@@ -892,16 +932,16 @@ class JourneySpace extends Component {
 
         const onAudioCanPlay = (event) => { 
           if (state.session.state === 'started') {
-            this.audioTag.play();
+            state.audioTag.play();
             if (!isNaN(state.session.currentTime)) {
-              this.audioTag.currentTime = state.session.currentTime;
+              state.audioTag.currentTime = state.session.currentTime;
             }
           }
-          this.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
+          state.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
         }
 
-        this.audioTag.addEventListener('canplaythrough', onAudioCanPlay, false);
-        this.audioTag.load();
+        state.audioTag.addEventListener('canplaythrough', onAudioCanPlay, false);
+        state.audioTag.load();
 			});
     fetch('/api/journeys')
       .then(res => res.json())
@@ -940,7 +980,7 @@ class JourneySpace extends Component {
     switch(state.session.state) {
       case 'started':
       case 'paused':
-        return new AudioPlayTickEmitter(this.audioTag);
+        return new AudioPlayTickEmitter(state.audioTag);
       default:
         if (!this.secondsEmitter) {
           this.secondsEmitter = new SecondsTimerEmitter(new Date(state.session.createdAt), new Date(state.session.startAt));
@@ -988,8 +1028,8 @@ class JourneySpace extends Component {
     this.setState({
       journeyDuration: e.target.duration
     });
-    this.audioTag.removeEventListener('timeupdate', this.onTimeUpdate);
-    this.audioTag.addEventListener('timeupdate', this.onTimeUpdate);
+    state.audioTag.removeEventListener('timeupdate', this.onTimeUpdate);
+    state.audioTag.addEventListener('timeupdate', this.onTimeUpdate);
   }
 
   onTimeUpdate = (e) => {
@@ -1050,7 +1090,6 @@ class JourneySpace extends Component {
   }
 
   onCompleteShare = (url, name) => {
-    console.log('complete share', url, this.props);
     this.setState({
       showShareModal: false
     });
@@ -1064,12 +1103,6 @@ class JourneySpace extends Component {
 			<div className='journeyspace' style={{position: 'relative'}}>
 
           <div className='journeyspace-content'>
-            <audio style={{display: 'none'}} onLoadedMetadata={this.onLoadedMetadata} key={state.session && state.session.journey} controls="true" ref={audioTag => { this.audioTag = audioTag }}>
-             <source src={state.session && state.session.journey} type="audio/mpeg"/>
-            </audio>
-            <audio style={{display: 'none'}} ref={el => {this.sharingPromptAudioPlayer = el}}>
-              <source src='/sharing.mp3' type='audio/mpeg'/>
-            </audio>
             {this.state.session &&
               <div className='row no-gutters'>
                 <div className='col-5 col-lg-3'>
@@ -1119,9 +1152,9 @@ class JourneySpace extends Component {
                   
                   {state.session.state === 'joined' && <JourneyStartsIn journey={state.session} timer={this.journeyStateTimer}/> }
 
-                  {!state.session.startAt && (state.session.state === 'created' || state.session.state === 'joined') &&
+                  {!state.session.startAt && (state.session.state === 'created' || state.session.state === 'joined' || state.session.state === 'completed') &&
                     <div style={{padding: '10px'}}>
-                      <select onChange={this.onChangeJourney} value={state.session && state.session.journey}>
+                      <select style={{width: '100%'}} onChange={this.onChangeJourney} value={state.session && state.session.journey}>
                         {state.journeys.map(journey => (
                           <option value={journey.filePath}>{journey.name}</option>
                         ))}
@@ -1131,19 +1164,21 @@ class JourneySpace extends Component {
                   
                   <div style={{display: 'flex', padding: '10px 10px 0'}}>
                     {(!state.session.startAt || ['started', 'paused'].indexOf(state.session.state) > -1) &&
-                      <PlayButton journey={state.session} player={this.audioTag}/>
+                      <PlayButton journey={state.session} player={state.audioTag}/>
                     }
                     <SkipButton style={{marginLeft: 'auto'}} journey={state.session}/>
                   </div>
-                  <div style={{display: 'flex', padding: '10px 10px 0'}}>
+                  <div style={{display: 'flex', padding: '10px 10px 0 10px'}}>
                     <VideoButton publisher={this.publisher}/>
                     <AudioButton style={{marginLeft: '10px'}} publisher={this.publisher}/>
+                  </div>
+                  <div style={{padding: '10px'}}>
+                    <LeaveRoomButton history={this.props.history}/>
                   </div>
                   <JourneyTimeline journey={state.session} timer={this.journeyStateTimer}/>
 
                   <div className='journeyspace-meta pr-3 pl-3 pt-3'>
-
-                    {state.session.startAt && <SharePrompt onInvite={this.onInvite}/>}
+                    {state.session.startAt && ['joined', 'created'].indexOf(state.session.state) > -1 && <SharePrompt onInvite={this.onInvite}/>}
                   </div>
                   
                   {state.session.state === 'failed' &&
@@ -1179,7 +1214,7 @@ class IntroWrapper extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showIntro: !Cookie.get('saw intro')
+      showIntro: false
     }
   }
 

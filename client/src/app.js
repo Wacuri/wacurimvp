@@ -15,6 +15,13 @@ var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 if (__CLIENT__) {
   var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
   const OT = require('@opentok/client');
+  document.body.addEventListener('click', (e) => {
+    if (state.audioTag && state.audioTag.paused) {
+      state.audioTag.play().then(() => {
+        state.audioTag.pause();
+      });
+    }
+  });
 }
 
 
@@ -187,7 +194,7 @@ class AutoCreatedJourneysQueue extends Component {
   render() {
     return (
       <div className='joinable-journeys'>
-        {state.joinableJourneys.map(journey => <JoinableJourneyCard key={journey._id} journey={journey}/>)}
+        {state.joinableJourneys.map(journey => <JoinableJourneyCard key={journey._id} journey={journey} audioTag={this.audioTag}/>)}
       </div>
     )
   }

@@ -35,10 +35,11 @@ JourneySpaceSchema.plugin(statemachine, {
     joined: { from: 'created', to: 'joined' },
     start: { from: ['joined', 'created', 'failed', 'paused'], to: 'started' },
     pause: { from: ['started'], to: 'paused' },
-    fail: { from: '*', to: 'failed' },
+    fail: { from: ['joined', 'created'], to: 'failed' },
     complete: { from: ['started', 'created'], to: 'completed' },
     end: { from: '*', to: 'ended' },
     expire: { from: '*', to: 'expired' },
+    reset: { from: '*', to: 'created' }
   }
 });
 

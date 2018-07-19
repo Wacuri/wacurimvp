@@ -165,13 +165,13 @@ router.post('/journeys/:id/rsvp', async (req, res) => {
   res.sendStatus(200);
 });
 
-router.post('/journeys/:id/completed', async (req, res) => {
-  const journey = await JourneySpace.findById(req.params.id).exec();
+router.post('/journeys/:room/completed', async (req, res) => {
+  const journey = await JourneySpace.findOne({room: req.params.room}).exec();
   await journey.complete();
-  const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
-  if (globalSpace) {
-    opentok.signal(globalSpace.sessionId, null, { 'type': 'completed', 'data': JSON.stringify(journey.toJSON()) }, () => {});
-  }
+  const response = journey.toJSON();
+  const participants = await JourneyParticipant.find({session: journey, present: true}).lean().exec();
+  response.participants = participants;
+  opentok.signal(journey.sessionId, null, { 'type': 'journeyUpdated', 'data': JSON.stringify(response) }, () => {});
   res.sendStatus(200);
 });
 
@@ -243,6 +243,7 @@ router.put('/sessions/:room/journey', async (req, res) => {
     journey.image = journeyContent.image;
     journey['name'] = journeyContent.get('name');
     await journey.save();
+    await journey.reset();
     const response = journey.toJSON();
     const participants = await JourneyParticipant.find({session: journey, present: true}).lean().exec();
     response.participants = participants;
@@ -272,7 +273,7 @@ router.post('/sessions/:room/pause', async (req, res) => {
     try {
       await existingSession.pause();
     } catch(e) {
-      console.log('error starting journey', e);
+      console.log('error pausing journey', e);
     }
     signal(existingSession.sessionId, {type: 'pauseJourney', data: ''});
   }
@@ -293,7 +294,6 @@ router.post('/sessions/:room/flag', async (req, res) => {
 });
 
 router.post('/event', async (req, res) => {
-  console.log('GOT EVENT', req.body);
   const {sessionId, connection} = req.body;
   const session = await JourneySpace.findOne({sessionId}).exec();
 
