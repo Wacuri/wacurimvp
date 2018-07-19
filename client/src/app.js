@@ -102,7 +102,6 @@ class JoinableJourneyCard extends Component {
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
       credentials: 'same-origin', // include, same-origin, *omit
       headers: {
-        'user-agent': 'Mozilla/4.0 MDN Example',
         'content-type': 'application/json'
       },
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -144,7 +143,7 @@ class AutoCreatedJourneysQueue extends Component {
     const roomUrl = 'temp-home-location'
 
     // subscribe to global events
-    fetch(`/api/sessions/${roomUrl}`)
+    fetch(`/api/sessions/${roomUrl}`, {credentials: 'include'})
       .then(res => res.json())
       .then(json => {
         state.session = json;
@@ -176,7 +175,9 @@ class AutoCreatedJourneysQueue extends Component {
           const rsvp = JSON.parse(event.data);
           const journey = state.joinableJourneys.find(j => j._id == rsvp.journey._id);
           const idx = state.joinableJourneys.findIndex(j => j._id === journey._id);
-          journey.rsvps.push(rsvp);
+          if (journey.rsvps.findIndex(rsvp => rsvp._id === rsvp._id) === -1) {
+            journey.rsvps.push(rsvp);
+          }
           state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), journey, ...state.joinableJourneys.slice(idx + 1)];
         });
 
