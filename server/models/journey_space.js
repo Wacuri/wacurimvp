@@ -5,6 +5,7 @@ import moment from 'moment';
 const FlagSchema = new Schema({
   user: {type: String},
   reason: {type: String},
+  flagged: {type: String},
 });
 
 const JourneySpaceSchema = new Schema({

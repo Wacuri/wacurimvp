@@ -6,6 +6,7 @@ import OpenTok from 'opentok';
 import moment from 'moment';
 import mongoose from 'mongoose';
 import JourneySpace from '../models/journey_space';
+import JourneyParticipant from '../models/journey_participant';
 import JourneyRSVP from '../models/journey_rsvp';
 import JourneyContent from '../models/journey_content';
 
@@ -28,7 +29,7 @@ agenda.define('create journey space', async function(job, done) {
     const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
     if (globalSpace) {
       const response = journeySpace.toJSON();
-      response.rsvps = [];
+      response.participants = [];
       opentok.signal(globalSpace.sessionId, null, { 'type': 'createdNewJourney', 'data': JSON.stringify(response) }, done);
     } else {
       done();
@@ -61,8 +62,8 @@ agenda.define('start journey', async function(job, done) {
     const {journey} = job.attrs.data;
     const journeySpace = await JourneySpace.findById(journey).exec();
     const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
-    const rsvps = await JourneyRSVP.find({journey: journeySpace._id}).exec();
-    if (rsvps.length > 1) {
+    const participants = await JourneyParticipant.find({journey: journeySpace._id, present: true}).exec();
+    if (participants.length > 1) {
       await journeySpace.start();
       opentok.signal(journeySpace.sessionId, null, { 'type': 'startJourney', 'data': JSON.stringify({journey}) }, () => {});
     } else {

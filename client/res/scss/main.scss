@@ -68,7 +68,6 @@ h2 {
   padding: 15px 10px 0 10px;
 
   li {
-    border: 1px solid rgb(83, 83, 83);
     min-height: calc(100vw * .4);
     margin-bottom: 10px; 
 
@@ -86,6 +85,7 @@ h2 {
 }
 
 .video-placeholder {
+  border: 1px solid rgb(83, 83, 83);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -110,11 +110,20 @@ h2 {
   position: relative;
   
   >div {
+    border: 1px solid rgb(83, 83, 83);
     width: 100%;
-    height: 100%;
+    height: calc(100% - 25px);
     position: absolute;
     top: 0;
     left: 0;
+  }
+  
+  .journeyspace-stream-controls {
+    position: absolute;
+    bottom: 0;
+    top: auto;
+    height: 25px;
+    border: none;
   }
 }
 

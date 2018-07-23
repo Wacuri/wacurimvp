@@ -100,12 +100,12 @@ class AudioPlayTickEmitter extends AbstractTimerEmitter {
   }
 }
 
-const FlagControl = ({currentUserHasFlaggedJourney, onFlag, children}) => {
+const FlagControl = ({currentUserHasFlaggedStream, stream, onFlag, children}) => {
   return (
     <button 
-      className='btn btn-flag-session'
-      disabled={currentUserHasFlaggedJourney}
-      onClick={onFlag}>
+      className='btn-flag-session'
+      disabled={currentUserHasFlaggedStream}
+      onClick={(e) => { e.preventDefault(); onFlag(stream); }}>
       {children}  
     </button>
   )
@@ -334,7 +334,7 @@ class SkipButton extends Component {
 
   render() {
     return (
-      this.props.journey.state != 'completed' ? <button style={this.props.style || {}} className='btn btn-secondary' onClick={this.skipToNext}><i className='fa fa-forward'></i></button> : <span/>
+      this.props.journey.state != 'completed' ? <button style={this.props.style || {}} className='btn btn-primary' onClick={this.skipToNext}><i className='fa fa-forward'></i></button> : <span/>
     )
   }
 }
@@ -435,7 +435,7 @@ class PlayButton extends Component {
     e.preventDefault();
     setTimeout(() => {
       if (state.audioTag.paused) {
-        fetch(`/api/sessions/${this.props.journey.room}/start`, {
+        fetch(`/api/journeys/${this.props.journey.room}/start`, {
           cache: 'no-cache',
           credentials: 'same-origin',
           headers: {
@@ -445,7 +445,7 @@ class PlayButton extends Component {
           mode: 'cors',
         });
       } else {
-        fetch(`/api/sessions/${this.props.journey.room}/pause`, {
+        fetch(`/api/journeys/${this.props.journey.room}/pause`, {
           cache: 'no-cache',
           credentials: 'same-origin',
           headers: {
@@ -460,7 +460,7 @@ class PlayButton extends Component {
 
   render() {
     return (
-      <button style={this.props.style || {}} onClick={this.toggle} className={`btn btn-secondary`}>
+      <button style={this.props.style || {}} onClick={this.toggle} className={`btn btn-primary`}>
         <i className={`fa fa-${state.audioTag.paused ? 'play' : 'pause'}`}></i>
       </button>
     )
@@ -479,7 +479,7 @@ class LeaveRoomButton extends Component {
 
   render() {
     return (
-      <button onClick={this.onLeave} className='btn btn-secondary'>Leave</button>
+      <button onClick={this.onLeave} className='btn btn-primary'>Leave</button>
     )
   }
 }
@@ -524,7 +524,7 @@ class SharePrompt extends Component {
     return (
       <div className='journeyspace-sharePrompt' style={{textAlign: 'center'}}>
         <p style={{fontFamily: 'Playfair Display, serif', fontSize: '25px', lineHeight: 0.8}}>If you would like to invite a friend you can make this a permanent JourneySpace:</p>
-        <button className='btn btn-secondary' onClick={this.props.onInvite}>Invite Friends</button>
+        <button className='btn btn-primary' onClick={this.props.onInvite}>Invite Friends</button>
       </div>
     )
   }
@@ -826,7 +826,7 @@ class JourneySpace extends Component {
       }
     });
 
-		fetch(`/api/sessions/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
+		fetch(`/api/journeys/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
 			.then(res => res.json())
 			.then(json => {
 				state.session = json;
@@ -840,7 +840,17 @@ class JourneySpace extends Component {
           token: state.session.token,
           onConnect: () => {
             console.log('assigned connection to publisher', this.sessionHelper.session.connection);
-            setTimeout(this.refreshSession, 1000);
+            fetch(`/api/journeys/${this.props.match.params.room}/joined`, {
+              body: JSON.stringify({id: this.sessionHelper.session.connection.id}),
+              credentials: 'same-origin', // include, same-origin, *omit
+              headers: {
+                'content-type': 'application/json'
+              },
+              method: 'POST', // *GET, POST, PUT, DELETE, etc.
+              mode: 'cors', // no-cors, cors, *same-origin
+              redirect: 'follow', // manual, *follow, error
+              referrer: 'no-referrer', // *client, no-referrer
+            });
           },
           onStreamsUpdated: streams => {
             console.log('Current subscriber streams:', streams);
@@ -977,7 +987,7 @@ class JourneySpace extends Component {
   }
 
   refreshSession = () => {
-		fetch(`/api/sessions/${this.props.match.params.room}`, {credentials: 'include'})
+		fetch(`/api/journeys/${this.props.match.params.room}`, {credentials: 'include'})
 			.then(res => res.json())
 			.then(json => {
 				state.session = json;
@@ -1014,11 +1024,11 @@ class JourneySpace extends Component {
   }
 
   onConfirmReady = (e) => {
-    fetch(`/api/sessions/${this.props.match.params.room}/connections/${this.sessionHelper.session.connection.id}/ready`);
+    fetch(`/api/journeys/${this.props.match.params.room}/connections/${this.sessionHelper.session.connection.id}/ready`);
   }
 
   onChangeJourney = (e) => {
-    fetch(`/api/sessions/${this.props.match.params.room}/journey`, {
+    fetch(`/api/journeys/${this.props.match.params.room}/journey`, {
       body: JSON.stringify({journey: e.target.value}), // must match 'Content-Type' header
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
       credentials: 'same-origin', // include, same-origin, *omit
@@ -1033,7 +1043,7 @@ class JourneySpace extends Component {
   }
 
   onStartSession = (e) => {
-    fetch(`/api/sessions/${this.props.match.params.room}/start`, {
+    fetch(`/api/journeys/${this.props.match.params.room}/start`, {
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
@@ -1071,11 +1081,10 @@ class JourneySpace extends Component {
     }
   }
 
-  onFlag = (e) => {
-    e.preventDefault();
-    fetch(`/api/sessions/${this.props.match.params.room}/flag`, {
+  onFlag = (stream) => {
+    fetch(`/api/journeys/${this.props.match.params.room}/flag`, {
       cache: 'no-cache',
-      body: JSON.stringify({connectionId: this.state.session.connection.id}),
+      body: JSON.stringify({connectionId: this.state.session.connection.id, stream}),
       credentials: 'same-origin',
       headers: {
         'content-type': 'application/json'
@@ -1143,6 +1152,7 @@ class JourneySpace extends Component {
 
                     {this.state.streams.map(stream => {
                       const participant = state.session.participants.find(participant => participant.connectionId === stream.connection.id);
+                      const hasFlagged = !!state.session.flags.find(flag => flag.user === state.sessionId && flag.flagged === stream.id);
                       return (
                         <li className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
                             <OTSubscriber
@@ -1154,6 +1164,11 @@ class JourneySpace extends Component {
                                 height: '100%',
                               }}
                             />
+                            <div className='journeyspace-stream-controls'>
+                              <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
+                                <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
+                              </FlagControl>
+                            </div>
                         </li>
                       );
                     })}
@@ -1215,9 +1230,6 @@ class JourneySpace extends Component {
           </div>
           <div className='journeyspace-footer' style={{display: 'flex'}}>
             <div style={{flex: 1}}>
-              <FlagControl currentUserHasFlaggedJourney={currentUserHasFlaggedJourney} onFlag={this.onFlag}>
-                {currentUserHasFlaggedJourney ? "Reported" : "Report"}
-              </FlagControl>
             </div>
             <div style={{marginLeft: 'auto', marginRight: '10px', alignSelf: 'center'}}>
             </div>
@@ -1239,7 +1251,7 @@ class IntroWrapper extends Component {
   }
 
   componentDidMount() {
-		fetch(`/api/sessions/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
+		fetch(`/api/journeys/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
 			.then(res => res.json())
 			.then(json => {
 				state.session = json;

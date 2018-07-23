@@ -14,7 +14,6 @@ router.get('/', (req, res) => {
 
   state.loggedIn = req.session.loggedIn;
   state.user = req.session.user;
-  console.log('GOT SESSION', req.session, req.originalUrl);
 
   const html = ReactDOMServer.renderToString(
     <StaticRouter
@@ -25,9 +24,7 @@ router.get('/', (req, res) => {
     </StaticRouter>
   );
 
-  console.log('GOT HTML', html, context.url);
   if (context.url) {
-    console.log('REDIRECT');
     if (req.originalUrl != '/favicon.ico') {
       res.writeHead(301, {
         Location: context.url,

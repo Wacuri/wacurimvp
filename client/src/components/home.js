@@ -29,7 +29,7 @@ export default class Home extends Component {
   componentDidMount() {
     const roomUrl = 'temp-home-location'
 
-    fetch(`/api/sessions/${roomUrl}`)
+    fetch(`/api/journeys/${roomUrl}`)
       .then(res => res.json())
       .then(json => {
         state.session = json;
@@ -39,7 +39,7 @@ export default class Home extends Component {
           token: state.session.token,
           onConnect: () => {
             setTimeout(this.refreshSession, 1000);
-            fetch(`/api/sessions/${roomUrl}/joined`, {
+            fetch(`/api/journeys/${roomUrl}/joined`, {
               body: JSON.stringify({id: this.sessionHelper.session.connection.id}),
               credentials: 'same-origin', // include, same-origin, *omit
               headers: {
@@ -92,7 +92,7 @@ export default class Home extends Component {
 
           let tries = 10;
           const fetchRetry = () => {
-            fetch(`/api/sessions/${roomUrl}/${event.connection.id}`).then(res => res.json()).then(json => {
+            fetch(`/api/journeys/${roomUrl}/${event.connection.id}`).then(res => res.json()).then(json => {
               if (!json && tries-- > 0) {
                 setTimeout(fetchRetry, 500);
               } else {
