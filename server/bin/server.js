@@ -7734,7 +7734,7 @@ var Intro = function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      // Cookie.set('saw intro', true, {expires: 365});
+      _jsCookie2.default.set('saw intro', true, { expires: 365 });
 
       fetch('/api/journeys/' + this.props.match.params.room + window.location.search, { credentials: 'include' }).then(function (res) {
         return res.json();
