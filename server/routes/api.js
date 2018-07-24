@@ -342,7 +342,7 @@ router.post('/event', async (req, res) => {
         const participant= await JourneyParticipant.findOne({journeySpace, connectionId: connection.id});
         if (participant) {
           participant.present = false;
-          await participant.save();participant
+          await participant.save();
           const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
           if (globalSpace) {
             opentok.signal(globalSpace.sessionId, null, { 'type': 'journeyerLeftSpace', 'data': JSON.stringify(participant.toJSON()) }, () => {});
@@ -351,6 +351,7 @@ router.post('/event', async (req, res) => {
       }
       break
   }
+  res.sendStatus(200);
 });
 
 router.post('/login', (req, res) => {

@@ -173,6 +173,7 @@ class AutoCreatedJourneysQueue extends Component {
 
         this.sessionHelper.session.on('signal:journeyerLeftSpace', (event) => {
           const participant = JSON.parse(event.data);
+          console.log('Event: left space', event.data);
           const journey = state.joinableJourneys.find(j => j._id === participant.journeySpace);
           const idx = state.joinableJourneys.indexOf(journey);
           journey.participants = journey.participants.filter(p => p._id !== participant._id);
