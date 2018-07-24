@@ -282,7 +282,7 @@ class JourneyTimeline extends Component {
             <h4>Prepare</h4>
             <div style={{display: 'flex'}}>
               <p>Breathe and center yourself</p>
-              {journey.state === 'joined' &&
+              {journey.state === 'joined' && journey.startAt &&
                 <p className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</p>
               }
             </div>
@@ -475,7 +475,7 @@ class LeaveRoomButton extends Component {
     if (!state.audioTag.paused) {
       state.audioTag.pause();
     }
-    this.props.history.push('/join');
+    this.props.history.push('/');
   }
 
   render() {
@@ -526,7 +526,7 @@ class InviteModal extends Component {
         error: false
       });
       const name = this.state.journeySpaceName;
-      const urlFriendlyName = name.replace(/\s+/g, '-').toLowerCase();
+      const urlFriendlyName = name.replace(/[^\w]/g, '-').toLowerCase();
       const url = `${window.location.protocol}//${window.location.host}/${urlFriendlyName}`;
       const success = this._copy(url);
       if (success) {
@@ -991,7 +991,7 @@ class JourneySpace extends Component {
                       <li className='video-placeholder'>
                         <div>
                           <i className='fa fa-user'></i>
-                          <p>waiting...</p>
+                          <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
                         </div>
                       </li>
                     ))}
@@ -999,7 +999,7 @@ class JourneySpace extends Component {
                 </div>
                 <div className='col-7 col-lg-9' style={{backgroundColor: 'white'}}>
                   
-                  {state.session.state === 'joined' && <JourneyStartsIn journey={state.session} timer={this.journeyStateTimer}/> }
+                  {state.session.state === 'joined' && state.session.startAt && <JourneyStartsIn journey={state.session} timer={this.journeyStateTimer}/> }
 
                   {!state.session.startAt && (state.session.state === 'created' || state.session.state === 'joined' || state.session.state === 'completed') &&
                     <div style={{padding: '10px'}}>

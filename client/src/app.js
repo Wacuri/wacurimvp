@@ -220,7 +220,7 @@ class IntroWrapper extends Component {
   render() {
     if (this.state.showIntro) {
       return (
-        <Intro onClose={this.onClose}>
+        <Intro onClose={this.onClose} {...this.props}>
           <this.props.component {...this.props}/>
         </Intro>
       )

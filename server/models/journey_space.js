@@ -16,6 +16,7 @@ const JourneySpaceSchema = new Schema({
   sessionId: {type: String, index: true},
   journey: {type: String, default: '/journeys/Journey to A Spiderweb+Music.mp3'},
   startAt: {type: Date},
+  owner: {type: String}, // a user session id, for now
   flags: {type: [FlagSchema], default: []},
 }, {
   timestamps: true

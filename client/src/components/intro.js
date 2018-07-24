@@ -7,11 +7,20 @@ import Cookie from 'js-cookie';
 import state from '../state';
 import JourneyStartsIn from './journey_starts_in';
 
+var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
+
+if (__CLIENT__) {
+	var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
+	const OT = require('@opentok/client');
+	window.state = state;
+}
+
 class Intro extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      streams: [],
       views: [
         <div className='intro-screen'>
           <h3>1. Welcome to CuriousLive&hellip; A five-minute guided journey &ndash; plus sharing &ndash; with others.</h3>
@@ -117,7 +126,37 @@ class Intro extends Component {
   }
 
   componentDidMount() {
-    Cookie.set('saw intro', true, {expires: 365});
+    // Cookie.set('saw intro', true, {expires: 365});
+
+		fetch(`/api/journeys/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
+			.then(res => res.json())
+			.then(json => {
+				state.session = json;
+        this.sessionHelper = createSession({
+          apiKey: state.openTokKey,
+          sessionId: state.session.sessionId,
+          token: state.session.token,
+          onConnect: () => {
+          },
+          onStreamsUpdated: streams => {
+            this.setState({ streams });
+          }
+        });
+      });
+  }
+
+  get journeySpaceOwnerVideoStream() {
+    if (state.session) {
+      const owner = state.session.owner;
+      const participant = state.session.participants.find(p => p.user === owner);
+      if (state.sessionId === owner) {
+        return null;
+      } else {
+        const stream = this.state.streams.find(s => s.connection.id === participant.connectionId);
+        return stream;
+      }
+    }
+    return null;
   }
 
   render() {
@@ -133,8 +172,18 @@ class Intro extends Component {
                 </div>
               </div>
               
-              <div style={{textAlign: 'center'}}>
+              <div style={{justifyContent: 'center', display: 'flex'}}>
                 <img style={{height: '150px'}} src={state.session.image}/>
+                {this.sessionHelper && this.journeySpaceOwnerVideoStream && 
+                  <OTSubscriber
+                    session={this.sessionHelper.session}
+                    stream={this.journeySpaceOwnerVideoStream}
+                    properties={{
+                      width: '150px',
+                      height: '150px',
+                    }}
+                  />
+                }
               </div>
             </div>
           }

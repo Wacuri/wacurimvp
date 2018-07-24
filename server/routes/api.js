@@ -92,6 +92,7 @@ router.get('/journeys/:room', async (req, res) => {
         journey: selectedJourney.filePath,
         name: req.query.name || selectedJourney.name,
         image: selectedJourney.image,
+        owner: req.session.id,
       });
 			await newJourneySpace.save();
       const response = newJourneySpace.toJSON();
