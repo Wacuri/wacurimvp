@@ -4355,16 +4355,16 @@ var JoinableJourneyCard = function (_Component2) {
   return JoinableJourneyCard;
 }(_react.Component);
 
-var AutoCreatedJourneysQueue = function (_Component3) {
-  _inherits(AutoCreatedJourneysQueue, _Component3);
+var JourneyBoard = function (_Component3) {
+  _inherits(JourneyBoard, _Component3);
 
-  function AutoCreatedJourneysQueue() {
-    _classCallCheck(this, AutoCreatedJourneysQueue);
+  function JourneyBoard() {
+    _classCallCheck(this, JourneyBoard);
 
-    return _possibleConstructorReturn(this, (AutoCreatedJourneysQueue.__proto__ || Object.getPrototypeOf(AutoCreatedJourneysQueue)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (JourneyBoard.__proto__ || Object.getPrototypeOf(JourneyBoard)).apply(this, arguments));
   }
 
-  _createClass(AutoCreatedJourneysQueue, [{
+  _createClass(JourneyBoard, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
       var _this5 = this;
@@ -4454,7 +4454,7 @@ var AutoCreatedJourneysQueue = function (_Component3) {
     }
   }]);
 
-  return AutoCreatedJourneysQueue;
+  return JourneyBoard;
 }(_react.Component);
 
 var IntroWrapper = function (_Component4) {
@@ -4502,7 +4502,7 @@ var RouteWithIntro = function RouteWithIntro(_ref3) {
   var Component = _ref3.component,
       rest = _objectWithoutProperties(_ref3, ['component']);
 
-  var showIntro = !_jsCookie2.default.get('saw intro');
+  var showIntro = __CLIENT__ && !_jsCookie2.default.get('saw intro');
   return _react2.default.createElement(
     'div',
     null,
@@ -4535,8 +4535,8 @@ var App = function (_Component5) {
           _reactRouterDom.Switch,
           null,
           _react2.default.createElement(RouteWithIntro, { exact: true, path: '/login', component: (0, _reactRouter.withRouter)(Login) }),
-          _react2.default.createElement(RouteWithIntro, { exact: true, path: '/join', component: (0, _reactEasyState.view)(AutoCreatedJourneysQueue) }),
-          _react2.default.createElement(RouteWithIntro, { exact: true, path: '/', component: _home2.default }),
+          _react2.default.createElement(RouteWithIntro, { exact: true, path: '/', component: (0, _reactEasyState.view)(JourneyBoard) }),
+          _react2.default.createElement(RouteWithIntro, { exact: true, path: '/old', component: _home2.default }),
           _react2.default.createElement(RouteWithIntro, { exact: true, path: '/:room', component: _journey_space2.default })
         )
       );
