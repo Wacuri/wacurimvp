@@ -126,7 +126,7 @@ class JoinableJourneyCard extends Component {
   }
 }
 
-class AutoCreatedJourneysQueue extends Component {
+class JourneyBoard extends Component {
 
   componentDidMount() {
     const roomUrl = 'temp-home-location'
@@ -231,7 +231,7 @@ class IntroWrapper extends Component {
 }
 
 const RouteWithIntro = ({component: Component, ...rest}) => {
-  const showIntro = !Cookie.get('saw intro');
+  const showIntro = __CLIENT__ && !Cookie.get('saw intro');
   return (
     <div>
       {showIntro && 
@@ -261,8 +261,8 @@ class App extends Component {
         <Header />
         <Switch>
           <RouteWithIntro exact path="/login" component={withRouter(Login)} />
-          <RouteWithIntro exact path="/join" component={view(AutoCreatedJourneysQueue)} />
-          <RouteWithIntro exact path="/" component={Home} />
+          <RouteWithIntro exact path="/" component={view(JourneyBoard)} />
+          <RouteWithIntro exact path="/old" component={Home} />
           <RouteWithIntro exact path="/:room" component={JourneySpace} />
         </Switch>
       </div>
