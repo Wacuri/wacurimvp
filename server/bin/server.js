@@ -132,55 +132,55 @@ module.exports = {
 /* 6 */
 /***/ (function(module, exports) {
 
-module.exports = require("path");
+module.exports = require("opentok-react");
 
 /***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
-module.exports = require("human-interval");
+module.exports = require("@opentok/client");
 
 /***/ }),
 /* 8 */
 /***/ (function(module, exports) {
 
-module.exports = require("moment");
+module.exports = require("path");
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports) {
 
-module.exports = require("express");
+module.exports = require("human-interval");
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = require("react-router");
+module.exports = require("moment");
 
 /***/ }),
 /* 11 */
 /***/ (function(module, exports) {
 
-module.exports = require("react-router-dom");
+module.exports = require("express");
 
 /***/ }),
 /* 12 */
 /***/ (function(module, exports) {
 
-module.exports = require("js-cookie");
+module.exports = require("react-router");
 
 /***/ }),
 /* 13 */
 /***/ (function(module, exports) {
 
-module.exports = require("opentok-react");
+module.exports = require("react-router-dom");
 
 /***/ }),
 /* 14 */
 /***/ (function(module, exports) {
 
-module.exports = require("@opentok/client");
+module.exports = require("js-cookie");
 
 /***/ }),
 /* 15 */
@@ -323,7 +323,7 @@ var _anotherMongooseStatemachine = __webpack_require__(80);
 
 var _anotherMongooseStatemachine2 = _interopRequireDefault(_anotherMongooseStatemachine);
 
-var _moment = __webpack_require__(8);
+var _moment = __webpack_require__(10);
 
 var _moment2 = _interopRequireDefault(_moment);
 
@@ -345,6 +345,7 @@ var JourneySpaceSchema = new _mongoose.Schema({
   sessionId: { type: String, index: true },
   journey: { type: String, default: '/journeys/Journey to A Spiderweb+Music.mp3' },
   startAt: { type: Date },
+  owner: { type: String }, // a user session id, for now
   flags: { type: [FlagSchema], default: [] }
 }, {
   timestamps: true
@@ -675,7 +676,7 @@ var _fs = __webpack_require__(16);
 
 var _fs2 = _interopRequireDefault(_fs);
 
-var _path = __webpack_require__(6);
+var _path = __webpack_require__(8);
 
 var _path2 = _interopRequireDefault(_path);
 
@@ -691,7 +692,7 @@ var _opentok = __webpack_require__(21);
 
 var _opentok2 = _interopRequireDefault(_opentok);
 
-var _moment = __webpack_require__(8);
+var _moment = __webpack_require__(10);
 
 var _moment2 = _interopRequireDefault(_moment);
 
@@ -723,18 +724,24 @@ var agenda = new _Agenda2.default({ db: { address: process.env.MONGODB_URI || pr
 var opentok = new _opentok2.default(process.env.OPENTOK_KEY, process.env.OPENTOK_SECRET);
 var db = _mongoose2.default.connection;
 
+var offset = 0;
 agenda.define('create journey space', function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(job, done) {
-    var randomJourney, journeySpace, globalSpace, response;
+    var total, randomJourney, journeySpace, globalSpace, response;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
             _context.next = 3;
-            return db.collection('journeycontents').aggregate([{ $sample: { size: 1 } }]).toArray();
+            return db.collection('journeycontents').count();
 
           case 3:
+            total = _context.sent;
+            _context.next = 6;
+            return db.collection('journeycontents').find().skip(offset++ % total).limit(1).toArray();
+
+          case 6:
             randomJourney = _context.sent[0];
             journeySpace = new _journey_space2.default({
               journey: randomJourney.filePath,
@@ -743,18 +750,18 @@ agenda.define('create journey space', function () {
               room: randomJourney.name.toLowerCase().replace(/[^a-z]/ig, '-') + '-' + new Date().getTime(),
               startAt: (0, _moment2.default)().add(10, 'minutes').toDate()
             });
-            _context.next = 7;
+            _context.next = 10;
             return journeySpace.save();
 
-          case 7:
-            _context.next = 9;
+          case 10:
+            _context.next = 12;
             return agenda.schedule(journeySpace.startAt, 'start journey', { journey: journeySpace._id });
 
-          case 9:
-            _context.next = 11;
+          case 12:
+            _context.next = 14;
             return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
 
-          case 11:
+          case 14:
             globalSpace = _context.sent;
 
             if (globalSpace) {
@@ -765,22 +772,22 @@ agenda.define('create journey space', function () {
             } else {
               done();
             }
-            _context.next = 19;
+            _context.next = 22;
             break;
 
-          case 15:
-            _context.prev = 15;
+          case 18:
+            _context.prev = 18;
             _context.t0 = _context['catch'](0);
 
             console.log(_context.t0);
             done(_context.t0);
 
-          case 19:
+          case 22:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, this, [[0, 15]]);
+    }, _callee, this, [[0, 18]]);
   }));
 
   return function (_x, _x2) {
@@ -990,7 +997,7 @@ module.exports = Agenda;
  */
 
 const Emitter = __webpack_require__(17).EventEmitter;
-const humanInterval = __webpack_require__(7);
+const humanInterval = __webpack_require__(9);
 
 class Agenda extends Emitter {
   constructor(config, cb) {
@@ -1212,7 +1219,7 @@ module.exports = function(name) {
 
 "use strict";
 
-const humanInterval = __webpack_require__(7);
+const humanInterval = __webpack_require__(9);
 const debug = __webpack_require__(0)('agenda:processEvery');
 
 /**
@@ -1413,7 +1420,7 @@ module.exports = function() {
 
 "use strict";
 
-const humanInterval = __webpack_require__(7);
+const humanInterval = __webpack_require__(9);
 const CronTime = __webpack_require__(52).CronTime;
 const moment = __webpack_require__(53);
 const date = __webpack_require__(19);
@@ -2839,11 +2846,11 @@ module.exports = require("another-mongoose-statemachine");
 "use strict";
 
 
-var _path = __webpack_require__(6);
+var _path = __webpack_require__(8);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _express = __webpack_require__(9);
+var _express = __webpack_require__(11);
 
 var _express2 = _interopRequireDefault(_express);
 
@@ -2937,11 +2944,11 @@ var _fs = __webpack_require__(16);
 
 var _fs2 = _interopRequireDefault(_fs);
 
-var _path = __webpack_require__(6);
+var _path = __webpack_require__(8);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _express = __webpack_require__(9);
+var _express = __webpack_require__(11);
 
 var _express2 = _interopRequireDefault(_express);
 
@@ -3182,7 +3189,8 @@ router.get('/journeys/:room', function () {
                           sessionId: session.sessionId,
                           journey: selectedJourney.filePath,
                           name: req.query.name || selectedJourney.name,
-                          image: selectedJourney.image
+                          image: selectedJourney.image,
+                          owner: req.session.id
                         });
                         _context2.next = 16;
                         return newJourneySpace.save();
@@ -4019,7 +4027,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _express = __webpack_require__(9);
+var _express = __webpack_require__(11);
 
 var _express2 = _interopRequireDefault(_express);
 
@@ -4035,7 +4043,7 @@ var _redux = __webpack_require__(87);
 
 var _reactRedux = __webpack_require__(88);
 
-var _reactRouter = __webpack_require__(10);
+var _reactRouter = __webpack_require__(12);
 
 var _app = __webpack_require__(89);
 
@@ -4118,9 +4126,9 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(11);
+var _reactRouterDom = __webpack_require__(13);
 
-var _reactRouter = __webpack_require__(10);
+var _reactRouter = __webpack_require__(12);
 
 var _reactEasyState = __webpack_require__(4);
 
@@ -4128,11 +4136,11 @@ var _propTypes = __webpack_require__(27);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _moment = __webpack_require__(8);
+var _moment = __webpack_require__(10);
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _jsCookie = __webpack_require__(12);
+var _jsCookie = __webpack_require__(14);
 
 var _jsCookie2 = _interopRequireDefault(_jsCookie);
 
@@ -4183,14 +4191,14 @@ var _ref = {},
 
 
 if (__CLIENT__) {
-  var _require = __webpack_require__(13),
+  var _require = __webpack_require__(6),
       OTSession = _require.OTSession,
       OTPublisher = _require.OTPublisher,
       OTStreams = _require.OTStreams,
       OTSubscriber = _require.OTSubscriber,
       createSession = _require.createSession;
 
-  var OT = __webpack_require__(14);
+  var OT = __webpack_require__(7);
   document.body.addEventListener('click', function (e) {
     if (_state2.default.audioTag && _state2.default.audioTag.paused) {
       _state2.default.audioTag.play().then(function () {
@@ -4486,7 +4494,7 @@ var IntroWrapper = function (_Component4) {
       if (this.state.showIntro) {
         return _react2.default.createElement(
           _intro2.default,
-          { onClose: this.onClose },
+          _extends({ onClose: this.onClose }, this.props),
           _react2.default.createElement(this.props.component, this.props)
         );
       } else {
@@ -4671,14 +4679,14 @@ var _ref = {},
 
 
 if (__CLIENT__) {
-  var _require = __webpack_require__(13),
+  var _require = __webpack_require__(6),
       OTSession = _require.OTSession,
       OTPublisher = _require.OTPublisher,
       OTStreams = _require.OTStreams,
       OTSubscriber = _require.OTSubscriber,
       createSession = _require.createSession;
 
-  var OT = __webpack_require__(14);
+  var OT = __webpack_require__(7);
 }
 
 var Home = function (_Component) {
@@ -5349,9 +5357,9 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactEasyState = __webpack_require__(4);
 
-var _reactRouterDom = __webpack_require__(11);
+var _reactRouterDom = __webpack_require__(13);
 
-var _jsCookie = __webpack_require__(12);
+var _jsCookie = __webpack_require__(14);
 
 var _jsCookie2 = _interopRequireDefault(_jsCookie);
 
@@ -5403,14 +5411,14 @@ var _ref = {},
 
 
 if (__CLIENT__) {
-  var _require = __webpack_require__(13),
+  var _require = __webpack_require__(6),
       OTSession = _require.OTSession,
       OTPublisher = _require.OTPublisher,
       OTStreams = _require.OTStreams,
       OTSubscriber = _require.OTSubscriber,
       createSession = _require.createSession;
 
-  var OT = __webpack_require__(14);
+  var OT = __webpack_require__(7);
   window.state = _state2.default;
 }
 
@@ -5779,7 +5787,7 @@ var JourneyTimeline = function (_Component3) {
                 null,
                 'Breathe and center yourself'
               ),
-              journey.state === 'joined' && _react2.default.createElement(
+              journey.state === 'joined' && journey.startAt && _react2.default.createElement(
                 'p',
                 { className: 'timer', style: { marginLeft: '10px' } },
                 this.props.timer.displayTime()
@@ -6115,7 +6123,7 @@ var LeaveRoomButton = function (_Component8) {
       if (!_state2.default.audioTag.paused) {
         _state2.default.audioTag.pause();
       }
-      _this17.props.history.push('/join');
+      _this17.props.history.push('/');
     }, _temp2), _possibleConstructorReturn(_this17, _ret2);
   }
 
@@ -6191,7 +6199,7 @@ var InviteModal = function (_Component10) {
           error: false
         });
         var name = _this19.state.journeySpaceName;
-        var urlFriendlyName = name.replace(/\s+/g, '-').toLowerCase();
+        var urlFriendlyName = name.replace(/[^\w]/g, '-').toLowerCase();
         var url = window.location.protocol + '//' + window.location.host + '/' + urlFriendlyName;
         var success = _this19._copy(url);
         if (success) {
@@ -6711,8 +6719,8 @@ var JourneySpace = function (_Component11) {
                       _react2.default.createElement('i', { className: 'fa fa-user' }),
                       _react2.default.createElement(
                         'p',
-                        null,
-                        'waiting...'
+                        { style: { maxWidth: '80%', margin: '0 auto' } },
+                        'placeholder for journeyer not present'
                       )
                     )
                   );
@@ -6722,7 +6730,7 @@ var JourneySpace = function (_Component11) {
             _react2.default.createElement(
               'div',
               { className: 'col-7 col-lg-9', style: { backgroundColor: 'white' } },
-              _state2.default.session.state === 'joined' && _react2.default.createElement(_journey_starts_in2.default, { journey: _state2.default.session, timer: this.journeyStateTimer }),
+              _state2.default.session.state === 'joined' && _state2.default.session.startAt && _react2.default.createElement(_journey_starts_in2.default, { journey: _state2.default.session, timer: this.journeyStateTimer }),
               !_state2.default.session.startAt && (_state2.default.session.state === 'created' || _state2.default.session.state === 'joined' || _state2.default.session.state === 'completed') && _react2.default.createElement(
                 'div',
                 { style: { padding: '10px' } },
@@ -7547,9 +7555,9 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(11);
+var _reactRouterDom = __webpack_require__(13);
 
-var _reactRouter = __webpack_require__(10);
+var _reactRouter = __webpack_require__(12);
 
 var _reactEasyState = __webpack_require__(4);
 
@@ -7557,7 +7565,7 @@ var _reactSwipeableViews = __webpack_require__(28);
 
 var _reactSwipeableViews2 = _interopRequireDefault(_reactSwipeableViews);
 
-var _jsCookie = __webpack_require__(12);
+var _jsCookie = __webpack_require__(14);
 
 var _jsCookie2 = _interopRequireDefault(_jsCookie);
 
@@ -7577,6 +7585,26 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var _ref = {},
+    OTSession = _ref.OTSession,
+    OTPublisher = _ref.OTPublisher,
+    OTStreams = _ref.OTStreams,
+    OTSubscriber = _ref.OTSubscriber,
+    createSession = _ref.createSession;
+
+
+if (__CLIENT__) {
+  var _require = __webpack_require__(6),
+      OTSession = _require.OTSession,
+      OTPublisher = _require.OTPublisher,
+      OTStreams = _require.OTStreams,
+      OTSubscriber = _require.OTSubscriber,
+      createSession = _require.createSession;
+
+  var OT = __webpack_require__(7);
+  window.state = _state2.default;
+}
+
 var Intro = function (_Component) {
   _inherits(Intro, _Component);
 
@@ -7591,8 +7619,8 @@ var Intro = function (_Component) {
       });
     };
 
-    _this.onChangeIndex = function (index, last, _ref) {
-      var reason = _ref.reason;
+    _this.onChangeIndex = function (index, last, _ref2) {
+      var reason = _ref2.reason;
 
       _this.setState({
         index: index
@@ -7605,6 +7633,7 @@ var Intro = function (_Component) {
     };
 
     _this.state = {
+      streams: [],
       views: [_react2.default.createElement(
         'div',
         { className: 'intro-screen' },
@@ -7703,12 +7732,29 @@ var Intro = function (_Component) {
   _createClass(Intro, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      _jsCookie2.default.set('saw intro', true, { expires: 365 });
+      var _this2 = this;
+
+      // Cookie.set('saw intro', true, {expires: 365});
+
+      fetch('/api/journeys/' + this.props.match.params.room + window.location.search, { credentials: 'include' }).then(function (res) {
+        return res.json();
+      }).then(function (json) {
+        _state2.default.session = json;
+        _this2.sessionHelper = createSession({
+          apiKey: _state2.default.openTokKey,
+          sessionId: _state2.default.session.sessionId,
+          token: _state2.default.session.token,
+          onConnect: function onConnect() {},
+          onStreamsUpdated: function onStreamsUpdated(streams) {
+            _this2.setState({ streams: streams });
+          }
+        });
+      });
     }
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       return _react2.default.createElement(
         'div',
@@ -7735,14 +7781,22 @@ var Intro = function (_Component) {
             ),
             _react2.default.createElement(
               'div',
-              { style: { textAlign: 'center' } },
-              _react2.default.createElement('img', { style: { height: '150px' }, src: _state2.default.session.image })
+              { style: { justifyContent: 'center', display: 'flex' } },
+              _react2.default.createElement('img', { style: { height: '150px' }, src: _state2.default.session.image }),
+              this.sessionHelper && this.journeySpaceOwnerVideoStream && _react2.default.createElement(OTSubscriber, {
+                session: this.sessionHelper.session,
+                stream: this.journeySpaceOwnerVideoStream,
+                properties: {
+                  width: '150px',
+                  height: '150px'
+                }
+              })
             )
           ),
           _react2.default.createElement(
             _reactSwipeableViews2.default,
             { onChangeIndex: this.onChangeIndex, index: this.state.index, enableMouseEvents: true, ref: function ref(swipeable) {
-                return _this2.swipeable = swipeable;
+                return _this3.swipeable = swipeable;
               } },
             this.state.views
           ),
@@ -7753,8 +7807,8 @@ var Intro = function (_Component) {
               return _react2.default.createElement(
                 'li',
                 { style: { marginRight: '10px', cursor: 'pointer' }, onClick: function onClick() {
-                    return _this2.goTo(i);
-                  }, className: _this2.state.index === i ? 'active' : '' },
+                    return _this3.goTo(i);
+                  }, className: _this3.state.index === i ? 'active' : '' },
                 _react2.default.createElement('span', { className: 'dot' })
               );
             })
@@ -7771,6 +7825,25 @@ var Intro = function (_Component) {
           this.props.children
         )
       );
+    }
+  }, {
+    key: 'journeySpaceOwnerVideoStream',
+    get: function get() {
+      if (_state2.default.session) {
+        var owner = _state2.default.session.owner;
+        var participant = _state2.default.session.participants.find(function (p) {
+          return p.user === owner;
+        });
+        if (_state2.default.sessionId === owner) {
+          return null;
+        } else {
+          var stream = this.state.streams.find(function (s) {
+            return s.connection.id === participant.connectionId;
+          });
+          return stream;
+        }
+      }
+      return null;
     }
   }]);
 
