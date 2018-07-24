@@ -126,7 +126,7 @@ class Intro extends Component {
   }
 
   componentDidMount() {
-    // Cookie.set('saw intro', true, {expires: 365});
+    Cookie.set('saw intro', true, {expires: 365});
 
 		fetch(`/api/journeys/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
 			.then(res => res.json())
