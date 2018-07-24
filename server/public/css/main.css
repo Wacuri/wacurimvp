@@ -8645,7 +8645,6 @@ h2 {
 .journeyspace-streams {
   padding: 15px 10px 0 10px; }
   .journeyspace-streams li {
-    border: 1px solid #535353;
     min-height: calc(100vw * .4);
     margin-bottom: 10px; }
     @media (min-width: 992px) {
@@ -8655,6 +8654,7 @@ h2 {
     border: none; }
 
 .video-placeholder {
+  border: 1px solid #535353;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -8670,11 +8670,18 @@ h2 {
 .journeyspace-stream {
   position: relative; }
   .journeyspace-stream > div {
+    border: 1px solid #535353;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 25px);
     position: absolute;
     top: 0;
     left: 0; }
+  .journeyspace-stream .journeyspace-stream-controls {
+    position: absolute;
+    bottom: 0;
+    top: auto;
+    height: 25px;
+    border: none; }
 
 .journeyspace-streams-count-1 .journeyspace-me {
   display: none; }
@@ -8908,5 +8915,21 @@ h2 {
   text-decoration: none;
   bottom: 10px;
   right: 10px; }
+
+.intro-wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; }
+  .intro-wrapper .intro, .intro-wrapper .intro-next {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; }
+  .intro-wrapper .intro {
+    z-index: 100; }
+  .intro-wrapper .intro-next {
+    z-index: 10; }
 
 /*# sourceMappingURL=main.css.map*/
