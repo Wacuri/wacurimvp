@@ -3935,15 +3935,15 @@ router.post('/event', function () {
             console.log(req.body.event, JSON.stringify(req.body, null, 2));
 
             _context18.t0 = req.body.event;
-            _context18.next = _context18.t0 === 'connectionCreated' ? 8 : _context18.t0 === 'connectionDestroyed' ? 9 : 23;
+            _context18.next = _context18.t0 === 'connectionCreated' ? 8 : _context18.t0 === 'connectionDestroyed' ? 9 : 22;
             break;
 
           case 8:
-            return _context18.abrupt('break', 23);
+            return _context18.abrupt('break', 22);
 
           case 9:
             if (!journeySpace) {
-              _context18.next = 22;
+              _context18.next = 21;
               break;
             }
 
@@ -3954,7 +3954,7 @@ router.post('/event', function () {
             participant = _context18.sent;
 
             if (!participant) {
-              _context18.next = 22;
+              _context18.next = 21;
               break;
             }
 
@@ -3963,19 +3963,21 @@ router.post('/event', function () {
             return participant.save();
 
           case 17:
-            participant;
-            _context18.next = 20;
+            _context18.next = 19;
             return _journey_space2.default.findOne({ room: 'temp-home-location' }).exec();
 
-          case 20:
+          case 19:
             globalSpace = _context18.sent;
 
             if (globalSpace) {
               opentok.signal(globalSpace.sessionId, null, { 'type': 'journeyerLeftSpace', 'data': JSON.stringify(participant.toJSON()) }, function () {});
             }
 
+          case 21:
+            return _context18.abrupt('break', 22);
+
           case 22:
-            return _context18.abrupt('break', 23);
+            res.sendStatus(200);
 
           case 23:
           case 'end':
@@ -4418,6 +4420,7 @@ var AutoCreatedJourneysQueue = function (_Component3) {
 
         _this5.sessionHelper.session.on('signal:journeyerLeftSpace', function (event) {
           var participant = JSON.parse(event.data);
+          console.log('Event: left space', event.data);
           var journey = _state2.default.joinableJourneys.find(function (j) {
             return j._id === participant.journeySpace;
           });
