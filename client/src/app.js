@@ -4,9 +4,11 @@ import { withRouter } from 'react-router';
 import { view } from 'react-easy-state';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import Cookie from 'js-cookie';
 import Header from './components/header';
 import Home from './components/home';
 import JourneySpace from './components/journey_space';
+import Intro from './components/intro';
 import CountdownMessage from './components/countdown_message';
 import state from './state';
 
@@ -133,11 +135,10 @@ class AutoCreatedJourneysQueue extends Component {
     fetch(`/api/journeys/${roomUrl}`, {credentials: 'include'})
       .then(res => res.json())
       .then(json => {
-        state.session = json;
         this.sessionHelper = createSession({
           apiKey: state.openTokKey,
-          sessionId: state.session.sessionId,
-          token: state.session.token,
+          sessionId: json.sessionId,
+          token: json.token,
           onConnect: () => {
           }
         });
@@ -198,16 +199,70 @@ class AutoCreatedJourneysQueue extends Component {
   }
 }
 
+class IntroWrapper extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showIntro: !Cookie.get('saw intro')
+    }
+  }
+
+  componentDidMount() {
+  }
+
+  onClose = () => {
+    this.setState({
+      showIntro: false
+    });
+  }
+
+  render() {
+    if (this.state.showIntro) {
+      return (
+        <Intro onClose={this.onClose}>
+          <this.props.component {...this.props}/>
+        </Intro>
+      )
+    } else {
+      return <this.props.component {...this.props}/>
+    }
+  }
+}
+
+const RouteWithIntro = ({component: Component, ...rest}) => {
+  const showIntro = !Cookie.get('saw intro');
+  return (
+    <div>
+      {showIntro && 
+        <Route {...rest} render={renderProps => {
+          return (
+            <IntroWrapper component={Component} {...renderProps}/>
+          )
+        }}/>
+      }
+
+      {!showIntro &&
+        <Route {...rest} render={renderProps => {
+          return (
+            <Component {...renderProps} />
+          )
+        }}/>
+      }
+    </div>
+  )
+}
+
+
 class App extends Component {
   render() {
     return (
       <div>
         <Header />
         <Switch>
-          <Route exact path="/login" component={withRouter(Login)} />
-          <Route exact path="/join" component={view(AutoCreatedJourneysQueue)} />
-          <Route exact path="/" component={Home} />
-          <Route exact path="/:room" component={JourneySpace} />
+          <RouteWithIntro exact path="/login" component={withRouter(Login)} />
+          <RouteWithIntro exact path="/join" component={view(AutoCreatedJourneysQueue)} />
+          <RouteWithIntro exact path="/" component={Home} />
+          <RouteWithIntro exact path="/:room" component={JourneySpace} />
         </Switch>
       </div>
     )

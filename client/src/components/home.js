@@ -32,11 +32,10 @@ export default class Home extends Component {
     fetch(`/api/journeys/${roomUrl}`)
       .then(res => res.json())
       .then(json => {
-        state.session = json;
         this.sessionHelper = createSession({
           apiKey: state.openTokKey,
-          sessionId: state.session.sessionId,
-          token: state.session.token,
+          sessionId: json.sessionId,
+          token: json.token,
           onConnect: () => {
             setTimeout(this.refreshSession, 1000);
             fetch(`/api/journeys/${roomUrl}/joined`, {

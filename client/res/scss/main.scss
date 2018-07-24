@@ -436,3 +436,26 @@ h2 {
     right: 10px;
   }
 }
+
+.intro-wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+
+  .intro, .intro-next {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .intro {
+    z-index: 100;
+  }
+
+  .intro-next {
+    z-index: 10;
+  }
+}
