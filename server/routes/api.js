@@ -241,7 +241,7 @@ router.get('/sessions/test/temp-home-location', async (req, res) => {
     url: "http://www.news.google.com"
   }
 
-  opentok.signal(journeySpace.sessionId, null, {type: 'displayJourneyRequest', data: JSON.stringify(messageData)});
+  opentok.signal(journeySpace.sessionId, null, {type: 'displayJourneyRequest', data: JSON.stringify(messageData)}, () => {});
   return res.sendStatus(200);
   }
   res.sendStatus(200);
@@ -254,7 +254,7 @@ router.get('/journeys/:room/connections/:connection/ready', async (req, res) => 
     const participant = await JourneyParticipant.findOne({session: journeySpace, connectionId: connection});
     participant.ready = true;
     await participant.save();
-    opentok.signal(journeySpace.sessionId, null, {type: 'ready', data: 'foo'});
+    opentok.signal(journeySpace.sessionId, null, {type: 'ready', data: 'foo'}, () => {});
     const allReady = (await JourneyParticipant.count({session: journeySpace, ready: false, present: true})) === 0;
     if (allReady) {
       // signal(journeySpace.sessionId, {type: 'startJourney', data: 'foo'});
@@ -298,8 +298,9 @@ router.post('/journeys/:room/start', async (req, res) => {
     } catch(e) {
       console.log('error starting journey', e);
     }
-    opentok.signal(journeySpace.sessionId, null, {type: 'startJourney', data: ''});
+    opentok.signal(journeySpace.sessionId, null, {type: 'startJourney', data: ''}, () => {});
   }
+  res.sendStatus(200);
 });
 
 router.post('/journeys/:room/pause', async (req, res) => {
@@ -311,7 +312,7 @@ router.post('/journeys/:room/pause', async (req, res) => {
     } catch(e) {
       console.log('error pausing journey', e);
     }
-    opentok.signal(journeySpace.sessionId, {type: 'pauseJourney', data: ''});
+    opentok.signal(journeySpace.sessionId, null, {type: 'pauseJourney', data: ''}, () => {});
   }
 });
 
