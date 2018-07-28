@@ -919,7 +919,7 @@ agenda.define('start journey', function () {
           case 7:
             globalSpace = _context3.sent;
             _context3.next = 10;
-            return _journey_participant2.default.find({ journey: journeySpace._id, present: true }).exec();
+            return _journey_participant2.default.find({ journeySpace: journeySpace._id, present: true }).exec();
 
           case 10:
             participants = _context3.sent;
@@ -3041,7 +3041,7 @@ router.get('/journeys/:room', function () {
             journeySpace = _context3.sent;
 
             if (!journeySpace) {
-              _context3.next = 39;
+              _context3.next = 44;
               break;
             }
 
@@ -3102,17 +3102,17 @@ router.get('/journeys/:room', function () {
           case 21:
             participants = _context3.sent;
             _context3.next = 24;
-            return _journey_participant2.default.findOne({ journeySpace: journeySpace, user: req.session.id }).lean().exec();
+            return _journey_participant2.default.findOne({ journeySpace: journeySpace, user: req.session.id }).exec();
 
           case 24:
             currentUserParticipant = _context3.sent;
 
             if (currentUserParticipant) {
-              _context3.next = 34;
+              _context3.next = 36;
               break;
             }
 
-            newParticipant = new _journey_participant2.default({ journeySpace: journeySpace, user: req.session.id });
+            newParticipant = new _journey_participant2.default({ journeySpace: journeySpace, user: req.session.id, present: true });
             _context3.next = 29;
             return newParticipant.save();
 
@@ -3127,18 +3127,25 @@ router.get('/journeys/:room', function () {
             if (globalSpace) {
               opentok.signal(globalSpace.sessionId, null, { 'type': 'newJoin', 'data': JSON.stringify(newParticipant.toJSON()) }, function () {});
             }
+            _context3.next = 39;
+            break;
 
-          case 34:
+          case 36:
+            currentUserParticipant.present = true;
+            _context3.next = 39;
+            return currentUserParticipant.save();
+
+          case 39:
             response = journeySpace.toJSON();
 
             response.participants = participants;
             res.json(_extends({}, response, {
               token: generateToken(journeySpace.sessionId)
             }));
-            _context3.next = 40;
+            _context3.next = 45;
             break;
 
-          case 39:
+          case 44:
             opentok.createSession(function () {
               var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(err, session) {
                 var db, selectedJourney, randomJourney, newJourneySpace, response;
@@ -3217,7 +3224,7 @@ router.get('/journeys/:room', function () {
               };
             }());
 
-          case 40:
+          case 45:
           case 'end':
             return _context3.stop();
         }
