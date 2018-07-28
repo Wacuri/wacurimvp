@@ -3607,7 +3607,7 @@ router.get('/sessions/test/temp-home-location', function () {
             };
 
 
-            opentok.signal(journeySpace.sessionId, null, { type: 'displayJourneyRequest', data: JSON.stringify(messageData) });
+            opentok.signal(journeySpace.sessionId, null, { type: 'displayJourneyRequest', data: JSON.stringify(messageData) }, function () {});
             return _context11.abrupt('return', res.sendStatus(200));
 
           case 8:
@@ -3657,7 +3657,7 @@ router.get('/journeys/:room/connections/:connection/ready', function () {
             return participant.save();
 
           case 11:
-            opentok.signal(journeySpace.sessionId, null, { type: 'ready', data: 'foo' });
+            opentok.signal(journeySpace.sessionId, null, { type: 'ready', data: 'foo' }, function () {});
             _context12.next = 14;
             return _journey_participant2.default.count({ session: journeySpace, ready: false, present: true });
 
@@ -3811,9 +3811,12 @@ router.post('/journeys/:room/start', function () {
             console.log('error starting journey', _context15.t0);
 
           case 13:
-            opentok.signal(journeySpace.sessionId, null, { type: 'startJourney', data: '' });
+            opentok.signal(journeySpace.sessionId, null, { type: 'startJourney', data: '' }, function () {});
 
           case 14:
+            res.sendStatus(200);
+
+          case 15:
           case 'end':
             return _context15.stop();
         }
@@ -3860,7 +3863,7 @@ router.post('/journeys/:room/pause', function () {
             console.log('error pausing journey', _context16.t0);
 
           case 13:
-            opentok.signal(journeySpace.sessionId, { type: 'pauseJourney', data: '' });
+            opentok.signal(journeySpace.sessionId, null, { type: 'pauseJourney', data: '' }, function () {});
 
           case 14:
           case 'end':
