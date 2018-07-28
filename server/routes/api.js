@@ -57,15 +57,18 @@ router.get('/journeys/:room', async (req, res) => {
       await journeySpace.save();
     }
     const participants = await JourneyParticipant.find({journeySpace, present: true}).lean().exec();
-    const currentUserParticipant = await JourneyParticipant.findOne({journeySpace, user: req.session.id}).lean().exec();
+    const currentUserParticipant = await JourneyParticipant.findOne({journeySpace, user: req.session.id}).exec();
     if (!currentUserParticipant) {
-      const newParticipant = new JourneyParticipant({journeySpace, user: req.session.id});
+      const newParticipant = new JourneyParticipant({journeySpace, user: req.session.id, present: true});
       await newParticipant.save();
       participants.push(newParticipant);
       const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
       if (globalSpace) {
         opentok.signal(globalSpace.sessionId, null, { 'type': 'newJoin', 'data': JSON.stringify(newParticipant.toJSON()) }, () => {});
       }
+    } else {
+      currentUserParticipant.present = true;
+      await currentUserParticipant.save();
     }
     const response = journeySpace.toJSON();
     response.participants = participants;

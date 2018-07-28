@@ -64,7 +64,7 @@ agenda.define('start journey', async function(job, done) {
     const {journey} = job.attrs.data;
     const journeySpace = await JourneySpace.findById(journey).exec();
     const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
-    const participants = await JourneyParticipant.find({journey: journeySpace._id, present: true}).exec();
+    const participants = await JourneyParticipant.find({journeySpace: journeySpace._id, present: true}).exec();
     if (participants.length > 1) {
       await journeySpace.start();
       opentok.signal(journeySpace.sessionId, null, { 'type': 'startJourney', 'data': JSON.stringify({journey}) }, () => {});
