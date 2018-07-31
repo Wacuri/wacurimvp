@@ -82,6 +82,7 @@ class AudioPlayTickEmitter extends AbstractTimerEmitter {
 
     audioElement.addEventListener('loadedmetadata', (e) => {
       audioElement.addEventListener('timeupdate', this.onTimeUpdate);
+      this.total = e.target.duration * 1000;
       this.emit('tick', audioElement.currentTime * 1000);
     });
   }
@@ -232,6 +233,15 @@ class JourneyStateProgressBar extends Component {
 
 class JourneyTimeline extends Component {
 
+  constructor(props) {
+    super(props);
+    props.timer.on('tick', (current) => {
+      this.setState({
+        timerValue: current
+      });
+    });
+  }
+
   componentWillReceiveProps(newProps) {
     newProps.timer.on('tick', (current) => {
       this.setState({
@@ -273,6 +283,11 @@ class JourneyTimeline extends Component {
     return items[idx].offsetHeight;
   }
 
+  onSeek = (e) => {
+    const percent = e.nativeEvent.offsetX / this.progressBar.offsetWidth;
+    this.props.seekTo(percent);
+  }
+
   render() {
     const {journey} = this.props;
     return (
@@ -296,7 +311,7 @@ class JourneyTimeline extends Component {
               }
               {(journey.state === 'started' || journey.state === 'paused') &&
                 <div style={{position: 'absolute', bottom: '-12px', left: '10px', right: '10px'}}>
-                  <progress max={this.props.timer.total} value={this.props.timer.currentTime} style={{width: '100%'}}></progress>
+                  <progress ref={(progressBar) => this.progressBar = progressBar} onClick={this.onSeek} max={this.props.timer.total} value={this.props.timer.currentTime} style={{width: '90%'}}></progress>
                 </div>
               }
             </div>
@@ -616,35 +631,33 @@ class JourneySpace extends Component {
 
 	componentDidMount() {
     state.audioTag.addEventListener('ended', (event) => {
-      if (!/sharing\.mp3/.test(state.audioTag.src)) {
-        if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-          this.publisher.state.publisher.publishAudio(true);
-        }
-        this.setState({
-          playerState: 'ended'
-        });
+      if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+        this.publisher.state.publisher.publishAudio(true);
+      }
+      this.setState({
+        playerState: 'ended'
+      });
 
-        fetch(`/api/journeys/${this.props.match.params.room}/completed`, {
-          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: 'same-origin', // include, same-origin, *omit
-          headers: {
-            'content-type': 'application/json'
-          },
-          method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          mode: 'cors', // no-cors, cors, *same-origin
-          redirect: 'follow', // manual, *follow, error
-          referrer: 'no-referrer', // *client, no-referrer
-        });
+      fetch(`/api/journeys/${this.props.match.params.room}/completed`, {
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, same-origin, *omit
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, cors, *same-origin
+        redirect: 'follow', // manual, *follow, error
+        referrer: 'no-referrer', // *client, no-referrer
+      });
 
-        state.audioTag.pause();
-        state.audioTag.currentTime = 0;
-        state.audioTag.src = '/sharing.mp3';
+      if (decodeURIComponent(state.audioTag.src) === `${window.location.origin}${state.session.journey}`) {
+        state.audioTag.enqueue(['/chime.mp3', '/sharing.mp3']).then(() => {
+          // sharing audio ended
+          if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+            this.publisher.state.publisher.publishAudio(true);
+          }
+        });
         state.audioTag.play();
-      } else {
-        // sharing audio ended
-        if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-          this.publisher.state.publisher.publishAudio(true);
-        }
       }
     });
 
@@ -751,16 +764,6 @@ class JourneySpace extends Component {
             this.setState({
               playerState: 'playing'
             });
-          } else {
-            state.audioTag.pause();
-            this.setState({
-              playerState: 'paused'
-            });
-          }
-
-          if (state.session.state === 'completed') {
-            state.audioTag.src = '/sharing.mp3';
-            state.audioTag.play();
           }
         });
         
@@ -824,7 +827,10 @@ class JourneySpace extends Component {
     switch(state.session.state) {
       case 'started':
       case 'paused':
-        return new AudioPlayTickEmitter(state.audioTag);
+        if (!this.playerTimeEmitter) {
+          this.playerTimeEmitter = new AudioPlayTickEmitter(state.audioTag);
+        }
+        return this.playerTimeEmitter;
       default:
         if (!this.secondsEmitter) {
           this.secondsEmitter = new SecondsTimerEmitter(new Date(state.session.createdAt), new Date(state.session.startAt));
@@ -939,6 +945,11 @@ class JourneySpace extends Component {
     window.location = url + `?journey=${state.session.name}&name=${name}`;
   }
 
+  seekTo = (percent) => {
+    state.audioTag.currentTime = state.audioTag.duration * percent;
+    state.audioTag.play();
+  }
+
 	render() {
     const currentParticipant = this.state.session && this.state.session.connection && state.session && state.session.participants.find(participant => participant.connectionId === this.state.session.connection.id);
     let currentUserHasFlaggedJourney = state.session && state.session.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
@@ -1024,7 +1035,7 @@ class JourneySpace extends Component {
                   <div style={{padding: '10px'}}>
                     <LeaveRoomButton history={this.props.history}/>
                   </div>
-                  <JourneyTimeline journey={state.session} timer={this.journeyStateTimer}/>
+                  <JourneyTimeline journey={state.session} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
 
                   <div className='journeyspace-meta pr-3 pl-3 pt-3'>
                     {state.session.startAt && ['joined', 'created'].indexOf(state.session.state) > -1 && <SharePrompt onInvite={this.onInvite}/>}
