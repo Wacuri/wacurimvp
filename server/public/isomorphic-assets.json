@@ -5,9 +5,7 @@
   "chunks": {
     "main": [
       "./js/index.js",
-      "css/main.css",
-      "./js/index.js.map",
-      "css/main.css.map"
+      "./js/index.js.map"
     ]
   }
 }

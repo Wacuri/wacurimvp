@@ -88,7 +88,124 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _reactEasyState = __webpack_require__(4);
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Deferred = function Deferred() {
+  var _this = this;
+
+  _classCallCheck(this, Deferred);
+
+  this.promise = new Promise(function (resolve, reject) {
+    _this.reject = reject;
+    _this.resolve = resolve;
+  });
+};
+
+var AudioQueue = function () {
+  function AudioQueue(file) {
+    var _this2 = this;
+
+    _classCallCheck(this, AudioQueue);
+
+    this.file = file;
+    this.player = new Audio(file);
+    this.queue = [];
+    this.track = 0;
+    this.player.addEventListener('ended', function (e) {
+      _this2.track++;
+      if (_this2.queue.length > _this2.track) {
+        _this2.player.src = _this2.queue[_this2.track];
+        _this2.play();
+      } else {
+        _this2.track = 0;
+        _this2.queueCompletionPromise.resolve();
+      }
+    });
+    this.queueCompletionPromise = new Deferred();
+  }
+
+  _createClass(AudioQueue, [{
+    key: 'play',
+    value: function play() {
+      if (!this.src) {
+        this.track = 0;
+        this.player.src = this.queue[this.track];
+      }
+      return this.player.play();
+    }
+  }, {
+    key: 'pause',
+    value: function pause() {
+      return this.player.pause();
+    }
+  }, {
+    key: 'enqueue',
+    value: function enqueue(files) {
+      this.queue = [].concat(_toConsumableArray(files));
+      this.queueCompletionPromise = new Deferred();
+      if (this.paused) {
+        this.track = 0;
+        this.player.src = this.queue[0];
+      }
+      return this.queueCompletionPromise.promise;
+    }
+  }, {
+    key: 'load',
+    value: function load() {
+      return this.player.load();
+    }
+  }, {
+    key: 'addEventListener',
+    value: function addEventListener(event, listener) {
+      return this.player.addEventListener(event, listener);
+    }
+  }, {
+    key: 'removeEventListener',
+    value: function removeEventListener(event, listener) {
+      return this.player.removeEventListener(event, listener);
+    }
+  }, {
+    key: 'src',
+    set: function set(file) {
+      this.queue = [file];
+      this.player.src = file;
+    },
+    get: function get() {
+      return this.player.src;
+    }
+  }, {
+    key: 'currentTime',
+    set: function set(time) {
+      this.player.currentTime = time;
+    },
+    get: function get() {
+      return this.player.currentTime;
+    }
+  }, {
+    key: 'duration',
+    get: function get() {
+      return this.player.duration;
+    }
+  }, {
+    key: 'paused',
+    get: function get() {
+      return this.player.paused;
+    }
+  }, {
+    key: 'readyState',
+    get: function get() {
+      return this.player.readyState;
+    }
+  }]);
+
+  return AudioQueue;
+}();
 
 var state = (0, _reactEasyState.store)(_extends({
   session: null,
@@ -98,7 +215,7 @@ var state = (0, _reactEasyState.store)(_extends({
   loggedIn: false,
   user: null,
   location: '/',
-  audioTag: __CLIENT__ ? new Audio('/journeys/Journey to The Magnetic Field of the Earth+Music.mp3') : null
+  audioTag: __CLIENT__ ? new AudioQueue('/journeys/Journey to The Magnetic Field of the Earth+Music.mp3') : null
 }, global.__INITIAL_STATE__ || {}));
 
 exports.default = state;
@@ -5529,6 +5646,7 @@ var AudioPlayTickEmitter = function (_AbstractTimerEmitter2) {
 
     audioElement.addEventListener('loadedmetadata', function (e) {
       audioElement.addEventListener('timeupdate', _this4.onTimeUpdate);
+      _this4.total = e.target.duration * 1000;
       _this4.emit('tick', audioElement.currentTime * 1000);
     });
     return _this4;
@@ -5749,10 +5867,22 @@ var JourneyStateProgressBar = function (_Component2) {
 var JourneyTimeline = function (_Component3) {
   _inherits(JourneyTimeline, _Component3);
 
-  function JourneyTimeline() {
+  function JourneyTimeline(props) {
     _classCallCheck(this, JourneyTimeline);
 
-    return _possibleConstructorReturn(this, (JourneyTimeline.__proto__ || Object.getPrototypeOf(JourneyTimeline)).apply(this, arguments));
+    var _this9 = _possibleConstructorReturn(this, (JourneyTimeline.__proto__ || Object.getPrototypeOf(JourneyTimeline)).call(this, props));
+
+    _this9.onSeek = function (e) {
+      var percent = e.nativeEvent.offsetX / _this9.progressBar.offsetWidth;
+      _this9.props.seekTo(percent);
+    };
+
+    props.timer.on('tick', function (current) {
+      _this9.setState({
+        timerValue: current
+      });
+    });
+    return _this9;
   }
 
   _createClass(JourneyTimeline, [{
@@ -5828,7 +5958,9 @@ var JourneyTimeline = function (_Component3) {
               (journey.state === 'started' || journey.state === 'paused') && _react2.default.createElement(
                 'div',
                 { style: { position: 'absolute', bottom: '-12px', left: '10px', right: '10px' } },
-                _react2.default.createElement('progress', { max: this.props.timer.total, value: this.props.timer.currentTime, style: { width: '100%' } })
+                _react2.default.createElement('progress', { ref: function ref(progressBar) {
+                    return _this11.progressBar = progressBar;
+                  }, onClick: this.onSeek, max: this.props.timer.total, value: this.props.timer.currentTime, style: { width: '90%' } })
               )
             )
           ),
@@ -6437,6 +6569,11 @@ var JourneySpace = function (_Component11) {
       window.location = url + ('?journey=' + _state2.default.session.name + '&name=' + name);
     };
 
+    _this20.seekTo = function (percent) {
+      _state2.default.audioTag.currentTime = _state2.default.audioTag.duration * percent;
+      _state2.default.audioTag.play();
+    };
+
     _this20.state = {
       streams: [],
       publisherId: '',
@@ -6460,35 +6597,33 @@ var JourneySpace = function (_Component11) {
       var _this21 = this;
 
       _state2.default.audioTag.addEventListener('ended', function (event) {
-        if (!/sharing\.mp3/.test(_state2.default.audioTag.src)) {
-          if (_this21.publisher && _this21.publisher.state && _this21.publisher.state.publisher) {
-            _this21.publisher.state.publisher.publishAudio(true);
-          }
-          _this21.setState({
-            playerState: 'ended'
-          });
+        if (_this21.publisher && _this21.publisher.state && _this21.publisher.state.publisher) {
+          _this21.publisher.state.publisher.publishAudio(true);
+        }
+        _this21.setState({
+          playerState: 'ended'
+        });
 
-          fetch('/api/journeys/' + _this21.props.match.params.room + '/completed', {
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, same-origin, *omit
-            headers: {
-              'content-type': 'application/json'
-            },
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: 'cors', // no-cors, cors, *same-origin
-            redirect: 'follow', // manual, *follow, error
-            referrer: 'no-referrer' // *client, no-referrer
-          });
+        fetch('/api/journeys/' + _this21.props.match.params.room + '/completed', {
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, same-origin, *omit
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, cors, *same-origin
+          redirect: 'follow', // manual, *follow, error
+          referrer: 'no-referrer' // *client, no-referrer
+        });
 
-          _state2.default.audioTag.pause();
-          _state2.default.audioTag.currentTime = 0;
-          _state2.default.audioTag.src = '/sharing.mp3';
+        if (decodeURIComponent(_state2.default.audioTag.src) === '' + window.location.origin + _state2.default.session.journey) {
+          _state2.default.audioTag.enqueue(['/chime.mp3', '/sharing.mp3']).then(function () {
+            // sharing audio ended
+            if (_this21.publisher && _this21.publisher.state && _this21.publisher.state.publisher) {
+              _this21.publisher.state.publisher.publishAudio(true);
+            }
+          });
           _state2.default.audioTag.play();
-        } else {
-          // sharing audio ended
-          if (_this21.publisher && _this21.publisher.state && _this21.publisher.state.publisher) {
-            _this21.publisher.state.publisher.publishAudio(true);
-          }
         }
       });
 
@@ -6594,16 +6729,6 @@ var JourneySpace = function (_Component11) {
             _this21.setState({
               playerState: 'playing'
             });
-          } else {
-            _state2.default.audioTag.pause();
-            _this21.setState({
-              playerState: 'paused'
-            });
-          }
-
-          if (_state2.default.session.state === 'completed') {
-            _state2.default.audioTag.src = '/sharing.mp3';
-            _state2.default.audioTag.play();
           }
         });
 
@@ -6773,7 +6898,7 @@ var JourneySpace = function (_Component11) {
                 { style: { padding: '10px' } },
                 _react2.default.createElement(LeaveRoomButton, { history: this.props.history })
               ),
-              _react2.default.createElement(JourneyTimeline, { journey: _state2.default.session, timer: this.journeyStateTimer }),
+              _react2.default.createElement(JourneyTimeline, { journey: _state2.default.session, timer: this.journeyStateTimer, seekTo: this.seekTo }),
               _react2.default.createElement(
                 'div',
                 { className: 'journeyspace-meta pr-3 pl-3 pt-3' },
@@ -6832,7 +6957,10 @@ var JourneySpace = function (_Component11) {
       switch (_state2.default.session.state) {
         case 'started':
         case 'paused':
-          return new AudioPlayTickEmitter(_state2.default.audioTag);
+          if (!this.playerTimeEmitter) {
+            this.playerTimeEmitter = new AudioPlayTickEmitter(_state2.default.audioTag);
+          }
+          return this.playerTimeEmitter;
         default:
           if (!this.secondsEmitter) {
             this.secondsEmitter = new SecondsTimerEmitter(new Date(_state2.default.session.createdAt), new Date(_state2.default.session.startAt));
