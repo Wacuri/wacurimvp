@@ -7,8 +7,8 @@ import logo from 'file-loader!isomorphic-loader!../../res/images/CuriousLive-log
 const Header = () => (
   <div className="header" style={{display: 'flex', alignItems: 'center'}}>
     <h1 className='logo'><img src={logo}/></h1>
-    {state.session && !state.session.startAt &&
-      <h2 style={{color: 'white', fontSize: '16px'}}>{state.session.name}</h2>
+    {state.journey && !state.journey.startAt &&
+      <h2 style={{color: 'white', fontSize: '16px'}}>{state.journey.name}</h2>
     }
     {false && state.loggedIn && state.user &&
       <div>

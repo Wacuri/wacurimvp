@@ -650,7 +650,7 @@ class JourneySpace extends Component {
         referrer: 'no-referrer', // *client, no-referrer
       });
 
-      if (decodeURIComponent(state.audioTag.src) === `${window.location.origin}${state.session.journey}`) {
+      if (decodeURIComponent(state.audioTag.src) === `${window.location.origin}${state.journey.journey}`) {
         state.audioTag.enqueue(['/chime.mp3', '/sharing.mp3']).then(() => {
           // sharing audio ended
           if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
@@ -664,15 +664,15 @@ class JourneySpace extends Component {
 		fetch(`/api/journeys/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
 			.then(res => res.json())
 			.then(json => {
-				state.session = json;
+				state.journey = json;
 
-        state.audioTag.src = state.session.journey;
+        state.audioTag.src = state.journey.journey;
         state.audioTag.currentTime = 0;
 
         this.sessionHelper = createSession({
           apiKey: state.openTokKey,
-          sessionId: state.session.sessionId,
-          token: state.session.token,
+          sessionId: state.journey.sessionId,
+          token: state.journey.token,
           onConnect: () => {
             console.log('assigned connection to publisher', this.sessionHelper.session.connection);
             fetch(`/api/journeys/${this.props.match.params.room}/joined`, {
@@ -747,15 +747,15 @@ class JourneySpace extends Component {
 
         this.sessionHelper.session.on("signal:journeyUpdated", (event) => {
           const journey = JSON.parse(event.data);
-          state.session = journey;
+          state.journey = journey;
 
-          if (state.session.state != 'completed') {
+          if (state.journey.state != 'completed') {
             // if we are in completed state, then audio may be playing the sharing prompt
-            state.audioTag.src = state.session.journey;
+            state.audioTag.src = state.journey.journey;
             state.audioTag.currentTime = 0;
           }
 
-          if (state.session.state === 'started') {
+          if (state.journey.state === 'started') {
 
             if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
               this.publisher.state.publisher.publishAudio(false);
@@ -769,7 +769,7 @@ class JourneySpace extends Component {
         
 
         this.sessionHelper.session.on("signal:fail", (event) => {
-          state.session.state = 'failed';
+          state.journey.state = 'failed';
         });
 
 
@@ -778,10 +778,10 @@ class JourneySpace extends Component {
         });
 
         const onAudioCanPlay = (event) => { 
-          if (state.session.state === 'started') {
+          if (state.journey.state === 'started') {
             state.audioTag.play();
-            if (!isNaN(state.session.currentTime)) {
-              state.audioTag.currentTime = state.session.currentTime;
+            if (!isNaN(state.journey.currentTime)) {
+              state.audioTag.currentTime = state.journey.currentTime;
             }
           }
           state.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
@@ -807,7 +807,7 @@ class JourneySpace extends Component {
 		fetch(`/api/journeys/${this.props.match.params.room}`, {credentials: 'include'})
 			.then(res => res.json())
 			.then(json => {
-				state.session = json;
+				state.journey = json;
       });
   }
 
@@ -819,12 +819,12 @@ class JourneySpace extends Component {
   }
 
   get isHostUser() {
-    const currentParticipant = this.state.session && this.state.session.connection && state.session && state.session.participants.find(participant => participant.connectionId === this.state.session.connection.id);
-    return currentParticipant && state.session.participants.indexOf(currentParticipant) === 0
+    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
+    return currentParticipant && state.journey.participants.indexOf(currentParticipant) === 0
   }
 
   get journeyStateTimer() {
-    switch(state.session.state) {
+    switch(state.journey.state) {
       case 'started':
       case 'paused':
         if (!this.playerTimeEmitter) {
@@ -833,7 +833,7 @@ class JourneySpace extends Component {
         return this.playerTimeEmitter;
       default:
         if (!this.secondsEmitter) {
-          this.secondsEmitter = new SecondsTimerEmitter(new Date(state.session.createdAt), new Date(state.session.startAt));
+          this.secondsEmitter = new SecondsTimerEmitter(new Date(state.journey.createdAt), new Date(state.journey.startAt));
         }
         return this.secondsEmitter;
     }
@@ -913,14 +913,14 @@ class JourneySpace extends Component {
       mode: 'cors',
     })
       .then(res => res.json())
-      .then(json => state.session = json);
+      .then(json => state.journey = json);
   }
 
   onShare = (e) => {
     navigator.share({
       title: 'Take a Journey With Me!',
-      text: `Join me on ${state.session.name}`,
-      url: `${window.location.protocol}//${window.location.host}/${state.session.room}`,
+      text: `Join me on ${state.journey.name}`,
+      url: `${window.location.protocol}//${window.location.host}/${state.journey.room}`,
     });
   }
 
@@ -942,7 +942,7 @@ class JourneySpace extends Component {
     this.setState({
       showShareModal: false
     });
-    window.location = url + `?journey=${state.session.name}&name=${name}`;
+    window.location = url + `?journey=${state.journey.name}&name=${name}`;
   }
 
   seekTo = (percent) => {
@@ -951,8 +951,8 @@ class JourneySpace extends Component {
   }
 
 	render() {
-    const currentParticipant = this.state.session && this.state.session.connection && state.session && state.session.participants.find(participant => participant.connectionId === this.state.session.connection.id);
-    let currentUserHasFlaggedJourney = state.session && state.session.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
+    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
+    let currentUserHasFlaggedJourney = state.journey && state.journey.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
 		return (
 			<div className='journeyspace' style={{position: 'relative'}}>
 
@@ -962,8 +962,8 @@ class JourneySpace extends Component {
                 <div className='col-5 col-lg-3'>
                   <ul className='journeyspace-streams' style={{margin: 0}}>
                     <li>
-                      <img style={{width: '100%'}} src={state.session.image}/>
-                      <h2 style={{flex: 5}} className='journeyspace-title'>{state.session.name}</h2>
+                      <img style={{width: '100%'}} src={state.journey.image}/>
+                      <h2 style={{flex: 5}} className='journeyspace-title'>{state.journey.name}</h2>
 
                     </li>
                     <li className='journeyspace-stream journeyspace-me'>
@@ -976,8 +976,8 @@ class JourneySpace extends Component {
                     </li>
 
                     {this.state.streams.map(stream => {
-                      const participant = state.session.participants.find(participant => participant.connectionId === stream.connection.id);
-                      const hasFlagged = !!state.session.flags.find(flag => flag.user === state.sessionId && flag.flagged === stream.id);
+                      const participant = state.journey.participants.find(participant => participant.connectionId === stream.connection.id);
+                      const hasFlagged = !!state.journey.flags.find(flag => flag.user === state.sessionId && flag.flagged === stream.id);
                       return (
                         <li className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
                             <OTSubscriber
@@ -1010,11 +1010,11 @@ class JourneySpace extends Component {
                 </div>
                 <div className='col-7 col-lg-9' style={{backgroundColor: 'white'}}>
                   
-                  {state.session.state === 'joined' && state.session.startAt && <JourneyStartsIn journey={state.session} timer={this.journeyStateTimer}/> }
+                  {state.journey.state === 'joined' && state.journey.startAt && <JourneyStartsIn journey={state.journey} timer={this.journeyStateTimer}/> }
 
-                  {!state.session.startAt && (state.session.state === 'created' || state.session.state === 'joined' || state.session.state === 'completed') &&
+                  {!state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed') &&
                     <div style={{padding: '10px'}}>
-                      <select style={{width: '100%'}} onChange={this.onChangeJourney} value={state.session && state.session.journey}>
+                      <select style={{width: '100%'}} onChange={this.onChangeJourney} value={state.journeys&& state.journey.journey}>
                         {state.journeys.map(journey => (
                           <option value={journey.filePath}>{journey.name}</option>
                         ))}
@@ -1023,9 +1023,9 @@ class JourneySpace extends Component {
                   }
                   
                   <div style={{display: 'flex', padding: '10px 10px 0'}}>
-                    <PlayButton journey={state.session} player={state.audioTag}/>
+                    <PlayButton journey={state.journey} player={state.audioTag}/>
                     { false &&
-                      <SkipButton style={{marginLeft: 'auto'}} journey={state.session}/>
+                      <SkipButton style={{marginLeft: 'auto'}} journey={state.journey}/>
                     }
                   </div>
                   <div style={{display: 'flex', padding: '10px 10px 0 10px'}}>
@@ -1035,13 +1035,13 @@ class JourneySpace extends Component {
                   <div style={{padding: '10px'}}>
                     <LeaveRoomButton history={this.props.history}/>
                   </div>
-                  <JourneyTimeline journey={state.session} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
+                  <JourneyTimeline journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
 
                   <div className='journeyspace-meta pr-3 pl-3 pt-3'>
-                    {state.session.startAt && ['joined', 'created'].indexOf(state.session.state) > -1 && <SharePrompt onInvite={this.onInvite}/>}
+                    {state.journey.startAt && ['joined', 'created'].indexOf(state.journey.state) > -1 && <SharePrompt onInvite={this.onInvite}/>}
                   </div>
                   
-                  {state.session.state === 'failed' &&
+                  {state.journey.state === 'failed' &&
                       <p className='p-3'>Nobody else has joined this Journey Space. 
                         You can either <a href='#' onClick={this.onStartSession}>hit play</a> and take the Journey by
                         yourself of return to the <Link to='/join'>JourneyBoard</Link> to find another Journey Space

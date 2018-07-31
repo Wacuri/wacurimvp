@@ -93,7 +93,7 @@ class AudioQueue {
 }
 
 const state =  store({
-  session: null,
+  journey: null,
   sessionId: null,
   journeys: [],
   joinableJourneys: [],

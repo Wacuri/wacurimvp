@@ -131,11 +131,11 @@ class Intro extends Component {
 		fetch(`/api/journeys/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
 			.then(res => res.json())
 			.then(json => {
-				state.session = json;
+				state.journey = json;
         this.sessionHelper = createSession({
           apiKey: state.openTokKey,
-          sessionId: state.session.sessionId,
-          token: state.session.token,
+          sessionId: state.journey.sessionId,
+          token: state.journey.token,
           onConnect: () => {
           },
           onStreamsUpdated: streams => {
@@ -146,9 +146,9 @@ class Intro extends Component {
   }
 
   get journeySpaceOwnerVideoStream() {
-    if (state.session) {
-      const owner = state.session.owner;
-      const participant = state.session.participants.find(p => p.user === owner);
+    if (state.journey) {
+      const owner = state.journey.owner;
+      const participant = state.journey.participants.find(p => p.user === owner);
       if (state.sessionId === owner) {
         return null;
       } else {
@@ -163,17 +163,17 @@ class Intro extends Component {
     return (
       <div className='intro-wrapper'>
         <div className='intro' style={{minHeight: 'calc(100vh - 46px)', position: 'relative', display: 'flex', flexDirection: 'column', backgroundColor: 'rgb(81, 148, 220)', padding: '20px'}}>
-          {state.session &&
+          {state.journeys&&
             <div>
               <div style={{display: 'flex', alignItems: 'baseline'}}>
-                <h2 style={{margin: 0}}>{state.session.name}</h2>
+                <h2 style={{margin: 0}}>{state.journey.name}</h2>
                 <div style={{marginLeft: 'auto', display: 'flex'}}>
                   <JourneyStartsIn journey={this.props.journey} timer={this.props.timer}/>
                 </div>
               </div>
               
               <div style={{justifyContent: 'center', display: 'flex'}}>
-                <img style={{height: '150px'}} src={state.session.image}/>
+                <img style={{height: '150px'}} src={state.journey.image}/>
                 {this.sessionHelper && this.journeySpaceOwnerVideoStream && 
                   <OTSubscriber
                     session={this.sessionHelper.session}
