@@ -8932,4 +8932,13 @@ h2 {
   .intro-wrapper .intro-next {
     z-index: 10; }
 
+.journey-vacant-spots i {
+  color: rgba(0, 0, 0, 0.2); }
+
+.journey-vacant-spots .fill {
+  color: black; }
+
+.journey-vacant-spots li {
+  margin-left: 4px; }
+
 /*# sourceMappingURL=main.css.map*/

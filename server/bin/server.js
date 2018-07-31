@@ -208,7 +208,7 @@ var AudioQueue = function () {
 }();
 
 var state = (0, _reactEasyState.store)(_extends({
-  session: null,
+  journey: null,
   sessionId: null,
   journeys: [],
   joinableJourneys: [],
@@ -4472,10 +4472,23 @@ var JoinableJourneyCard = function (_Component2) {
             (0, _moment2.default)(journey.startAt).format('LT')
           ),
           _react2.default.createElement(
-            'p',
-            null,
-            journey.participants.length,
-            ' / 3'
+            'ul',
+            { className: 'journey-vacant-spots', style: { display: 'flex', listStyle: 'none', margin: 0, padding: 0 } },
+            _react2.default.createElement(
+              'li',
+              null,
+              3 - journey.participants.length,
+              ' spot',
+              3 - journey.participants.length > 1 ? 's' : '',
+              ' available:'
+            ),
+            Array(3).fill(0).map(function (k, i) {
+              return _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement('i', { className: 'fa fa-female ' + (journey.participants.length > i ? 'fill' : '') })
+              );
+            })
           ),
           _react2.default.createElement(
             _reactRouterDom.Link,
@@ -4719,10 +4732,10 @@ var Header = function Header() {
       { className: 'logo' },
       _react2.default.createElement('img', { src: _CuriousLiveLogo2.default })
     ),
-    _state2.default.session && !_state2.default.session.startAt && _react2.default.createElement(
+    _state2.default.journey && !_state2.default.journey.startAt && _react2.default.createElement(
       'h2',
       { style: { color: 'white', fontSize: '16px' } },
-      _state2.default.session.name
+      _state2.default.journey.name
     ),
     false && _state2.default.loggedIn && _state2.default.user && _react2.default.createElement(
       'div',
@@ -6457,7 +6470,7 @@ var JourneySpace = function (_Component11) {
       fetch('/api/journeys/' + _this20.props.match.params.room, { credentials: 'include' }).then(function (res) {
         return res.json();
       }).then(function (json) {
-        _state2.default.session = json;
+        _state2.default.journey = json;
       });
     };
 
@@ -6536,15 +6549,15 @@ var JourneySpace = function (_Component11) {
       }).then(function (res) {
         return res.json();
       }).then(function (json) {
-        return _state2.default.session = json;
+        return _state2.default.journey = json;
       });
     };
 
     _this20.onShare = function (e) {
       navigator.share({
         title: 'Take a Journey With Me!',
-        text: 'Join me on ' + _state2.default.session.name,
-        url: window.location.protocol + '//' + window.location.host + '/' + _state2.default.session.room
+        text: 'Join me on ' + _state2.default.journey.name,
+        url: window.location.protocol + '//' + window.location.host + '/' + _state2.default.journey.room
       });
     };
 
@@ -6566,7 +6579,7 @@ var JourneySpace = function (_Component11) {
       _this20.setState({
         showShareModal: false
       });
-      window.location = url + ('?journey=' + _state2.default.session.name + '&name=' + name);
+      window.location = url + ('?journey=' + _state2.default.journey.name + '&name=' + name);
     };
 
     _this20.seekTo = function (percent) {
@@ -6616,7 +6629,7 @@ var JourneySpace = function (_Component11) {
           referrer: 'no-referrer' // *client, no-referrer
         });
 
-        if (decodeURIComponent(_state2.default.audioTag.src) === '' + window.location.origin + _state2.default.session.journey) {
+        if (decodeURIComponent(_state2.default.audioTag.src) === '' + window.location.origin + _state2.default.journey.journey) {
           _state2.default.audioTag.enqueue(['/chime.mp3', '/sharing.mp3']).then(function () {
             // sharing audio ended
             if (_this21.publisher && _this21.publisher.state && _this21.publisher.state.publisher) {
@@ -6630,15 +6643,15 @@ var JourneySpace = function (_Component11) {
       fetch('/api/journeys/' + this.props.match.params.room + window.location.search, { credentials: 'include' }).then(function (res) {
         return res.json();
       }).then(function (json) {
-        _state2.default.session = json;
+        _state2.default.journey = json;
 
-        _state2.default.audioTag.src = _state2.default.session.journey;
+        _state2.default.audioTag.src = _state2.default.journey.journey;
         _state2.default.audioTag.currentTime = 0;
 
         _this21.sessionHelper = createSession({
           apiKey: _state2.default.openTokKey,
-          sessionId: _state2.default.session.sessionId,
-          token: _state2.default.session.token,
+          sessionId: _state2.default.journey.sessionId,
+          token: _state2.default.journey.token,
           onConnect: function onConnect() {
             console.log('assigned connection to publisher', _this21.sessionHelper.session.connection);
             fetch('/api/journeys/' + _this21.props.match.params.room + '/joined', {
@@ -6712,15 +6725,15 @@ var JourneySpace = function (_Component11) {
 
         _this21.sessionHelper.session.on("signal:journeyUpdated", function (event) {
           var journey = JSON.parse(event.data);
-          _state2.default.session = journey;
+          _state2.default.journey = journey;
 
-          if (_state2.default.session.state != 'completed') {
+          if (_state2.default.journey.state != 'completed') {
             // if we are in completed state, then audio may be playing the sharing prompt
-            _state2.default.audioTag.src = _state2.default.session.journey;
+            _state2.default.audioTag.src = _state2.default.journey.journey;
             _state2.default.audioTag.currentTime = 0;
           }
 
-          if (_state2.default.session.state === 'started') {
+          if (_state2.default.journey.state === 'started') {
 
             if (_this21.publisher && _this21.publisher.state && _this21.publisher.state.publisher) {
               _this21.publisher.state.publisher.publishAudio(false);
@@ -6733,7 +6746,7 @@ var JourneySpace = function (_Component11) {
         });
 
         _this21.sessionHelper.session.on("signal:fail", function (event) {
-          _state2.default.session.state = 'failed';
+          _state2.default.journey.state = 'failed';
         });
 
         _this21.setState({
@@ -6741,10 +6754,10 @@ var JourneySpace = function (_Component11) {
         });
 
         var onAudioCanPlay = function onAudioCanPlay(event) {
-          if (_state2.default.session.state === 'started') {
+          if (_state2.default.journey.state === 'started') {
             _state2.default.audioTag.play();
-            if (!isNaN(_state2.default.session.currentTime)) {
-              _state2.default.audioTag.currentTime = _state2.default.session.currentTime;
+            if (!isNaN(_state2.default.journey.currentTime)) {
+              _state2.default.audioTag.currentTime = _state2.default.journey.currentTime;
             }
           }
           _state2.default.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
@@ -6771,10 +6784,10 @@ var JourneySpace = function (_Component11) {
     value: function render() {
       var _this22 = this;
 
-      var currentParticipant = this.state.session && this.state.session.connection && _state2.default.session && _state2.default.session.participants.find(function (participant) {
+      var currentParticipant = this.state.session && this.state.session.connection && _state2.default.journey && _state2.default.journey.participants.find(function (participant) {
         return participant.connectionId === _this22.state.session.connection.id;
       });
-      var currentUserHasFlaggedJourney = _state2.default.session && _state2.default.session.flags.map(function (flag) {
+      var currentUserHasFlaggedJourney = _state2.default.journey && _state2.default.journey.flags.map(function (flag) {
         return flag.user;
       }).indexOf(_state2.default.sessionId) > -1;
       return _react2.default.createElement(
@@ -6795,11 +6808,11 @@ var JourneySpace = function (_Component11) {
                 _react2.default.createElement(
                   'li',
                   null,
-                  _react2.default.createElement('img', { style: { width: '100%' }, src: _state2.default.session.image }),
+                  _react2.default.createElement('img', { style: { width: '100%' }, src: _state2.default.journey.image }),
                   _react2.default.createElement(
                     'h2',
                     { style: { flex: 5 }, className: 'journeyspace-title' },
-                    _state2.default.session.name
+                    _state2.default.journey.name
                   )
                 ),
                 _react2.default.createElement(
@@ -6815,10 +6828,10 @@ var JourneySpace = function (_Component11) {
                   })
                 ),
                 this.state.streams.map(function (stream) {
-                  var participant = _state2.default.session.participants.find(function (participant) {
+                  var participant = _state2.default.journey.participants.find(function (participant) {
                     return participant.connectionId === stream.connection.id;
                   });
-                  var hasFlagged = !!_state2.default.session.flags.find(function (flag) {
+                  var hasFlagged = !!_state2.default.journey.flags.find(function (flag) {
                     return flag.user === _state2.default.sessionId && flag.flagged === stream.id;
                   });
                   return _react2.default.createElement(
@@ -6865,13 +6878,13 @@ var JourneySpace = function (_Component11) {
             _react2.default.createElement(
               'div',
               { className: 'col-7 col-lg-9', style: { backgroundColor: 'white' } },
-              _state2.default.session.state === 'joined' && _state2.default.session.startAt && _react2.default.createElement(_journey_starts_in2.default, { journey: _state2.default.session, timer: this.journeyStateTimer }),
-              !_state2.default.session.startAt && (_state2.default.session.state === 'created' || _state2.default.session.state === 'joined' || _state2.default.session.state === 'completed') && _react2.default.createElement(
+              _state2.default.journey.state === 'joined' && _state2.default.journey.startAt && _react2.default.createElement(_journey_starts_in2.default, { journey: _state2.default.journey, timer: this.journeyStateTimer }),
+              !_state2.default.journey.startAt && (_state2.default.journey.state === 'created' || _state2.default.journey.state === 'joined' || _state2.default.journey.state === 'completed') && _react2.default.createElement(
                 'div',
                 { style: { padding: '10px' } },
                 _react2.default.createElement(
                   'select',
-                  { style: { width: '100%' }, onChange: this.onChangeJourney, value: _state2.default.session && _state2.default.session.journey },
+                  { style: { width: '100%' }, onChange: this.onChangeJourney, value: _state2.default.journeys && _state2.default.journey.journey },
                   _state2.default.journeys.map(function (journey) {
                     return _react2.default.createElement(
                       'option',
@@ -6884,8 +6897,8 @@ var JourneySpace = function (_Component11) {
               _react2.default.createElement(
                 'div',
                 { style: { display: 'flex', padding: '10px 10px 0' } },
-                _react2.default.createElement(PlayButton, { journey: _state2.default.session, player: _state2.default.audioTag }),
-                false && _react2.default.createElement(SkipButton, { style: { marginLeft: 'auto' }, journey: _state2.default.session })
+                _react2.default.createElement(PlayButton, { journey: _state2.default.journey, player: _state2.default.audioTag }),
+                false && _react2.default.createElement(SkipButton, { style: { marginLeft: 'auto' }, journey: _state2.default.journey })
               ),
               _react2.default.createElement(
                 'div',
@@ -6898,13 +6911,13 @@ var JourneySpace = function (_Component11) {
                 { style: { padding: '10px' } },
                 _react2.default.createElement(LeaveRoomButton, { history: this.props.history })
               ),
-              _react2.default.createElement(JourneyTimeline, { journey: _state2.default.session, timer: this.journeyStateTimer, seekTo: this.seekTo }),
+              _react2.default.createElement(JourneyTimeline, { journey: _state2.default.journey, timer: this.journeyStateTimer, seekTo: this.seekTo }),
               _react2.default.createElement(
                 'div',
                 { className: 'journeyspace-meta pr-3 pl-3 pt-3' },
-                _state2.default.session.startAt && ['joined', 'created'].indexOf(_state2.default.session.state) > -1 && _react2.default.createElement(SharePrompt, { onInvite: this.onInvite })
+                _state2.default.journey.startAt && ['joined', 'created'].indexOf(_state2.default.journey.state) > -1 && _react2.default.createElement(SharePrompt, { onInvite: this.onInvite })
               ),
-              _state2.default.session.state === 'failed' && _react2.default.createElement(
+              _state2.default.journey.state === 'failed' && _react2.default.createElement(
                 'p',
                 { className: 'p-3' },
                 'Nobody else has joined this Journey Space. You can either ',
@@ -6946,15 +6959,15 @@ var JourneySpace = function (_Component11) {
     get: function get() {
       var _this23 = this;
 
-      var currentParticipant = this.state.session && this.state.session.connection && _state2.default.session && _state2.default.session.participants.find(function (participant) {
+      var currentParticipant = this.state.session && this.state.session.connection && _state2.default.journey && _state2.default.journey.participants.find(function (participant) {
         return participant.connectionId === _this23.state.session.connection.id;
       });
-      return currentParticipant && _state2.default.session.participants.indexOf(currentParticipant) === 0;
+      return currentParticipant && _state2.default.journey.participants.indexOf(currentParticipant) === 0;
     }
   }, {
     key: 'journeyStateTimer',
     get: function get() {
-      switch (_state2.default.session.state) {
+      switch (_state2.default.journey.state) {
         case 'started':
         case 'paused':
           if (!this.playerTimeEmitter) {
@@ -6963,7 +6976,7 @@ var JourneySpace = function (_Component11) {
           return this.playerTimeEmitter;
         default:
           if (!this.secondsEmitter) {
-            this.secondsEmitter = new SecondsTimerEmitter(new Date(_state2.default.session.createdAt), new Date(_state2.default.session.startAt));
+            this.secondsEmitter = new SecondsTimerEmitter(new Date(_state2.default.journey.createdAt), new Date(_state2.default.journey.startAt));
           }
           return this.secondsEmitter;
       }
@@ -7877,11 +7890,11 @@ var Intro = function (_Component) {
       fetch('/api/journeys/' + this.props.match.params.room + window.location.search, { credentials: 'include' }).then(function (res) {
         return res.json();
       }).then(function (json) {
-        _state2.default.session = json;
+        _state2.default.journey = json;
         _this2.sessionHelper = createSession({
           apiKey: _state2.default.openTokKey,
-          sessionId: _state2.default.session.sessionId,
-          token: _state2.default.session.token,
+          sessionId: _state2.default.journey.sessionId,
+          token: _state2.default.journey.token,
           onConnect: function onConnect() {},
           onStreamsUpdated: function onStreamsUpdated(streams) {
             _this2.setState({ streams: streams });
@@ -7900,7 +7913,7 @@ var Intro = function (_Component) {
         _react2.default.createElement(
           'div',
           { className: 'intro', style: { minHeight: 'calc(100vh - 46px)', position: 'relative', display: 'flex', flexDirection: 'column', backgroundColor: 'rgb(81, 148, 220)', padding: '20px' } },
-          _state2.default.session && _react2.default.createElement(
+          _state2.default.journeys && _react2.default.createElement(
             'div',
             null,
             _react2.default.createElement(
@@ -7909,7 +7922,7 @@ var Intro = function (_Component) {
               _react2.default.createElement(
                 'h2',
                 { style: { margin: 0 } },
-                _state2.default.session.name
+                _state2.default.journey.name
               ),
               _react2.default.createElement(
                 'div',
@@ -7920,7 +7933,7 @@ var Intro = function (_Component) {
             _react2.default.createElement(
               'div',
               { style: { justifyContent: 'center', display: 'flex' } },
-              _react2.default.createElement('img', { style: { height: '150px' }, src: _state2.default.session.image }),
+              _react2.default.createElement('img', { style: { height: '150px' }, src: _state2.default.journey.image }),
               this.sessionHelper && this.journeySpaceOwnerVideoStream && _react2.default.createElement(OTSubscriber, {
                 session: this.sessionHelper.session,
                 stream: this.journeySpaceOwnerVideoStream,
@@ -7967,9 +7980,9 @@ var Intro = function (_Component) {
   }, {
     key: 'journeySpaceOwnerVideoStream',
     get: function get() {
-      if (_state2.default.session) {
-        var owner = _state2.default.session.owner;
-        var participant = _state2.default.session.participants.find(function (p) {
+      if (_state2.default.journey) {
+        var owner = _state2.default.journey.owner;
+        var participant = _state2.default.journey.participants.find(function (p) {
           return p.user === owner;
         });
         if (_state2.default.sessionId === owner) {
