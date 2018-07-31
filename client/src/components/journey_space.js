@@ -950,6 +950,33 @@ class JourneySpace extends Component {
     state.audioTag.play();
   }
 
+  togglePlayState = (e) => {
+    e.preventDefault();
+    setTimeout(() => {
+      if (state.audioTag.paused) {
+        fetch(`/api/journeys/${state.journey.room}/start`, {
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST',
+          mode: 'cors',
+        });
+      } else {
+        fetch(`/api/journeys/${state.journey.room}/pause`, {
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST',
+          mode: 'cors',
+        });
+      }
+    }, 20);
+  }
+
 	render() {
     const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
     let currentUserHasFlaggedJourney = state.journey && state.journey.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
@@ -962,7 +989,7 @@ class JourneySpace extends Component {
                 <div className='col-5 col-lg-3'>
                   <ul className='journeyspace-streams' style={{margin: 0}}>
                     <li>
-                      <img style={{width: '100%'}} src={state.journey.image}/>
+                      <img style={{width: '100%'}} src={state.journey.image} onClick={this.togglePlayState}/>
                       <h2 style={{flex: 5}} className='journeyspace-title'>{state.journey.name}</h2>
 
                     </li>

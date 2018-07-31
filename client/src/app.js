@@ -17,13 +17,15 @@ var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 if (__CLIENT__) {
   var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
   const OT = require('@opentok/client');
-  document.body.addEventListener('click', (e) => {
+  const globalClickCatcher = (e) => {
     if (state.audioTag && state.audioTag.paused) {
       state.audioTag.play().then(() => {
         state.audioTag.pause();
+        document.body.removeEventListener('click', globalClickCatcher);
       });
     }
-  });
+  }
+  document.body.addEventListener('click', globalClickCatcher);
 }
 
 
