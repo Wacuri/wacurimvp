@@ -459,3 +459,17 @@ h2 {
     z-index: 10;
   }
 }
+
+.journey-vacant-spots {
+  i {
+    color: rgba(0, 0, 0, 0.2);
+  }
+
+  .fill {
+    color: black;
+  }
+
+  li {
+    margin-left: 4px;
+  }
+}

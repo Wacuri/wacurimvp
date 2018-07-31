@@ -118,7 +118,13 @@ class JoinableJourneyCard extends Component {
           <CountdownMessage endTime={journey.startAt} />
           <h4>{journey.name}</h4>
           <p>Starts at: {moment(journey.startAt).format('LT')}</p>
-          <p>{journey.participants.length} / 3</p>
+          <ul className='journey-vacant-spots' style={{display: 'flex', listStyle: 'none', margin: 0, padding: 0}}>
+            <li>{3 - journey.participants.length} spot{3 - journey.participants.length > 1 ? 's' : ''} available:</li>
+            {Array(3).fill(0).map((k, i) => (
+              <li><i className={`fa fa-female ${journey.participants.length > i ? 'fill' : ''}`}></i></li>
+            ))}
+            
+          </ul>
           <Link to={`/${journey.room}`} className='btn btn-primary'>{currentUserHasRSVP ? 'Go there now' : 'Join'}</Link>
         </div>
       </div>
