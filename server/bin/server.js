@@ -4326,13 +4326,15 @@ if (__CLIENT__) {
       createSession = _require.createSession;
 
   var OT = __webpack_require__(7);
-  document.body.addEventListener('click', function (e) {
+  var globalClickCatcher = function globalClickCatcher(e) {
     if (_state2.default.audioTag && _state2.default.audioTag.paused) {
       _state2.default.audioTag.play().then(function () {
         _state2.default.audioTag.pause();
+        document.body.removeEventListener('click', globalClickCatcher);
       });
     }
-  });
+  };
+  document.body.addEventListener('click', globalClickCatcher);
 }
 
 var RequireLoginRoute = function RequireLoginRoute(_ref2) {
@@ -6587,6 +6589,33 @@ var JourneySpace = function (_Component11) {
       _state2.default.audioTag.play();
     };
 
+    _this20.togglePlayState = function (e) {
+      e.preventDefault();
+      setTimeout(function () {
+        if (_state2.default.audioTag.paused) {
+          fetch('/api/journeys/' + _state2.default.journey.room + '/start', {
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+              'content-type': 'application/json'
+            },
+            method: 'POST',
+            mode: 'cors'
+          });
+        } else {
+          fetch('/api/journeys/' + _state2.default.journey.room + '/pause', {
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+              'content-type': 'application/json'
+            },
+            method: 'POST',
+            mode: 'cors'
+          });
+        }
+      }, 20);
+    };
+
     _this20.state = {
       streams: [],
       publisherId: '',
@@ -6808,7 +6837,7 @@ var JourneySpace = function (_Component11) {
                 _react2.default.createElement(
                   'li',
                   null,
-                  _react2.default.createElement('img', { style: { width: '100%' }, src: _state2.default.journey.image }),
+                  _react2.default.createElement('img', { style: { width: '100%' }, src: _state2.default.journey.image, onClick: this.togglePlayState }),
                   _react2.default.createElement(
                     'h2',
                     { style: { flex: 5 }, className: 'journeyspace-title' },
