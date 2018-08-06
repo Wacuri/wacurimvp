@@ -7916,20 +7916,22 @@ var Intro = function (_Component) {
 
       _jsCookie2.default.set('saw intro', true, { expires: 365 });
 
-      fetch('/api/journeys/' + this.props.match.params.room + window.location.search, { credentials: 'include' }).then(function (res) {
-        return res.json();
-      }).then(function (json) {
-        _state2.default.journey = json;
-        _this2.sessionHelper = createSession({
-          apiKey: _state2.default.openTokKey,
-          sessionId: _state2.default.journey.sessionId,
-          token: _state2.default.journey.token,
-          onConnect: function onConnect() {},
-          onStreamsUpdated: function onStreamsUpdated(streams) {
-            _this2.setState({ streams: streams });
-          }
+      if (this.props.match.params.room) {
+        fetch('/api/journeys/' + this.props.match.params.room + window.location.search, { credentials: 'include' }).then(function (res) {
+          return res.json();
+        }).then(function (json) {
+          _state2.default.journey = json;
+          _this2.sessionHelper = createSession({
+            apiKey: _state2.default.openTokKey,
+            sessionId: _state2.default.journey.sessionId,
+            token: _state2.default.journey.token,
+            onConnect: function onConnect() {},
+            onStreamsUpdated: function onStreamsUpdated(streams) {
+              _this2.setState({ streams: streams });
+            }
+          });
         });
-      });
+      }
     }
   }, {
     key: 'render',
@@ -7942,7 +7944,7 @@ var Intro = function (_Component) {
         _react2.default.createElement(
           'div',
           { className: 'intro', style: { minHeight: 'calc(100vh - 46px)', position: 'relative', display: 'flex', flexDirection: 'column', backgroundColor: 'rgb(81, 148, 220)', padding: '20px' } },
-          _state2.default.journeys && _react2.default.createElement(
+          _state2.default.journey && _react2.default.createElement(
             'div',
             null,
             _react2.default.createElement(
