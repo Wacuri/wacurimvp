@@ -128,21 +128,23 @@ class Intro extends Component {
   componentDidMount() {
     Cookie.set('saw intro', true, {expires: 365});
 
-		fetch(`/api/journeys/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
-			.then(res => res.json())
-			.then(json => {
-				state.journey = json;
-        this.sessionHelper = createSession({
-          apiKey: state.openTokKey,
-          sessionId: state.journey.sessionId,
-          token: state.journey.token,
-          onConnect: () => {
-          },
-          onStreamsUpdated: streams => {
-            this.setState({ streams });
-          }
+    if (this.props.match.params.room) {
+      fetch(`/api/journeys/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
+        .then(res => res.json())
+        .then(json => {
+          state.journey = json;
+          this.sessionHelper = createSession({
+            apiKey: state.openTokKey,
+            sessionId: state.journey.sessionId,
+            token: state.journey.token,
+            onConnect: () => {
+            },
+            onStreamsUpdated: streams => {
+              this.setState({ streams });
+            }
+          });
         });
-      });
+    }
   }
 
   get journeySpaceOwnerVideoStream() {
@@ -163,7 +165,7 @@ class Intro extends Component {
     return (
       <div className='intro-wrapper'>
         <div className='intro' style={{minHeight: 'calc(100vh - 46px)', position: 'relative', display: 'flex', flexDirection: 'column', backgroundColor: 'rgb(81, 148, 220)', padding: '20px'}}>
-          {state.journeys&&
+          {state.journey &&
             <div>
               <div style={{display: 'flex', alignItems: 'baseline'}}>
                 <h2 style={{margin: 0}}>{state.journey.name}</h2>
