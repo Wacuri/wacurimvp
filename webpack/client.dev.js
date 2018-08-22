@@ -74,11 +74,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new IsomorphicLoaderPlugin({
-      webpackDev: {
-        addUrl: false
-      }
-    }),
+    new IsomorphicLoaderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
 		 new webpack.DefinePlugin({
