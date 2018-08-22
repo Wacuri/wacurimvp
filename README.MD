@@ -5,9 +5,11 @@
 
 Node Version: v8.3.0
 
-Just clone this repo or download the zip file. `cd` into the directory and run
+Just clone this repo or download the zip file. `cd` into the directory and run.
 
-    npm install
+    yarn install --ignore-engines
+
+The reason we are using yarn is historic and a bit obscure.
 
 ## Developing App with [Hot Reload]
 
