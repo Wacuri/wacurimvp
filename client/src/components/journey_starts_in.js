@@ -32,14 +32,14 @@ class JourneyStartsIn extends Component {
   render() {
     const {journey} = this.props;
     return (
-      <p className='journey-starts-in' style={{padding: '10px 10px 10px', borderBottom: '1px solid rgb(88, 88, 88)'}}>
+      <div className='journey-starts-in' style={{padding: '10px 10px 10px', borderBottom: '1px solid rgb(88, 88, 88)'}}>
         { this.props.timer &&
           <div style={{display: 'flex'}}>
             <span className='label'>Journey starts in:</span>
             <span className='time' style={{marginLeft: 'auto'}}>{this.props.timer.displayTime()}</span>
           </div>
         }
-      </p>
+      </div>
     )
   }
 }

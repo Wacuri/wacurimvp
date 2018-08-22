@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 30);
+/******/ 	return __webpack_require__(__webpack_require__.s = 31);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -237,7 +237,7 @@ module.exports = require("react-easy-state");
 /***/ (function(module, exports, __webpack_require__) {
 
 const createJob = __webpack_require__(20);
-const processJobs = __webpack_require__(68);
+const processJobs = __webpack_require__(69);
 
 module.exports = {
   createJob,
@@ -370,21 +370,21 @@ class Job {
   }
 }
 
-Job.prototype.toJSON = __webpack_require__(50);
-Job.prototype.computeNextRunAt = __webpack_require__(51);
-Job.prototype.repeatEvery = __webpack_require__(54);
-Job.prototype.repeatAt = __webpack_require__(55);
-Job.prototype.disable = __webpack_require__(56);
-Job.prototype.enable = __webpack_require__(57);
-Job.prototype.unique = __webpack_require__(58);
-Job.prototype.schedule = __webpack_require__(59);
-Job.prototype.priority = __webpack_require__(60);
-Job.prototype.fail = __webpack_require__(61);
-Job.prototype.run = __webpack_require__(62);
-Job.prototype.isRunning = __webpack_require__(63);
-Job.prototype.save = __webpack_require__(64);
-Job.prototype.remove = __webpack_require__(65);
-Job.prototype.touch = __webpack_require__(66);
+Job.prototype.toJSON = __webpack_require__(51);
+Job.prototype.computeNextRunAt = __webpack_require__(52);
+Job.prototype.repeatEvery = __webpack_require__(55);
+Job.prototype.repeatAt = __webpack_require__(56);
+Job.prototype.disable = __webpack_require__(57);
+Job.prototype.enable = __webpack_require__(58);
+Job.prototype.unique = __webpack_require__(59);
+Job.prototype.schedule = __webpack_require__(60);
+Job.prototype.priority = __webpack_require__(61);
+Job.prototype.fail = __webpack_require__(62);
+Job.prototype.run = __webpack_require__(63);
+Job.prototype.isRunning = __webpack_require__(64);
+Job.prototype.save = __webpack_require__(65);
+Job.prototype.remove = __webpack_require__(66);
+Job.prototype.touch = __webpack_require__(67);
 
 module.exports = Job;
 
@@ -419,10 +419,16 @@ module.exports = (agenda, jobData) => {
 /* 21 */
 /***/ (function(module, exports) {
 
-module.exports = require("opentok");
+module.exports = require("lodash");
 
 /***/ }),
 /* 22 */
+/***/ (function(module, exports) {
+
+module.exports = require("opentok");
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -544,7 +550,7 @@ var JourneySpace = _mongoose2.default.model('JourneySpace', JourneySpaceSchema);
 exports.default = JourneySpace;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -573,7 +579,7 @@ var JourneyParticipant = _mongoose2.default.model('JourneyParticipant', JourneyP
 exports.default = JourneyParticipant;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -599,7 +605,7 @@ var JourneyRSVP = _mongoose2.default.model('JourneyRSVP', JourneyRSVPSchema);
 exports.default = JourneyRSVP;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -628,25 +634,25 @@ var JourneyContent = _mongoose2.default.model('JourneyContent', JourneyContentSc
 exports.default = JourneyContent;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports) {
 
 module.exports = require("isomorphic-fetch");
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 module.exports = require("prop-types");
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-swipeable-views");
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -740,21 +746,21 @@ var JourneyStartsIn = function (_Component) {
 exports.default = JourneyStartsIn;
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(31);
-module.exports = __webpack_require__(32);
+__webpack_require__(32);
+module.exports = __webpack_require__(33);
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-polyfill/lib/index");
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -766,9 +772,9 @@ dotenv.config();
 global.__CLIENT__ = false;
 global.__SERVER__ = true;
 
-var extendRequire = __webpack_require__(33);
+var extendRequire = __webpack_require__(34);
 
-__webpack_require__(34);
+__webpack_require__(35);
 
 extendRequire().then(function () {
     __webpack_require__(81);
@@ -777,13 +783,13 @@ extendRequire().then(function () {
 });
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = require("isomorphic-loader/lib/extend-require");
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -797,15 +803,15 @@ var _path = __webpack_require__(8);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _Agenda = __webpack_require__(35);
+var _Agenda = __webpack_require__(36);
 
 var _Agenda2 = _interopRequireDefault(_Agenda);
 
-var _lodash = __webpack_require__(79);
+var _lodash = __webpack_require__(21);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _opentok = __webpack_require__(21);
+var _opentok = __webpack_require__(22);
 
 var _opentok2 = _interopRequireDefault(_opentok);
 
@@ -817,19 +823,19 @@ var _mongoose = __webpack_require__(3);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _journey_space = __webpack_require__(22);
+var _journey_space = __webpack_require__(23);
 
 var _journey_space2 = _interopRequireDefault(_journey_space);
 
-var _journey_participant = __webpack_require__(23);
+var _journey_participant = __webpack_require__(24);
 
 var _journey_participant2 = _interopRequireDefault(_journey_participant);
 
-var _journey_rsvp = __webpack_require__(24);
+var _journey_rsvp = __webpack_require__(25);
 
 var _journey_rsvp2 = _interopRequireDefault(_journey_rsvp);
 
-var _journey_content = __webpack_require__(25);
+var _journey_content = __webpack_require__(26);
 
 var _journey_content2 = _interopRequireDefault(_journey_content);
 
@@ -1094,16 +1100,16 @@ agenda.on('ready', function () {
 });
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Agenda = __webpack_require__(36);
+const Agenda = __webpack_require__(37);
 
 module.exports = Agenda;
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1150,35 +1156,35 @@ class Agenda extends Emitter {
   }
 }
 
-Agenda.prototype.mongo = __webpack_require__(37);
-Agenda.prototype.database = __webpack_require__(38);
-Agenda.prototype.db_init = __webpack_require__(40); // eslint-disable-line camelcase
-Agenda.prototype.name = __webpack_require__(41);
-Agenda.prototype.processEvery = __webpack_require__(42);
-Agenda.prototype.maxConcurrency = __webpack_require__(43);
-Agenda.prototype.defaultConcurrency = __webpack_require__(44);
-Agenda.prototype.lockLimit = __webpack_require__(45);
-Agenda.prototype.defaultLockLimit = __webpack_require__(46);
-Agenda.prototype.defaultLockLifetime = __webpack_require__(47);
-Agenda.prototype.sort = __webpack_require__(48);
-Agenda.prototype.create = __webpack_require__(49);
-Agenda.prototype.jobs = __webpack_require__(67);
-Agenda.prototype.purge = __webpack_require__(69);
-Agenda.prototype.define = __webpack_require__(70);
-Agenda.prototype.every = __webpack_require__(71);
-Agenda.prototype.schedule = __webpack_require__(72);
-Agenda.prototype.now = __webpack_require__(73);
-Agenda.prototype.cancel = __webpack_require__(74);
-Agenda.prototype.saveJob = __webpack_require__(75);
-Agenda.prototype.start = __webpack_require__(76);
-Agenda.prototype.stop = __webpack_require__(77);
-Agenda.prototype._findAndLockNextJob = __webpack_require__(78);
+Agenda.prototype.mongo = __webpack_require__(38);
+Agenda.prototype.database = __webpack_require__(39);
+Agenda.prototype.db_init = __webpack_require__(41); // eslint-disable-line camelcase
+Agenda.prototype.name = __webpack_require__(42);
+Agenda.prototype.processEvery = __webpack_require__(43);
+Agenda.prototype.maxConcurrency = __webpack_require__(44);
+Agenda.prototype.defaultConcurrency = __webpack_require__(45);
+Agenda.prototype.lockLimit = __webpack_require__(46);
+Agenda.prototype.defaultLockLimit = __webpack_require__(47);
+Agenda.prototype.defaultLockLifetime = __webpack_require__(48);
+Agenda.prototype.sort = __webpack_require__(49);
+Agenda.prototype.create = __webpack_require__(50);
+Agenda.prototype.jobs = __webpack_require__(68);
+Agenda.prototype.purge = __webpack_require__(70);
+Agenda.prototype.define = __webpack_require__(71);
+Agenda.prototype.every = __webpack_require__(72);
+Agenda.prototype.schedule = __webpack_require__(73);
+Agenda.prototype.now = __webpack_require__(74);
+Agenda.prototype.cancel = __webpack_require__(75);
+Agenda.prototype.saveJob = __webpack_require__(76);
+Agenda.prototype.start = __webpack_require__(77);
+Agenda.prototype.stop = __webpack_require__(78);
+Agenda.prototype._findAndLockNextJob = __webpack_require__(79);
 
 module.exports = Agenda;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1199,12 +1205,12 @@ module.exports = function(mdb, collection, cb) {
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-const MongoClient = __webpack_require__(39).MongoClient;
+const MongoClient = __webpack_require__(40).MongoClient;
 const debug = __webpack_require__(0)('agenda:database');
 
 /**
@@ -1248,13 +1254,13 @@ module.exports = function(url, collection, options, cb) {
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports) {
 
 module.exports = require("mongodb");
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1311,7 +1317,7 @@ module.exports = function(collection, cb) {
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1331,7 +1337,7 @@ module.exports = function(name) {
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1352,7 +1358,7 @@ module.exports = function(time) {
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1372,7 +1378,7 @@ module.exports = function(num) {
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1392,7 +1398,7 @@ module.exports = function(num) {
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1413,7 +1419,7 @@ module.exports = function(num) {
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1433,7 +1439,7 @@ module.exports = function(num) {
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1454,7 +1460,7 @@ module.exports = function(ms) {
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1475,7 +1481,7 @@ module.exports = function(query) {
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1499,7 +1505,7 @@ module.exports = function(name, data) {
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1532,14 +1538,14 @@ module.exports = function() {
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 const humanInterval = __webpack_require__(9);
-const CronTime = __webpack_require__(52).CronTime;
-const moment = __webpack_require__(53);
+const CronTime = __webpack_require__(53).CronTime;
+const moment = __webpack_require__(54);
 const date = __webpack_require__(19);
 const debug = __webpack_require__(0)('agenda:job');
 
@@ -1631,19 +1637,19 @@ module.exports = function() {
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports) {
 
 module.exports = require("cron");
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports) {
 
 module.exports = require("moment-timezone");
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1664,7 +1670,7 @@ module.exports = function(interval, options) {
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1682,7 +1688,7 @@ module.exports = function(time) {
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1699,7 +1705,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1716,7 +1722,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1736,7 +1742,7 @@ module.exports = function(unique, opts) {
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1755,7 +1761,7 @@ module.exports = function(time) {
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1792,7 +1798,7 @@ module.exports = function(priority) {
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1819,7 +1825,7 @@ module.exports = function(reason) {
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1895,7 +1901,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1923,7 +1929,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1941,7 +1947,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1958,7 +1964,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1976,7 +1982,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2004,7 +2010,7 @@ module.exports = function(query, cb) {
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2345,7 +2351,7 @@ module.exports = function(extraJob) {
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2366,7 +2372,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2400,7 +2406,7 @@ module.exports = function(name, options, processor) {
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2489,7 +2495,7 @@ module.exports = function(interval, names, data, options, cb) {
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2570,7 +2576,7 @@ module.exports = function(when, names, data, cb) {
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2598,7 +2604,7 @@ module.exports = function(name, data, cb) {
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2628,7 +2634,7 @@ module.exports = function(query, cb) {
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2778,7 +2784,7 @@ module.exports = function(job, cb) {
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2804,7 +2810,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2854,7 +2860,7 @@ module.exports = function(cb) {
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2943,12 +2949,6 @@ module.exports = function(jobName, definition, cb) {
   }
 };
 
-
-/***/ }),
-/* 79 */
-/***/ (function(module, exports) {
-
-module.exports = require("lodash");
 
 /***/ }),
 /* 80 */
@@ -3069,7 +3069,7 @@ var _express = __webpack_require__(11);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _opentok = __webpack_require__(21);
+var _opentok = __webpack_require__(22);
 
 var _opentok2 = _interopRequireDefault(_opentok);
 
@@ -3077,19 +3077,19 @@ var _mongoose = __webpack_require__(3);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _journey_space = __webpack_require__(22);
+var _journey_space = __webpack_require__(23);
 
 var _journey_space2 = _interopRequireDefault(_journey_space);
 
-var _journey_participant = __webpack_require__(23);
+var _journey_participant = __webpack_require__(24);
 
 var _journey_participant2 = _interopRequireDefault(_journey_participant);
 
-var _journey_rsvp = __webpack_require__(24);
+var _journey_rsvp = __webpack_require__(25);
 
 var _journey_rsvp2 = _interopRequireDefault(_journey_rsvp);
 
-var _journey_content = __webpack_require__(25);
+var _journey_content = __webpack_require__(26);
 
 var _journey_content2 = _interopRequireDefault(_journey_content);
 
@@ -3103,7 +3103,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-__webpack_require__(26);
+__webpack_require__(27);
 
 _dotenv2.default.config();
 
@@ -4259,7 +4259,7 @@ var _reactRouter = __webpack_require__(12);
 
 var _reactEasyState = __webpack_require__(4);
 
-var _propTypes = __webpack_require__(27);
+var _propTypes = __webpack_require__(28);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -4295,6 +4295,10 @@ var _state = __webpack_require__(2);
 
 var _state2 = _interopRequireDefault(_state);
 
+var _lodash = __webpack_require__(21);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -4308,6 +4312,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+// Experimental by Rob
+
 
 var _ref = {},
     OTSession = _ref.OTSession,
@@ -4536,7 +4543,12 @@ var JourneyBoard = function (_Component3) {
         });
 
         _this5.sessionHelper.session.on("signal:createdNewJourney", function (event) {
-          _state2.default.joinableJourneys.push(JSON.parse(event.data));
+          console.log("joinable Jounerys:");
+          console.log(_state2.default.joinableJourneys);
+          _state2.default.joinableJourneys = _lodash2.default.unionBy(_state2.default.joinableJourneys, [JSON.parse(event.data)], function (j) {
+            return j._id;
+          });
+          //             state.joinableJourneys.push(JSON.parse(event.data));
         });
 
         _this5.sessionHelper.session.on("signal:expiredJourney", function (event) {
@@ -4567,7 +4579,10 @@ var JourneyBoard = function (_Component3) {
             }) === -1) {
               journey.participants.push(participant);
             }
+            console.log(_state2.default.joinableJourneys);
             _state2.default.joinableJourneys = [].concat(_toConsumableArray(_state2.default.joinableJourneys.slice(0, idx)), [journey], _toConsumableArray(_state2.default.joinableJourneys.slice(idx + 1)));
+            console.log("journeyer joined done!");
+            console.log(_state2.default.joinableJourneys);
           }
         });
 
@@ -4581,7 +4596,10 @@ var JourneyBoard = function (_Component3) {
           journey.participants = journey.participants.filter(function (p) {
             return p._id !== participant._id;
           });
+          console.log(_state2.default.joinableJourneys);
           _state2.default.joinableJourneys = [].concat(_toConsumableArray(_state2.default.joinableJourneys.slice(0, idx)), [journey], _toConsumableArray(_state2.default.joinableJourneys.slice(idx + 1)));
+          console.log("journeyer left space done!");
+          console.log(_state2.default.joinableJourneys);
         });
       });
 
@@ -5508,7 +5526,7 @@ var _jsCookie = __webpack_require__(14);
 
 var _jsCookie2 = _interopRequireDefault(_jsCookie);
 
-var _reactSwipeableViews = __webpack_require__(28);
+var _reactSwipeableViews = __webpack_require__(29);
 
 var _reactSwipeableViews2 = _interopRequireDefault(_reactSwipeableViews);
 
@@ -5520,7 +5538,7 @@ var _state = __webpack_require__(2);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _propTypes = __webpack_require__(27);
+var _propTypes = __webpack_require__(28);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -5532,7 +5550,7 @@ var _opentokLayoutJs = __webpack_require__(102);
 
 __webpack_require__(103);
 
-var _journey_starts_in = __webpack_require__(29);
+var _journey_starts_in = __webpack_require__(30);
 
 var _journey_starts_in2 = _interopRequireDefault(_journey_starts_in);
 
@@ -5545,7 +5563,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 __webpack_require__(104).polyfill();
-__webpack_require__(26);
+__webpack_require__(27);
 
 var _ref = {},
     OTSession = _ref.OTSession,
@@ -7744,7 +7762,7 @@ var _reactRouter = __webpack_require__(12);
 
 var _reactEasyState = __webpack_require__(4);
 
-var _reactSwipeableViews = __webpack_require__(28);
+var _reactSwipeableViews = __webpack_require__(29);
 
 var _reactSwipeableViews2 = _interopRequireDefault(_reactSwipeableViews);
 
@@ -7756,7 +7774,7 @@ var _state = __webpack_require__(2);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _journey_starts_in = __webpack_require__(29);
+var _journey_starts_in = __webpack_require__(30);
 
 var _journey_starts_in2 = _interopRequireDefault(_journey_starts_in);
 

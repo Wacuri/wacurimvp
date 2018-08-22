@@ -293,7 +293,7 @@ class JourneyTimeline extends Component {
     return (
       <div ref={el => {this.container = el}} className={`journey-timeline step-${this.stepIndex.toString()}`}>
         <ul>
-          <li className={journey.state === 'joined' ? 'active' : ''}>
+          <li key="Prepare" className={journey.state === 'joined' ? 'active' : ''}>
             <h4>Prepare</h4>
             <div style={{display: 'flex'}}>
               <p>Breathe and center yourself</p>
@@ -302,7 +302,7 @@ class JourneyTimeline extends Component {
               }
             </div>
           </li>
-          <li className={journey.state === 'started' ? 'active' : ''} style={{position: 'relative'}}>
+          <li key="Journey" className={journey.state === 'started' ? 'active' : ''} style={{position: 'relative'}}>
             <h4>Journey</h4>
             <div style={{display: 'flex'}}>
               <p>Listen and imagine</p>
@@ -316,13 +316,13 @@ class JourneyTimeline extends Component {
               }
             </div>
           </li>
-          <li>
+          <li key="Sharing">
             <h4>Sharing</h4>
             <p>Feelings and thoughts</p>
           </li>
         </ul>
         <div className='arrow' style={{height: `${this.heightForActive}px`, width: `${this.heightForActive}px`, transform: `translateY(${this.positionForCaret}px)`}}>
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-triangle" viewBox="0 0 100 100" preserveAspectRatio="none" shapeRendering="geometricPrecision">
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" className="svg-triangle" viewBox="0 0 100 100" preserveAspectRatio="none" shapeRendering="geometricPrecision">
             <path d="M 70 50 100 5 100 100 Z"/>
           </svg>
         </div>
@@ -978,7 +978,8 @@ class JourneySpace extends Component {
   }
 
 	render() {
-    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
+	    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
+	    var local_key_counter_to_avoid_warning = 0;	    
     let currentUserHasFlaggedJourney = state.journey && state.journey.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
 		return (
 			<div className='journeyspace' style={{position: 'relative'}}>
@@ -988,12 +989,12 @@ class JourneySpace extends Component {
               <div className='row no-gutters'>
                 <div className='col-5 col-lg-3'>
                   <ul className='journeyspace-streams' style={{margin: 0}}>
-                    <li>
+                    <li key="name">
                       <img style={{width: '100%'}} src={state.journey.image} onClick={this.togglePlayState}/>
                       <h2 style={{flex: 5}} className='journeyspace-title'>{state.journey.name}</h2>
 
                     </li>
-                    <li className='journeyspace-stream journeyspace-me'>
+                    <li key="stream" className='journeyspace-stream journeyspace-me'>
                         <OTPublisher 
                           properties={{width: '100%', height: '100%'}}
                           session={this.sessionHelper.session}
@@ -1004,9 +1005,10 @@ class JourneySpace extends Component {
 
                     {this.state.streams.map(stream => {
                       const participant = state.journey.participants.find(participant => participant.connectionId === stream.connection.id);
-                      const hasFlagged = !!state.journey.flags.find(flag => flag.user === state.sessionId && flag.flagged === stream.id);
+			const hasFlagged = !!state.journey.flags.find(flag => flag.user === state.sessionId && flag.flagged === stream.id);
+			var streamcnt = 0;
                       return (
-                        <li className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+                              <li key={streamcnt++} className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
                             <OTSubscriber
                               key={stream.id}
                               session={this.sessionHelper.session}
@@ -1025,8 +1027,8 @@ class JourneySpace extends Component {
                       );
                     })}
                     
-                    {Array(2 - this.state.streams.length).fill({}).map(empty => (
-                      <li className='video-placeholder'>
+             {	 Array(2 - this.state.streams.length).fill({}).map(empty => (
+                     <li key={local_key_counter_to_avoid_warning++} className='video-placeholder'>
                         <div>
                           <i className='fa fa-user'></i>
                           <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>

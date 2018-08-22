@@ -121,10 +121,11 @@ class JoinableJourneyCard extends Component {
           <h4>{journey.name}</h4>
           <p>Starts at: {moment(journey.startAt).format('LT')}</p>
           <ul className='journey-vacant-spots' style={{display: 'flex', listStyle: 'none', margin: 0, padding: 0}}>
-            <li>{3 - journey.participants.length} spot{3 - journey.participants.length > 1 ? 's' : ''} available:</li>
+            <li key="msg">{3 - journey.participants.length} spot{3 - journey.participants.length > 1 ? 's' : ''} available:</li>
             {Array(3).fill(0).map((k, i) => (
 		// Rob is changing this to "user" just as a test of my ability to change things...
-              <li><i className={`fa fa-user ${journey.participants.length > i ? 'fill' : ''}`}></i></li>
+		// Note: Adding a "key" here seems unneeded but made a confusing waring disappear...
+		    <li key={"item"+i}><i className={`fa fa-user ${journey.participants.length > i ? 'fill' : ''}`}></i></li>
             ))}
             
           </ul>
@@ -152,8 +153,14 @@ class JourneyBoard extends Component {
           }
         });
 
-        this.sessionHelper.session.on("signal:createdNewJourney", (event) => {
-          state.joinableJourneys.push(JSON.parse(event.data));
+          this.sessionHelper.session.on("signal:createdNewJourney", (event) => {
+	      // console.log("joinable Jounerys:");
+	      // console.log(state.joinableJourneys);
+	      // console.log([JSON.parse(event.data)]);	      
+//	      state.joinableJourneys = _.unionBy(state.joinableJourneys, [JSON.parse(event.data)], (j) => j._id)	      
+              state.joinableJourneys.push(JSON.parse(event.data));
+	      
+	      console.log(state.joinableJourneys);	      
         });
 
         this.sessionHelper.session.on("signal:expiredJourney", (event) => {
@@ -176,7 +183,10 @@ class JourneyBoard extends Component {
             if (journey.participants.findIndex(_participant => _participant._id === participant._id) === -1) {
               journey.participants.push(participant);
             }
-            state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), journey, ...state.joinableJourneys.slice(idx + 1)];
+//	      console.log(state.joinableJourneys);
+              state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), journey, ...state.joinableJourneys.slice(idx + 1)];
+//	      console.log("journeyer joined done!");
+//	      console.log(state.joinableJourneys);	      
           }
         });
 
@@ -185,8 +195,11 @@ class JourneyBoard extends Component {
           console.log('Event: left space', event.data);
           const journey = state.joinableJourneys.find(j => j._id === participant.journeySpace);
           const idx = state.joinableJourneys.indexOf(journey);
-          journey.participants = journey.participants.filter(p => p._id !== participant._id);
-          state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), journey, ...state.joinableJourneys.slice(idx + 1)];
+            journey.participants = journey.participants.filter(p => p._id !== participant._id);
+//	      console.log(state.joinableJourneys);	    
+            state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), journey, ...state.joinableJourneys.slice(idx + 1)];
+//	      console.log("journeyer left space done!");
+//	      console.log(state.joinableJourneys);	      	    
         });
 
       });
@@ -200,10 +213,14 @@ class JourneyBoard extends Component {
       });
   }
 
-  render() {
+    render() {
+	// Note, if this key is ever read and treated as a id, then we will have a terrible problem.
+	// I want to remove the warnings I am getting, but this is a dangerous way to do it.
+	// Possibly I should deal with this in a different way.
+	var discriminator = 0;
     return (
       <div className='joinable-journeys'>
-        {state.joinableJourneys.map(journey => <JoinableJourneyCard key={journey._id} journey={journey} audioTag={this.audioTag}/>)}
+        {state.joinableJourneys.map(journey => <JoinableJourneyCard key={journey._id+"_"+discriminator++} journey={journey} audioTag={this.audioTag}/>)}
       </div>
     )
   }
