@@ -4766,7 +4766,7 @@ exports.default = (0, _reactEasyState.view)(Header);
 /* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "f8a62333255a9846821aec2c092c395e.png";
+module.exports = __webpack_require__.p + "341f729cd6f70c37015fd5b519ccc8b1.png";
 
 /***/ }),
 /* 92 */
