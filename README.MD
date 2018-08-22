@@ -36,3 +36,21 @@ To get a distributable tarball of your application, run this command
 
 Remember that you have to run `npm run build` before doing this. This will create a tar.gz file in your root folder. The contents in this file is deployable. All you need to do is copy the contents inside package folder inside this tar.gz file to your server and run the app with something like [pm2].
 
+# Deployment Using Heroku
+
+Currently the deployment mechanism to Heroku is to build the site:
+
+    npm run build:server
+    npm run build:client
+
+And then copy all relevant files to the Heroku CLI directory, with sonething like:
+
+    cp -r ../wacurimvp/webpack .
+    cp -r ../wacurimvp/client .
+    cp -r ../wacurimvp/server .        
+    cp ../wacurimvp/.isomorphic-loader-config.json .
+
+And then use a standard Heroku push:
+
+    git commit -am “deploy"
+    git push heroku head:master 

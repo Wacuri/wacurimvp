@@ -4485,10 +4485,13 @@ var JoinableJourneyCard = function (_Component2) {
               ' available:'
             ),
             Array(3).fill(0).map(function (k, i) {
-              return _react2.default.createElement(
-                'li',
-                null,
-                _react2.default.createElement('i', { className: 'fa fa-female ' + (journey.participants.length > i ? 'fill' : '') })
+              return (
+                // Rob is changing this to "user" just as a test of my ability to change things...
+                _react2.default.createElement(
+                  'li',
+                  null,
+                  _react2.default.createElement('i', { className: 'fa fa-user ' + (journey.participants.length > i ? 'fill' : '') })
+                )
               );
             })
           ),
