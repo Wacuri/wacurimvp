@@ -1,12 +1,29 @@
 {
   "valid": true,
   "version": "2.0.1",
-  "timestamp": 1534908482733,
+  "timestamp": 1534957470287,
   "context": "client",
   "output": {
     "path": "server/public",
     "filename": "./js/index.js",
-    "publicPath": "/"
+    "publicPath": "http://localhost:8080/"
   },
+  "assets": {
+    "marked": {
+      "client/res/images/CuriousLive-logo.png": "341f729cd6f70c37015fd5b519ccc8b1.png"
+    },
+    "chunks": {
+      "main": [
+        "./js/index.js",
+        "css/main.css"
+      ]
+    }
+  },
+  "webpackDev": {
+    "skipSetEnv": false,
+    "url": "http://localhost:8080",
+    "addUrl": false
+  },
+  "isWebpackDev": true,
   "assetsFile": "server/public/isomorphic-assets.json"
 }
