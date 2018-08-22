@@ -123,7 +123,8 @@ class JoinableJourneyCard extends Component {
           <ul className='journey-vacant-spots' style={{display: 'flex', listStyle: 'none', margin: 0, padding: 0}}>
             <li>{3 - journey.participants.length} spot{3 - journey.participants.length > 1 ? 's' : ''} available:</li>
             {Array(3).fill(0).map((k, i) => (
-              <li><i className={`fa fa-female ${journey.participants.length > i ? 'fill' : ''}`}></i></li>
+		// Rob is changing this to "user" just as a test of my ability to change things...
+              <li><i className={`fa fa-user ${journey.participants.length > i ? 'fill' : ''}`}></i></li>
             ))}
             
           </ul>
