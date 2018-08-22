@@ -56,3 +56,13 @@ And then use a standard Heroku push:
 
     git commit -am “deploy"
     git push heroku head:master 
+
+# Using Ngrok locally
+
+At present, Ngrok is used to create a local tunnel for reporting the number of participants in a room, a cricial piece of functionality. 
+It is begun with:
+
+  ngrok http 5000
+
+And configured as the local session monitoring seeting at TokBox. Which will look something like:  http://9cd44610.ngrok.io/api/event
+
