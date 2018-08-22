@@ -1,7 +1,7 @@
 {
   "valid": true,
   "version": "2.0.1",
-  "timestamp": 1534951420693,
+  "timestamp": 1534957470287,
   "context": "client",
   "output": {
     "path": "server/public",
@@ -15,7 +15,6 @@
     "chunks": {
       "main": [
         "./js/index.js",
-        "0.032aed7e77d44325c3f5.hot-update.js",
         "css/main.css"
       ]
     }
