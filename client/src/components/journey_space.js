@@ -389,40 +389,78 @@ class AudioButton extends Component {
     this.state = {
       publishing: true
     }
+
+    // This binding is necessary to make `this` work in the callback -- ROB IS TRYING THIS  
+    this.toggleMicrophone = this.toggleMicrophone.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const {publisher} = nextProps;
-    if (publisher && publisher.state && publisher.state.publisher) {
-      publisher.state.publisher.on('audioLevelUpdated', (event) => {
-        if (event.audioLevel === 0) {
-          this.setState({
-            publishing: false
-          });
-        } else {
-          this.setState({
-            publishing: true
-          });
-        }
-      });
-    }
-  }
+    // NOTE: This seems like a good idea, and it causes no problem on Chrome,
+    // but it makes a complete failure on Safari, so I am giving up this feature.
+    
+  //   componentWillReceiveProps(nextProps) {
+  // 	console.log("WillReceiveProps called");
+  // 	const {publisher} = nextProps;
 
-  toggle = (e) => {
-    e.preventDefault();
-    const {publisher} = this.props;
+  // 	console.log("WillReceiveProps called",publisher);	
+  // 	if (publisher && publisher.state && publisher.state.publisher) {
+
+  // 	    // WARNING: Commneting this out is partially working --- it is controlling things in a one-way direction.
+  // 	    // the active drop down on the video image is not correctly tied to this on Safari.
+  // 	    // Rob believes this is cauising a bug on Safari...
+  // 	    // Note that there is a warning on the log in Chrome about an "unmounted componnets".
+  //     publisher.state.publisher.on('audioLevelUpdated', (event) => {
+  //       if (event.audioLevel === 0) {
+  //         this.setState({
+  //           publishing: false
+  //         });
+  //       } else {
+  //         this.setState({
+  //           publishing: true
+  //         });
+  //       }
+  //     });
+  //   }
+  // }
+    componentDidUpdate(prevProps) {
+  // Typical usage (don't forget to compare props):
+  if (this.props.userID !== prevProps.userID) {
+      this.fetchData(this.props.userID);
+  }
+}
+
+    changeToggleValue = () => {
+	this.setState((prevState) => {
+	    return { publishing: !prevState.publishing};
+	})
+    };
+    
+    toggleMicrophone = (e) => {
+	const DEBUG_MUTE = 1;	
+	e.preventDefault();
+      const {publisher} = this.props;
+      if (DEBUG_MUTE) {
+	  console.log("Initial Publishing State:",this.state.publishing);
+	  console.log(publisher,publisher.state,publisher.state.publisher);
+      }
+	// ON SAFARI, this state is never changing!
+	
     if (publisher && publisher.state && publisher.state.publisher) {
-      publisher.state.publisher.publishAudio(!this.state.publishing);
-      this.setState({
-        publishing: !this.state.publishing
-      });
+	publisher.state.publisher.publishAudio(!this.state.publishing);
+	this.changeToggleValue();
     }
+      if (DEBUG_MUTE) {
+	  console.log("FINAL this.publishing:",this.state.publishing);
+	  console.log("FINAL state:",this.state);	  
+      }
+
+	// This is absolutely necessary, but insuffient to make it work properly.
+	e.stopPropagation();
   }
   
 
   render() {
     return (
-      <button style={this.props.style || {}} onClick={this.toggle} className={`btn btn-${this.state.publishing ? 'primary' : 'secondary'}`}><i className="fa fa-microphone"></i></button>
+      <button id="microphoneButton" style={this.props.style || {}} onClick={this.toggleMicrophone} className={`btn btn-${this.state.publishing ? 'primary' : 'secondary'}`}><i className="fa fa-microphone"></i></button>
     )
   }
 }
@@ -434,10 +472,12 @@ class PlayButton extends Component {
     this.state = {
       paused: (props.player && props.player.paused) || true
     }
-    props.player.addEventListener('play', () => {
+      props.player.addEventListener('play', () => {
       this.setState({
         paused: false
       });
+    // This binding is necessary to make `this` work in the callback -- ROB IS TRYING THIS  
+    this.togglePlay = this.togglePlay.bind(this);
     });
 
     props.player.addEventListener('pause', () => {
@@ -447,7 +487,7 @@ class PlayButton extends Component {
     });
   }
 
-  toggle = (e) => {
+    togglePlay = (e) => {
     e.preventDefault();
     setTimeout(() => {
       if (state.audioTag.paused) {
@@ -476,7 +516,7 @@ class PlayButton extends Component {
 
   render() {
     return (
-      <button style={this.props.style || {}} onClick={this.toggle} className={`btn btn-primary`}>
+      <button id="playbutton_id" style={this.props.style || {}} onClick={this.togglePlay} className={`btn btn-primary`}>
         <i className={`fa fa-${state.audioTag.paused ? 'play' : 'pause'}`}></i>
       </button>
     )
@@ -950,7 +990,7 @@ class JourneySpace extends Component {
     state.audioTag.play();
   }
 
-  togglePlayState = (e) => {
+    togglePlayState = (e) => {
     e.preventDefault();
     setTimeout(() => {
       if (state.audioTag.paused) {
