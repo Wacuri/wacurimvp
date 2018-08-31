@@ -1020,64 +1020,16 @@ class JourneySpace extends Component {
 	render() {
 	    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
 	    var local_key_counter_to_avoid_warning = 0;	    
-    let currentUserHasFlaggedJourney = state.journey && state.journey.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
+	    let currentUserHasFlaggedJourney = state.journey && state.journey.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
+	    var stream0 = this.state.streams[0];
 		return (
 			<div className='journeyspace' style={{position: 'relative'}}>
 
           <div className='journeyspace-content'>
-            {this.state.session &&
+			{this.state.session &&
+			 <div>
               <div className='row no-gutters'>
-                <div className='col-5 col-lg-3'>
-                  <ul className='journeyspace-streams' style={{margin: 0}}>
-                    <li key="name">
-                      <img style={{width: '100%'}} src={state.journey.image} onClick={this.togglePlayState}/>
-                      <h2 style={{flex: 5}} className='journeyspace-title'>{state.journey.name}</h2>
-
-                    </li>
-                    <li key="stream" className='journeyspace-stream journeyspace-me'>
-                        <OTPublisher 
-                          properties={{width: '100%', height: '100%'}}
-                          session={this.sessionHelper.session}
-                          onInit={this.onInitPublisher}
-                          ref={publisher => {this.publisher = publisher}}
-                        />
-                    </li>
-
-                    {this.state.streams.map(stream => {
-                      const participant = state.journey.participants.find(participant => participant.connectionId === stream.connection.id);
-			const hasFlagged = !!state.journey.flags.find(flag => flag.user === state.sessionId && flag.flagged === stream.id);
-			var streamcnt = 0;
-                      return (
-                              <li key={streamcnt++} className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
-                            <OTSubscriber
-                              key={stream.id}
-                              session={this.sessionHelper.session}
-                              stream={stream}
-                              properties={{
-                                width: '100%',
-                                height: '100%',
-                              }}
-                            />
-                            <div className='journeyspace-stream-controls'>
-                              <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
-                                <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
-                              </FlagControl>
-                            </div>
-                        </li>
-                      );
-                    })}
-                    
-             {	 Array(2 - this.state.streams.length).fill({}).map(empty => (
-                     <li key={local_key_counter_to_avoid_warning++} className='video-placeholder'>
-                        <div>
-                          <i className='fa fa-user'></i>
-                          <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className='col-7 col-lg-9' style={{backgroundColor: 'white'}}>
+                <div className='col-12 col-lg-12' style={{backgroundColor: 'white'}}>
                   
                   {state.journey.state === 'joined' && state.journey.startAt && <JourneyStartsIn journey={state.journey} timer={this.journeyStateTimer}/> }
 
@@ -1117,11 +1069,58 @@ class JourneySpace extends Component {
                       </p>
                   }
 
-                </div>
-              </div>
-            }
-          
-          </div>
+			 </div>
+			 </div>
+
+			 <div className='row no-gutters'>
+			 <div className='col-5 col-lg-5'>
+                    <div key="name">
+                      <img style={{width: '100%'}} src={state.journey.image} onClick={this.togglePlayState}/>
+                      <h2 style={{flex: 5}} className='journeyspace-title'>{state.journey.name}</h2>
+
+                    </div>
+			 </div>
+			 
+ 			 <div className='col-5 col-lg-5' style={{backgroundColor: 'red'}}>
+			 <p>SPUD</p>
+			 <ul className='journeyspace-streams' style={{margin: 0}}>
+			 <li key="stream" className='journeyspace-stream journeyspace-me'>
+			 <p>THIS IS RIGHT BEFORE THE OTPUBLISHER</p>
+                        <OTPublisher 
+                          properties={{width: '100%', height: '100%'}}
+                          session={this.sessionHelper.session}
+                          onInit={this.onInitPublisher}
+                          ref={publisher => {this.publisher = publisher}}
+                        />
+			 </li>
+			 </ul>
+		       	
+			 <p>SECOND SPUD</p>
+			 </div>
+			 </div>
+			 <div className='row no-gutters'>
+			 <div className='col-5 col-lg-5'>
+			 <p>MORTIMER</p>
+			 { (() => { if (true)
+				 return <p>"XXXX"</p>;
+			     else
+				 return <p>"YYYY"</p>;
+				  })()
+			 }
+			 </div>
+			 <div className='col-5 col-lg-5'>
+			 <p>LATIMER</p>			 
+			 { (()=> {
+			     if (false)
+				 return <p>"XXXX"</p>;
+			     else
+				 return <p>"YYYY"</p>;
+			 })()
+			 }
+			 </div>
+			 </div>
+
+			 
           <div className='journeyspace-footer' style={{display: 'flex'}}>
             <div style={{flex: 1}}>
             </div>
@@ -1131,9 +1130,80 @@ class JourneySpace extends Component {
           {this.state.showShareModal &&
             <InviteModal journey={this.state.session} onComplete={this.onCompleteShare} onClose={this.onCloseShareModal}/>
           }
+		    </div>
+		}			
 			</div>
-		)
+		    </div>						
+	)
 	}
 }
 
 export default view(JourneySpace);
+
+
+		      // 	 <div className='col-5 col-lg-5'>
+		      // 	 // The first participant
+		      // 	 {() => {
+                      // const participant = state.journey.participants.find(participant => participant.connectionId === stream0.connection.id);
+		      // 	const hasFlagged = !!state.journey.flags.find(flag => flag.user === state.sessionId && flag.flagged === stream0.id);
+                      // return (
+                      //         <li key={0} className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+                      //       <OTSubscriber
+                      //         key={stream0.id}
+                      //         session={this.sessionHelper.session}
+                      //         stream={stream0}
+                      //         properties={{
+                      //           width: '100%',
+                      //           height: '100%',
+                      //         }}
+                      //       />
+                      //       <div className='journeyspace-stream-controls'>
+                      //         <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
+                      //           <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
+                      //         </FlagControl>
+                      //       </div>
+                      //   </li>
+                      // );
+		      // 	 }}
+		      // 	 </div>
+	// <div className='row no-gutters'>			 
+        //         <div className='col-12 col-lg-12'>
+        //           <ul className='journeyspace-streams' style={{margin: 0}}>
+
+        //             {this.state.streams.map(stream => {
+        //               const participant = state.journey.participants.find(participant => participant.connectionId === stream.connection.id);
+	// 		const hasFlagged = !!state.journey.flags.find(flag => flag.user === state.sessionId && flag.flagged === stream.id);
+	// 		var streamcnt = 0;
+        //               return (
+        //                       <li key={streamcnt++} className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+        //                     <OTSubscriber
+        //                       key={stream.id}
+        //                       session={this.sessionHelper.session}
+        //                       stream={stream}
+        //                       properties={{
+        //                         width: '100%',
+        //                         height: '100%',
+        //                       }}
+        //                     />
+        //                     <div className='journeyspace-stream-controls'>
+        //                       <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
+        //                         <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
+        //                       </FlagControl>
+        //                     </div>
+        //                 </li>
+        //               );
+        //             })}
+                    
+        //      {	 Array(2 - this.state.streams.length).fill({}).map(empty => (
+        //              <li key={local_key_counter_to_avoid_warning++} className='video-placeholder'>
+        //                 <div>
+        //                   <i className='fa fa-user'></i>
+        //                   <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
+        //                 </div>
+        //               </li>
+        //             ))}
+        //           </ul>
+
+        //     }
+        //      </div>
+	//      </div>          
