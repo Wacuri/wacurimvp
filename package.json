@@ -1,7 +1,7 @@
 {
-  "name": "react-expressjs",
+  "name": "Curious Live",
   "version": "4.0.0",
-  "description": "Boilerplate for ReactJS project with ExpressJS server",
+  "description": "Be curious together.",
   "main": "server/bin/server.js",
   "scripts": {
     "dev": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack/client.dev.js | nodemon server --exec node_modules/.bin/babel-node --presets es2015,stage-0",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tahnik/react-express-webpack-babel"
+    "url": "https://github.com/Wacuri/wacurimvp"
   },
   "keywords": [
     "react",
@@ -26,12 +26,12 @@
     "react router v4",
     "redux"
   ],
-  "author": "Tahnik Mustasin",
-  "license": "MIT",
+  "author": "Robert L. Read and others",
+  "license": "GPL",
   "bugs": {
-    "url": "https://github.com/tahnik/react-express-webpack-babel/issues"
+    "url": "https://github.com/Wacuri/wacurimvp"
   },
-  "homepage": "https://github.com/tahnik/react-express-webpack-babel#readme",
+  "homepage": "https://wacuri.com",
   "dependencies": {
     "@opentok/client": "^2.13.2",
     "agenda": "^1.0.3",
