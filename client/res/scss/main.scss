@@ -10,6 +10,12 @@ $fa-font-path: "~font-awesome/fonts";
   }
 }
 
+:root {
+    --heightpercentage: 0.1;
+    --mainheightpercentage: 0.2;    
+}
+
+
 .btn-secondary {
   background-color: rgb(220, 220, 220);
 }
@@ -63,17 +69,19 @@ h2 {
 .journeyspace-container {
   position: relative;
 }
-
+// This is what makes the height of the video expand as you change the width.
+// This took some work. This is in part to maintain an aspect ratio.
+// Having elments fill 100% of available height is tricky.
 .journeyspace-streams {
   padding: 15px 10px 0 10px;
 
   li {
-    min-height: calc(100vw * .4);
+    min-height: calc(100vw * var(--mainheightpercentage));
     margin-bottom: 10px; 
 
     @media (min-width: 992px) {
       & {
-        min-height: calc(100vw * .25);
+        min-height: calc(100vw * var(--heightpercentage));
       }
     }
     
@@ -84,6 +92,7 @@ h2 {
   }
 }
 
+// Possibly the div is obsolete
 .video-placeholder {
   border: 1px solid rgb(83, 83, 83);
   display: flex;
@@ -102,6 +111,24 @@ h2 {
 
   p {
     color: rgb(83, 83, 83);
+  }
+  
+  > div {
+      //    min-height: calc(100vw * .4);
+    min-height: calc(100vw * var(--mainheightpercentage));      
+    margin-bottom: 10px; 
+
+    @media (min-width: 992px) {
+      & {
+	  //        min-height: calc(100vw * .25);
+        min-height: calc(100vw * var(--heightpercentage));	  
+      }
+    }
+    
+  }
+
+  li:first-child {
+    border: none;
   }
 
 }

@@ -1073,7 +1073,7 @@ class JourneySpace extends Component {
 			 </div>
 
 			 <div className='row no-gutters'>
-			 <div className='col-5 col-lg-5'>
+			 <div className='col-6 col-lg-6'>
                     <div key="name">
                       <img style={{width: '100%'}} src={state.journey.image} onClick={this.togglePlayState}/>
                       <h2 style={{flex: 5}} className='journeyspace-title'>{state.journey.name}</h2>
@@ -1081,11 +1081,9 @@ class JourneySpace extends Component {
                     </div>
 			 </div>
 			 
- 			 <div className='col-5 col-lg-5' style={{backgroundColor: 'red'}}>
-			 <p>SPUD</p>
+ 			 <div className='col-6 col-lg-6'>
 			 <ul className='journeyspace-streams' style={{margin: 0}}>
 			 <li key="stream" className='journeyspace-stream journeyspace-me'>
-			 <p>THIS IS RIGHT BEFORE THE OTPUBLISHER</p>
                         <OTPublisher 
                           properties={{width: '100%', height: '100%'}}
                           session={this.sessionHelper.session}
@@ -1094,28 +1092,67 @@ class JourneySpace extends Component {
                         />
 			 </li>
 			 </ul>
-		       	
-			 <p>SECOND SPUD</p>
 			 </div>
 			 </div>
 			 <div className='row no-gutters'>
-			 <div className='col-5 col-lg-5'>
-			 <p>MORTIMER</p>
-			 { (() => { if (true)
-				 return <p>"XXXX"</p>;
-			     else
-				 return <p>"YYYY"</p>;
-				  })()
+			 <div className='col-6 col-lg-6'>
+			 { (() => { 
+			     return ((this.state.streams.length < 1) ?
+				 <li key={local_key_counter_to_avoid_warning++} className='video-placeholder'>
+                        <div>
+                          <i className='fa fa-user'></i>
+                          <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
+                        </div>
+				     </li>
+				     :
+				 <li key={0} className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+				 <p>hello</p>
+                            <OTSubscriber
+                              key={this.state.streams[0].id}
+                              session={this.sessionHelper.session}
+                              stream={this.state.streams[0]}
+                              properties={{
+                                width: '100%',
+                                height: '100%',
+                              }}
+                            />
+                          <div className='journeyspace-stream-controls'>
+                              <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
+                                <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
+                              </FlagControl>
+                            </div>
+                        </li>
+				    ); })()
 			 }
 			 </div>
-			 <div className='col-5 col-lg-5'>
-			 <p>LATIMER</p>			 
-			 { (()=> {
-			     if (false)
-				 return <p>"XXXX"</p>;
-			     else
-				 return <p>"YYYY"</p>;
-			 })()
+			 <div className='col-6 col-lg-6'>
+			 { (() => { 
+			     return ((this.state.streams.length < 2) ?
+				 <li key={local_key_counter_to_avoid_warning++} className='video-placeholder'>
+                        <div>
+                          <i className='fa fa-user'></i>
+                          <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
+                        </div>
+				     </li>
+				     :
+				 <li key={1} className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+				 <p>hello</p>
+                            <OTSubscriber
+                              key={this.state.streams[1].id}
+                              session={this.sessionHelper.session}
+                              stream={this.state.streams[1]}
+                              properties={{
+                                width: '100%',
+                                height: '100%',
+                              }}
+                            />
+                          <div className='journeyspace-stream-controls'>
+                              <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
+                                <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
+                              </FlagControl>
+                            </div>
+                        </li>
+				    ); })()
 			 }
 			 </div>
 			 </div>
