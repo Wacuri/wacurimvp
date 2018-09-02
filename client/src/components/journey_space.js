@@ -24,6 +24,32 @@ if (__CLIENT__) {
 }
 
 
+
+const setSizes = () => {
+    var fs = document.getElementById("flex-squares-main");	
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+
+    
+    var v = Math.max(Math.max(w/4,h/4),Math.min(w/2,h/2));
+    v = v * 1.0;
+    var s0 = document.getElementById("video-square0");
+    var s1 = document.getElementById("video-square1");
+    var s2 = document.getElementById("video-square2");
+    var s3 = document.getElementById("video-square3");
+
+    s0.style.height = v+"px";
+    s1.style.height = v+"px";
+    s2.style.height = v+"px";
+    s3.style.height = v+"px";
+
+    s0.style.width = v+"px";
+    s1.style.width = v+"px";
+    s2.style.width = v+"px";
+    s3.style.width = v+"px";
+}
+
+
 class AbstractTimerEmitter extends EventEmitter {
   _displayTime(millisec: number) {
     if (millisec < 0) { return '0:00'; }
@@ -849,7 +875,8 @@ class JourneySpace extends Component {
 			.then(res => res.json())
 			.then(json => {
 				state.journey = json;
-      });
+			});
+      setTimeout(setSizes,1000);
   }
 
   get timeRemaining() {

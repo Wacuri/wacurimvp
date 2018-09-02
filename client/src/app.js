@@ -24,20 +24,20 @@ if (__CLIENT__) {
         document.body.removeEventListener('click', globalClickCatcher);
       });
     }
-  }
-    const resizeEventHandler = (e) => {
-	console.log("GOT RESIZE EVENT");
+  };
+    const setSizes = () => {
+	var fs = document.getElementById("flex-squares-main");	
 	var w = window.innerWidth;
 	var h = window.innerHeight;
+
+	
 	var v = Math.max(Math.max(w/4,h/4),Math.min(w/2,h/2));
 	v = v * 1.0;
-	console.log("v, w, h", v, w, h);
 	var s0 = document.getElementById("video-square0");
 	var s1 = document.getElementById("video-square1");
 	var s2 = document.getElementById("video-square2");
 	var s3 = document.getElementById("video-square3");
 
-	//	s0.style.height = "50px";
 	s0.style.height = v+"px";
 	s1.style.height = v+"px";
 	s2.style.height = v+"px";
@@ -47,13 +47,13 @@ if (__CLIENT__) {
 	s1.style.width = v+"px";
 	s2.style.width = v+"px";
 	s3.style.width = v+"px";
-	
-	console.log("s0,s1,s2,s3", s0, s1, s2, s3);
-	console.log(e);
+    }
+    const resizeEventHandler = (e) => {
+	setSizes();
     };
     document.body.addEventListener('click', globalClickCatcher);
     window.addEventListener('resize', resizeEventHandler);
-  window.addEventListener('load', resizeEventHandler);        
+    window.addEventListener('load', resizeEventHandler);        
 }
 
 
