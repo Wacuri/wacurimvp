@@ -1,5 +1,5 @@
 {
-  "name": "Curious Live",
+  "name": "CuriousLive",
   "version": "4.0.0",
   "description": "Be curious together.",
   "main": "server/bin/server.js",
