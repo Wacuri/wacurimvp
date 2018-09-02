@@ -1056,8 +1056,7 @@ class JourneySpace extends Component {
           <div className='journeyspace-content'>
 			{this.state.session &&
 			 <div>
-              <div className='row no-gutters'>
-                <div className='col-12 col-lg-12' style={{backgroundColor: 'white'}}>
+                <div className='' style={{backgroundColor: 'red'}}>
                   
                   {state.journey.state === 'joined' && state.journey.startAt && <JourneyStartsIn journey={state.journey} timer={this.journeyStateTimer}/> }
 
@@ -1070,7 +1069,9 @@ class JourneySpace extends Component {
                       </select>
                     </div>
                   }
-                  
+
+			 <div style={{display: 'flex'}}>
+			 
                   <div style={{display: 'flex', padding: '10px 10px 0'}}>
                     <PlayButton journey={state.journey} player={state.audioTag}/>
                     { false &&
@@ -1083,7 +1084,9 @@ class JourneySpace extends Component {
                   </div>
                   <div style={{padding: '10px'}}>
                     <LeaveRoomButton history={this.props.history}/>
-                  </div>
+			 </div>
+			 </div>
+			 
                   <JourneyTimeline journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
 
                   <div className='journeyspace-meta pr-3 pl-3 pt-3'>
@@ -1097,7 +1100,6 @@ class JourneySpace extends Component {
                       </p>
                   }
 
-			 </div>
 			 </div>
 
 
