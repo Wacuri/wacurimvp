@@ -28,16 +28,17 @@ h2 {
   margin: 0;
   background: rgb(252, 189, 81);
   padding: 0;
-
-  h1 {
-    color: white;
-    font-size: 2rem;
-    margin: 0;
-  }
-
-  .logo img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+		       
+  .logo {
     width: 150px;
     max-height: 46px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  
   }
 }
 
