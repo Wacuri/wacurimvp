@@ -318,7 +318,8 @@ class JourneyTimeline extends Component {
   render() {
     const {journey} = this.props;
     return (
-      <div ref={el => {this.container = el}} className={`journey-timeline step-${this.stepIndex.toString()}`}>
+	    <div ref={el => {this.container = el}} className={`journey-timeline step-${this.stepIndex.toString()}`}>
+	    <div style={{display: 'flex'}}>
         <ul>
           <li key="Prepare" className={journey.state === 'joined' ? 'active' : ''}>
             <h4>Prepare</h4>
@@ -327,8 +328,10 @@ class JourneyTimeline extends Component {
               {journey.state === 'joined' && journey.startAt &&
                 <p className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</p>
               }
-            </div>
-          </li>
+        </div>
+            </li>
+	    </ul>
+	    <ul>
           <li key="Journey" className={journey.state === 'started' ? 'active' : ''} style={{position: 'relative'}}>
             <h4>Journey</h4>
             <div style={{display: 'flex'}}>
@@ -342,12 +345,16 @@ class JourneyTimeline extends Component {
                 </div>
               }
             </div>
-          </li>
+            </li>
+	    </ul>
+	    <ul>
           <li key="Sharing">
             <h4>Sharing</h4>
             <p>Feelings and thoughts</p>
           </li>
-        </ul>
+			</ul>
+			</div>
+			
         <div className='arrow' style={{height: `${this.heightForActive}px`, width: `${this.heightForActive}px`, transform: `translateY(${this.positionForCaret}px)`}}>
           <svg xmlns="http://www.w3.org/2000/svg" version="1.1" className="svg-triangle" viewBox="0 0 100 100" preserveAspectRatio="none" shapeRendering="geometricPrecision">
             <path d="M 70 50 100 5 100 100 Z"/>
