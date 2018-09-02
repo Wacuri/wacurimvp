@@ -23,6 +23,7 @@ if (__CLIENT__) {
 	window.state = state;
 }
 
+
 class AbstractTimerEmitter extends EventEmitter {
   _displayTime(millisec: number) {
     if (millisec < 0) { return '0:00'; }
@@ -1072,40 +1073,39 @@ class JourneySpace extends Component {
 			 </div>
 			 </div>
 
-			 <div className='row no-gutters'>
-			 <div className='col-6 col-lg-6'>
-                    <div key="name">
-                      <img style={{width: '100%'}} src={state.journey.image} onClick={this.togglePlayState}/>
+
+			 <div className="flex-squares"> 
+                    <span   key="name" >
+                      <img id='video-square0' className="journey-image" src={state.journey.image} onClick={this.togglePlayState}/>
                       <h2 style={{flex: 5}} className='journeyspace-title'>{state.journey.name}</h2>
 
-                    </div>
-			 </div>
+                    </span>
 			 
- 			 <div className='col-6 col-lg-6'>
-			 <ul className='journeyspace-streams' style={{margin: 0}}>
-			 <li key="stream" className='journeyspace-stream journeyspace-me'>
+
+			 <span key="stream" id='video-square1' className='journeyspace-stream journeyspace-me'>
                         <OTPublisher 
-                          properties={{width: '100%', height: '100%'}}
                           session={this.sessionHelper.session}
                           onInit={this.onInitPublisher}
-                          ref={publisher => {this.publisher = publisher}}
+                         ref={publisher => {this.publisher = publisher}}
+                              properties={{
+                                width: '100%',
+                                height: '100%',
+                              }}
                         />
-			 </li>
-			 </ul>
-			 </div>
-			 </div>
-			 <div className='row no-gutters'>
-			 <div className='col-6 col-lg-6'>
+			 </span>
+
+			 
+
 			 { (() => { 
 			     return ((this.state.streams.length < 1) ?
-				 <li key={local_key_counter_to_avoid_warning++} className='video-placeholder'>
+				 <li key={local_key_counter_to_avoid_warning++} id='video-square2' className='video-placeholder'>
                         <div>
                           <i className='fa fa-user'></i>
                           <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
                         </div>
 				     </li>
 				     :
-				 <li key={0} className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+				 <li key={0} id='video-square2' className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
 				 <p>hello</p>
                             <OTSubscriber
                               key={this.state.streams[0].id}
@@ -1124,18 +1124,16 @@ class JourneySpace extends Component {
                         </li>
 				    ); })()
 			 }
-			 </div>
-			 <div className='col-6 col-lg-6'>
 			 { (() => { 
 			     return ((this.state.streams.length < 2) ?
-				 <li key={local_key_counter_to_avoid_warning++} className='video-placeholder'>
+				 <li key={local_key_counter_to_avoid_warning++} id='video-square3' className='video-placeholder'>
                         <div>
                           <i className='fa fa-user'></i>
                           <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
                         </div>
 				     </li>
 				     :
-				 <li key={1} className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+				 <li key={1} id='video-square3' className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
 				 <p>hello</p>
                             <OTSubscriber
                               key={this.state.streams[1].id}
@@ -1155,9 +1153,6 @@ class JourneySpace extends Component {
 				    ); })()
 			 }
 			 </div>
-			 </div>
-
-			 
           <div className='journeyspace-footer' style={{display: 'flex'}}>
             <div style={{flex: 1}}>
             </div>
@@ -1244,3 +1239,91 @@ export default view(JourneySpace);
         //     }
         //      </div>
 	//      </div>          
+
+
+
+
+		    // 	 <div className='row no-gutters'>
+		    // 	 <div className='col-6 col-lg-6'>
+                    // <div key="name" id='video-square0'>
+                    //   <img style={{width: '100%'}} src={state.journey.image} onClick={this.togglePlayState}/>
+                    //   <h2 style={{flex: 5}} className='journeyspace-title'>{state.journey.name}</h2>
+
+                    // </div>
+		    // 	 </div>
+			 
+ 		    // 	 <div className='col-6 col-lg-6'>
+		    // 	 <ul className='journeyspace-streams' style={{margin: 0}}>
+		    // 	 <li key="stream" id='video-square1' className='journeyspace-stream journeyspace-me'>
+                    //     <OTPublisher 
+                    //       properties={{width: '100%', height: '100%'}}
+                    //       session={this.sessionHelper.session}
+                    //       onInit={this.onInitPublisher}
+                    //       ref={publisher => {this.publisher = publisher}}
+                    //     />
+		    // 	 </li>
+		    // 	 </ul>
+		    // 	 </div>
+		    // 	 </div>
+		    // 	 <div className='row no-gutters'>
+		    // 	 <div className='col-6 col-lg-6'>
+		    // 	 { (() => { 
+		    // 	     return ((this.state.streams.length < 1) ?
+		    // 		 <li key={local_key_counter_to_avoid_warning++} id='video-square2' className='video-placeholder'>
+                    //     <div>
+                    //       <i className='fa fa-user'></i>
+                    //       <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
+                    //     </div>
+		    // 		     </li>
+		    // 		     :
+		    // 		 <li key={0} id='video-square2' className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+		    // 		 <p>hello</p>
+                    //         <OTSubscriber
+                    //           key={this.state.streams[0].id}
+                    //           session={this.sessionHelper.session}
+                    //           stream={this.state.streams[0]}
+                    //           properties={{
+                    //             width: '100%',
+                    //             height: '100%',
+                    //           }}
+                    //         />
+                    //       <div className='journeyspace-stream-controls'>
+                    //           <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
+                    //             <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
+                    //           </FlagControl>
+                    //         </div>
+                    //     </li>
+		    // 		    ); })()
+		    // 	 }
+		    // 	 </div>
+		    // 	 <div className='col-6 col-lg-6'>
+		    // 	 { (() => { 
+		    // 	     return ((this.state.streams.length < 2) ?
+		    // 		 <li key={local_key_counter_to_avoid_warning++} id='video-square3' className='video-placeholder'>
+                    //     <div>
+                    //       <i className='fa fa-user'></i>
+                    //       <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
+                    //     </div>
+		    // 		     </li>
+		    // 		     :
+		    // 		 <li key={1} id='video-square3' className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+		    // 		 <p>hello</p>
+                    //         <OTSubscriber
+                    //           key={this.state.streams[1].id}
+                    //           session={this.sessionHelper.session}
+                    //           stream={this.state.streams[1]}
+                    //           properties={{
+                    //             width: '100%',
+                    //             height: '100%',
+                    //           }}
+                    //         />
+                    //       <div className='journeyspace-stream-controls'>
+                    //           <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
+                    //             <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
+                    //           </FlagControl>
+                    //         </div>
+                    //     </li>
+		    // 		    ); })()
+		    // 	 }
+		    // 	 </div>
+		    // 	 </div>

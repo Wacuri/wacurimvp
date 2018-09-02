@@ -11,8 +11,8 @@ $fa-font-path: "~font-awesome/fonts";
 }
 
 :root {
-    --heightpercentage: 0.1;
-    --mainheightpercentage: 0.2;    
+    --heightpercentage: 0.8;
+    --mainheightpercentage: 0.8;
 }
 
 
@@ -52,6 +52,15 @@ h2 {
   min-height: calc(100vh - 46px);
 }
 
+.journey-image {
+    object-fit: contain
+}
+
+.flex-squares {
+    display: flex;
+    flex-flow: row wrap;
+}
+
 .journeyspace-content {
   flex: 1;
 }
@@ -76,12 +85,12 @@ h2 {
   padding: 15px 10px 0 10px;
 
   li {
-    min-height: calc(100vw * var(--mainheightpercentage));
-    margin-bottom: 10px; 
+      min-height: calc(100vw * .4);	          
+      margin-bottom: 10px; 
 
     @media (min-width: 992px) {
-      & {
-        min-height: calc(100vw * var(--heightpercentage));
+	& {
+	  min-height: calc(100vw * .25);	    
       }
     }
     
@@ -114,14 +123,13 @@ h2 {
   }
   
   > div {
-      //    min-height: calc(100vw * .4);
-    min-height: calc(100vw * var(--mainheightpercentage));      
-    margin-bottom: 10px; 
+      min-height: calc(100vw * .4);
+      margin-bottom: 10px; 
 
     @media (min-width: 992px) {
       & {
-	  //        min-height: calc(100vw * .25);
-        min-height: calc(100vw * var(--heightpercentage));	  
+	  min-height: calc(100vw * .25);
+	  width: height;
       }
     }
     
