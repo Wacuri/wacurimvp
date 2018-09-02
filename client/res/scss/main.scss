@@ -64,6 +64,10 @@ h2 {
     display: flex;
     flex-flow: row wrap;
 }
+.flexiblerow {
+    display: flex;
+    flex-flow: row wrap;
+}
 
 .journeyspace-content {
   flex: 1;
@@ -192,14 +196,13 @@ h2 {
    height: 4px;
    display: block;
  }
-
   progress[value]::-webkit-progress-bar {
-    background-color: rgb(255, 191, 53);
+      background-color: rgb(255, 191, 53);
     border-radius: 2px;
   }
 
   progress[value]::-webkit-progress-value {
-    background-color: rgb(97, 97, 97);
+      background-color: rgb(97, 97, 97);
     border-radius: 2px 0 0 2px;
   }
 }

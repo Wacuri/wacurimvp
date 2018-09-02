@@ -315,6 +315,8 @@ class JourneyTimeline extends Component {
     this.props.seekTo(percent);
   }
 
+    // Note: setting the backgroudnColor below to orange does not work, but at least gives us a
+    // gray that can be seen against the black background
   render() {
     const {journey} = this.props;
     return (
@@ -341,7 +343,7 @@ class JourneyTimeline extends Component {
               }
               {(journey.state === 'started' || journey.state === 'paused') &&
                 <div style={{position: 'absolute', bottom: '-12px', left: '10px', right: '10px'}}>
-                  <progress ref={(progressBar) => this.progressBar = progressBar} onClick={this.onSeek} max={this.props.timer.total} value={this.props.timer.currentTime} style={{width: '90%'}}></progress>
+               <progress ref={(progressBar) => this.progressBar = progressBar} onClick={this.onSeek} max={this.props.timer.total} value={this.props.timer.currentTime} style={{width: '90%',backgroundColor: 'orange'}}></progress>
                 </div>
               }
             </div>
@@ -354,15 +356,18 @@ class JourneyTimeline extends Component {
           </li>
 			</ul>
 			</div>
-			
+	</div>			
+    )
+  }
+}
+
+function OBSOLETE_ARROW() {
         <div className='arrow' style={{height: `${this.heightForActive}px`, width: `${this.heightForActive}px`, transform: `translateY(${this.positionForCaret}px)`}}>
           <svg xmlns="http://www.w3.org/2000/svg" version="1.1" className="svg-triangle" viewBox="0 0 100 100" preserveAspectRatio="none" shapeRendering="geometricPrecision">
             <path d="M 70 50 100 5 100 100 Z"/>
           </svg>
         </div>
-      </div>
-    )
-  }
+
 }
 
 class SkipButton extends Component {
@@ -1060,10 +1065,10 @@ class JourneySpace extends Component {
 		return (
 			<div className='journeyspace' style={{position: 'relative'}}>
 
-          <div className='journeyspace-content'>
+          <div className='journeyspace-content flexiblerow'>
 			{this.state.session &&
 			 <div>
-                <div className='' style={{backgroundColor: 'red'}}>
+			 <div className='flexiblerow' style={{backgroundColor: 'black', color: 'white'}}>
                   
                   {state.journey.state === 'joined' && state.journey.startAt && <JourneyStartsIn journey={state.journey} timer={this.journeyStateTimer}/> }
 
@@ -1077,7 +1082,7 @@ class JourneySpace extends Component {
                     </div>
                   }
 
-			 <div style={{display: 'flex'}}>
+			 <div style={{display: 'flex'}} className='flexiblerow'>
 			 
                   <div style={{display: 'flex', padding: '10px 10px 0'}}>
                     <PlayButton journey={state.journey} player={state.audioTag}/>
