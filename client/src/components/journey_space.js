@@ -505,7 +505,7 @@ class AudioButton extends Component {
 	publisher.state.publisher.publishAudio(!this.state.publishing);
 	this.changeToggleValue();
     }
-      if (DEBUG_MUTE) {
+	if (DEBUG_MUTE) {
 	  console.log("FINAL this.publishing:",this.state.publishing);
 	  console.log("FINAL state:",this.state);	  
       }
@@ -571,9 +571,11 @@ class PlayButton extends Component {
     }, 20);
   }
 
-  render() {
+    render() {
     return (
-      <button id="playbutton_id" style={this.props.style || {}} onClick={this.togglePlay} className={`btn btn-primary`}>
+	    <button id="playbutton_id"
+		style={this.props.style || {}}
+	onClick={this.togglePlay} className={`btn btn-primary`}>
         <i className={`fa fa-${state.audioTag.paused ? 'play' : 'pause'}`}></i>
       </button>
     )
@@ -1089,8 +1091,8 @@ class JourneySpace extends Component {
                     </div>
                   }
 
-			 <div style={{display: 'flex'}} className='flexiblerow'>
-			 
+			 <div id='central_control_panel_id' style={{display: 'flex'}} className='flexiblerow'>
+
                   <div style={{display: 'flex', padding: '10px 10px 0'}}>
                     <PlayButton journey={state.journey} player={state.audioTag}/>
                     { false &&
@@ -1103,7 +1105,9 @@ class JourneySpace extends Component {
 			 </div>
 			 <div style={{padding: '10px'}}>
 			 </div>
+
 			 </div>
+
 			 
                   <JourneyTimeline journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
 
