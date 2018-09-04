@@ -246,10 +246,13 @@ class JourneyBoard extends Component {
 	// I want to remove the warnings I am getting, but this is a dangerous way to do it.
 	// Possibly I should deal with this in a different way.
 	var discriminator = 0;
-    return (
+	return (
+		<div>
+	    <Header history={this.props.history}/>	    
       <div className='joinable-journeys'>
         {state.joinableJourneys.map(journey => <JoinableJourneyCard key={journey._id+"_"+discriminator++} journey={journey} audioTag={this.audioTag}/>)}
-      </div>
+	    </div>
+		</div>
     )
   }
 }
@@ -312,7 +315,6 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Header />
         <Switch>
           <RouteWithIntro exact path="/login" component={withRouter(Login)} />
           <RouteWithIntro exact path="/" component={view(JourneyBoard)} />

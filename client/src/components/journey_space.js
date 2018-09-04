@@ -11,6 +11,7 @@ import uuid from 'uuid';
 import {initLayoutContainer} from 'opentok-layout-js';
 import './share';
 import JourneyStartsIn from './journey_starts_in';
+import Header from './header';
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
@@ -47,6 +48,23 @@ const setSizes = () => {
     s1.style.width = v+"px";
     s2.style.width = v+"px";
     s3.style.width = v+"px";
+}
+
+class LeaveRoomButton extends Component {
+
+  onLeave = (e) => {
+    e.preventDefault();
+    if (!state.audioTag.paused) {
+      state.audioTag.pause();
+    }
+      this.props.history.push('/');      
+  }
+
+  render() {
+    return (
+      <button onClick={this.onLeave} className='btn btn-primary'>Leave</button>
+    )
+  }
 }
 
 
@@ -562,22 +580,6 @@ class PlayButton extends Component {
   }
 }
 
-class LeaveRoomButton extends Component {
-
-  onLeave = (e) => {
-    e.preventDefault();
-    if (!state.audioTag.paused) {
-      state.audioTag.pause();
-    }
-    this.props.history.push('/');
-  }
-
-  render() {
-    return (
-      <button onClick={this.onLeave} className='btn btn-primary'>Leave</button>
-    )
-  }
-}
 
 
 class SharePrompt extends Component {
@@ -691,7 +693,8 @@ class InviteModal extends Component {
 class JourneySpace extends Component {
 
   constructor(props) {
-    super(props);
+      super(props);
+      console.log(props);
     this.state = {
       streams: [],
       publisherId: '',
@@ -874,6 +877,8 @@ class JourneySpace extends Component {
       .then(json => {
         state.journeys = json;
       });
+
+
 	}
 
   componentWillUnmount() {
@@ -886,7 +891,7 @@ class JourneySpace extends Component {
 		fetch(`/api/journeys/${this.props.match.params.room}`, {credentials: 'include'})
 			.then(res => res.json())
 			.then(json => {
-				state.journey = json;
+			    state.journey = json;
 			});
       setTimeout(setSizes,1000);
   }
@@ -1057,17 +1062,19 @@ class JourneySpace extends Component {
     }, 20);
   }
 
-	render() {
+    render() {
 	    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
 	    var local_key_counter_to_avoid_warning = 0;	    
 	    let currentUserHasFlaggedJourney = state.journey && state.journey.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
 	    var stream0 = this.state.streams[0];
-		return (
+	return (
 			<div className='journeyspace' style={{position: 'relative'}}>
+	    <Header history={this.props.history}/>
 
           <div className='journeyspace-content flexiblerow'>
 			{this.state.session &&
 			 <div>
+			 <span style={{color: 'white'}} >{state.journey.name}</span>
 			 <div className='flexiblerow' style={{backgroundColor: 'black', color: 'white'}}>
                   
                   {state.journey.state === 'joined' && state.journey.startAt && <JourneyStartsIn journey={state.journey} timer={this.journeyStateTimer}/> }
@@ -1093,9 +1100,8 @@ class JourneySpace extends Component {
                   <div style={{display: 'flex', padding: '10px 10px 0 10px'}}>
                     <VideoButton publisher={this.publisher}/>
                     <AudioButton style={{marginLeft: '10px'}} publisher={this.publisher}/>
-                  </div>
-                  <div style={{padding: '10px'}}>
-                    <LeaveRoomButton history={this.props.history}/>
+			 </div>
+			 <div style={{padding: '10px'}}>
 			 </div>
 			 </div>
 			 
