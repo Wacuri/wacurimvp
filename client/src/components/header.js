@@ -17,7 +17,10 @@ class LeaveRoomButton extends Component {
 
   render() {
     return (
-      <button onClick={this.onLeave} className='btn btn-primary'>Home</button>
+	    <button onClick={this.onLeave}
+	style={{backgroundColor: 'rgb(250,188,91)', borderStyle: 'none'}}	
+	    >
+	    <i className="fa fa-home" style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', padding: '8px', fontSize: '24px'}}></i></button>
     )
   }
 }
