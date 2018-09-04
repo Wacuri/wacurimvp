@@ -1093,20 +1093,17 @@ class JourneySpace extends Component {
 
 			 <div id='central_control_panel_id' style={{display: 'flex'}} className='flexiblerow'>
 
-                  <div style={{display: 'flex', padding: '10px 10px 0'}}>
-                    <PlayButton journey={state.journey} player={state.audioTag}/>
-                    { false &&
-                      <SkipButton style={{marginLeft: 'auto'}} journey={state.journey}/>
-                    }
-                  </div>
-                  <div style={{display: 'flex', padding: '10px 10px 0 10px'}}>
-                    <VideoButton publisher={this.publisher}/>
-                    <AudioButton style={{marginLeft: '10px'}} publisher={this.publisher}/>
+			 <div style={{display: 'flex'}}>
+			 <VideoButton
+			 style={{color: 'white',backgroundColor: 'rgb(75,176,88)',
+				 borderRadius: '50%', padding: '30px', fontSize: '36px', margin: '50px'
+				}}
+			 publisher={this.publisher}/>
+			 <AudioButton style={{ color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', padding: '30px', margin: '50px', fontSize: '48px'}} publisher={this.publisher}/>
+			 <PlayButton style={{ color: 'white',backgroundColor: 'rgb(55,180,246)', borderRadius: '50%', padding: '30px', margin: '50px', fontSize: '48px'}} journey={state.journey} player={state.audioTag}/>
+			 <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', padding: '30px', margin: '50px', fontSize: '36px', marginLeft: 'auto'}} journey={state.journey}/>
 			 </div>
-			 <div style={{padding: '10px'}}>
-			 </div>
-
-			 </div>
+	          </div>
 
 			 
                   <JourneyTimeline journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>

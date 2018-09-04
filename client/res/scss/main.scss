@@ -517,8 +517,26 @@ h2 {
   }
 }
 
+
 #central_control_panel_id {
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
 }
+
+
+.round-button {
+    backgroundColor: 'rgb(250,188,91)';
+    borderStyle: 'none';    
+}
+
+.round-button-image {
+    color: 'white';
+    backgroundColor: 'rgb(75,176,88)';
+    borderRadius: '50%';
+    padding: '8px';
+    fontSize: '24px';    
+}
+
