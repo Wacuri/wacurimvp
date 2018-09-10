@@ -407,7 +407,7 @@ class SkipButton extends Component {
 
   render() {
     return (
-      this.props.journey.state != 'completed' ? <button style={this.props.style || {}} className='btn btn-primary' onClick={this.skipToNext}><i className='fa fa-forward'></i></button> : <span/>
+      this.props.journey.state != 'completed' ? <button style={this.props.style || {}} className='btn btn-primary' onClick={this.skipToNext}><i className='fa fa-forward fa-fw'></i></button> : <span/>
     )
   }
 }
@@ -434,7 +434,7 @@ class VideoButton extends Component {
 
   render() {
     return (
-      <button style={this.props.style || {}} onClick={this.toggle} className={`btn btn-${this.state.publishing ? 'primary' : 'secondary'}`}><i className="fa fa-video-camera"></i></button>
+      <button style={this.props.style || {}} onClick={this.toggle} className={`btn btn-${this.state.publishing ? 'primary' : 'secondary'}`}><i className="fa fa-video-camera fa-fw"></i></button>
     )
   }
 }
@@ -517,7 +517,9 @@ class AudioButton extends Component {
 
   render() {
     return (
-      <button id="microphoneButton" style={this.props.style || {}} onClick={this.toggleMicrophone} className={`btn btn-${this.state.publishing ? 'primary' : 'secondary'}`}><i className="fa fa-microphone"></i></button>
+	    <button id="microphoneButton" style={this.props.style || {}} onClick={this.toggleMicrophone} className={`btn btn-${this.state.publishing ? 'primary' : 'secondary'}`}>
+	    <i className="fa fa-microphone fa-fw" ></i>
+	    </button>
     )
   }
 }
@@ -1093,16 +1095,19 @@ class JourneySpace extends Component {
 
 			 <div id='central_control_panel_id' style={{display: 'flex'}} className='flexiblerow'>
 
-			 <div style={{display: 'flex'}}>
 			 <VideoButton
 			 style={{color: 'white',backgroundColor: 'rgb(75,176,88)',
-				 borderRadius: '50%', padding: '30px', fontSize: '36px', margin: '50px'
-				}}
+			 	 borderRadius: '50%', fontSize: '36px', margin: '25px'
+			 	}}
 			 publisher={this.publisher}/>
-			 <AudioButton style={{ color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', padding: '30px', margin: '50px', fontSize: '48px'}} publisher={this.publisher}/>
-			 <PlayButton style={{ color: 'white',backgroundColor: 'rgb(55,180,246)', borderRadius: '50%', padding: '30px', margin: '50px', fontSize: '48px'}} journey={state.journey} player={state.audioTag}/>
-			 <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', padding: '30px', margin: '50px', fontSize: '36px', marginLeft: 'auto'}} journey={state.journey}/>
-			 </div>
+			 <AudioButton
+			  style={{color: 'white',backgroundColor: 'rgb(75,176,88)',
+			  	  borderRadius: '50%',  fontSize: '36px', margin: '25px'
+			  	}}
+			  publisher={this.publisher}/>
+			 <PlayButton style={{ color: 'white',backgroundColor: 'rgb(55,180,246)', borderRadius: '50%', padding: '20px', paddingRight: '30px', paddingLeft: '30px', margin: '10px', fontSize: '48px'}} journey={state.journey} player={state.audioTag}/>			 
+
+			 <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', margin: '25px', fontSize: '36px'}} journey={state.journey}/>
 	          </div>
 
 			 
@@ -1375,3 +1380,20 @@ export default view(JourneySpace);
 		    // 	 }
 		    // 	 </div>
 		    // 	 </div>
+
+
+			 // <div style={{width: '5%', paddingBottom: '5%', position: 'relative'}}>
+			 // <VideoButton
+			 // style={{color: 'white',backgroundColor: 'rgb(75,176,88)',
+			 // 	 borderRadius: '50%', padding: '30px', fontSize: '36px', margin: '50px'
+			 // 	}}
+			 // publisher={this.publisher}/>
+			 // </div>
+			 // <div style={{width: '5%', maxHeight: '100px', paddingBottom: '5%', position: 'relative'}}>
+			 // </div>
+			 // <div style={{width: '7%', height: '7%', paddingBottom: '7%', position: 'relative'}}>			 
+			 // <PlayButton style={{ color: 'white',backgroundColor: 'rgb(55,180,246)', borderRadius: '50%', padding: '30px', margin: '0px', fontSize: '48px'}} journey={state.journey} player={state.audioTag}/>
+			 // </div>
+			 // <div style={{width: '5%', height: '5%', paddingBottom: '5%' , position: 'relative'}}>			 			 
+			 // <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', padding: '30px', margin: '50px', fontSize: '36px', marginLeft: 'auto'}} journey={state.journey}/>
+			 // </div>			 			 
