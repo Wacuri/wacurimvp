@@ -25,7 +25,7 @@ if (__CLIENT__) {
       });
     }
   };
-    const setSizes = () => {
+/*    const setSizes = () => {
 	var fs = document.getElementById("flex-squares-main");	
 	var w = window.innerWidth;
 	var h = window.innerHeight;
@@ -48,8 +48,9 @@ if (__CLIENT__) {
 	s2.style.width = v+"px";
 	s3.style.width = v+"px";
     }
+*/
     const resizeEventHandler = (e) => {
-	setSizes();
+//	setSizes();
     };
     document.body.addEventListener('click', globalClickCatcher);
     window.addEventListener('resize', resizeEventHandler);

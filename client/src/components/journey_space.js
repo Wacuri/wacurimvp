@@ -694,6 +694,46 @@ class InviteModal extends Component {
 }
 
 
+class UnfilledVideoSquare extends React.Component {
+  constructor(props) {
+      super(props);
+  }    
+  render() {
+      const vid = this.props.vidid;
+      const slength = this.props.streamlength;
+      const stream = this.props.stream;
+      const session = this.props.session;
+      const localkey = this.props.localkey;
+      const limit = this.props.limit;
+      return ((slength < limit) ?
+		     <li key={localkey} id={vid} className='video-placeholder'>
+                        <div>
+                          <i className='fa fa-user'></i>
+                          <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
+                        </div>
+				     </li>
+				     :
+	      <li key={localkey} id={vid}
+	      >
+				 <p>hello</p>
+                            <OTSubscriber
+                              key={stream.id}
+                              session={session}
+                              stream={stream}
+                              properties={{
+                                width: '100%',
+                                height: '100%',
+                              }}
+                            />
+                          <div className='journeyspace-stream-controls'>
+                              <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
+                                <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
+                              </FlagControl>
+                            </div>
+                        </li>
+		    ); }	  
+}
+
 class JourneySpace extends Component {
 
   constructor(props) {
@@ -1064,8 +1104,42 @@ class JourneySpace extends Component {
         });
       }
     }, 20);
-  }
+    }
+    render_video_square = (video_square_id) => {
+	<div> SPUD </div>
+    }
 
+    // render_video_square = (video_square_id) => {
+    // 	return (<div> { ((this.state.streams.length < 1) ?
+    // 		<li key={local_key_counter_to_avoid_warning++} id=video_square_id className='video-placeholder'>
+    //             <div>
+    //                       <i className='fa fa-user'></i>
+    //                       <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
+    //                     </div>
+    // 				     </li>
+    // 				     :
+    // 				 <li key={0} id=video_square_id className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+    // 				 <p>hello</p>
+    //                         <OTSubscriber
+    //                           key={this.state.streams[0].id}
+    //                           session={this.sessionHelper.session}
+    //                           stream={this.state.streams[0]}
+    //                           properties={{
+    //                             width: '100%',
+    //                             height: '100%',
+    //                           }}
+    //                         />
+    //                       <div className='journeyspace-stream-controls'>
+    //                           <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
+    //                             <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
+    //                           </FlagControl>
+    //                         </div>
+    //                     </li>
+    // 			) }
+    // 		</div>);
+    // }
+
+    
     render() {
 	    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
 	    var local_key_counter_to_avoid_warning = 0;	    
@@ -1148,64 +1222,24 @@ class JourneySpace extends Component {
                         />
 			 </span>
 
-			 
+		 <UnfilledVideoSquare vidid='video-square2'
+		 limit={1}
+		 streamlength={this.state.streams.length}
+		 stream={this.state.stream}
+		 session={this.sessionHelper.session}
+		 localkey={local_key_counter_to_avoid_warning++}
+		 ></UnfilledVideoSquare>
 
-			 { (() => { 
-			     return ((this.state.streams.length < 1) ?
-				 <li key={local_key_counter_to_avoid_warning++} id='video-square2' className='video-placeholder'>
-                        <div>
-                          <i className='fa fa-user'></i>
-                          <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
-                        </div>
-				     </li>
-				     :
-				 <li key={0} id='video-square2' className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
-				 <p>hello</p>
-                            <OTSubscriber
-                              key={this.state.streams[0].id}
-                              session={this.sessionHelper.session}
-                              stream={this.state.streams[0]}
-                              properties={{
-                                width: '100%',
-                                height: '100%',
-                              }}
-                            />
-                          <div className='journeyspace-stream-controls'>
-                              <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
-                                <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
-                              </FlagControl>
-                            </div>
-                        </li>
-				    ); })()
-			 }
-			 { (() => { 
-			     return ((this.state.streams.length < 2) ?
-				 <li key={local_key_counter_to_avoid_warning++} id='video-square3' className='video-placeholder'>
-                        <div>
-                          <i className='fa fa-user'></i>
-                          <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
-                        </div>
-				     </li>
-				     :
-				 <li key={1} id='video-square3' className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
-				 <p>hello</p>
-                            <OTSubscriber
-                              key={this.state.streams[1].id}
-                              session={this.sessionHelper.session}
-                              stream={this.state.streams[1]}
-                              properties={{
-                                width: '100%',
-                                height: '100%',
-                              }}
-                            />
-                          <div className='journeyspace-stream-controls'>
-                              <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
-                                <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
-                              </FlagControl>
-                            </div>
-                        </li>
-				    ); })()
-			 }
+		 <UnfilledVideoSquare vidid='video-square3'
+		 limit={2}
+		 streamlength={this.state.streams.length}
+		 stream={this.state.stream}
+		 session={this.sessionHelper.session}
+		 localkey={local_key_counter_to_avoid_warning++}
+		 ></UnfilledVideoSquare>
+		 
+
+		 
 			 </div>
           <div className='journeyspace-footer' style={{display: 'flex'}}>
             <div style={{flex: 1}}>
@@ -1230,3 +1264,61 @@ class JourneySpace extends Component {
 
 export default view(JourneySpace);
 
+			//  { (() => { 
+			//      return ((this.state.streams.length < 1) ?
+			// 	 <li key={local_key_counter_to_avoid_warning++} id='video-square2' className='video-placeholder'>
+                        // <div>
+                        //   <i className='fa fa-user'></i>
+                        //   <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
+                        // </div>
+			// 	     </li>
+			// 	     :
+			// 	 <li key={0} id='video-square2' className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+			// 	 <p>hello</p>
+                        //     <OTSubscriber
+                        //       key={this.state.streams[0].id}
+                        //       session={this.sessionHelper.session}
+                        //       stream={this.state.streams[0]}
+                        //       properties={{
+                        //         width: '100%',
+                        //         height: '100%',
+                        //       }}
+                        //     />
+                        //   <div className='journeyspace-stream-controls'>
+                        //       <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
+                        //         <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
+                        //       </FlagControl>
+                        //     </div>
+                        // </li>
+			// 	    ); })()
+			//  }
+
+
+			//  { (() => { 
+			//      return ((this.state.streams.length < 2) ?
+			// 	 <li key={local_key_counter_to_avoid_warning++} id='video-square3' className='video-placeholder'>
+                        // <div>
+                        //   <i className='fa fa-user'></i>
+                        //   <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
+                        // </div>
+			// 	     </li>
+			// 	     :
+			// 	 <li key={1} id='video-square3' className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
+			// 	 <p>hello</p>
+                        //     <OTSubscriber
+                        //       key={this.state.streams[1].id}
+                        //       session={this.sessionHelper.session}
+                        //       stream={this.state.streams[1]}
+                        //       properties={{
+                        //         width: '100%',
+                        //         height: '100%',
+                        //       }}
+                        //     />
+                        //   <div className='journeyspace-stream-controls'>
+                        //       <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
+                        //         <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
+                        //       </FlagControl>
+                        //     </div>
+                        // </li>
+			// 	    ); })()
+			//  }
