@@ -1075,11 +1075,12 @@ class JourneySpace extends Component {
 			<div className='journeyspace' style={{position: 'relative'}}>
 	    <Header history={this.props.history}/>
 
-          <div className='journeyspace-content flexiblerow'>
-			{this.state.session &&
-			 <div>
-			 <span style={{color: 'white'}} >{state.journey.name}</span>
-			 <div className='flexiblerow' style={{backgroundColor: 'black', color: 'white'}}>
+	    {/*          <div className='journeyspace-content flexiblerow'> */}
+		{this.state.session && /* AAA */
+          <div className='journeyspace-content flexiblerow space-between-added'>		 
+		 <div style={{color: 'white'}} >{state.journey.name}</div>
+		 <div className='flexiblerow'
+		 style={{marginBottom: '20px', backgroundColor: 'black', color: 'white'}}>
                   
                   {state.journey.state === 'joined' && state.journey.startAt && <JourneyStartsIn journey={state.journey} timer={this.journeyStateTimer}/> }
 
@@ -1215,9 +1216,13 @@ class JourneySpace extends Component {
           {this.state.showShareModal &&
             <InviteModal journey={this.state.session} onComplete={this.onCompleteShare} onClose={this.onCloseShareModal}/>
           }
-		    </div>
-		}			
-			</div>
+
+			</div>		 
+		}
+	    
+			 {/* AAA */}
+
+
 		    </div>						
 	)
 	}
@@ -1225,175 +1230,3 @@ class JourneySpace extends Component {
 
 export default view(JourneySpace);
 
-
-		      // 	 <div className='col-5 col-lg-5'>
-		      // 	 // The first participant
-		      // 	 {() => {
-                      // const participant = state.journey.participants.find(participant => participant.connectionId === stream0.connection.id);
-		      // 	const hasFlagged = !!state.journey.flags.find(flag => flag.user === state.sessionId && flag.flagged === stream0.id);
-                      // return (
-                      //         <li key={0} className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
-                      //       <OTSubscriber
-                      //         key={stream0.id}
-                      //         session={this.sessionHelper.session}
-                      //         stream={stream0}
-                      //         properties={{
-                      //           width: '100%',
-                      //           height: '100%',
-                      //         }}
-                      //       />
-                      //       <div className='journeyspace-stream-controls'>
-                      //         <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
-                      //           <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
-                      //         </FlagControl>
-                      //       </div>
-                      //   </li>
-                      // );
-		      // 	 }}
-		      // 	 </div>
-	// <div className='row no-gutters'>			 
-        //         <div className='col-12 col-lg-12'>
-        //           <ul className='journeyspace-streams' style={{margin: 0}}>
-
-        //             {this.state.streams.map(stream => {
-        //               const participant = state.journey.participants.find(participant => participant.connectionId === stream.connection.id);
-	// 		const hasFlagged = !!state.journey.flags.find(flag => flag.user === state.sessionId && flag.flagged === stream.id);
-	// 		var streamcnt = 0;
-        //               return (
-        //                       <li key={streamcnt++} className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
-        //                     <OTSubscriber
-        //                       key={stream.id}
-        //                       session={this.sessionHelper.session}
-        //                       stream={stream}
-        //                       properties={{
-        //                         width: '100%',
-        //                         height: '100%',
-        //                       }}
-        //                     />
-        //                     <div className='journeyspace-stream-controls'>
-        //                       <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
-        //                         <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
-        //                       </FlagControl>
-        //                     </div>
-        //                 </li>
-        //               );
-        //             })}
-                    
-        //      {	 Array(2 - this.state.streams.length).fill({}).map(empty => (
-        //              <li key={local_key_counter_to_avoid_warning++} className='video-placeholder'>
-        //                 <div>
-        //                   <i className='fa fa-user'></i>
-        //                   <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
-        //                 </div>
-        //               </li>
-        //             ))}
-        //           </ul>
-
-        //     }
-        //      </div>
-	//      </div>          
-
-
-
-
-		    // 	 <div className='row no-gutters'>
-		    // 	 <div className='col-6 col-lg-6'>
-                    // <div key="name" id='video-square0'>
-                    //   <img style={{width: '100%'}} src={state.journey.image} onClick={this.togglePlayState}/>
-                    //   <h2 style={{flex: 5}} className='journeyspace-title'>{state.journey.name}</h2>
-
-                    // </div>
-		    // 	 </div>
-			 
- 		    // 	 <div className='col-6 col-lg-6'>
-		    // 	 <ul className='journeyspace-streams' style={{margin: 0}}>
-		    // 	 <li key="stream" id='video-square1' className='journeyspace-stream journeyspace-me'>
-                    //     <OTPublisher 
-                    //       properties={{width: '100%', height: '100%'}}
-                    //       session={this.sessionHelper.session}
-                    //       onInit={this.onInitPublisher}
-                    //       ref={publisher => {this.publisher = publisher}}
-                    //     />
-		    // 	 </li>
-		    // 	 </ul>
-		    // 	 </div>
-		    // 	 </div>
-		    // 	 <div className='row no-gutters'>
-		    // 	 <div className='col-6 col-lg-6'>
-		    // 	 { (() => { 
-		    // 	     return ((this.state.streams.length < 1) ?
-		    // 		 <li key={local_key_counter_to_avoid_warning++} id='video-square2' className='video-placeholder'>
-                    //     <div>
-                    //       <i className='fa fa-user'></i>
-                    //       <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
-                    //     </div>
-		    // 		     </li>
-		    // 		     :
-		    // 		 <li key={0} id='video-square2' className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
-		    // 		 <p>hello</p>
-                    //         <OTSubscriber
-                    //           key={this.state.streams[0].id}
-                    //           session={this.sessionHelper.session}
-                    //           stream={this.state.streams[0]}
-                    //           properties={{
-                    //             width: '100%',
-                    //             height: '100%',
-                    //           }}
-                    //         />
-                    //       <div className='journeyspace-stream-controls'>
-                    //           <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
-                    //             <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
-                    //           </FlagControl>
-                    //         </div>
-                    //     </li>
-		    // 		    ); })()
-		    // 	 }
-		    // 	 </div>
-		    // 	 <div className='col-6 col-lg-6'>
-		    // 	 { (() => { 
-		    // 	     return ((this.state.streams.length < 2) ?
-		    // 		 <li key={local_key_counter_to_avoid_warning++} id='video-square3' className='video-placeholder'>
-                    //     <div>
-                    //       <i className='fa fa-user'></i>
-                    //       <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
-                    //     </div>
-		    // 		     </li>
-		    // 		     :
-		    // 		 <li key={1} id='video-square3' className={`journeyspace-stream ${this.state.currentlyActivePublisher ? 'journeyspace-active-stream' : ''}`}>
-		    // 		 <p>hello</p>
-                    //         <OTSubscriber
-                    //           key={this.state.streams[1].id}
-                    //           session={this.sessionHelper.session}
-                    //           stream={this.state.streams[1]}
-                    //           properties={{
-                    //             width: '100%',
-                    //             height: '100%',
-                    //           }}
-                    //         />
-                    //       <div className='journeyspace-stream-controls'>
-                    //           <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
-                    //             <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
-                    //           </FlagControl>
-                    //         </div>
-                    //     </li>
-		    // 		    ); })()
-		    // 	 }
-		    // 	 </div>
-		    // 	 </div>
-
-
-			 // <div style={{width: '5%', paddingBottom: '5%', position: 'relative'}}>
-			 // <VideoButton
-			 // style={{color: 'white',backgroundColor: 'rgb(75,176,88)',
-			 // 	 borderRadius: '50%', padding: '30px', fontSize: '36px', margin: '50px'
-			 // 	}}
-			 // publisher={this.publisher}/>
-			 // </div>
-			 // <div style={{width: '5%', maxHeight: '100px', paddingBottom: '5%', position: 'relative'}}>
-			 // </div>
-			 // <div style={{width: '7%', height: '7%', paddingBottom: '7%', position: 'relative'}}>			 
-			 // <PlayButton style={{ color: 'white',backgroundColor: 'rgb(55,180,246)', borderRadius: '50%', padding: '30px', margin: '0px', fontSize: '48px'}} journey={state.journey} player={state.audioTag}/>
-			 // </div>
-			 // <div style={{width: '5%', height: '5%', paddingBottom: '5%' , position: 'relative'}}>			 			 
-			 // <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', padding: '30px', margin: '50px', fontSize: '36px', marginLeft: 'auto'}} journey={state.journey}/>
-			 // </div>			 			 
