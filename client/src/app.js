@@ -53,8 +53,8 @@ if (__CLIENT__) {
 //	setSizes();
     };
     document.body.addEventListener('click', globalClickCatcher);
-    window.addEventListener('resize', resizeEventHandler);
-    window.addEventListener('load', resizeEventHandler);        
+//    window.addEventListener('resize', resizeEventHandler);
+//    window.addEventListener('load', resizeEventHandler);        
 }
 
 
