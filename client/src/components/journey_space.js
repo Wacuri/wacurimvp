@@ -38,16 +38,19 @@ const setSizes = () => {
     var s1 = document.getElementById("video-square1");
     var s2 = document.getElementById("video-square2");
     var s3 = document.getElementById("video-square3");
+    var s4 = document.getElementById("video-square4");    
 
     s0.style.height = v+"px";
     s1.style.height = v+"px";
     s2.style.height = v+"px";
     s3.style.height = v+"px";
+    s4.style.height = v+"px";    
 
     s0.style.width = v+"px";
     s1.style.width = v+"px";
     s2.style.width = v+"px";
     s3.style.width = v+"px";
+    s4.style.width = v+"px";    
 }
 
 class LeaveRoomButton extends Component {
@@ -832,8 +835,9 @@ class NoVideoSquare extends React.Component {
   }    
   render() {
       const localkey = this.props.localkey;
+      const vid = this.props.vidid;      
       return (
-	      <div key={localkey} className='video-placeholder'>
+	      <div key={localkey} id={vid} className='video-placeholder'>
 	      <div className='invite-indicator'>
 	      <div>
         <button className='btn btn-primary' onClick={this.props.onInvite}>Orientation</button>
@@ -1325,7 +1329,7 @@ class JourneySpace extends Component {
 		 localkey={local_key_counter_to_avoid_warning++}
 		 ></UnfilledVideoSquare>
 		 
-		 <NoVideoSquare
+		 <NoVideoSquare vidid='video-square4'
 		 localkey={local_key_counter_to_avoid_warning++}
 		 ></NoVideoSquare>
 		 
