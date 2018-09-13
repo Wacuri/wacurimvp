@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { view } from 'react-easy-state';
 import state from '../state';
 
-import logo from 'file-loader!isomorphic-loader!../../res/images/CuriousLive-logo.png';
+import logo from 'file-loader!isomorphic-loader!../../res/images/CuriousLiveLogoMark-150-300.png';
 
 
 class LeaveRoomButton extends Component {
