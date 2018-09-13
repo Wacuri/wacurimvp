@@ -276,6 +276,89 @@ class JourneyStateProgressBar extends Component {
   }
 }
 
+// I need to create a new react component here. Possibly this would be releasable on its own.
+// The basic idea we need here is a changing piece of text, with bars beneath it to indicate the state.
+// Possibly I should develop this component separately, completely outside this project.
+// 
+ // To be done: We need to define an additional state to represent "the completion of the journey"
+// We need to implement the state indicator bar as a series of colors. This should be
+// easy with background color and CSS
+
+// We need to implement the 
+class JourneyPhases extends Component {
+
+  constructor(props) {
+    super(props);
+    props.timer.on('tick', (current) => {
+      this.setState({
+        timerValue: current
+      });
+    });
+  }
+
+  componentWillReceiveProps(newProps) {
+    newProps.timer.on('tick', (current) => {
+      this.setState({
+        timerValue: current
+      });
+    });
+  }
+
+    get stepIndex() {
+      console.log("state",this.props.journey.state);	
+    switch(this.props.journey.state) {
+      case 'joined':
+      case 'created':
+        return 0;
+      case 'failed':
+	return 0;
+      case 'started':
+      case 'paused':
+        return 1;
+      case 'completed':
+	return 2;
+      case 'ended':
+	return 2;
+      default:
+        return 2;
+    }
+  }
+    // Note: setting the backgroudnColor below to orange does not work, but at least gives us a
+    // gray that can be seen against the black background
+   
+  render() {
+      const {journey} = this.props;
+      const NumPhases = 4;
+      const Messages = ["Breathe and center yourself","Journey in Progess","Share your Insights","Provide Feedback"];
+      console.log("STEP Index",this.stepIndex);
+    return (
+	    <div ref={el => {this.container = el}} className={`journey-timeline step-${this.stepIndex.toString()}`}>
+	    <div>
+	    <div style={{display: 'flex', flexDirection: 'row' }}>
+	    <h4>{Messages[this.stepIndex]}</h4>
+
+	{
+	    (this.stepIndex == 0) &&
+                <h4 className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</h4>
+	}
+	    </div>
+	    </div>
+	    <div style={{width: 'calc(25vw)',  display: 'flex', flexDirection: 'row' }}>
+	    <div className={ `phase-bar bar-${this.stepIndex == 0 ? 'white' : 'green'}`}>
+	      </div>
+	    <div className={ `phase-bar bar-${this.stepIndex == 1 ? 'white' : 'green'}`}>
+	      </div>
+	    <div className={ `phase-bar bar-${this.stepIndex == 2 ? 'white' : 'green'}`}>
+	      </div>
+	    <div className={ `phase-bar bar-${this.stepIndex == 3 ? 'white' : 'green'}`}>
+	      </div>
+	    </div>
+	</div>			
+    )
+  }
+}
+
+
 class JourneyTimeline extends Component {
 
   constructor(props) {
@@ -335,6 +418,7 @@ class JourneyTimeline extends Component {
 
     // Note: setting the backgroudnColor below to orange does not work, but at least gives us a
     // gray that can be seen against the black background
+   
   render() {
     const {journey} = this.props;
     return (
@@ -1117,13 +1201,19 @@ class JourneySpace extends Component {
 
 	    {/*          <div className='journeyspace-content flexiblerow'> */}
 		{this.state.session && /* AAA */
-          <div className='journeyspace-content flexiblerow'>		 
+          <div className='journeyspace-content'>		 
 
 		 <div className='flexiblerow space-between-added'
 		 style={{marginBottom: '20px', backgroundColor: 'black', color: 'white'}}>
-		 <span style={{color: 'white'}} >{state.journey.name}</span>                  
+		 <span style={{color: 'white'}} >{state.journey.name}</span>
+		 {/*		 <JourneyTimeline journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/> */}
+                 <JourneyPhases journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
+
+		 {/*
                  {state.journey.state === 'joined' && state.journey.startAt &&
 		  <JourneyStartsIn journey={state.journey} timer={this.journeyStateTimer}/> }
+		  */}
+
 
                   {!state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed') &&
                     <div style={{padding: '10px'}}>
@@ -1134,6 +1224,25 @@ class JourneySpace extends Component {
                       </select>
                     </div>
                   }
+
+			 </div>
+
+			 
+
+                  <div className='journeyspace-meta pr-3 pl-3 pt-3'>
+                    {state.journey.startAt && ['joined', 'created'].indexOf(state.journey.state) > -1 && <SharePrompt onInvite={this.onInvite}/>}
+                  </div>
+                  
+
+		 {/*
+                 {state.journey.state === 'failed' &&
+                      <p className='p-3'>Nobody else has joined this Journey Space. 
+                        You can either <a href='#' onClick={this.onStartSession}>hit play</a> and take the Journey by
+                        yourself of return to the <Link to='/join'>JourneyBoard</Link> to find another Journey Space
+                      </p>
+                  }
+		  */}
+
 
 		 {/* This needs to be either hidden or turn into a React Component when InviteModal is up */}
 			 <div id='central_control_panel_id' style={{display: 'flex'}} className='flexiblerow'>
@@ -1152,25 +1261,6 @@ class JourneySpace extends Component {
 
 			 <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', margin: '25px', fontSize: '36px'}} journey={state.journey}/>
 	          </div>
-
-			 
-                  <JourneyTimeline journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
-
-                  <div className='journeyspace-meta pr-3 pl-3 pt-3'>
-                    {state.journey.startAt && ['joined', 'created'].indexOf(state.journey.state) > -1 && <SharePrompt onInvite={this.onInvite}/>}
-                  </div>
-                  
-			 </div>
-
-                 {state.journey.state === 'failed' &&
-                      <p className='p-3'>Nobody else has joined this Journey Space. 
-                        You can either <a href='#' onClick={this.onStartSession}>hit play</a> and take the Journey by
-                        yourself of return to the <Link to='/join'>JourneyBoard</Link> to find another Journey Space
-                      </p>
-                  }
-
-
-
 			 <div className="flex-squares"> 
                     <span   key="name" >
                       <img id='video-square0' className="journey-image" src={state.journey.image} onClick={this.togglePlayState}/>

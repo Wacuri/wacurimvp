@@ -536,15 +536,29 @@ h2 {
 
 
 .round-button {
-    backgroundColor: 'rgb(250,188,91)';
-    borderStyle: 'none';    
+    background-color: rgb(250,188,91);
+    borderStyle: none;    
 }
 
 .round-button-image {
-    color: 'white';
-    backgroundColor: 'rgb(75,176,88)';
-    borderRadius: '50%';
-    padding: '8px';
-    fontSize: '24px';    
+    color: white;
+    background-color: rgb(75,176,88);
+    borderRadius: 50%;
+    padding: 8px;
+    fontSize: 24px;    
 }
 
+.phase-bar {
+    min-width: 20%;
+    height: calc(0.4vw);
+    margin-left: calc(0.2vw);
+    margin-right: calc(0.1vw);
+}
+
+.bar-white {
+    background-color: white;
+}
+
+.bar-green {
+    background-color: rgb(75,176,88);    
+}
