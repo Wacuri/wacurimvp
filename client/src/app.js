@@ -11,8 +11,12 @@ import JourneySpace from './components/journey_space';
 import Intro from './components/intro';
 import CountdownMessage from './components/countdown_message';
 import state from './state';
+import * as someHelper from './utility/utility'
 
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
+
+
+
 
 if (__CLIENT__) {
   var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
@@ -25,36 +29,13 @@ if (__CLIENT__) {
       });
     }
   };
-/*    const setSizes = () => {
-	var fs = document.getElementById("flex-squares-main");	
-	var w = window.innerWidth;
-	var h = window.innerHeight;
-
-	
-	var v = Math.max(Math.max(w/4,h/4),Math.min(w/2,h/2));
-	v = v * 1.0;
-	var s0 = document.getElementById("video-square0");
-	var s1 = document.getElementById("video-square1");
-	var s2 = document.getElementById("video-square2");
-	var s3 = document.getElementById("video-square3");
-
-	s0.style.height = v+"px";
-	s1.style.height = v+"px";
-	s2.style.height = v+"px";
-	s3.style.height = v+"px";
-
-	s0.style.width = v+"px";
-	s1.style.width = v+"px";
-	s2.style.width = v+"px";
-	s3.style.width = v+"px";
-    }
-*/
+    
     const resizeEventHandler = (e) => {
-//	setSizes();
+	someHelper.setSizes();
     };
     document.body.addEventListener('click', globalClickCatcher);
-//    window.addEventListener('resize', resizeEventHandler);
-//    window.addEventListener('load', resizeEventHandler);        
+    window.addEventListener('resize', resizeEventHandler);
+    window.addEventListener('load', resizeEventHandler);
 }
 
 

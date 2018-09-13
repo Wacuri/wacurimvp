@@ -12,6 +12,7 @@ import {initLayoutContainer} from 'opentok-layout-js';
 import './share';
 import JourneyStartsIn from './journey_starts_in';
 import Header from './header';
+import * as someHelper from '../utility/utility'
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
@@ -24,34 +25,6 @@ if (__CLIENT__) {
 	window.state = state;
 }
 
-
-
-const setSizes = () => {
-    var fs = document.getElementById("flex-squares-main");	
-    var w = window.innerWidth;
-    var h = window.innerHeight;
-
-    
-    var v = Math.max(Math.max(w/4,h/4),Math.min(w/2,h/2));
-    v = v * 1.0;
-    var s0 = document.getElementById("video-square0");
-    var s1 = document.getElementById("video-square1");
-    var s2 = document.getElementById("video-square2");
-    var s3 = document.getElementById("video-square3");
-    var s4 = document.getElementById("video-square4");    
-
-    s0.style.height = v+"px";
-    s1.style.height = v+"px";
-    s2.style.height = v+"px";
-    s3.style.height = v+"px";
-    s4.style.height = v+"px";    
-
-    s0.style.width = v+"px";
-    s1.style.width = v+"px";
-    s2.style.width = v+"px";
-    s3.style.width = v+"px";
-    s4.style.width = v+"px";    
-}
 
 class LeaveRoomButton extends Component {
 
@@ -1052,7 +1025,7 @@ class JourneySpace extends Component {
 			.then(json => {
 			    state.journey = json;
 			});
-      setTimeout(setSizes,1000);
+      setTimeout(someHelper.setSizes,1000);
   }
 
   get timeRemaining() {
