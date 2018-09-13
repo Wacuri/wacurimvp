@@ -305,7 +305,6 @@ class JourneyPhases extends Component {
   }
 
     get stepIndex() {
-      console.log("state",this.props.journey.state);	
     switch(this.props.journey.state) {
       case 'joined':
       case 'created':
@@ -330,7 +329,6 @@ class JourneyPhases extends Component {
       const {journey} = this.props;
       const NumPhases = 4;
       const Messages = ["Breathe and center yourself","Journey in Progess","Share your Insights","Provide Feedback"];
-      console.log("STEP Index",this.stepIndex);
     return (
 	    <div ref={el => {this.container = el}} className={`journey-timeline step-${this.stepIndex.toString()}`}>
 	    <div>
@@ -463,6 +461,7 @@ class JourneyTimeline extends Component {
   }
 }
 
+/*
 function OBSOLETE_ARROW() {
         <div className='arrow' style={{height: `${this.heightForActive}px`, width: `${this.heightForActive}px`, transform: `translateY(${this.positionForCaret}px)`}}>
           <svg xmlns="http://www.w3.org/2000/svg" version="1.1" className="svg-triangle" viewBox="0 0 100 100" preserveAspectRatio="none" shapeRendering="geometricPrecision">
@@ -471,6 +470,7 @@ function OBSOLETE_ARROW() {
         </div>
 
 }
+*/
 
 class SkipButton extends Component {
 
@@ -487,11 +487,17 @@ class SkipButton extends Component {
       redirect: 'follow', // manual, *follow, error
       referrer: 'no-referrer', // *client, no-referrer
     });
+      // I believe this should change the state to completed, but I am not sure
+      // if that happens server side or client side
+      console.log("skipToNext event fired");
   }
 
-  render() {
-    return (
-      this.props.journey.state != 'completed' ? <button style={this.props.style || {}} className='btn btn-primary' onClick={this.skipToNext}><i className='fa fa-step-forward fa-fw'></i></button> : <span/>
+    render() {
+	{/*	this.props.journey.state != 'completed' ? */}
+	return (
+	    (true) ?
+	    <button style={this.props.style || {}} className='btn btn-primary' onClick={this.skipToNext}><i className='fa fa-step-forward fa-fw'></i></button> :
+	    <span/>
     )
   }
 }
@@ -790,12 +796,14 @@ class UnfilledVideoSquare extends React.Component {
       const localkey = this.props.localkey;
       const limit = this.props.limit;
       return ((slength < limit) ?
-		     <li key={localkey} id={vid} className='video-placeholder'>
-                        <div>
-                          <i className='fa fa-user'></i>
-                          <p style={{maxWidth: '80%', margin: '0 auto'}}>placeholder for journeyer not present</p>
-                        </div>
-				     </li>
+	      <div key={localkey} id={vid} className='video-placeholder'>
+	      <div className='invite-indicator'>
+	      <div>
+                          <i className='fa fa-smile-o fa-3x'></i>
+              <p style={{color: 'white', maxWidth: '80%', margin: '0 auto'}}>Waiting...</p>
+	      </div>
+	      </div>
+	      </div>
 				     :
 	      <li key={localkey} id={vid}
 	      >
@@ -816,6 +824,24 @@ class UnfilledVideoSquare extends React.Component {
                             </div>
                         </li>
 		    ); }	  
+}
+
+class NoVideoSquare extends React.Component {
+  constructor(props) {
+      super(props);
+  }    
+  render() {
+      const localkey = this.props.localkey;
+      return (
+	      <div key={localkey} className='video-placeholder'>
+	      <div className='invite-indicator'>
+	      <div>
+        <button className='btn btn-primary' onClick={this.props.onInvite}>Orientation</button>
+	      </div>
+	      </div>
+	      </div>
+      );
+  }	  
 }
 
 class JourneySpace extends Component {
@@ -839,7 +865,8 @@ class JourneySpace extends Component {
   }
 
 	componentDidMount() {
-    state.audioTag.addEventListener('ended', (event) => {
+	    state.audioTag.addEventListener('ended', (event) => {
+		consoleLog("CHANGING STATE TO ENDED!");
       if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
         this.publisher.state.publisher.publishAudio(true);
       }
@@ -847,6 +874,7 @@ class JourneySpace extends Component {
         playerState: 'ended'
       });
 
+		console.log("DOING /completed fetch");
       fetch(`/api/journeys/${this.props.match.params.room}/completed`, {
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, same-origin, *omit
@@ -1296,6 +1324,10 @@ class JourneySpace extends Component {
 		 session={this.sessionHelper.session}
 		 localkey={local_key_counter_to_avoid_warning++}
 		 ></UnfilledVideoSquare>
+		 
+		 <NoVideoSquare
+		 localkey={local_key_counter_to_avoid_warning++}
+		 ></NoVideoSquare>
 		 
 
 		 
