@@ -471,9 +471,19 @@ class SkipButton extends Component {
     render() {
 	{/*	this.props.journey.state != 'completed' ? */}
 	return (
-	    (true) ?
+/*	    (true) ?
 	    <button style={this.props.style || {}} className='btn btn-primary' onClick={this.skipToNext}><i className='fa fa-step-forward fa-fw'></i></button> :
-	    <span/>
+		<span/>
+*/
+	    <span className={`fa-stack`} onClick={this.skipToNext}>
+	    <i className='fa fa-circle fa-stack-2x' 
+	style={{color: 'rgb(75,176,88)'}}
+	    ></i>
+	    {
+            <i className={`fa fa-step-forward fa-stack-1x`}
+	     style={{color: 'white'}}></i>
+	     }
+		 </span>
     )
   }
 }
@@ -500,7 +510,15 @@ class VideoButton extends Component {
 
   render() {
     return (
-      <button style={this.props.style || {}} onClick={this.toggle} className={`btn btn-${this.state.publishing ? 'primary' : 'secondary'}`}><i className="fa fa-video-camera fa-fw"></i></button>
+	    <span className={`fa-stack`} onClick={this.toggle}>
+	    <i className='fa fa-circle fa-stack-2x' 
+	style={{color: 'rgb(75,176,88)'}}
+	    ></i>
+	    {
+            <i className={`fa fa-video-camera fa-stack-1x`}
+	     style={{color: 'white'}}></i>
+	     }
+		 </span>
     )
   }
 }
@@ -583,9 +601,22 @@ class AudioButton extends Component {
 
   render() {
     return (
-	    <button id="microphoneButton" style={this.props.style || {}} onClick={this.toggleMicrophone} className={`btn btn-${this.state.publishing ? 'primary' : 'secondary'}`}>
+/*	    <button id="microphoneButton" style={this.props.style || {}} onClick={this.toggleMicrophone} className={`btn btn-${this.state.publishing ? 'primary' : 'secondary'}`}> 
+
 	    <i className="fa fa-microphone fa-fw" ></i>
 	    </button>
+*/	    
+	    <span className={`fa-stack`} onClick={this.toggleMicrophone}>
+	    <i className='fa fa-circle fa-stack-2x' 
+	style={{color: 'rgb(75,176,88)'}}
+	    ></i>
+	    {
+            <i className={`fa fa-microphone fa-stack-1x`}
+	     style={{color: 'white'}}></i>
+	     }
+		 </span>
+
+	
     )
   }
 }
@@ -641,11 +672,80 @@ class PlayButton extends Component {
 
     render() {
     return (
-	    <button id="playbutton_id"
-		style={this.props.style || {}}
-	onClick={this.togglePlay} className={`btn btn-primary`}>
-        <i className={`fa fa-${state.audioTag.paused ? 'play' : 'pause'}`}></i>
-      </button>
+	    <span className='fa-stack' onClick={this.togglePlay} style={{fontSize: '1.4em'}}>
+	    <i className='fa fa-circle fa-stack-2x' onClick={this.togglePlay}
+	style={{color: 'rgb(55,180,246)'}}
+	    ></i>
+	    {
+            <i className={`fa fa-${state.audioTag.paused ? 'play' : 'pause'} fa-stack-1x`}
+	     style={{color: 'white'}}></i>
+	     }
+		 </span>
+    )
+  }
+}
+
+// This is oddly similar and anti-symmetric to the PlayButton.
+class PauseButton extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      paused: (props.player && props.player.paused) || true
+    }
+      props.player.addEventListener('play', () => {
+      this.setState({
+        paused: false
+      });
+    // This binding is necessary to make `this` work in the callback -- ROB IS TRYING THIS  
+    this.togglePlay = this.togglePlay.bind(this);
+    });
+
+    props.player.addEventListener('pause', () => {
+      this.setState({
+        paused: true
+      });
+    });
+  }
+
+    togglePlay = (e) => {
+    e.preventDefault();
+    setTimeout(() => {
+      if (state.audioTag.paused) {
+        fetch(`/api/journeys/${this.props.journey.room}/start`, {
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST',
+          mode: 'cors',
+        });
+      } else {
+        fetch(`/api/journeys/${this.props.journey.room}/pause`, {
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST',
+          mode: 'cors',
+        });
+      }
+    }, 20);
+  }
+
+    render() {
+    return (
+	    <span className='fa-stack' onClick={this.togglePlay}>
+	    <i className='fa fa-circle fa-stack-2x' onClick={this.togglePlay}
+	style={{color: 'rgb(75,176,88)'}}
+	    ></i>
+	    {
+            <i className={`fa fa-${state.audioTag.paused ? 'pause' : 'play'} fa-stack-1x`}
+	     style={{color: 'white'}}></i>
+	     }
+		 </span>
     )
   }
 }
@@ -1247,24 +1347,7 @@ class JourneySpace extends Component {
 		  */}
 
 
-		 {/* This needs to be either hidden or turn into a React Component when InviteModal is up */}
-			 <div id='central_control_panel_id' style={{display: 'flex'}} className='flexiblerow'>
 
-			 <VideoButton
-			 style={{color: 'white',backgroundColor: 'rgb(75,176,88)',
-			 	 borderRadius: '50%', fontSize: '36px', margin: '25px'
-			 	}}
-			 publisher={this.publisher}/>
-			 <AudioButton
-			  style={{color: 'white',backgroundColor: 'rgb(75,176,88)',
-			  	  borderRadius: '50%',  fontSize: '36px', margin: '25px'
-			  	}}
-			  publisher={this.publisher}/>
-			 <PlayButton style={{ color: 'white',backgroundColor: 'rgb(55,180,246)', borderRadius: '50%', padding: '20px', paddingRight: '30px', paddingLeft: '30px', margin: '10px', fontSize: '48px'}} journey={state.journey} player={state.audioTag}/>			 
-
-			 <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', margin: '25px', fontSize: '36px'}} journey={state.journey}/>
-	         </div>
-		 
 		 <div className="flex-squares"> 
 			 
 		 {/* here we create the two big squares;  */}
@@ -1275,9 +1358,9 @@ class JourneySpace extends Component {
                     </span>
 
 		 {/* This is the second square;  */}		 
-		 <div id='secondsquare' style={{display: 'flex', flexDirection: 'col'}}>
+		 <div id='secondsquare' className='flexiblecol'>
 
-		 <div>
+		 <div style={{display: 'flex', flexDirection: 'row'}}>
 		 <span key="stream" id='video-square1' className='journeyspace-stream journeyspace-me'>
                         <OTPublisher 
                           session={this.sessionHelper.session}
@@ -1299,7 +1382,30 @@ class JourneySpace extends Component {
 		 ></UnfilledVideoSquare>
 		 </div>
 
-		 <div>
+		 		 {/* This needs to be either hidden or turn into a React Component when InviteModal is up */}
+			 <div id='central_control_panel_id' style={{display: 'flex'}} className='flexiblerow'>
+
+			 <VideoButton
+			 style={{color: 'white',backgroundColor: 'rgb(75,176,88)',
+			 	 borderRadius: '50%'
+			 	}}
+			 publisher={this.publisher}/>
+			 <AudioButton
+			  style={{color: 'white',backgroundColor: 'rgb(75,176,88)',
+			  	  borderRadius: '50%' 
+			  	}}
+			  publisher={this.publisher}/>
+		 <PlayButton style={{color: 'rgb(55,180,246)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
+		 journey={state.journey} player={state.audioTag}/>			 
+
+		 <PauseButton style={{color: 'rgb(55,180,246)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
+		 journey={state.journey} player={state.audioTag}/>			 
+		 
+			 <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%',  }} journey={state.journey}/>
+	         </div>
+		 
+
+		 <div style={{display: 'flex', flexDirection: 'row'}}>
 		 <UnfilledVideoSquare vidid='video-square3'
 		 limit={2}
 		 streamlength={this.state.streams.length}

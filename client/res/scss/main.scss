@@ -531,11 +531,13 @@ h2 {
 
 
 #central_control_panel_id {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 0px;
     z-index: 1000;
+    font-size: 1.5em;
 }
 
 
