@@ -13,8 +13,6 @@ export function setSizes() {
 	var h = window.innerHeight;
 	// TODO: this should actually be pulled from the header height
     var headerHeight = tb_and_h.offsetHeight;
-
-
     
     console.log("headerHeight", headerHeight);
     
@@ -53,10 +51,12 @@ export function setSizes() {
 	s1.style.width = osw_h+"px";
 	s2.style.width = osw_h+"px";
 	s3.style.width = osw_h+"px";
-	s4.style.width = osw_h+"px";
-    console.log("osw " ,osw);
+    s4.style.width = osw_h+"px";
+    
     var tb = document.getElementById("titlebar");
+    console.log("osw * 2 ", osw*2+"px");
     tb.style.maxWidth = osw*2+"px";
+
     
     }
 

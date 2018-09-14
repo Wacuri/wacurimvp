@@ -1227,9 +1227,11 @@ class JourneySpace extends Component {
                       </select>
                     </div>
                     }
+		 {state.journey.startAt && ['joined', 'created'].indexOf(state.journey.state) > -1 && 
                     <div className='journeyspace-meta pr-3 pl-3 pt-3'>
-                      {state.journey.startAt && ['joined', 'created'].indexOf(state.journey.state) > -1 && <SharePrompt onInvite={this.onInvite}/>}
-                    </div>
+                      <SharePrompt onInvite={this.onInvite}/>
+                  </div>
+		 }
 
 		 </div>
 
