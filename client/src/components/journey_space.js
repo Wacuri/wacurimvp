@@ -1382,8 +1382,9 @@ class JourneySpace extends Component {
 		 ></UnfilledVideoSquare>
 		 </div>
 
-		 		 {/* This needs to be either hidden or turn into a React Component when InviteModal is up */}
-			 <div id='central_control_panel_id' style={{display: 'flex'}} className='flexiblerow'>
+		 {!this.state.showShareModal &&
+		  <div id='central_control_panel_id' style={{display: 'flex'}} className='flexiblerow'>
+
 
 			 <VideoButton
 			 style={{color: 'white',backgroundColor: 'rgb(75,176,88)',
@@ -1403,7 +1404,7 @@ class JourneySpace extends Component {
 		 
 			 <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%',  }} journey={state.journey}/>
 	         </div>
-		 
+		 }		 
 
 		 <div style={{display: 'flex', flexDirection: 'row'}}>
 		 <UnfilledVideoSquare vidid='video-square3'
