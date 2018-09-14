@@ -911,11 +911,16 @@ class NoVideoSquare extends React.Component {
       const vid = this.props.vidid;      
       return (
 	      <div key={localkey} id={vid} className='video-placeholder'>
-	      <div className='invite-indicator'>
-	      <div>
-        <button className='btn btn-primary' onClick={this.props.onInvite}>Orientation</button>
-	      </div>
-	      </div>
+	        <div className='invite-indicator'>
+	          <div>
+	            <i className='fa fa-smile-o fa-3x' style={{ display: 'hidden'}}></i>
+                    <div style={{color: 'white'}}>
+                      <button className='btn btn-primary' onClick={this.props.onInvite}
+	                style={{margin: '0 auto'}}
+ 	              >Orientation</button>
+	            </div>	      	  
+  	         </div>
+	        </div>
 	      </div>
       );
   }	  
@@ -1387,14 +1392,8 @@ class JourneySpace extends Component {
 
 
 			 <VideoButton
-			 style={{color: 'white',backgroundColor: 'rgb(75,176,88)',
-			 	 borderRadius: '50%'
-			 	}}
 			 publisher={this.publisher}/>
 			 <AudioButton
-			  style={{color: 'white',backgroundColor: 'rgb(75,176,88)',
-			  	  borderRadius: '50%' 
-			  	}}
 			  publisher={this.publisher}/>
 		 <PlayButton style={{color: 'rgb(55,180,246)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
 		 journey={state.journey} player={state.audioTag}/>			 
