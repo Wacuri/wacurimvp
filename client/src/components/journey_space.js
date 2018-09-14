@@ -1201,26 +1201,24 @@ class JourneySpace extends Component {
 	    let currentUserHasFlaggedJourney = state.journey && state.journey.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
 	    var stream0 = this.state.streams[0];
 	return (
-			<div className='journeyspace' style={{position: 'relative'}}>
-	    <Header history={this.props.history}/>
-
+		<div className='journeyspace' style={{position: 'relative'}}>
 	    {/*          <div className='journeyspace-content flexiblerow'> */}
 		{this.state.session && /* AAA */
           <div className='journeyspace-content'>		 
 
-		 <div className='flexiblerow space-between-added'
-		 style={{marginBottom: '20px', backgroundColor: 'black', color: 'white'}}>
-		 <span style={{color: 'white'}} >{state.journey.name}</span>
-		 {/*		 <JourneyTimeline journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/> */}
-                 <JourneyPhases journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
+		{/* tob bar */}
+		<div id="topbar_and_header">
+	    <Header history={this.props.history}/>
 
-		 {/*
-                 {state.journey.state === 'joined' && state.journey.startAt &&
-		  <JourneyStartsIn journey={state.journey} timer={this.journeyStateTimer}/> }
-		  */}
+		 
+		 <div id="titlebar" className='flexiblerow space-between-added'
+		 style={{backgroundColor: 'black', color: 'white'}}>
+		 
+		   <span style={{color: 'white'}} >{state.journey.name}</span>
 
+                   <JourneyPhases journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
 
-                  {!state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed') &&
+                    {!state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed') &&
                     <div style={{padding: '10px'}}>
                       <select style={{width: '100%'}} onChange={this.onChangeJourney} value={state.journeys&& state.journey.journey}>
                         {state.journeys.map(journey => (
@@ -1228,16 +1226,14 @@ class JourneySpace extends Component {
                         ))}
                       </select>
                     </div>
-                  }
+                    }
+                    <div className='journeyspace-meta pr-3 pl-3 pt-3'>
+                      {state.journey.startAt && ['joined', 'created'].indexOf(state.journey.state) > -1 && <SharePrompt onInvite={this.onInvite}/>}
+                    </div>
 
-			 </div>
+		 </div>
 
-			 
-
-                  <div className='journeyspace-meta pr-3 pl-3 pt-3'>
-                    {state.journey.startAt && ['joined', 'created'].indexOf(state.journey.state) > -1 && <SharePrompt onInvite={this.onInvite}/>}
-                  </div>
-                  
+	    </div>
 
 		 {/*
                  {state.journey.state === 'failed' &&
@@ -1265,16 +1261,22 @@ class JourneySpace extends Component {
 			 <PlayButton style={{ color: 'white',backgroundColor: 'rgb(55,180,246)', borderRadius: '50%', padding: '20px', paddingRight: '30px', paddingLeft: '30px', margin: '10px', fontSize: '48px'}} journey={state.journey} player={state.audioTag}/>			 
 
 			 <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', margin: '25px', fontSize: '36px'}} journey={state.journey}/>
-	          </div>
-			 <div className="flex-squares"> 
+	         </div>
+		 
+		 <div className="flex-squares"> 
+			 
+		 {/* here we create the two big squares;  */}
+		 <div id="bigsquares">
+
                     <span   key="name" >
                       <img id='video-square0' className="journey-image" src={state.journey.image} onClick={this.togglePlayState}/>
-                      <h2 style={{flex: 5}} className='journeyspace-title'>{state.journey.name}</h2>
-
                     </span>
-			 
 
-			 <span key="stream" id='video-square1' className='journeyspace-stream journeyspace-me'>
+		 {/* This is the second square;  */}		 
+		 <div id='secondsquare' style={{display: 'flex', flexDirection: 'col'}}>
+
+		 <div>
+		 <span key="stream" id='video-square1' className='journeyspace-stream journeyspace-me'>
                         <OTPublisher 
                           session={this.sessionHelper.session}
                           onInit={this.onInitPublisher}
@@ -1284,8 +1286,8 @@ class JourneySpace extends Component {
                                 height: '100%',
                               }}
                         />
-			 </span>
-
+		 </span>
+		 
 		 <UnfilledVideoSquare vidid='video-square2'
 		 limit={1}
 		 streamlength={this.state.streams.length}
@@ -1293,7 +1295,9 @@ class JourneySpace extends Component {
 		 session={this.sessionHelper.session}
 		 localkey={local_key_counter_to_avoid_warning++}
 		 ></UnfilledVideoSquare>
+		 </div>
 
+		 <div>
 		 <UnfilledVideoSquare vidid='video-square3'
 		 limit={2}
 		 streamlength={this.state.streams.length}
@@ -1305,6 +1309,12 @@ class JourneySpace extends Component {
 		 <NoVideoSquare vidid='video-square4'
 		 localkey={local_key_counter_to_avoid_warning++}
 		 ></NoVideoSquare>
+		 </div>
+		 
+		 </div>
+		 
+		 </div>
+		 
 		 
 
 		 

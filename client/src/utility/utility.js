@@ -4,16 +4,34 @@
     // the view port (not counting the header), arranged either
     // vertically for portrait mode or horiontally for landscape.
 export function setSizes() {
-	var fs = document.getElementById("flex-squares-main");	
+    var fs = document.getElementById("flex-squares-main");
+
+    var tb_and_h = document.getElementById("topbar_and_header");
+
+    
 	var w = window.innerWidth;
 	var h = window.innerHeight;
 	// TODO: this should actually be pulled from the header height
-	var headerHeight = 100;
+    var headerHeight = tb_and_h.offsetHeight;
+
+
+    
+    console.log("headerHeight", headerHeight);
+    
 	var h = h - headerHeight;
 
-	var mi = Math.min(w,h);
-	// now a fourth of this minimum is our basic size...
-	var mi_half = mi / 2;
+    // one square width...
+    var osw = Math.min(Math.max(w,h)/2,Math.min(w,h));
+    var osw_h = osw/2;
+
+    // The square frame
+    var sf = document.getElementById("bigsquares");
+    sf.style.display = "flex";
+    sf.style.flexFlow = (w >= h) ? "row wrap" : "col wrap";
+    
+    var square2 = document.getElementById("secondsquare");
+    square2.style.width = osw+"px";
+    square2.style.height = osw+"px";    
 
 	// video-square0 is the Thumbnail
 	// video-square4 is the empty one
@@ -23,20 +41,23 @@ export function setSizes() {
 	var s3 = document.getElementById("video-square3");
 	var s4 = document.getElementById("video-square4");    
 
-	s0.style.height = mi_half*2+"px";
-	s0.style.width = mi_half*2+"px";
+	s0.style.height = osw+"px";
+	s0.style.width = osw+"px";
 	
-	s1.style.height = mi_half+"px";
-	s2.style.height = mi_half+"px";
-	s3.style.height = mi_half+"px";
-	s4.style.height = mi_half+"px";    
+	s1.style.height = osw_h+"px";
+	s2.style.height = osw_h+"px";
+	s3.style.height = osw_h+"px";
+	s4.style.height = osw_h+"px";    
 
 
-	s1.style.width = mi_half+"px";
-	s2.style.width = mi_half+"px";
-	s3.style.width = mi_half+"px";
-	s4.style.width = mi_half+"px";
-	console.log("mi_half " ,mi_half);
+	s1.style.width = osw_h+"px";
+	s2.style.width = osw_h+"px";
+	s3.style.width = osw_h+"px";
+	s4.style.width = osw_h+"px";
+    console.log("osw " ,osw);
+    var tb = document.getElementById("titlebar");
+    tb.style.maxWidth = osw*2+"px";
+    
     }
 
 
