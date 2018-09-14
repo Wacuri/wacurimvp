@@ -29,7 +29,13 @@ export function setSizes() {
     
     var square2 = document.getElementById("secondsquare");
     square2.style.width = osw+"px";
-    square2.style.height = osw+"px";    
+    square2.style.maxWidth = osw+"px";    
+//    square2.style.height = osw+"px";
+
+    
+//    console.log(square2.style.flexDirection);
+//    square2.style.flexDirection = "col";
+//    console.log(square2.style.flexDirection);    
 
 	// video-square0 is the Thumbnail
 	// video-square4 is the empty one
