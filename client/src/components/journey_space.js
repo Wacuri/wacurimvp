@@ -12,6 +12,8 @@ import {initLayoutContainer} from 'opentok-layout-js';
 import './share';
 import JourneyStartsIn from './journey_starts_in';
 import Header from './header';
+import Intro from './intro';
+
 import * as someHelper from '../utility/utility'
 
 require('es6-promise').polyfill();
@@ -23,6 +25,38 @@ if (__CLIENT__) {
 	var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
 	const OT = require('@opentok/client');
 	window.state = state;
+}
+
+// Warning: This is duplicated, and must be turned into a separate file and removed from
+// app.js
+class IntroWrapper extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showIntro: props.force || !Cookie.get('saw intro')
+    }
+  }
+
+  componentDidMount() {
+  }
+
+  onClose = () => {
+    this.setState({
+      showIntro: false
+    });
+  }
+
+  render() {
+    if (this.state.showIntro) {
+      return (
+        <Intro onClose={this.onClose} {...this.props}>
+          <this.props.component {...this.props}/>
+        </Intro>
+      )
+    } else {
+      return <this.props.component {...this.props}/>
+    }
+  }
 }
 
 
@@ -774,11 +808,13 @@ class InviteModal extends Component {
     }
   }
 
-  onChange = (e) => {
+    onChange = (e) => {
+    e.preventDefault();	
     this.setState({
       journeySpaceName: e.target.value,
       error: this.state.error && e.target.value != ''
     });
+	e.stopPropagation();	
   }
 
   onCopy = (e) => {
@@ -860,6 +896,35 @@ class InviteModal extends Component {
 }
 
 
+class OrientationModal extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      journeySpaceName: '',
+      error: false
+    }
+  }
+
+  onChange = (e) => {
+    this.setState({
+      journeySpaceName: e.target.value,
+      error: this.state.error && e.target.value != ''
+    });
+  }
+
+  render() {
+    return (
+	    <div style={{width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(89, 153, 222, 0.9)'}} className='journeyspace-invite'>
+        <Intro onClose={this.onClose} {...this.props}>
+          <this.props.component {...this.props}/>
+        </Intro>
+      </div>
+    )
+  }
+}
+
+
 class UnfilledVideoSquare extends React.Component {
   constructor(props) {
       super(props);
@@ -871,12 +936,20 @@ class UnfilledVideoSquare extends React.Component {
       const session = this.props.session;
       const localkey = this.props.localkey;
       const limit = this.props.limit;
+      const state = this.props.state;
+
+      const hide_control = 
+      	    !(state.playerState == "waiting" ||
+	     state.playerState == "failed");
       return ((slength < limit) ?
 	      <div key={localkey} id={vid} className='video-placeholder'>
 	      <div className='invite-indicator'>
-	      <div>
-                          <i className='fa fa-smile-o fa-3x'></i>
-              <p style={{color: 'white', maxWidth: '80%', margin: '0 auto'}}>Waiting...</p>
+	      <div style={{visibility: `${hide_control ? 'hidden' : 'visible'}` }}>
+              <i className='fa fa-smile-o fa-3x'></i>
+              <p style={{color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '0.5em'}}>Waiting...</p>
+              <button style={{color: 'white', backgroundColor: 'black', marginTop: '0.5em' }}
+	            onClick={this.props.onInvite}>Invite Friends
+	        </button>
 	      </div>
 	      </div>
 	      </div>
@@ -913,11 +986,17 @@ class NoVideoSquare extends React.Component {
 	      <div key={localkey} id={vid} className='video-placeholder'>
 	        <div className='invite-indicator'>
 	          <div>
-	            <i className='fa fa-smile-o fa-3x' style={{ display: 'hidden'}}></i>
-                    <div style={{color: 'white'}}>
-                      <button className='btn btn-primary' onClick={this.props.onInvite}
-	                style={{margin: '0 auto'}}
+	      <i className='fa fa-smile-o fa-3x' style={{ visibility: 'hidden'}}></i>
+	      
+              <p style={{visibility: 'hidden', color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '0.5em'}}>Waiting...</p>
+
+              <div style={{color: 'white'}}>
+	      {/* I have no idea how to incease the roundness of these corners */}
+	  {/*
+                      <button className='btn btn-primary' onClick={this.props.onOrientation}
+	  style={{margin: '0 auto',  marginTop: '0.5em' }}
  	              >Orientation</button>
+	   */}
 	            </div>	      	  
   	         </div>
 	        </div>
@@ -939,7 +1018,8 @@ class JourneySpace extends Component {
       playerProgressMS: 0,
       journeyDuration: 0,
       currentlyActivePublisher: null,
-      showShareModal: false,
+	showShareModal: false,
+	showOrientationModal: false,
       showIntro: true,
     }
     this.publisher = {};
@@ -1267,6 +1347,29 @@ class JourneySpace extends Component {
     window.location = url + `?journey=${state.journey.name}&name=${name}`;
   }
 
+    onOrientation = (e) => {
+    e.preventDefault();
+    this.setState({
+      showOrientationModal: true
+    });
+  }
+
+  onCloseOrientationModal = (e) => {
+    e.preventDefault();
+    this.setState({
+      showOrientationModal: false
+    });
+  }
+
+  onCompleteOrienetation = (url, name) => {
+    this.setState({
+      showOrientationModal: false
+    });
+    window.location = url + `?journey=${state.journey.name}&name=${name}`;
+  }
+    
+
+    
   seekTo = (percent) => {
     state.audioTag.currentTime = state.audioTag.duration * percent;
     state.audioTag.play();
@@ -1332,11 +1435,14 @@ class JourneySpace extends Component {
                       </select>
                     </div>
                     }
+		 {/* we may need to make the Invite Friends button modal by this condition */}
+		 {/*
 		 {state.journey.startAt && ['joined', 'created'].indexOf(state.journey.state) > -1 && 
                     <div className='journeyspace-meta pr-3 pl-3 pt-3'>
                       <SharePrompt onInvite={this.onInvite}/>
                   </div>
 		 }
+		  */}
 
 		 </div>
 
@@ -1380,14 +1486,17 @@ class JourneySpace extends Component {
 		 
 		 <UnfilledVideoSquare vidid='video-square2'
 		 limit={1}
+		 onInvite={this.onInvite}		 
 		 streamlength={this.state.streams.length}
 		 stream={this.state.stream}
 		 session={this.sessionHelper.session}
 		 localkey={local_key_counter_to_avoid_warning++}
+		 state={this.state}
+
 		 ></UnfilledVideoSquare>
 		 </div>
 
-		 {!this.state.showShareModal &&
+		 {!(this.state.showShareModal || this.state.showOrientationModal ) &&
 		  <div id='central_control_panel_id' style={{display: 'flex'}} className='flexiblerow'>
 
 
@@ -1408,14 +1517,17 @@ class JourneySpace extends Component {
 		 <div style={{display: 'flex', flexDirection: 'row'}}>
 		 <UnfilledVideoSquare vidid='video-square3'
 		 limit={2}
+		 onInvite={this.onInvite}		 
 		 streamlength={this.state.streams.length}
 		 stream={this.state.stream}
 		 session={this.sessionHelper.session}
-		 localkey={local_key_counter_to_avoid_warning++}
+		  localkey={local_key_counter_to_avoid_warning++}
+		 state={this.state}		  
 		 ></UnfilledVideoSquare>
 		 
 		 <NoVideoSquare vidid='video-square4'
 		 localkey={local_key_counter_to_avoid_warning++}
+		 onOrientation={this.onOrientation}		 		 
 		 ></NoVideoSquare>
 		 </div>
 		 
@@ -1436,7 +1548,11 @@ class JourneySpace extends Component {
           {this.state.showShareModal &&
             <InviteModal journey={this.state.session} onComplete={this.onCompleteShare} onClose={this.onCloseShareModal}/>
           }
-
+		 /*
+		 {this.state.showOrientationModal &&
+		  <IntroWrapper force={true}/>
+          }
+*/
 			</div>		 
 		}
 	    
