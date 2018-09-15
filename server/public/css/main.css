@@ -8608,6 +8608,9 @@ a.text-dark:hover, a.text-dark:focus {
 .btn-secondary {
   background-color: gainsboro; }
 
+.btn-primary {
+  border-width: 0; }
+
 h2 {
   font-size: 1.7rem; }
 
@@ -8649,6 +8652,13 @@ h2 {
 .flexiblerow {
   display: flex;
   flex-flow: row wrap; }
+
+.flexiblecol {
+  display: flex;
+  flex-flow: column; }
+
+.space-between-added {
+  justify-content: space-between; }
 
 .journeyspace-content {
   flex: 1; }
@@ -8973,21 +8983,55 @@ h2 {
   margin-left: 4px; }
 
 #central_control_panel_id {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000; }
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 0px;
+  z-index: 1000;
+  font-size: 1.5em; }
 
 .round-button {
-  backgroundColor: 'rgb(250,188,91)';
-  borderStyle: 'none'; }
+  background-color: #fabc5b;
+  borderStyle: none; }
 
 .round-button-image {
-  color: 'white';
-  backgroundColor: 'rgb(75,176,88)';
-  borderRadius: '50%';
-  padding: '8px';
-  fontSize: '24px'; }
+  color: white;
+  background-color: #4bb058;
+  borderRadius: 50%;
+  padding: 8px;
+  fontSize: 24px; }
+
+.phase-bar {
+  min-width: 20%;
+  height: calc(0.4vw);
+  margin-left: calc(0.2vw);
+  margin-right: calc(0.1vw); }
+
+.bar-white {
+  background-color: white; }
+
+.bar-green {
+  background-color: #4bb058; }
+
+.invite-indicator {
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white; }
+  .invite-indicator .fa-smile-o {
+    font-size: 3rem;
+    color: white; }
+  .invite-indicator .p {
+    color: white; }
+  .invite-indicator .btn {
+    font-size: 1em;
+    background-color: #4bb058; }
+
+.secondsquare {
+  display: flex;
+  flex-flow: col wrap; }
 
 /*# sourceMappingURL=main.css.map*/

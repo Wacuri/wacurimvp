@@ -1,5 +1,4 @@
 
-// WARINING: THIS IS DUPLICATED!!
     // Our basic design is to make sure that two sqares fit in
     // the view port (not counting the header), arranged either
     // vertically for portrait mode or horiontally for landscape.
@@ -13,10 +12,7 @@ export function setSizes() {
 	var h = window.innerHeight;
 	// TODO: this should actually be pulled from the header height
     var headerHeight = tb_and_h.offsetHeight;
-    
-    console.log("headerHeight", headerHeight);
-    
-	var h = h - headerHeight;
+    var h = h - headerHeight;
 
     // one square width...
     var osw = Math.min(Math.max(w,h)/2,Math.min(w,h));
@@ -30,12 +26,6 @@ export function setSizes() {
     var square2 = document.getElementById("secondsquare");
     square2.style.width = osw+"px";
     square2.style.maxWidth = osw+"px";    
-//    square2.style.height = osw+"px";
-
-    
-//    console.log(square2.style.flexDirection);
-//    square2.style.flexDirection = "col";
-//    console.log(square2.style.flexDirection);    
 
 	// video-square0 is the Thumbnail
 	// video-square4 is the empty one
@@ -60,7 +50,6 @@ export function setSizes() {
     s4.style.width = osw_h+"px";
     
     var tb = document.getElementById("titlebar");
-    console.log("osw * 2 ", osw*2+"px");
     tb.style.maxWidth = osw*2+"px";
 
     
