@@ -8989,7 +8989,7 @@ h2 {
   align-items: center;
   height: 0px;
   z-index: 1000;
-  font-size: 1.5em; }
+  font-size: 1.5rem; }
 
 .round-button {
   background-color: #fabc5b;
@@ -9027,7 +9027,7 @@ h2 {
   .invite-indicator .p {
     color: white; }
   .invite-indicator .btn {
-    font-size: 1em;
+    font-size: 1rem;
     background-color: #4bb058; }
 
 .secondsquare {

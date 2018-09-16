@@ -7020,7 +7020,7 @@ var PlayButton = function (_Component10) {
     value: function render() {
       return _react2.default.createElement(
         'span',
-        { className: 'fa-stack', onClick: this.togglePlay, style: { fontSize: '1.4em' } },
+        { className: 'fa-stack', onClick: this.togglePlay, style: { fontSize: '2rem' } },
         _react2.default.createElement('i', { className: 'fa fa-circle fa-stack-2x', onClick: this.togglePlay,
           style: { color: 'rgb(55,180,246)' }
         }),
@@ -7345,12 +7345,12 @@ var UnfilledVideoSquare = function (_React$Component) {
             _react2.default.createElement('i', { className: 'fa fa-smile-o fa-3x' }),
             _react2.default.createElement(
               'p',
-              { style: { color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '0.5em' } },
+              { style: { color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem' } },
               'Waiting...'
             ),
             _react2.default.createElement(
               'button',
-              { style: { color: 'white', backgroundColor: 'black', marginTop: '0.5em' },
+              { style: { color: 'white', backgroundColor: 'black', marginTop: '0.5rem', fontSize: '1.5rem' },
                 onClick: this.props.onInvite },
               'Invite Friends'
             )
@@ -7416,7 +7416,7 @@ var NoVideoSquare = function (_React$Component2) {
             _react2.default.createElement('i', { className: 'fa fa-smile-o fa-3x', style: { visibility: 'hidden' } }),
             _react2.default.createElement(
               'p',
-              { style: { visibility: 'hidden', color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '0.5em' } },
+              { style: { visibility: 'hidden', color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '0.5rem' } },
               'Waiting...'
             ),
             _react2.default.createElement('div', { style: { color: 'white' } })
