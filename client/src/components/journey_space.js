@@ -721,7 +721,6 @@ class PlayButton extends Component {
 
 // This is oddly similar and anti-symmetric to the PlayButton.
 class PauseButton extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
