@@ -591,6 +591,17 @@ h2 {
 
 .secondsquare {
     display: flex;
-    flex-flow: col wrap;
-    
+    flex-flow: column wrap;
+}
+
+.PartnerStream {
+    display: flex;
+    flex-flow: column;
+    div {
+	height: 90%;
+    }
+}
+
+.journeyspace-stream-controls {
+    height: 20px;
 }

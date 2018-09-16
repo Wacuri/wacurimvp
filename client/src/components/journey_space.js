@@ -927,7 +927,8 @@ class OrientationModal extends Component {
 class UnfilledVideoSquare extends React.Component {
   constructor(props) {
       super(props);
-  }    
+  }
+    // TODO: onFlag must be moved here
   render() {
       const vid = this.props.vidid;
       const slength = this.props.streamlength;
@@ -936,10 +937,13 @@ class UnfilledVideoSquare extends React.Component {
       const localkey = this.props.localkey;
       const limit = this.props.limit;
       const state = this.props.state;
-
+      const journey = this.props.journey;
+      const sessionId = this.props.sessionId;
+      const hasFlagged = (stream) ? !!journey.flags.find(flag => flag.user === sessionId && flag.flagged === stream.id) : false;
       const hide_control = 
       	    !(state.playerState == "waiting" ||
-	     state.playerState == "failed");
+	      state.playerState == "failed");
+
       return ((slength < limit) ?
 	      <div key={localkey} id={vid} className='video-placeholder'>
 	      <div className='invite-indicator'>
@@ -953,9 +957,8 @@ class UnfilledVideoSquare extends React.Component {
 	      </div>
 	      </div>
 				     :
-	      <li key={localkey} id={vid}
+	      <div key={localkey} id={vid} className='PartnerStream'
 	      >
-				 <p>hello</p>
                             <OTSubscriber
                               key={stream.id}
                               session={session}
@@ -966,11 +969,13 @@ class UnfilledVideoSquare extends React.Component {
                               }}
                             />
                           <div className='journeyspace-stream-controls'>
-                              <FlagControl currentUserHasFlaggedStream={hasFlagged} onFlag={this.onFlag} stream={stream.id}>
-                                <i style={{color: hasFlagged ? 'red' : 'white'}} className='fa fa-flag'></i>
+              <FlagControl currentUserHasFlaggedStream={hasFlagged}
+	          onFlag={this.onFlag} stream={stream.id}>
+              <i style={{color: hasFlagged ? 'red' : 'white'}}
+	          className='fa fa-flag'></i>
                               </FlagControl>
                             </div>
-                        </li>
+                        </div>
 		    ); }	  
 }
 
@@ -1483,15 +1488,20 @@ class JourneySpace extends Component {
                         />
 		 </span>
 		 
+		 {console.log("streams",this.state.streams)}
+		 {console.log("streams",stream0)}
+		 {console.log("length",this.state.streams.length)}		 
+		 
 		 <UnfilledVideoSquare vidid='video-square2'
 		 limit={1}
 		 onInvite={this.onInvite}		 
 		 streamlength={this.state.streams.length}
-		 stream={this.state.stream}
+		 stream={this.state.streams[0]}
 		 session={this.sessionHelper.session}
 		 localkey={local_key_counter_to_avoid_warning++}
 		 state={this.state}
-
+		 journey={state.journey}
+		 sessionId={state.sessionId}
 		 ></UnfilledVideoSquare>
 		 </div>
 
@@ -1518,7 +1528,7 @@ class JourneySpace extends Component {
 		 limit={2}
 		 onInvite={this.onInvite}		 
 		 streamlength={this.state.streams.length}
-		 stream={this.state.stream}
+		 stream={this.state.streams[1]}
 		 session={this.sessionHelper.session}
 		  localkey={local_key_counter_to_avoid_warning++}
 		 state={this.state}		  
