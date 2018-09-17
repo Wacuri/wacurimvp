@@ -27,38 +27,6 @@ if (__CLIENT__) {
 	window.state = state;
 }
 
-// Warning: This is duplicated, and must be turned into a separate file and removed from
-// app.js
-class IntroWrapper extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showIntro: props.force || !Cookie.get('saw intro')
-    }
-  }
-
-  componentDidMount() {
-  }
-
-  onClose = () => {
-    this.setState({
-      showIntro: false
-    });
-  }
-
-  render() {
-    if (this.state.showIntro) {
-      return (
-        <Intro onClose={this.onClose} {...this.props}>
-          <this.props.component {...this.props}/>
-        </Intro>
-      )
-    } else {
-      return <this.props.component {...this.props}/>
-    }
-  }
-}
-
 
 class LeaveRoomButton extends Component {
 
@@ -896,7 +864,6 @@ class InviteModal extends Component {
 
 
 class OrientationModal extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -905,19 +872,88 @@ class OrientationModal extends Component {
     }
   }
 
-  onChange = (e) => {
+    onChange = (e) => {
+    e.preventDefault();	
     this.setState({
       journeySpaceName: e.target.value,
       error: this.state.error && e.target.value != ''
     });
+	e.stopPropagation();	
+  }
+
+  onCopy = (e) => {
+    e.preventDefault();
+    if (this.state.journeySpaceName === '') {
+      this.setState({
+        error: 'please enter a name'
+      });
+    } else {
+      this.setState({
+        error: false
+      });
+      const name = this.state.journeySpaceName;
+      const urlFriendlyName = name.replace(/[^\w]/g, '-').toLowerCase();
+      const url = `${window.location.protocol}//${window.location.host}/${urlFriendlyName}`;
+      const success = this._copy(url);
+      if (success) {
+        this.props.onComplete(url, name);
+      } else {
+        this.setState({
+          error: 'failed to copy url'
+        });
+      }
+    }
+  }
+
+  _copy(url) {
+    // A <span> contains the text to copy
+    const span = document.createElement('span');
+    span.textContent = url;
+    span.style.whiteSpace = 'pre'; // Preserve consecutive spaces and newlines
+
+    // Paint the span outside the viewport
+    span.style.position = 'absolute';
+    span.style.left = '-9999px';
+    span.style.top = '-9999px';
+
+    const win = window;
+    const selection = win.getSelection();
+    win.document.body.appendChild(span);
+
+    const range = win.document.createRange();
+    selection.removeAllRanges();
+    range.selectNode(span);
+    selection.addRange(range);
+
+    let success = false;
+    try {
+        success = win.document.execCommand('copy');
+    } catch (err) {}
+
+    selection.removeAllRanges();
+    span.remove();
+
+    return success;
   }
 
   render() {
     return (
-	    <div style={{width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(89, 153, 222, 0.9)'}} className='journeyspace-invite'>
-        <Intro onClose={this.onClose} {...this.props}>
-          <this.props.component {...this.props}/>
-        </Intro>
+      <div style={{width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(89, 153, 222, 0.9)'}} className='journeyspace-invite'>
+        <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px'}}>
+          <i className='fa fa-times' style={{fontSize: '22px', color: 'white'}}/>
+        </a>
+        <div style={{textAlign: 'center', position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '0 20px', minWidth: '90%'}}>
+          <p style={{fontSize: '26px', lineHeight: 0.8, fontFamily: 'Playfair Display, serif', color: 'white'}}>Share your new permanent CuriousLive Space with Friends</p>
+          <input type='text' value={this.state.journeySpaceName} onChange={this.onChange} placeholder='Name Your Space'/>
+          {this.state.error && <p className='text-danger'>{this.state.error}</p>}
+          <p style={{margin: '10px 0 10px 0'}}>Share Using</p>
+          <ul style={{listStyle: 'none', margin: 0, padding: 0}}>
+            <li onClick={this.onCopy} style={{width: '90px', height: '90px', margin: '0 auto', cursor: 'pointer'}}>
+              <i className='fa fa-link' style={{display: 'flex', background: 'white', height: '70px', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', fontSize: '38px'}}/>
+              <p>Copy Link</p>
+            </li>
+          </ul>
+        </div>
       </div>
     )
   }
@@ -1355,6 +1391,7 @@ class JourneySpace extends Component {
     this.setState({
       showOrientationModal: true
     });
+    e.stopPropagation();	
   }
 
   onCloseOrientationModal = (e) => {
@@ -1552,11 +1589,9 @@ class JourneySpace extends Component {
           {this.state.showShareModal &&
             <InviteModal journey={this.state.session} onComplete={this.onCompleteShare} onClose={this.onCloseShareModal}/>
           }
-		 /*
-		 {this.state.showOrientationModal &&
-		  <IntroWrapper force={true}/>
+	  {this.state.showOrientationModal &&
+	    <OrientationModal force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal}/>
           }
-*/
 			</div>		 
 		}
 	    
