@@ -901,7 +901,7 @@ class OrientationModal extends Component {
         </a>
 	    <div/>
 	    <div/>	    
-<h3> Welcome to CuriousLive ...<br/>
+<h3>1.  Welcome to CuriousLive ...<br/>
 A five-minute guided journey - plus sharing - with others.</h3>
 <div>
 The journey will begin when the timer above elapses and you hear the cime.
@@ -909,8 +909,23 @@ The journey will begin when the timer above elapses and you hear the cime.
 <div>
 Breathe slowly and deeply and ajust your posture to be comfortable.
 </div>
+<h3>2.  Next comse the Journey...</h3>
+<div>
+Your microphone will be muted.
+</div>
+<div>
+Some people like to leave their cameras on during the journey to increase the feeling of a shared experience. It is up to you.
+</div>
+<h3>2.  After the Journey comes the Sharing and Connecting.</h3>
+<div>
+	    After the journey you will have the opportunity to share your insights.
+	    Each person takes 1 or 2 minutes.
+</div>
+	    <div>
+	    When others are sharing, please listen deeply, and in turn they will listen more deeply to you.
+</div>
 	    </div>
-      </div>
+	</div>	    
     )
   }
 }
