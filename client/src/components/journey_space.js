@@ -880,69 +880,14 @@ class OrientationModal extends Component {
     });
 	e.stopPropagation();	
   }
-
-  onCopy = (e) => {
-    e.preventDefault();
-    if (this.state.journeySpaceName === '') {
-      this.setState({
-        error: 'please enter a name'
-      });
-    } else {
-      this.setState({
-        error: false
-      });
-      const name = this.state.journeySpaceName;
-      const urlFriendlyName = name.replace(/[^\w]/g, '-').toLowerCase();
-      const url = `${window.location.protocol}//${window.location.host}/${urlFriendlyName}`;
-      const success = this._copy(url);
-      if (success) {
-        this.props.onComplete(url, name);
-      } else {
-        this.setState({
-          error: 'failed to copy url'
-        });
-      }
-    }
-  }
-
-  _copy(url) {
-    // A <span> contains the text to copy
-    const span = document.createElement('span');
-    span.textContent = url;
-    span.style.whiteSpace = 'pre'; // Preserve consecutive spaces and newlines
-
-    // Paint the span outside the viewport
-    span.style.position = 'absolute';
-    span.style.left = '-9999px';
-    span.style.top = '-9999px';
-
-    const win = window;
-    const selection = win.getSelection();
-    win.document.body.appendChild(span);
-
-    const range = win.document.createRange();
-    selection.removeAllRanges();
-    range.selectNode(span);
-    selection.addRange(range);
-
-    let success = false;
-    try {
-        success = win.document.execCommand('copy');
-    } catch (err) {}
-
-    selection.removeAllRanges();
-    span.remove();
-
-    return success;
-  }
-
+    
   render() {
     return (
-      <div style={{width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(89, 153, 222, 0.9)'}} className='journeyspace-invite'>
+      <div style={{width: '100%', height: '100%', position: 'relative', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(89, 153, 222, 0.9)'}} className='journeyspace-invite'>
         <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px'}}>
           <i className='fa fa-times' style={{fontSize: '22px', color: 'white'}}/>
         </a>
-        <div style={{textAlign: 'center', position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '0 20px', minWidth: '90%'}}>
+        <div style={{textAlign: 'center', position: 'relative', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '0 20px', minWidth: '90%'}}>
           <p style={{fontSize: '26px', lineHeight: 0.8, fontFamily: 'Playfair Display, serif', color: 'white'}}>Share your new permanent CuriousLive Space with Friends</p>
           <input type='text' value={this.state.journeySpaceName} onChange={this.onChange} placeholder='Name Your Space'/>
           {this.state.error && <p className='text-danger'>{this.state.error}</p>}
@@ -976,9 +921,12 @@ class UnfilledVideoSquare extends React.Component {
       const journey = this.props.journey;
       const sessionId = this.props.sessionId;
       const hasFlagged = (stream) ? !!journey.flags.find(flag => flag.user === sessionId && flag.flagged === stream.id) : false;
-      const hide_control = 
+      const visible = this.props.visible;      
+      const hide_control = (!visible) ||
       	    !(state.playerState == "waiting" ||
 	      state.playerState == "failed");
+
+      console.log("visible",visible);
 
       return ((slength < limit) ?
 	      <div key={localkey} id={vid} className='video-placeholder'>
@@ -1031,11 +979,9 @@ class NoVideoSquare extends React.Component {
 
               <div style={{color: 'white'}}>
 	      {/* I have no idea how to incease the roundness of these corners */}
-	  {/*
                       <button className='btn btn-primary' onClick={this.props.onOrientation}
 	  style={{margin: '0 auto',  marginTop: '0.5em' }}
  	              >Orientation</button>
-	   */}
 	            </div>	      	  
   	         </div>
 	        </div>
@@ -1511,7 +1457,13 @@ class JourneySpace extends Component {
 		 {/* This is the second square;  */}		 
 		 <div id='secondsquare' className='flexiblecol'>
 
-		 <div style={{display: 'flex', flexDirection: 'row'}}>
+		 {/* This is a modal which is usually invisible. */}
+		 {this.state.showOrientationModal &&
+		  <OrientationModal force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal}/>
+		 }
+		 
+
+		 <div style={{display: 'flex', flexDirection: 'row', visibility: `${(this.state.showOrientationModal) ? "hidden" : "visible"}`}}>
 		 <span key="stream" id='video-square1' className='journeyspace-stream journeyspace-me'>
                         <OTPublisher 
                           session={this.sessionHelper.session}
@@ -1534,6 +1486,7 @@ class JourneySpace extends Component {
 		 state={this.state}
 		 journey={state.journey}
 		 sessionId={state.sessionId}
+		 visible={(!this.state.showOrientationModal)}
 		 ></UnfilledVideoSquare>
 		 </div>
 
@@ -1561,7 +1514,7 @@ class JourneySpace extends Component {
 		 {/*
 		    }*/}		 
 
-		 <div style={{display: 'flex', flexDirection: 'row'}}>
+		 <div style={{display: 'flex', flexDirection: 'row', visibility: `${(this.state.showOrientationModal) ? "hidden" : "visible"}`}}>
 		 <UnfilledVideoSquare vidid='video-square3'
 		 limit={2}
 		 onInvite={this.onInvite}		 
@@ -1569,7 +1522,8 @@ class JourneySpace extends Component {
 		 stream={this.state.streams[1]}
 		 session={this.sessionHelper.session}
 		  localkey={local_key_counter_to_avoid_warning++}
-		 state={this.state}		  
+		 state={this.state}
+		 visible={(!this.state.showOrientationModal)}		 
 		 ></UnfilledVideoSquare>
 		 
 		 <NoVideoSquare vidid='video-square4'
@@ -1594,9 +1548,6 @@ class JourneySpace extends Component {
           </div>
           {this.state.showShareModal &&
             <InviteModal journey={this.state.session} onComplete={this.onCompleteShare} onClose={this.onCloseShareModal}/>
-          }
-	  {this.state.showOrientationModal &&
-	    <OrientationModal force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal}/>
           }
 			</div>		 
 		}
