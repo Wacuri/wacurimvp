@@ -343,11 +343,11 @@ class JourneyPhases extends Component {
 	    <div ref={el => {this.container = el}} className={`journey-timeline step-${this.stepIndex.toString()}`}>
 	    <div>
 	    <div style={{display: 'flex', flexDirection: 'row' }}>
-	    <h4>{Messages[this.stepIndex]}</h4>
+	    <span>{Messages[this.stepIndex]}</span>
 
 	{
 	    (this.stepIndex == 0) &&
-                <h4 className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</h4>
+                <span className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</span>
 	}
 	    </div>
 	    </div>
@@ -1419,7 +1419,7 @@ class JourneySpace extends Component {
 
 		{/* tob bar */}
 		<div id="topbar_and_header">
-	    <Header history={this.props.history}/>
+		 <Header history={this.props.history} showLeave={true} />
 
 		 
 		 <div id="titlebar" className='flexiblerow space-between-added'
@@ -1467,7 +1467,7 @@ class JourneySpace extends Component {
 		 {/* here we create the two big squares;  */}
 		 <div id="bigsquares">
 
-                    <span   key="name" >
+                    <span   key="name">
                       <img id='video-square0' className="journey-image" src={state.journey.image} onClick={this.togglePlayState}/>
                     </span>
 
@@ -1486,10 +1486,6 @@ class JourneySpace extends Component {
                               }}
                         />
 		 </span>
-		 
-		 {console.log("streams",this.state.streams)}
-		 {console.log("streams",stream0)}
-		 {console.log("length",this.state.streams.length)}		 
 		 
 		 <UnfilledVideoSquare vidid='video-square2'
 		 limit={1}

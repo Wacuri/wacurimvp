@@ -7,21 +7,27 @@ export function setSizes() {
 
     var tb_and_h = document.getElementById("topbar_and_header");
 
+    var debug = 0;
     
 	var w = window.innerWidth;
-	var h = window.innerHeight;
+    var h = window.innerHeight;
+    if (debug) console.log(w,h);
 	// TODO: this should actually be pulled from the header height
     var headerHeight = tb_and_h.offsetHeight;
     var h = h - headerHeight;
 
     // one square width...
     var osw = Math.min(Math.max(w,h)/2,Math.min(w,h));
+
+    if (debug) console.log(osw);
+    
     var osw_h = osw/2;
 
     // The square frame
     var sf = document.getElementById("bigsquares");
     sf.style.display = "flex";
-    sf.style.flexFlow = (w >= h) ? "row wrap" : "col wrap";
+    sf.style.flexFlow = (w >= h) ? "row wrap" : "column wrap";
+    if (debug) console.log("flex flow",sf.style.flexFlow);
     
     var square2 = document.getElementById("secondsquare");
     square2.style.width = osw+"px";
@@ -52,7 +58,6 @@ export function setSizes() {
     var tb = document.getElementById("titlebar");
     tb.style.maxWidth = osw*2+"px";
 
-    
     }
 
 

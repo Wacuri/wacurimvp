@@ -35,6 +35,12 @@ body {
  
 }
 
+@media all and (max-width: 319px)  {
+    body{
+        font-size: 6px;
+    }
+}
+
 :root {
     --heightpercentage: 0.8;
     --mainheightpercentage: 0.8;
@@ -565,19 +571,6 @@ h2 {
 }
 
 
-// .round-button {
-//     background-color: rgb(250,188,91);
-//     borderStyle: none;    
-// }
-
-// .round-button-image {
-//     color: white;
-//     background-color: rgb(75,176,88);
-//     borderRadius: 50%;
-//     padding: 8px;
-//     fontSize: 24px;    
-// }
-
 .phase-bar {
     min-width: 20%;
     height: calc(0.4vw);
@@ -609,7 +602,7 @@ h2 {
 	font-size: 3rem;
     }
     .invite-friends-button {
-	font-size: 2rem;	
+	font-size: 1.5rem;	
     }
     #central_control_panel_id { 
 	font-size: 2.0rem;    
@@ -624,26 +617,10 @@ h2 {
 	font-size: 2.0rem;
     }
     .invite-friends-button {
-	font-size: 2.0rem;	
+	font-size: 1.2rem;	
     }
     #central_control_panel_id { 
-	font-size: 1.5rem;    
-    }
-    .play-button {
-	font-size: 2rem;
-    }
-    
-}
-
-@media all and (max-width: 599px)  {
-    .fa-smile-o {
-        font-size: 1.0rem;
-    }
-    .invite-friends-button {
-        font-size: 1.0rem;	
-    }
-    #central_control_panel_id { 
-	font-size: 1.0rem;    
+	font-size: 1.2rem;    
     }
     .play-button {
 	font-size: 1.5rem;
@@ -651,6 +628,37 @@ h2 {
     
 }
 
+@media all and (max-width: 599px) and (min-width: 300px) {
+    .fa-smile-o {
+        font-size: 1.0rem;
+    }
+    .invite-friends-button {
+        font-size: 1.0rem;	
+    }
+    #central_control_panel_id { 
+	font-size: 0.8rem;    
+    }
+    .play-button {
+	font-size: 1.2rem;
+    }
+    
+}
+
+@media all and (max-width: 319px)  {
+    .fa-smile-o {
+        font-size: 1.0rem;
+    }
+    .invite-friends-button {
+        font-size: 1.0rem;	
+    }
+    #central_control_panel_id { 
+	font-size: 0.8rem;    
+    }
+    .play-button {
+	font-size: 1.0rem;
+    }
+    
+}
 
 
 
@@ -678,6 +686,7 @@ h2 {
     flex-flow: column wrap;
 }
 
+// The flag stuff is barely working
 .PartnerStream {
     display: flex;
     flex-flow: column;
@@ -688,4 +697,11 @@ h2 {
 
 .journeyspace-stream-controls {
     height: 20px;
+}
+
+// By making the initial size small, we make it load a little faster
+// and make the size change less disruptive...
+.journey-image {
+    width: calc(0.5vw);
+    hegith: calc(0.5vw);
 }
