@@ -706,9 +706,9 @@ class PlayButton extends Component {
 
     render() {
     return (
-	    <span className='fa-stack' onClick={this.togglePlay} style={{fontSize: '2rem'}}>
-	    <i className='fa fa-circle fa-stack-2x' onClick={this.togglePlay}
-	style={{color: 'rgb(55,180,246)'}}
+	    <span className='fa-stack play-button' onClick={this.togglePlay}>
+	    <i className='fa fa-circle fa-stack-2x'
+    	      style={{color: 'rgb(55,180,246)'}}
 	    ></i>
 	    {
             <i className={`fa fa-${state.audioTag.paused ? 'play' : 'pause'} fa-stack-1x`}
@@ -948,10 +948,9 @@ class UnfilledVideoSquare extends React.Component {
 	      <div key={localkey} id={vid} className='video-placeholder'>
 	      <div className='invite-indicator'>
 	      <div style={{visibility: `${hide_control ? 'hidden' : 'visible'}` }}>
-              <i className='fa fa-smile-o fa-3x'></i>
+              <i className='fa fa-smile-o fa-2x'></i>
               <p style={{color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem'}}>Waiting...</p>
-              <button style={{color: 'white', backgroundColor: 'black', marginTop: '0.5rem', fontSize: '1.5rem' }}
-	            onClick={this.props.onInvite}>Invite Friends
+              <button className='invite-friends-button'  onClick={this.props.onInvite}>Invite Friends
 	        </button>
 	      </div>
 	      </div>
@@ -990,7 +989,7 @@ class NoVideoSquare extends React.Component {
 	      <div key={localkey} id={vid} className='video-placeholder'>
 	        <div className='invite-indicator'>
 	          <div>
-	      <i className='fa fa-smile-o fa-3x' style={{ visibility: 'hidden'}}></i>
+	      <i className='fa fa-smile-o' style={{ visibility: 'hidden'}}></i>
 	      
               <p style={{visibility: 'hidden', color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '0.5rem'}}>Waiting...</p>
 

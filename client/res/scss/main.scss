@@ -4,10 +4,35 @@ $fa-font-path: "~font-awesome/fonts";
 
 // Bootstrap overrides
 
+body {
+    fontFamily: 'Playfair Display, serif'
+}
+
 @media (max-width: 767.98px) { 
   body {
     cursor: pointer;
   }
+}
+
+
+// This works nicely for the body but sadly I must be changing font-sizes elsewhere
+@media all and (min-width: 960px) {
+    body{
+        font-size: 18px;
+    }
+}
+ 
+@media all and (max-width: 959px) and (min-width: 600px) {
+    body{
+        font-size: 14px;
+    }
+}
+ 
+@media all and (max-width: 599px) and (min-width: 320px) {
+    body{
+        font-size: 10px;
+    }
+ 
 }
 
 :root {
@@ -92,7 +117,7 @@ h2 {
 
 .journeyspace-title {
   color: white;
-  font-size: 12px;
+//  font-size: 12px;
   font-weight: normal;
 }
 
@@ -136,7 +161,6 @@ h2 {
 
   i {
     color: rgb(83, 83, 83);
-    font-size: 22px;
   }
 
   p {
@@ -537,22 +561,22 @@ h2 {
     align-items: center;
     height: 0px;
     z-index: 1000;
-    font-size: 1.5rem;
+
 }
 
 
-.round-button {
-    background-color: rgb(250,188,91);
-    borderStyle: none;    
-}
+// .round-button {
+//     background-color: rgb(250,188,91);
+//     borderStyle: none;    
+// }
 
-.round-button-image {
-    color: white;
-    background-color: rgb(75,176,88);
-    borderRadius: 50%;
-    padding: 8px;
-    fontSize: 24px;    
-}
+// .round-button-image {
+//     color: white;
+//     background-color: rgb(75,176,88);
+//     borderRadius: 50%;
+//     padding: 8px;
+//     fontSize: 24px;    
+// }
 
 .phase-bar {
     min-width: 20%;
@@ -569,15 +593,75 @@ h2 {
     background-color: rgb(75,176,88);    
 }
 
+.invite-friends-button {
+    color: white;
+    background-color: black;
+    margin-top: 0.5rem;
+    font-size: 1.5rem;    
+}
+
+.play-button {
+    font-size: 2rem;
+}
+
+@media all and (min-width: 960px) {
+    .fa-smile-o {    
+	font-size: 3rem;
+    }
+    .invite-friends-button {
+	font-size: 2rem;	
+    }
+    #central_control_panel_id { 
+	font-size: 2.0rem;    
+    }
+    .play-button {
+	font-size: 2.5rem;
+    }
+}
+ 
+@media all and (max-width: 959px) and (min-width: 600px) {
+    .fa-smile-o {    
+	font-size: 2.0rem;
+    }
+    .invite-friends-button {
+	font-size: 2.0rem;	
+    }
+    #central_control_panel_id { 
+	font-size: 1.5rem;    
+    }
+    .play-button {
+	font-size: 2rem;
+    }
+    
+}
+
+@media all and (max-width: 599px)  {
+    .fa-smile-o {
+        font-size: 1.0rem;
+    }
+    .invite-friends-button {
+        font-size: 1.0rem;	
+    }
+    #central_control_panel_id { 
+	font-size: 1.0rem;    
+    }
+    .play-button {
+	font-size: 1.5rem;
+    }
+    
+}
+
+
+
+
 .invite-indicator {
     min-width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    
     color: white;
     .fa-smile-o {
-	font-size: 3rem;
 	color: white;	
     }
     .p {
