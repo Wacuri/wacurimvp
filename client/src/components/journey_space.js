@@ -1537,8 +1537,13 @@ class JourneySpace extends Component {
 		 ></UnfilledVideoSquare>
 		 </div>
 
+		 {/*
+
 		 {!(this.state.showShareModal || this.state.showOrientationModal ) &&
-		  <div id='central_control_panel_id' style={{display: 'flex'}} className='flexiblerow'>
+		  */}
+		 <div id='central_control_panel_id'
+		 style={{visibility: `${(!(this.state.showShareModal || this.state.showOrientationModal)) ? "visible" : "hidden"}`}}
+		 >
 
 
 			 <VideoButton
@@ -1553,7 +1558,8 @@ class JourneySpace extends Component {
 		 
 			 <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%',  }} journey={state.journey}/>
 	         </div>
-		 }		 
+		 {/*
+		    }*/}		 
 
 		 <div style={{display: 'flex', flexDirection: 'row'}}>
 		 <UnfilledVideoSquare vidid='video-square3'
