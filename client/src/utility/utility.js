@@ -1,4 +1,4 @@
-
+export var ONE_SQUARE_WIDTH = 0;
     // Our basic design is to make sure that two sqares fit in
     // the view port (not counting the header), arranged either
     // vertically for portrait mode or horiontally for landscape.
@@ -18,6 +18,7 @@ export function setSizes() {
 
     // one square width...
     var osw = Math.min(Math.max(w,h)/2,Math.min(w,h));
+    ONE_SQUARE_WIDTH = osw;
 
     if (debug) console.log(osw);
     

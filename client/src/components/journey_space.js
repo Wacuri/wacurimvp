@@ -19,6 +19,7 @@ import * as someHelper from '../utility/utility'
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
+
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 
 if (__CLIENT__) {
@@ -881,24 +882,34 @@ class OrientationModal extends Component {
 	e.stopPropagation();	
   }
     
-  render() {
+    render() {
+	console.log('ONE_SQUARE_WIDTH',someHelper.ONE_SQUARE_WIDTH);
     return (
-      <div style={{width: '100%', height: '100%', position: 'relative', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(89, 153, 222, 0.9)'}} className='journeyspace-invite'>
-        <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px'}}>
+	    <div style={{position: 'absolute',
+			 minHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
+			 maxWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,
+			 backgroundColor: 'rgba(89, 153, 222, 0.9)',
+			 disaply: 'flex',
+			 flexFlow: 'column',
+			 justifyContent: 'space-between'
+			 }
+		       }>
+
+            <div className='orientation-message'>
+            <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
           <i className='fa fa-times' style={{fontSize: '22px', color: 'white'}}/>
         </a>
-        <div style={{textAlign: 'center', position: 'relative', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '0 20px', minWidth: '90%'}}>
-          <p style={{fontSize: '26px', lineHeight: 0.8, fontFamily: 'Playfair Display, serif', color: 'white'}}>Share your new permanent CuriousLive Space with Friends</p>
-          <input type='text' value={this.state.journeySpaceName} onChange={this.onChange} placeholder='Name Your Space'/>
-          {this.state.error && <p className='text-danger'>{this.state.error}</p>}
-          <p style={{margin: '10px 0 10px 0'}}>Share Using</p>
-          <ul style={{listStyle: 'none', margin: 0, padding: 0}}>
-            <li onClick={this.onCopy} style={{width: '90px', height: '90px', margin: '0 auto', cursor: 'pointer'}}>
-              <i className='fa fa-link' style={{display: 'flex', background: 'white', height: '70px', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', fontSize: '38px'}}/>
-              <p>Copy Link</p>
-            </li>
-          </ul>
-        </div>
+	    <div/>
+	    <div/>	    
+<h3> Welcome to CuriousLive ...<br/>
+A five-minute guided journey - plus sharing - with others.</h3>
+<div>
+The journey will begin when the timer above elapses and you hear the cime.
+</div>
+<div>
+Breathe slowly and deeply and ajust your posture to be comfortable.
+</div>
+	    </div>
       </div>
     )
   }
