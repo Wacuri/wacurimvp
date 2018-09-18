@@ -1,4 +1,15 @@
+// utility.js -- This is needed to do some reposition in javascript
+// Copyright (C) 2018 Robert L. Read <read.robert@gmail.com>
+
+// This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+
 export var ONE_SQUARE_WIDTH = 0;
+export var LANDSCAPE_NOT_PORTRAIT = true;
     // Our basic design is to make sure that two sqares fit in
     // the view port (not counting the header), arranged either
     // vertically for portrait mode or horiontally for landscape.
@@ -18,6 +29,8 @@ export function setSizes() {
 
     // one square width...
     var osw = Math.min(Math.max(w,h)/2,Math.min(w,h));
+
+    var LANDSCAPE_NOT_PORTRAIT = w > h;
     ONE_SQUARE_WIDTH = osw;
 
     if (debug) console.log(osw);
@@ -40,7 +53,8 @@ export function setSizes() {
 	var s1 = document.getElementById("video-square1");
 	var s2 = document.getElementById("video-square2");
 	var s3 = document.getElementById("video-square3");
-	var s4 = document.getElementById("video-square4");    
+    var s4 = document.getElementById("video-square4");
+	var jt = document.getElementById("journey-timeline0");        
 
 	s0.style.height = osw+"px";
 	s0.style.width = osw+"px";
@@ -54,10 +68,15 @@ export function setSizes() {
 	s1.style.width = osw_h+"px";
 	s2.style.width = osw_h+"px";
 	s3.style.width = osw_h+"px";
-    s4.style.width = osw_h+"px";
+        s4.style.width = osw_h+"px";
+
+	jt.style.width = osw_h+"px";
+
     
     var tb = document.getElementById("titlebar");
-    tb.style.maxWidth = osw*2+"px";
+
+    console.log("landsacpeNotPortrait",LANDSCAPE_NOT_PORTRAIT);
+    tb.style.maxWidth = ((LANDSCAPE_NOT_PORTRAIT ) ? osw*2 : osw)+"px";
 
     }
 

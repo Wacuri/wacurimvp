@@ -9110,7 +9110,8 @@ h2 {
     background-color: #4bb058; }
 
 .invite-friends-button {
-  border-radius: 15px !important; }
+  border-radius: 15px !important;
+  border-width: 2px; }
 
 .PartnerStream {
   display: flex;
@@ -9149,6 +9150,6 @@ h2 {
 
 @media all and (max-width: 319px) {
   body {
-    font-size: 6px; } }
+    font-size: 8px; } }
 
 /*# sourceMappingURL=main.css.map*/

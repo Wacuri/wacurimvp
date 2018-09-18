@@ -1,3 +1,12 @@
+// journey_space.js -- The main page where the Curious Live Journeys are experienced.
+// Copyright (C) 2018 Robert L. Read <read.robert@gmail.com>
+
+// This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+
 import EventEmitter from 'events';
 import React, {Component} from 'react';
 import { view } from 'react-easy-state';
@@ -310,7 +319,7 @@ class JourneyPhases extends Component {
       const Messages = ["Breathe and center yourself","Journey in Progess","Share your Insights","Provide Feedback"];
       console.log('ONE_SQUARE_WIDTH_X',someHelper.ONE_SQUARE_WIDTH);      
     return (
-	    <div ref={el => {this.container = el}} className={`journey-timeline step-${this.stepIndex.toString()}`}>
+	    <div ref={el => {this.container = el}} id={'journey-timeline0'} className={`journey-timeline step-${this.stepIndex.toString()}`}>
 	    <div>
 	    <div style={{display: 'flex', flexDirection: 'row' }}>
 	    <span>{Messages[this.stepIndex]}</span>
@@ -321,7 +330,7 @@ class JourneyPhases extends Component {
 	}
 	    </div>
 	    </div>
-	    <div style={{width:  `${someHelper.ONE_SQUARE_WIDTH}px`,  display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+	    <div id={'phase-bar0'}>
 	    <div className={ `phase-bar bar-${this.stepIndex == 0 ? 'white' : 'green'}`}>
 	      </div>
 	    <div className={ `phase-bar bar-${this.stepIndex == 1 ? 'white' : 'green'}`}>
@@ -1000,14 +1009,14 @@ class NoVideoSquare extends React.Component {
 	      <div key={localkey} id={vid} className='video-placeholder'>
 	        <div className='invite-indicator'>
 	          <div>
-	      <i className='fa fa-smile-o' style={{ visibility: 'hidden'}}></i>
+	      <i className='fa fa-smile-o fa-2x' style={{ visibility: 'hidden'}}></i>
 	      
               <p style={{visibility: 'hidden', color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '0.5rem'}}>Waiting...</p>
 
               <div style={{color: 'white'}}>
 	      {/* I have no idea how to incease the roundness of these corners */}
                       <button className='btn btn-primary' onClick={this.props.onOrientation}
-	  style={{margin: '0 auto',  marginTop: '0.5em' }}
+	  style={{margin: '0 auto',  marginTop: '0.5em', borderRadius: '15px' }}
  	              >Orientation</button>
 	            </div>	      	  
   	         </div>

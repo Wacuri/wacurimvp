@@ -1,3 +1,14 @@
+// Curious Live Main Stylesheet
+// Copyright (C) 2018 Robert L. Read <read.robert@gmail.com>
+
+// This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+
 @import "~bootstrap/scss/bootstrap.scss";
 $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome.scss";
@@ -549,7 +560,6 @@ h2 {
 
 
 .phase-bar {
-    min-width: calc(10vw);
     height: calc(0.8vh);
     margin-left: calc(0.1vw);
     margin-right: calc(0.1vw);
@@ -697,6 +707,12 @@ h2 {
     }
 }
 
+#phase-bar0 {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: auto auto auto auto ;
+}
+
 // This works nicely for the body but sadly I must be changing font-sizes elsewhere
 @media all and (min-width: 960px) {
     body{
@@ -712,13 +728,13 @@ h2 {
  
 @media all and (max-width: 599px) and (min-width: 320px) {
     body{
-        font-size: 10px;
+        font-size: 12px;
     }
  
 }
 
 @media all and (max-width: 319px)  {
     body{
-        font-size: 8px;
+        font-size: 10px;
     }
 }
