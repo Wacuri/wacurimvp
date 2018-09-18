@@ -16,6 +16,7 @@ import * as someHelper from './utility/utility'
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 
 
+// Note: it may be worth using serve favicon to make this work on our deployed site: https://expressjs.com/en/resources/middleware/serve-favicon.html
 
 
 if (__CLIENT__) {
@@ -230,7 +231,7 @@ class JourneyBoard extends Component {
 	var discriminator = 0;
 	return (
 		<div>
-	    <Header history={this.props.history}/>	    
+		<Header history={this.props.history} showLeave={false}/>	    
       <div className='joinable-journeys'>
         {state.joinableJourneys.map(journey => <JoinableJourneyCard key={journey._id+"_"+discriminator++} journey={journey} audioTag={this.audioTag}/>)}
 	    </div>
