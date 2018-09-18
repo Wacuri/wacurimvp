@@ -8597,9 +8597,28 @@ a.text-dark:hover, a.text-dark:focus {
   overflow: visible;
   clip: auto; }
 
+body {
+  font-family: 'Playfair Display'; }
+
 @media (max-width: 767.98px) {
   body {
     cursor: pointer; } }
+
+@media all and (min-width: 960px) {
+  body {
+    font-size: 18px; } }
+
+@media all and (max-width: 959px) and (min-width: 600px) {
+  body {
+    font-size: 14px; } }
+
+@media all and (max-width: 599px) and (min-width: 320px) {
+  body {
+    font-size: 10px; } }
+
+@media all and (max-width: 319px) {
+  body {
+    font-size: 6px; } }
 
 :root {
   --heightpercentage: 0.8;
@@ -8668,7 +8687,6 @@ h2 {
 
 .journeyspace-title {
   color: white;
-  font-size: 12px;
   font-weight: normal; }
 
 .journeyspace-container {
@@ -8694,8 +8712,7 @@ h2 {
   .video-placeholder > div {
     text-align: center; }
   .video-placeholder i {
-    color: #535353;
-    font-size: 22px; }
+    color: #535353; }
   .video-placeholder p {
     color: #535353; }
   .video-placeholder > div {
@@ -8988,19 +9005,8 @@ h2 {
   justify-content: center;
   align-items: center;
   height: 0px;
-  z-index: 1000;
-  font-size: 1.5rem; }
-
-.round-button {
-  background-color: #fabc5b;
-  borderStyle: none; }
-
-.round-button-image {
-  color: white;
-  background-color: #4bb058;
-  borderRadius: 50%;
-  padding: 8px;
-  fontSize: 24px; }
+  flex-flow: row wrap;
+  z-index: 1000; }
 
 .phase-bar {
   min-width: 20%;
@@ -9014,15 +9020,62 @@ h2 {
 .bar-green {
   background-color: #4bb058; }
 
+.invite-friends-button {
+  color: white;
+  background-color: black;
+  margin-top: 0.5rem;
+  font-size: 1.5rem; }
+
+.play-button {
+  font-size: 2rem; }
+
+@media all and (min-width: 960px) {
+  .fa-smile-o {
+    font-size: 3rem; }
+  .invite-friends-button {
+    font-size: 1.5rem; }
+  #central_control_panel_id {
+    font-size: 2.0rem; }
+  .play-button {
+    font-size: 2.5rem; } }
+
+@media all and (max-width: 959px) and (min-width: 600px) {
+  .fa-smile-o {
+    font-size: 2.0rem; }
+  .invite-friends-button {
+    font-size: 1.2rem; }
+  #central_control_panel_id {
+    font-size: 1.2rem; }
+  .play-button {
+    font-size: 1.5rem; } }
+
+@media all and (max-width: 599px) and (min-width: 300px) {
+  .fa-smile-o {
+    font-size: 1.0rem; }
+  .invite-friends-button {
+    font-size: 1.0rem; }
+  #central_control_panel_id {
+    font-size: 0.8rem; }
+  .play-button {
+    font-size: 1.2rem; } }
+
+@media all and (max-width: 319px) {
+  .fa-smile-o {
+    font-size: 1.0rem; }
+  .invite-friends-button {
+    font-size: 1.0rem; }
+  #central_control_panel_id {
+    font-size: 0.8rem; }
+  .play-button {
+    font-size: 1.0rem; } }
+
 .invite-indicator {
   min-width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
   color: white; }
   .invite-indicator .fa-smile-o {
-    font-size: 3rem;
     color: white; }
   .invite-indicator .p {
     color: white; }
@@ -9030,8 +9083,27 @@ h2 {
     font-size: 1rem;
     background-color: #4bb058; }
 
-.secondsquare {
+.PartnerStream {
   display: flex;
-  flex-flow: col wrap; }
+  flex-flow: column; }
+  .PartnerStream div {
+    height: 90%; }
+
+.journeyspace-stream-controls {
+  height: 20px; }
+
+.journey-image {
+  width: calc(0.5vw);
+  hegith: calc(0.5vw); }
+
+.orientation-message {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  height: 100%; }
+  .orientation-message div {
+    color: white; }
+  .orientation-message h3 {
+    font-size: 1.5rem; }
 
 /*# sourceMappingURL=main.css.map*/

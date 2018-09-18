@@ -662,9 +662,9 @@ var _state = __webpack_require__(2);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _CuriousLiveLogoMark = __webpack_require__(93);
+var _CuriousLiveLogo = __webpack_require__(93);
 
-var _CuriousLiveLogoMark2 = _interopRequireDefault(_CuriousLiveLogoMark);
+var _CuriousLiveLogo2 = _interopRequireDefault(_CuriousLiveLogo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -673,6 +673,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// import logo from 'file-loader!isomorphic-loader!../../res/images/CuriousLiveLogoMark-150-300.png';
+
 
 var LeaveRoomButton = function (_Component) {
   _inherits(LeaveRoomButton, _Component);
@@ -729,11 +732,11 @@ var Header = function (_React$Component) {
         'div',
         { className: 'header' },
         _react2.default.createElement('div', { style: { padding: '10px' } }),
-        _react2.default.createElement(LeaveRoomButton, { history: this.props.history }),
-        _react2.default.createElement('img', { className: 'logo', src: _CuriousLiveLogoMark2.default }),
+        this.props.showLeave && _react2.default.createElement(LeaveRoomButton, { history: this.props.history }),
+        _react2.default.createElement('img', { className: 'logo', src: _CuriousLiveLogo2.default }),
         _state2.default.journey && !_state2.default.journey.startAt && _react2.default.createElement(
           'h2',
-          { style: { color: 'white', fontSize: '16px' } },
+          { style: { color: 'white' } },
           _state2.default.journey.name
         ),
         false && _state2.default.loggedIn && _state2.default.user && _react2.default.createElement(
@@ -1187,7 +1190,7 @@ Object.defineProperty(exports, "__esModule", {
    value: true
 });
 exports.setSizes = setSizes;
-
+var ONE_SQUARE_WIDTH = exports.ONE_SQUARE_WIDTH = 0;
 // Our basic design is to make sure that two sqares fit in
 // the view port (not counting the header), arranged either
 // vertically for portrait mode or horiontally for landscape.
@@ -1196,20 +1199,28 @@ function setSizes() {
 
    var tb_and_h = document.getElementById("topbar_and_header");
 
+   var debug = 0;
+
    var w = window.innerWidth;
    var h = window.innerHeight;
+   if (debug) console.log(w, h);
    // TODO: this should actually be pulled from the header height
    var headerHeight = tb_and_h.offsetHeight;
    var h = h - headerHeight;
 
    // one square width...
    var osw = Math.min(Math.max(w, h) / 2, Math.min(w, h));
+   exports.ONE_SQUARE_WIDTH = ONE_SQUARE_WIDTH = osw;
+
+   if (debug) console.log(osw);
+
    var osw_h = osw / 2;
 
    // The square frame
    var sf = document.getElementById("bigsquares");
    sf.style.display = "flex";
-   sf.style.flexFlow = w >= h ? "row wrap" : "col wrap";
+   sf.style.flexFlow = w >= h ? "row wrap" : "column wrap";
+   if (debug) console.log("flex flow", sf.style.flexFlow);
 
    var square2 = document.getElementById("secondsquare");
    square2.style.width = osw + "px";
@@ -4823,6 +4834,8 @@ var _ref = {},
     OTSubscriber = _ref.OTSubscriber,
     createSession = _ref.createSession;
 
+// Note: it may be worth using serve favicon to make this work on our deployed site: https://expressjs.com/en/resources/middleware/serve-favicon.html
+
 
 if (__CLIENT__) {
   var _require = __webpack_require__(6),
@@ -5130,7 +5143,7 @@ var JourneyBoard = function (_Component3) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_header2.default, { history: this.props.history }),
+        _react2.default.createElement(_header2.default, { history: this.props.history, showLeave: false }),
         _react2.default.createElement(
           'div',
           { className: 'joinable-journeys' },
@@ -5963,8 +5976,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _events = __webpack_require__(17);
@@ -6056,57 +6067,13 @@ if (__CLIENT__) {
   window.state = _state2.default;
 }
 
-// Warning: This is duplicated, and must be turned into a separate file and removed from
-// app.js
-
-var IntroWrapper = function (_Component) {
-  _inherits(IntroWrapper, _Component);
-
-  function IntroWrapper(props) {
-    _classCallCheck(this, IntroWrapper);
-
-    var _this2 = _possibleConstructorReturn(this, (IntroWrapper.__proto__ || Object.getPrototypeOf(IntroWrapper)).call(this, props));
-
-    _this2.onClose = function () {
-      _this2.setState({
-        showIntro: false
-      });
-    };
-
-    _this2.state = {
-      showIntro: props.force || !_jsCookie2.default.get('saw intro')
-    };
-    return _this2;
-  }
-
-  _createClass(IntroWrapper, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {}
-  }, {
-    key: 'render',
-    value: function render() {
-      if (this.state.showIntro) {
-        return _react2.default.createElement(
-          _intro2.default,
-          _extends({ onClose: this.onClose }, this.props),
-          _react2.default.createElement(this.props.component, this.props)
-        );
-      } else {
-        return _react2.default.createElement(this.props.component, this.props);
-      }
-    }
-  }]);
-
-  return IntroWrapper;
-}(_react.Component);
-
-var LeaveRoomButton = function (_Component2) {
-  _inherits(LeaveRoomButton, _Component2);
+var LeaveRoomButton = function (_Component) {
+  _inherits(LeaveRoomButton, _Component);
 
   function LeaveRoomButton() {
     var _ref2;
 
-    var _temp, _this3, _ret;
+    var _temp, _this2, _ret;
 
     _classCallCheck(this, LeaveRoomButton);
 
@@ -6114,13 +6081,13 @@ var LeaveRoomButton = function (_Component2) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this3 = _possibleConstructorReturn(this, (_ref2 = LeaveRoomButton.__proto__ || Object.getPrototypeOf(LeaveRoomButton)).call.apply(_ref2, [this].concat(args))), _this3), _this3.onLeave = function (e) {
+    return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_ref2 = LeaveRoomButton.__proto__ || Object.getPrototypeOf(LeaveRoomButton)).call.apply(_ref2, [this].concat(args))), _this2), _this2.onLeave = function (e) {
       e.preventDefault();
       if (!_state2.default.audioTag.paused) {
         _state2.default.audioTag.pause();
       }
-      _this3.props.history.push('/');
-    }, _temp), _possibleConstructorReturn(_this3, _ret);
+      _this2.props.history.push('/');
+    }, _temp), _possibleConstructorReturn(_this2, _ret);
   }
 
   _createClass(LeaveRoomButton, [{
@@ -6182,19 +6149,19 @@ var SecondsTimerEmitter = function (_AbstractTimerEmitter) {
   function SecondsTimerEmitter(createdAt, startAt) {
     _classCallCheck(this, SecondsTimerEmitter);
 
-    var _this5 = _possibleConstructorReturn(this, (SecondsTimerEmitter.__proto__ || Object.getPrototypeOf(SecondsTimerEmitter)).call(this));
+    var _this4 = _possibleConstructorReturn(this, (SecondsTimerEmitter.__proto__ || Object.getPrototypeOf(SecondsTimerEmitter)).call(this));
 
-    _this5.start = createdAt.getTime();
-    _this5.total = startAt.getTime() - _this5.start;
-    _this5.passed = new Date().getTime() - _this5.start;
-    _this5.interval = setInterval(function () {
-      _this5.passed = new Date().getTime() - _this5.start;
-      if (_this5.passed >= _this5.total) {
-        clearInterval(_this5.interval);
+    _this4.start = createdAt.getTime();
+    _this4.total = startAt.getTime() - _this4.start;
+    _this4.passed = new Date().getTime() - _this4.start;
+    _this4.interval = setInterval(function () {
+      _this4.passed = new Date().getTime() - _this4.start;
+      if (_this4.passed >= _this4.total) {
+        clearInterval(_this4.interval);
       }
-      _this5.emit('tick', _this5.passed);
+      _this4.emit('tick', _this4.passed);
     }, 100);
-    return _this5;
+    return _this4;
   }
 
   _createClass(SecondsTimerEmitter, [{
@@ -6218,26 +6185,26 @@ var AudioPlayTickEmitter = function (_AbstractTimerEmitter2) {
   function AudioPlayTickEmitter(audioElement) {
     _classCallCheck(this, AudioPlayTickEmitter);
 
-    var _this6 = _possibleConstructorReturn(this, (AudioPlayTickEmitter.__proto__ || Object.getPrototypeOf(AudioPlayTickEmitter)).call(this));
+    var _this5 = _possibleConstructorReturn(this, (AudioPlayTickEmitter.__proto__ || Object.getPrototypeOf(AudioPlayTickEmitter)).call(this));
 
-    _this6.onTimeUpdate = function (e) {
-      _this6.currentTime = e.target.currentTime * 1000;
-      _this6.emit('tick', _this6.currentTime);
+    _this5.onTimeUpdate = function (e) {
+      _this5.currentTime = e.target.currentTime * 1000;
+      _this5.emit('tick', _this5.currentTime);
     };
 
-    _this6.currentTime = (audioElement.currentTime || 0) * 1000;
-    _this6.total = audioElement.duration * 1000;
+    _this5.currentTime = (audioElement.currentTime || 0) * 1000;
+    _this5.total = audioElement.duration * 1000;
     if (audioElement.readyState === 4) {
-      audioElement.addEventListener('timeupdate', _this6.onTimeUpdate);
-      _this6.emit('tick', audioElement.currentTime * 1000);
+      audioElement.addEventListener('timeupdate', _this5.onTimeUpdate);
+      _this5.emit('tick', audioElement.currentTime * 1000);
     }
 
     audioElement.addEventListener('loadedmetadata', function (e) {
-      audioElement.addEventListener('timeupdate', _this6.onTimeUpdate);
-      _this6.total = e.target.duration * 1000;
-      _this6.emit('tick', audioElement.currentTime * 1000);
+      audioElement.addEventListener('timeupdate', _this5.onTimeUpdate);
+      _this5.total = e.target.duration * 1000;
+      _this5.emit('tick', audioElement.currentTime * 1000);
     });
-    return _this6;
+    return _this5;
   }
 
   _createClass(AudioPlayTickEmitter, [{
@@ -6271,24 +6238,24 @@ var FlagControl = function FlagControl(_ref3) {
   );
 };
 
-var Waiting = function (_Component3) {
-  _inherits(Waiting, _Component3);
+var Waiting = function (_Component2) {
+  _inherits(Waiting, _Component2);
 
   function Waiting(props) {
     _classCallCheck(this, Waiting);
 
-    var _this7 = _possibleConstructorReturn(this, (Waiting.__proto__ || Object.getPrototypeOf(Waiting)).call(this, props));
+    var _this6 = _possibleConstructorReturn(this, (Waiting.__proto__ || Object.getPrototypeOf(Waiting)).call(this, props));
 
-    _this7.onToggle = function (e) {
-      _this7.setState({
-        open: !_this7.state.open
+    _this6.onToggle = function (e) {
+      _this6.setState({
+        open: !_this6.state.open
       });
     };
 
-    _this7.state = {
+    _this6.state = {
       open: true
     };
-    return _this7;
+    return _this6;
   }
 
   _createClass(Waiting, [{
@@ -6322,7 +6289,7 @@ var Waiting = function (_Component3) {
   }, {
     key: 'render',
     value: function render() {
-      var _this8 = this;
+      var _this7 = this;
 
       return _react2.default.createElement(
         'div',
@@ -6339,7 +6306,7 @@ var Waiting = function (_Component3) {
             'div',
             { className: 'wrapper' },
             _react2.default.createElement('canvas', { className: 'signature-pad', ref: function ref(el) {
-                return _this8.canvas = el;
+                return _this7.canvas = el;
               }, width: 400, height: 400 })
           )
         ),
@@ -6364,33 +6331,33 @@ var Waiting = function (_Component3) {
   return Waiting;
 }(_react.Component);
 
-var JourneyStateProgressBar = function (_Component4) {
-  _inherits(JourneyStateProgressBar, _Component4);
+var JourneyStateProgressBar = function (_Component3) {
+  _inherits(JourneyStateProgressBar, _Component3);
 
   function JourneyStateProgressBar(props) {
     _classCallCheck(this, JourneyStateProgressBar);
 
-    var _this9 = _possibleConstructorReturn(this, (JourneyStateProgressBar.__proto__ || Object.getPrototypeOf(JourneyStateProgressBar)).call(this, props));
+    var _this8 = _possibleConstructorReturn(this, (JourneyStateProgressBar.__proto__ || Object.getPrototypeOf(JourneyStateProgressBar)).call(this, props));
 
     props.timer.on('tick', function (current) {
-      _this9.setState({
+      _this8.setState({
         timerValue: current
       });
     });
-    _this9.state = {
+    _this8.state = {
       timerValue: 0,
       total: props.timer.total
     };
-    return _this9;
+    return _this8;
   }
 
   _createClass(JourneyStateProgressBar, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(newProps) {
-      var _this10 = this;
+      var _this9 = this;
 
       newProps.timer.on('tick', function (current) {
-        _this10.setState({
+        _this9.setState({
           timerValue: current
         });
       });
@@ -6463,29 +6430,29 @@ var JourneyStateProgressBar = function (_Component4) {
 // We need to implement the 
 
 
-var JourneyPhases = function (_Component5) {
-  _inherits(JourneyPhases, _Component5);
+var JourneyPhases = function (_Component4) {
+  _inherits(JourneyPhases, _Component4);
 
   function JourneyPhases(props) {
     _classCallCheck(this, JourneyPhases);
 
-    var _this11 = _possibleConstructorReturn(this, (JourneyPhases.__proto__ || Object.getPrototypeOf(JourneyPhases)).call(this, props));
+    var _this10 = _possibleConstructorReturn(this, (JourneyPhases.__proto__ || Object.getPrototypeOf(JourneyPhases)).call(this, props));
 
     props.timer.on('tick', function (current) {
-      _this11.setState({
+      _this10.setState({
         timerValue: current
       });
     });
-    return _this11;
+    return _this10;
   }
 
   _createClass(JourneyPhases, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(newProps) {
-      var _this12 = this;
+      var _this11 = this;
 
       newProps.timer.on('tick', function (current) {
-        _this12.setState({
+        _this11.setState({
           timerValue: current
         });
       });
@@ -6497,7 +6464,7 @@ var JourneyPhases = function (_Component5) {
     // gray that can be seen against the black background
 
     value: function render() {
-      var _this13 = this;
+      var _this12 = this;
 
       var journey = this.props.journey;
 
@@ -6506,7 +6473,7 @@ var JourneyPhases = function (_Component5) {
       return _react2.default.createElement(
         'div',
         { ref: function ref(el) {
-            _this13.container = el;
+            _this12.container = el;
           }, className: 'journey-timeline step-' + this.stepIndex.toString() },
         _react2.default.createElement(
           'div',
@@ -6515,12 +6482,12 @@ var JourneyPhases = function (_Component5) {
             'div',
             { style: { display: 'flex', flexDirection: 'row' } },
             _react2.default.createElement(
-              'h4',
+              'span',
               null,
               Messages[this.stepIndex]
             ),
             this.stepIndex == 0 && _react2.default.createElement(
-              'h4',
+              'span',
               { className: 'timer', style: { marginLeft: '10px' } },
               this.props.timer.displayTime()
             )
@@ -6561,34 +6528,34 @@ var JourneyPhases = function (_Component5) {
   return JourneyPhases;
 }(_react.Component);
 
-var JourneyTimeline = function (_Component6) {
-  _inherits(JourneyTimeline, _Component6);
+var JourneyTimeline = function (_Component5) {
+  _inherits(JourneyTimeline, _Component5);
 
   function JourneyTimeline(props) {
     _classCallCheck(this, JourneyTimeline);
 
-    var _this14 = _possibleConstructorReturn(this, (JourneyTimeline.__proto__ || Object.getPrototypeOf(JourneyTimeline)).call(this, props));
+    var _this13 = _possibleConstructorReturn(this, (JourneyTimeline.__proto__ || Object.getPrototypeOf(JourneyTimeline)).call(this, props));
 
-    _this14.onSeek = function (e) {
-      var percent = e.nativeEvent.offsetX / _this14.progressBar.offsetWidth;
-      _this14.props.seekTo(percent);
+    _this13.onSeek = function (e) {
+      var percent = e.nativeEvent.offsetX / _this13.progressBar.offsetWidth;
+      _this13.props.seekTo(percent);
     };
 
     props.timer.on('tick', function (current) {
-      _this14.setState({
+      _this13.setState({
         timerValue: current
       });
     });
-    return _this14;
+    return _this13;
   }
 
   _createClass(JourneyTimeline, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(newProps) {
-      var _this15 = this;
+      var _this14 = this;
 
       newProps.timer.on('tick', function (current) {
-        _this15.setState({
+        _this14.setState({
           timerValue: current
         });
       });
@@ -6601,14 +6568,14 @@ var JourneyTimeline = function (_Component6) {
     // gray that can be seen against the black background
 
     value: function render() {
-      var _this16 = this;
+      var _this15 = this;
 
       var journey = this.props.journey;
 
       return _react2.default.createElement(
         'div',
         { ref: function ref(el) {
-            _this16.container = el;
+            _this15.container = el;
           }, className: 'journey-timeline step-' + this.stepIndex.toString() },
         _react2.default.createElement(
           'div',
@@ -6668,7 +6635,7 @@ var JourneyTimeline = function (_Component6) {
                   'div',
                   { style: { position: 'absolute', bottom: '-12px', left: '10px', right: '10px' } },
                   _react2.default.createElement('progress', { ref: function ref(progressBar) {
-                      return _this16.progressBar = progressBar;
+                      return _this15.progressBar = progressBar;
                     }, onClick: this.onSeek, max: this.props.timer.total, value: this.props.timer.currentTime, style: { width: '90%', backgroundColor: 'orange' } })
                 )
               )
@@ -6751,13 +6718,13 @@ function OBSOLETE_ARROW() {
 }
 */
 
-var SkipButton = function (_Component7) {
-  _inherits(SkipButton, _Component7);
+var SkipButton = function (_Component6) {
+  _inherits(SkipButton, _Component6);
 
   function SkipButton() {
     var _ref4;
 
-    var _temp2, _this17, _ret2;
+    var _temp2, _this16, _ret2;
 
     _classCallCheck(this, SkipButton);
 
@@ -6765,9 +6732,9 @@ var SkipButton = function (_Component7) {
       args[_key2] = arguments[_key2];
     }
 
-    return _ret2 = (_temp2 = (_this17 = _possibleConstructorReturn(this, (_ref4 = SkipButton.__proto__ || Object.getPrototypeOf(SkipButton)).call.apply(_ref4, [this].concat(args))), _this17), _this17.skipToNext = function (e) {
+    return _ret2 = (_temp2 = (_this16 = _possibleConstructorReturn(this, (_ref4 = SkipButton.__proto__ || Object.getPrototypeOf(SkipButton)).call.apply(_ref4, [this].concat(args))), _this16), _this16.skipToNext = function (e) {
       e.preventDefault();
-      fetch('/api/journeys/' + _this17.props.journey.room + '/skip', {
+      fetch('/api/journeys/' + _this16.props.journey.room + '/skip', {
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, same-origin, *omit
         headers: {
@@ -6781,7 +6748,7 @@ var SkipButton = function (_Component7) {
       // I believe this should change the state to completed, but I am not sure
       // if that happens server side or client side
       console.log("skipToNext event fired");
-    }, _temp2), _possibleConstructorReturn(_this17, _ret2);
+    }, _temp2), _possibleConstructorReturn(_this16, _ret2);
   }
 
   _createClass(SkipButton, [{
@@ -6809,30 +6776,30 @@ var SkipButton = function (_Component7) {
   return SkipButton;
 }(_react.Component);
 
-var VideoButton = function (_Component8) {
-  _inherits(VideoButton, _Component8);
+var VideoButton = function (_Component7) {
+  _inherits(VideoButton, _Component7);
 
   function VideoButton(props) {
     _classCallCheck(this, VideoButton);
 
-    var _this18 = _possibleConstructorReturn(this, (VideoButton.__proto__ || Object.getPrototypeOf(VideoButton)).call(this, props));
+    var _this17 = _possibleConstructorReturn(this, (VideoButton.__proto__ || Object.getPrototypeOf(VideoButton)).call(this, props));
 
-    _this18.toggle = function (e) {
+    _this17.toggle = function (e) {
       e.preventDefault();
-      var publisher = _this18.props.publisher;
+      var publisher = _this17.props.publisher;
 
       if (publisher && publisher.state && publisher.state.publisher) {
-        publisher.state.publisher.publishVideo(!_this18.state.publishing);
-        _this18.setState({
-          publishing: !_this18.state.publishing
+        publisher.state.publisher.publishVideo(!_this17.state.publishing);
+        _this17.setState({
+          publishing: !_this17.state.publishing
         });
       }
     };
 
-    _this18.state = {
+    _this17.state = {
       publishing: true
     };
-    return _this18;
+    return _this17;
   }
 
   _createClass(VideoButton, [{
@@ -6853,50 +6820,50 @@ var VideoButton = function (_Component8) {
   return VideoButton;
 }(_react.Component);
 
-var AudioButton = function (_Component9) {
-  _inherits(AudioButton, _Component9);
+var AudioButton = function (_Component8) {
+  _inherits(AudioButton, _Component8);
 
   function AudioButton(props) {
     _classCallCheck(this, AudioButton);
 
-    var _this19 = _possibleConstructorReturn(this, (AudioButton.__proto__ || Object.getPrototypeOf(AudioButton)).call(this, props));
+    var _this18 = _possibleConstructorReturn(this, (AudioButton.__proto__ || Object.getPrototypeOf(AudioButton)).call(this, props));
 
-    _this19.changeToggleValue = function () {
-      _this19.setState(function (prevState) {
+    _this18.changeToggleValue = function () {
+      _this18.setState(function (prevState) {
         return { publishing: !prevState.publishing };
       });
     };
 
-    _this19.toggleMicrophone = function (e) {
+    _this18.toggleMicrophone = function (e) {
       var DEBUG_MUTE = 1;
       e.preventDefault();
-      var publisher = _this19.props.publisher;
+      var publisher = _this18.props.publisher;
 
       if (DEBUG_MUTE) {
-        console.log("Initial Publishing State:", _this19.state.publishing);
+        console.log("Initial Publishing State:", _this18.state.publishing);
         console.log(publisher, publisher.state, publisher.state.publisher);
       }
       // ON SAFARI, this state is never changing!
 
       if (publisher && publisher.state && publisher.state.publisher) {
-        publisher.state.publisher.publishAudio(!_this19.state.publishing);
-        _this19.changeToggleValue();
+        publisher.state.publisher.publishAudio(!_this18.state.publishing);
+        _this18.changeToggleValue();
       }
       if (DEBUG_MUTE) {
-        console.log("FINAL this.publishing:", _this19.state.publishing);
-        console.log("FINAL state:", _this19.state);
+        console.log("FINAL this.publishing:", _this18.state.publishing);
+        console.log("FINAL state:", _this18.state);
       }
 
       // This is absolutely necessary, but insuffient to make it work properly.
       e.stopPropagation();
     };
 
-    _this19.state = {
+    _this18.state = {
       publishing: true
 
       // This binding is necessary to make `this` work in the callback -- ROB IS TRYING THIS  
-    };_this19.toggleMicrophone = _this19.toggleMicrophone.bind(_this19);
-    return _this19;
+    };_this18.toggleMicrophone = _this18.toggleMicrophone.bind(_this18);
+    return _this18;
   }
 
   // NOTE: This seems like a good idea, and it causes no problem on Chrome,
@@ -6961,13 +6928,88 @@ var AudioButton = function (_Component9) {
   return AudioButton;
 }(_react.Component);
 
-var PlayButton = function (_Component10) {
-  _inherits(PlayButton, _Component10);
+var PlayButton = function (_Component9) {
+  _inherits(PlayButton, _Component9);
 
   function PlayButton(props) {
     _classCallCheck(this, PlayButton);
 
-    var _this20 = _possibleConstructorReturn(this, (PlayButton.__proto__ || Object.getPrototypeOf(PlayButton)).call(this, props));
+    var _this19 = _possibleConstructorReturn(this, (PlayButton.__proto__ || Object.getPrototypeOf(PlayButton)).call(this, props));
+
+    _this19.togglePlay = function (e) {
+      e.preventDefault();
+      setTimeout(function () {
+        if (_state2.default.audioTag.paused) {
+          fetch('/api/journeys/' + _this19.props.journey.room + '/start', {
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+              'content-type': 'application/json'
+            },
+            method: 'POST',
+            mode: 'cors'
+          });
+        } else {
+          fetch('/api/journeys/' + _this19.props.journey.room + '/pause', {
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+              'content-type': 'application/json'
+            },
+            method: 'POST',
+            mode: 'cors'
+          });
+        }
+      }, 20);
+    };
+
+    _this19.state = {
+      paused: props.player && props.player.paused || true
+    };
+    props.player.addEventListener('play', function () {
+      _this19.setState({
+        paused: false
+      });
+      // This binding is necessary to make `this` work in the callback -- ROB IS TRYING THIS  
+      _this19.togglePlay = _this19.togglePlay.bind(_this19);
+    });
+
+    props.player.addEventListener('pause', function () {
+      _this19.setState({
+        paused: true
+      });
+    });
+    return _this19;
+  }
+
+  _createClass(PlayButton, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'span',
+        { className: 'fa-stack play-button', onClick: this.togglePlay },
+        _react2.default.createElement('i', { className: 'fa fa-circle fa-stack-2x',
+          style: { color: 'rgb(55,180,246)' }
+        }),
+        _react2.default.createElement('i', { className: 'fa fa-' + (_state2.default.audioTag.paused ? 'play' : 'pause') + ' fa-stack-1x',
+          style: { color: 'white' } })
+      );
+    }
+  }]);
+
+  return PlayButton;
+}(_react.Component);
+
+// This is oddly similar and anti-symmetric to the PlayButton.
+
+
+var PauseButton = function (_Component10) {
+  _inherits(PauseButton, _Component10);
+
+  function PauseButton(props) {
+    _classCallCheck(this, PauseButton);
+
+    var _this20 = _possibleConstructorReturn(this, (PauseButton.__proto__ || Object.getPrototypeOf(PauseButton)).call(this, props));
 
     _this20.togglePlay = function (e) {
       e.preventDefault();
@@ -7015,81 +7057,6 @@ var PlayButton = function (_Component10) {
     return _this20;
   }
 
-  _createClass(PlayButton, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'span',
-        { className: 'fa-stack', onClick: this.togglePlay, style: { fontSize: '2rem' } },
-        _react2.default.createElement('i', { className: 'fa fa-circle fa-stack-2x', onClick: this.togglePlay,
-          style: { color: 'rgb(55,180,246)' }
-        }),
-        _react2.default.createElement('i', { className: 'fa fa-' + (_state2.default.audioTag.paused ? 'play' : 'pause') + ' fa-stack-1x',
-          style: { color: 'white' } })
-      );
-    }
-  }]);
-
-  return PlayButton;
-}(_react.Component);
-
-// This is oddly similar and anti-symmetric to the PlayButton.
-
-
-var PauseButton = function (_Component11) {
-  _inherits(PauseButton, _Component11);
-
-  function PauseButton(props) {
-    _classCallCheck(this, PauseButton);
-
-    var _this21 = _possibleConstructorReturn(this, (PauseButton.__proto__ || Object.getPrototypeOf(PauseButton)).call(this, props));
-
-    _this21.togglePlay = function (e) {
-      e.preventDefault();
-      setTimeout(function () {
-        if (_state2.default.audioTag.paused) {
-          fetch('/api/journeys/' + _this21.props.journey.room + '/start', {
-            cache: 'no-cache',
-            credentials: 'same-origin',
-            headers: {
-              'content-type': 'application/json'
-            },
-            method: 'POST',
-            mode: 'cors'
-          });
-        } else {
-          fetch('/api/journeys/' + _this21.props.journey.room + '/pause', {
-            cache: 'no-cache',
-            credentials: 'same-origin',
-            headers: {
-              'content-type': 'application/json'
-            },
-            method: 'POST',
-            mode: 'cors'
-          });
-        }
-      }, 20);
-    };
-
-    _this21.state = {
-      paused: props.player && props.player.paused || true
-    };
-    props.player.addEventListener('play', function () {
-      _this21.setState({
-        paused: false
-      });
-      // This binding is necessary to make `this` work in the callback -- ROB IS TRYING THIS  
-      _this21.togglePlay = _this21.togglePlay.bind(_this21);
-    });
-
-    props.player.addEventListener('pause', function () {
-      _this21.setState({
-        paused: true
-      });
-    });
-    return _this21;
-  }
-
   _createClass(PauseButton, [{
     key: 'render',
     value: function render() {
@@ -7108,8 +7075,8 @@ var PauseButton = function (_Component11) {
   return PauseButton;
 }(_react.Component);
 
-var SharePrompt = function (_Component12) {
-  _inherits(SharePrompt, _Component12);
+var SharePrompt = function (_Component11) {
+  _inherits(SharePrompt, _Component11);
 
   function SharePrompt() {
     _classCallCheck(this, SharePrompt);
@@ -7140,52 +7107,52 @@ var SharePrompt = function (_Component12) {
   return SharePrompt;
 }(_react.Component);
 
-var InviteModal = function (_Component13) {
-  _inherits(InviteModal, _Component13);
+var InviteModal = function (_Component12) {
+  _inherits(InviteModal, _Component12);
 
   function InviteModal(props) {
     _classCallCheck(this, InviteModal);
 
-    var _this23 = _possibleConstructorReturn(this, (InviteModal.__proto__ || Object.getPrototypeOf(InviteModal)).call(this, props));
+    var _this22 = _possibleConstructorReturn(this, (InviteModal.__proto__ || Object.getPrototypeOf(InviteModal)).call(this, props));
 
-    _this23.onChange = function (e) {
+    _this22.onChange = function (e) {
       e.preventDefault();
-      _this23.setState({
+      _this22.setState({
         journeySpaceName: e.target.value,
-        error: _this23.state.error && e.target.value != ''
+        error: _this22.state.error && e.target.value != ''
       });
       e.stopPropagation();
     };
 
-    _this23.onCopy = function (e) {
+    _this22.onCopy = function (e) {
       e.preventDefault();
-      if (_this23.state.journeySpaceName === '') {
-        _this23.setState({
+      if (_this22.state.journeySpaceName === '') {
+        _this22.setState({
           error: 'please enter a name'
         });
       } else {
-        _this23.setState({
+        _this22.setState({
           error: false
         });
-        var name = _this23.state.journeySpaceName;
+        var name = _this22.state.journeySpaceName;
         var urlFriendlyName = name.replace(/[^\w]/g, '-').toLowerCase();
         var url = window.location.protocol + '//' + window.location.host + '/' + urlFriendlyName;
-        var success = _this23._copy(url);
+        var success = _this22._copy(url);
         if (success) {
-          _this23.props.onComplete(url, name);
+          _this22.props.onComplete(url, name);
         } else {
-          _this23.setState({
+          _this22.setState({
             error: 'failed to copy url'
           });
         }
       }
     };
 
-    _this23.state = {
+    _this22.state = {
       journeySpaceName: '',
       error: false
     };
-    return _this23;
+    return _this22;
   }
 
   _createClass(InviteModal, [{
@@ -7272,38 +7239,101 @@ var InviteModal = function (_Component13) {
   return InviteModal;
 }(_react.Component);
 
-var OrientationModal = function (_Component14) {
-  _inherits(OrientationModal, _Component14);
+var OrientationModal = function (_Component13) {
+  _inherits(OrientationModal, _Component13);
 
   function OrientationModal(props) {
     _classCallCheck(this, OrientationModal);
 
-    var _this24 = _possibleConstructorReturn(this, (OrientationModal.__proto__ || Object.getPrototypeOf(OrientationModal)).call(this, props));
+    var _this23 = _possibleConstructorReturn(this, (OrientationModal.__proto__ || Object.getPrototypeOf(OrientationModal)).call(this, props));
 
-    _this24.onChange = function (e) {
-      _this24.setState({
+    _this23.onChange = function (e) {
+      e.preventDefault();
+      _this23.setState({
         journeySpaceName: e.target.value,
-        error: _this24.state.error && e.target.value != ''
+        error: _this23.state.error && e.target.value != ''
       });
+      e.stopPropagation();
     };
 
-    _this24.state = {
+    _this23.state = {
       journeySpaceName: '',
       error: false
     };
-    return _this24;
+    return _this23;
   }
 
   _createClass(OrientationModal, [{
     key: 'render',
     value: function render() {
+      console.log('ONE_SQUARE_WIDTH', someHelper.ONE_SQUARE_WIDTH);
       return _react2.default.createElement(
         'div',
-        { style: { width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(89, 153, 222, 0.9)' }, className: 'journeyspace-invite' },
+        { style: { position: 'absolute',
+            minHeight: someHelper.ONE_SQUARE_WIDTH + 'px',
+            maxWidth: someHelper.ONE_SQUARE_WIDTH + 'px',
+            backgroundColor: 'rgba(89, 153, 222, 0.9)',
+            disaply: 'flex',
+            flexFlow: 'column',
+            justifyContent: 'space-between'
+          } },
         _react2.default.createElement(
-          _intro2.default,
-          _extends({ onClose: this.onClose }, this.props),
-          _react2.default.createElement(this.props.component, this.props)
+          'div',
+          { className: 'orientation-message' },
+          _react2.default.createElement(
+            'a',
+            { href: '#', onClick: this.props.onClose, style: { position: 'absolute', right: '20px', top: '20px', zIndex: 100 } },
+            _react2.default.createElement('i', { className: 'fa fa-times', style: { fontSize: '22px', color: 'white' } })
+          ),
+          _react2.default.createElement('div', null),
+          _react2.default.createElement('div', null),
+          _react2.default.createElement(
+            'h3',
+            null,
+            '1.  Welcome to CuriousLive ...',
+            _react2.default.createElement('br', null),
+            'A five-minute guided journey - plus sharing - with others.'
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            'The journey will begin when the timer above elapses and you hear the cime.'
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            'Breathe slowly and deeply and ajust your posture to be comfortable.'
+          ),
+          _react2.default.createElement(
+            'h3',
+            null,
+            '2.  Next comse the Journey...'
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            'Your microphone will be muted.'
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            'Some people like to leave their cameras on during the journey to increase the feeling of a shared experience. It is up to you.'
+          ),
+          _react2.default.createElement(
+            'h3',
+            null,
+            '2.  After the Journey comes the Sharing and Connecting.'
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            'After the journey you will have the opportunity to share your insights. Each person takes 1 or 2 minutes.'
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            'When others are sharing, please listen deeply, and in turn they will listen more deeply to you.'
+          )
         )
       );
     }
@@ -7320,6 +7350,8 @@ var UnfilledVideoSquare = function (_React$Component) {
 
     return _possibleConstructorReturn(this, (UnfilledVideoSquare.__proto__ || Object.getPrototypeOf(UnfilledVideoSquare)).call(this, props));
   }
+  // TODO: onFlag must be moved here
+
 
   _createClass(UnfilledVideoSquare, [{
     key: 'render',
@@ -7331,8 +7363,16 @@ var UnfilledVideoSquare = function (_React$Component) {
       var localkey = this.props.localkey;
       var limit = this.props.limit;
       var state = this.props.state;
+      var journey = this.props.journey;
+      var sessionId = this.props.sessionId;
+      var hasFlagged = stream ? !!journey.flags.find(function (flag) {
+        return flag.user === sessionId && flag.flagged === stream.id;
+      }) : false;
+      var visible = this.props.visible;
+      var hide_control = !visible || !(state.playerState == "waiting" || state.playerState == "failed");
 
-      var hide_control = !(state.playerState == "waiting" || state.playerState == "failed");
+      console.log("visible", visible);
+
       return slength < limit ? _react2.default.createElement(
         'div',
         { key: localkey, id: vid, className: 'video-placeholder' },
@@ -7342,7 +7382,7 @@ var UnfilledVideoSquare = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { style: { visibility: '' + (hide_control ? 'hidden' : 'visible') } },
-            _react2.default.createElement('i', { className: 'fa fa-smile-o fa-3x' }),
+            _react2.default.createElement('i', { className: 'fa fa-smile-o fa-2x' }),
             _react2.default.createElement(
               'p',
               { style: { color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem' } },
@@ -7350,21 +7390,15 @@ var UnfilledVideoSquare = function (_React$Component) {
             ),
             _react2.default.createElement(
               'button',
-              { style: { color: 'white', backgroundColor: 'black', marginTop: '0.5rem', fontSize: '1.5rem' },
-                onClick: this.props.onInvite },
+              { className: 'invite-friends-button', onClick: this.props.onInvite },
               'Invite Friends'
             )
           )
         )
       ) : _react2.default.createElement(
-        'li',
-        { key: localkey, id: vid
+        'div',
+        { key: localkey, id: vid, className: 'PartnerStream'
         },
-        _react2.default.createElement(
-          'p',
-          null,
-          'hello'
-        ),
         _react2.default.createElement(OTSubscriber, {
           key: stream.id,
           session: session,
@@ -7379,8 +7413,10 @@ var UnfilledVideoSquare = function (_React$Component) {
           { className: 'journeyspace-stream-controls' },
           _react2.default.createElement(
             FlagControl,
-            { currentUserHasFlaggedStream: hasFlagged, onFlag: this.onFlag, stream: stream.id },
-            _react2.default.createElement('i', { style: { color: hasFlagged ? 'red' : 'white' }, className: 'fa fa-flag' })
+            { currentUserHasFlaggedStream: hasFlagged,
+              onFlag: this.onFlag, stream: stream.id },
+            _react2.default.createElement('i', { style: { color: hasFlagged ? 'red' : 'white' },
+              className: 'fa fa-flag' })
           )
         )
       );
@@ -7413,13 +7449,23 @@ var NoVideoSquare = function (_React$Component2) {
           _react2.default.createElement(
             'div',
             null,
-            _react2.default.createElement('i', { className: 'fa fa-smile-o fa-3x', style: { visibility: 'hidden' } }),
+            _react2.default.createElement('i', { className: 'fa fa-smile-o', style: { visibility: 'hidden' } }),
             _react2.default.createElement(
               'p',
               { style: { visibility: 'hidden', color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '0.5rem' } },
               'Waiting...'
             ),
-            _react2.default.createElement('div', { style: { color: 'white' } })
+            _react2.default.createElement(
+              'div',
+              { style: { color: 'white' } },
+              _react2.default.createElement(
+                'button',
+                { className: 'btn btn-primary', onClick: this.props.onOrientation,
+                  style: { margin: '0 auto', marginTop: '0.5em' }
+                },
+                'Orientation'
+              )
+            )
           )
         )
       );
@@ -7429,16 +7475,16 @@ var NoVideoSquare = function (_React$Component2) {
   return NoVideoSquare;
 }(_react2.default.Component);
 
-var JourneySpace = function (_Component15) {
-  _inherits(JourneySpace, _Component15);
+var JourneySpace = function (_Component14) {
+  _inherits(JourneySpace, _Component14);
 
   function JourneySpace(props) {
     _classCallCheck(this, JourneySpace);
 
-    var _this27 = _possibleConstructorReturn(this, (JourneySpace.__proto__ || Object.getPrototypeOf(JourneySpace)).call(this, props));
+    var _this26 = _possibleConstructorReturn(this, (JourneySpace.__proto__ || Object.getPrototypeOf(JourneySpace)).call(this, props));
 
-    _this27.refreshSession = function () {
-      fetch('/api/journeys/' + _this27.props.match.params.room, { credentials: 'include' }).then(function (res) {
+    _this26.refreshSession = function () {
+      fetch('/api/journeys/' + _this26.props.match.params.room, { credentials: 'include' }).then(function (res) {
         return res.json();
       }).then(function (json) {
         _state2.default.journey = json;
@@ -7446,16 +7492,16 @@ var JourneySpace = function (_Component15) {
       setTimeout(someHelper.setSizes, 1000);
     };
 
-    _this27.onInitPublisher = function () {
+    _this26.onInitPublisher = function () {
       console.log('initialized publisher');
     };
 
-    _this27.onConfirmReady = function (e) {
-      fetch('/api/journeys/' + _this27.props.match.params.room + '/connections/' + _this27.sessionHelper.session.connection.id + '/ready');
+    _this26.onConfirmReady = function (e) {
+      fetch('/api/journeys/' + _this26.props.match.params.room + '/connections/' + _this26.sessionHelper.session.connection.id + '/ready');
     };
 
-    _this27.onChangeJourney = function (e) {
-      fetch('/api/journeys/' + _this27.props.match.params.room + '/journey', {
+    _this26.onChangeJourney = function (e) {
+      fetch('/api/journeys/' + _this26.props.match.params.room + '/journey', {
         body: JSON.stringify({ journey: e.target.value }), // must match 'Content-Type' header
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, same-origin, *omit
@@ -7469,8 +7515,8 @@ var JourneySpace = function (_Component15) {
       });
     };
 
-    _this27.onStartSession = function (e) {
-      fetch('/api/journeys/' + _this27.props.match.params.room + '/start', {
+    _this26.onStartSession = function (e) {
+      fetch('/api/journeys/' + _this26.props.match.params.room + '/start', {
         cache: 'no-cache',
         credentials: 'same-origin',
         headers: {
@@ -7481,21 +7527,21 @@ var JourneySpace = function (_Component15) {
       });
     };
 
-    _this27.onLoadedMetadata = function (e) {
-      _this27.setState({
+    _this26.onLoadedMetadata = function (e) {
+      _this26.setState({
         journeyDuration: e.target.duration
       });
-      _state2.default.audioTag.removeEventListener('timeupdate', _this27.onTimeUpdate);
-      _state2.default.audioTag.addEventListener('timeupdate', _this27.onTimeUpdate);
+      _state2.default.audioTag.removeEventListener('timeupdate', _this26.onTimeUpdate);
+      _state2.default.audioTag.addEventListener('timeupdate', _this26.onTimeUpdate);
     };
 
-    _this27.onTimeUpdate = function (e) {
-      _this27.setState({
+    _this26.onTimeUpdate = function (e) {
+      _this26.setState({
         playerProgress: e.target.currentTime / e.target.duration * 100,
         playerProgressMS: e.target.currentTime
       });
-      if (_this27.isHostUser) {
-        fetch('/api/journeys/' + _this27.props.match.params.room + '/progress', {
+      if (_this26.isHostUser) {
+        fetch('/api/journeys/' + _this26.props.match.params.room + '/progress', {
           body: JSON.stringify({ currentTime: e.target.currentTime }),
           cache: 'no-cache',
           credentials: 'same-origin',
@@ -7508,10 +7554,10 @@ var JourneySpace = function (_Component15) {
       }
     };
 
-    _this27.onFlag = function (stream) {
-      fetch('/api/journeys/' + _this27.props.match.params.room + '/flag', {
+    _this26.onFlag = function (stream) {
+      fetch('/api/journeys/' + _this26.props.match.params.room + '/flag', {
         cache: 'no-cache',
-        body: JSON.stringify({ connectionId: _this27.state.session.connection.id, stream: stream }),
+        body: JSON.stringify({ connectionId: _this26.state.session.connection.id, stream: stream }),
         credentials: 'same-origin',
         headers: {
           'content-type': 'application/json'
@@ -7525,7 +7571,7 @@ var JourneySpace = function (_Component15) {
       });
     };
 
-    _this27.onShare = function (e) {
+    _this26.onShare = function (e) {
       navigator.share({
         title: 'Take a Journey With Me!',
         text: 'Join me on ' + _state2.default.journey.name,
@@ -7533,54 +7579,55 @@ var JourneySpace = function (_Component15) {
       });
     };
 
-    _this27.onInvite = function (e) {
+    _this26.onInvite = function (e) {
       e.preventDefault();
-      _this27.setState({
+      _this26.setState({
         showShareModal: true
       });
     };
 
-    _this27.onCloseShareModal = function (e) {
+    _this26.onCloseShareModal = function (e) {
       e.preventDefault();
-      _this27.setState({
+      _this26.setState({
         showShareModal: false
       });
     };
 
-    _this27.onCompleteShare = function (url, name) {
-      _this27.setState({
+    _this26.onCompleteShare = function (url, name) {
+      _this26.setState({
         showShareModal: false
       });
       window.location = url + ('?journey=' + _state2.default.journey.name + '&name=' + name);
     };
 
-    _this27.onOrientation = function (e) {
+    _this26.onOrientation = function (e) {
       e.preventDefault();
-      _this27.setState({
+      _this26.setState({
         showOrientationModal: true
       });
+      e.stopPropagation();
     };
 
-    _this27.onCloseOrientationModal = function (e) {
+    _this26.onCloseOrientationModal = function (e) {
       e.preventDefault();
-      _this27.setState({
+      _this26.setState({
         showOrientationModal: false
       });
     };
 
-    _this27.onCompleteOrienetation = function (url, name) {
-      _this27.setState({
+    _this26.onCompleteOrienetation = function (url, name) {
+      _this26.setState({
         showOrientationModal: false
       });
       window.location = url + ('?journey=' + _state2.default.journey.name + '&name=' + name);
     };
 
-    _this27.seekTo = function (percent) {
+    _this26.seekTo = function (percent) {
       _state2.default.audioTag.currentTime = _state2.default.audioTag.duration * percent;
       _state2.default.audioTag.play();
     };
 
-    _this27.togglePlayState = function (e) {
+    _this26.togglePlayState = function (e) {
       e.preventDefault();
       setTimeout(function () {
         if (_state2.default.audioTag.paused) {
@@ -7607,7 +7654,7 @@ var JourneySpace = function (_Component15) {
       }, 20);
     };
 
-    _this27.state = {
+    _this26.state = {
       streams: [],
       publisherId: '',
       session: null,
@@ -7620,27 +7667,27 @@ var JourneySpace = function (_Component15) {
       showOrientationModal: false,
       showIntro: true
     };
-    _this27.publisher = {};
-    _this27.audioTag = {};
-    return _this27;
+    _this26.publisher = {};
+    _this26.audioTag = {};
+    return _this26;
   }
 
   _createClass(JourneySpace, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this28 = this;
+      var _this27 = this;
 
       _state2.default.audioTag.addEventListener('ended', function (event) {
         consoleLog("CHANGING STATE TO ENDED!");
-        if (_this28.publisher && _this28.publisher.state && _this28.publisher.state.publisher) {
-          _this28.publisher.state.publisher.publishAudio(true);
+        if (_this27.publisher && _this27.publisher.state && _this27.publisher.state.publisher) {
+          _this27.publisher.state.publisher.publishAudio(true);
         }
-        _this28.setState({
+        _this27.setState({
           playerState: 'ended'
         });
 
         console.log("DOING /completed fetch");
-        fetch('/api/journeys/' + _this28.props.match.params.room + '/completed', {
+        fetch('/api/journeys/' + _this27.props.match.params.room + '/completed', {
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
           credentials: 'same-origin', // include, same-origin, *omit
           headers: {
@@ -7655,8 +7702,8 @@ var JourneySpace = function (_Component15) {
         if (decodeURIComponent(_state2.default.audioTag.src) === '' + window.location.origin + _state2.default.journey.journey) {
           _state2.default.audioTag.enqueue(['/chime.mp3', '/sharing.mp3']).then(function () {
             // sharing audio ended
-            if (_this28.publisher && _this28.publisher.state && _this28.publisher.state.publisher) {
-              _this28.publisher.state.publisher.publishAudio(true);
+            if (_this27.publisher && _this27.publisher.state && _this27.publisher.state.publisher) {
+              _this27.publisher.state.publisher.publishAudio(true);
             }
           });
           _state2.default.audioTag.play();
@@ -7671,14 +7718,14 @@ var JourneySpace = function (_Component15) {
         _state2.default.audioTag.src = _state2.default.journey.journey;
         _state2.default.audioTag.currentTime = 0;
 
-        _this28.sessionHelper = createSession({
+        _this27.sessionHelper = createSession({
           apiKey: _state2.default.openTokKey,
           sessionId: _state2.default.journey.sessionId,
           token: _state2.default.journey.token,
           onConnect: function onConnect() {
-            console.log('assigned connection to publisher', _this28.sessionHelper.session.connection);
-            fetch('/api/journeys/' + _this28.props.match.params.room + '/joined', {
-              body: JSON.stringify({ id: _this28.sessionHelper.session.connection.id }),
+            console.log('assigned connection to publisher', _this27.sessionHelper.session.connection);
+            fetch('/api/journeys/' + _this27.props.match.params.room + '/joined', {
+              body: JSON.stringify({ id: _this27.sessionHelper.session.connection.id }),
               credentials: 'same-origin', // include, same-origin, *omit
               headers: {
                 'content-type': 'application/json'
@@ -7691,35 +7738,35 @@ var JourneySpace = function (_Component15) {
           },
           onStreamsUpdated: function onStreamsUpdated(streams) {
             console.log('Current subscriber streams:', streams);
-            _this28.setState({ streams: streams });
-            if (!_this28.state.currentlyActivePublisher) {
-              _this28.setState({
+            _this27.setState({ streams: streams });
+            if (!_this27.state.currentlyActivePublisher) {
+              _this27.setState({
                 currentlyActivePublisher: streams[0]
               });
             }
           }
         });
-        _this28.sessionHelper.session.on("connectionDestroyed", function (event) {
+        _this27.sessionHelper.session.on("connectionDestroyed", function (event) {
           var data = {
-            sessionId: _this28.sessionHelper.session.sessionId,
+            sessionId: _this27.sessionHelper.session.sessionId,
             connection: {
               id: event.connection.id
             },
             event: 'connectionDestroyed'
           };
-          _this28.refreshSession();
+          _this27.refreshSession();
         });
-        _this28.sessionHelper.session.on("connectionCreated", function (event) {
-          _this28.refreshSession();
+        _this27.sessionHelper.session.on("connectionCreated", function (event) {
+          _this27.refreshSession();
         });
-        _this28.sessionHelper.session.on('signal', function (event) {
+        _this27.sessionHelper.session.on('signal', function (event) {
           console.log("Signal sent from connection ", event);
-          _this28.refreshSession();
+          _this27.refreshSession();
         });
 
-        _this28.sessionHelper.session.on("signal:startJourney", function (event) {
-          if (_this28.publisher && _this28.publisher.state && _this28.publisher.state.publisher) {
-            _this28.publisher.state.publisher.publishAudio(false);
+        _this27.sessionHelper.session.on("signal:startJourney", function (event) {
+          if (_this27.publisher && _this27.publisher.state && _this27.publisher.state.publisher) {
+            _this27.publisher.state.publisher.publishAudio(false);
           }
           var playPromise = _state2.default.audioTag.play();
           if (playPromise !== undefined) {
@@ -7731,22 +7778,22 @@ var JourneySpace = function (_Component15) {
               console.error(e);
             });
           }
-          _this28.setState({
+          _this27.setState({
             playerState: 'playing'
           });
         });
 
-        _this28.sessionHelper.session.on("signal:pauseJourney", function (event) {
-          if (_this28.publisher && _this28.publisher.state && _this28.publisher.state.publisher) {
-            _this28.publisher.state.publisher.publishAudio(true);
+        _this27.sessionHelper.session.on("signal:pauseJourney", function (event) {
+          if (_this27.publisher && _this27.publisher.state && _this27.publisher.state.publisher) {
+            _this27.publisher.state.publisher.publishAudio(true);
           }
           _state2.default.audioTag.pause();
-          _this28.setState({
+          _this27.setState({
             playerState: 'paused'
           });
         });
 
-        _this28.sessionHelper.session.on("signal:journeyUpdated", function (event) {
+        _this27.sessionHelper.session.on("signal:journeyUpdated", function (event) {
           var journey = JSON.parse(event.data);
           _state2.default.journey = journey;
 
@@ -7758,22 +7805,22 @@ var JourneySpace = function (_Component15) {
 
           if (_state2.default.journey.state === 'started') {
 
-            if (_this28.publisher && _this28.publisher.state && _this28.publisher.state.publisher) {
-              _this28.publisher.state.publisher.publishAudio(false);
+            if (_this27.publisher && _this27.publisher.state && _this27.publisher.state.publisher) {
+              _this27.publisher.state.publisher.publishAudio(false);
             }
             _state2.default.audioTag.play();
-            _this28.setState({
+            _this27.setState({
               playerState: 'playing'
             });
           }
         });
 
-        _this28.sessionHelper.session.on("signal:fail", function (event) {
+        _this27.sessionHelper.session.on("signal:fail", function (event) {
           _state2.default.journey.state = 'failed';
         });
 
-        _this28.setState({
-          session: _this28.sessionHelper.session
+        _this27.setState({
+          session: _this27.sessionHelper.session
         });
 
         var onAudioCanPlay = function onAudioCanPlay(event) {
@@ -7805,10 +7852,10 @@ var JourneySpace = function (_Component15) {
   }, {
     key: 'render',
     value: function render() {
-      var _this29 = this;
+      var _this28 = this;
 
       var currentParticipant = this.state.session && this.state.session.connection && _state2.default.journey && _state2.default.journey.participants.find(function (participant) {
-        return participant.connectionId === _this29.state.session.connection.id;
+        return participant.connectionId === _this28.state.session.connection.id;
       });
       var local_key_counter_to_avoid_warning = 0;
       var currentUserHasFlaggedJourney = _state2.default.journey && _state2.default.journey.flags.map(function (flag) {
@@ -7825,7 +7872,7 @@ var JourneySpace = function (_Component15) {
           _react2.default.createElement(
             'div',
             { id: 'topbar_and_header' },
-            _react2.default.createElement(_header2.default, { history: this.props.history }),
+            _react2.default.createElement(_header2.default, { history: this.props.history, showLeave: true }),
             _react2.default.createElement(
               'div',
               { id: 'titlebar', className: 'flexiblerow space-between-added',
@@ -7867,9 +7914,10 @@ var JourneySpace = function (_Component15) {
               _react2.default.createElement(
                 'div',
                 { id: 'secondsquare', className: 'flexiblecol' },
+                this.state.showOrientationModal && _react2.default.createElement(OrientationModal, { force: true, onComplete: this.onCompleteOrientation, onClose: this.onCloseOrientationModal }),
                 _react2.default.createElement(
                   'div',
-                  { style: { display: 'flex', flexDirection: 'row' } },
+                  { style: { display: 'flex', flexDirection: 'row', visibility: '' + (this.state.showOrientationModal ? "hidden" : "visible") } },
                   _react2.default.createElement(
                     'span',
                     { key: 'stream', id: 'video-square1', className: 'journeyspace-stream journeyspace-me' },
@@ -7877,7 +7925,7 @@ var JourneySpace = function (_Component15) {
                       session: this.sessionHelper.session,
                       onInit: this.onInitPublisher,
                       ref: function ref(publisher) {
-                        _this29.publisher = publisher;
+                        _this28.publisher = publisher;
                       },
                       properties: {
                         width: '100%',
@@ -7889,16 +7937,20 @@ var JourneySpace = function (_Component15) {
                     limit: 1,
                     onInvite: this.onInvite,
                     streamlength: this.state.streams.length,
-                    stream: this.state.stream,
+                    stream: this.state.streams[0],
                     session: this.sessionHelper.session,
                     localkey: local_key_counter_to_avoid_warning++,
-                    state: this.state
-
+                    state: this.state,
+                    journey: _state2.default.journey,
+                    sessionId: _state2.default.sessionId,
+                    visible: !this.state.showOrientationModal
                   })
                 ),
-                !(this.state.showShareModal || this.state.showOrientationModal) && _react2.default.createElement(
+                _react2.default.createElement(
                   'div',
-                  { id: 'central_control_panel_id', style: { display: 'flex' }, className: 'flexiblerow' },
+                  { id: 'central_control_panel_id',
+                    style: { visibility: '' + (!(this.state.showShareModal || this.state.showOrientationModal) ? "visible" : "hidden") }
+                  },
                   _react2.default.createElement(VideoButton, {
                     publisher: this.publisher }),
                   _react2.default.createElement(AudioButton, {
@@ -7911,15 +7963,16 @@ var JourneySpace = function (_Component15) {
                 ),
                 _react2.default.createElement(
                   'div',
-                  { style: { display: 'flex', flexDirection: 'row' } },
+                  { style: { display: 'flex', flexDirection: 'row', visibility: '' + (this.state.showOrientationModal ? "hidden" : "visible") } },
                   _react2.default.createElement(UnfilledVideoSquare, { vidid: 'video-square3',
                     limit: 2,
                     onInvite: this.onInvite,
                     streamlength: this.state.streams.length,
-                    stream: this.state.stream,
+                    stream: this.state.streams[1],
                     session: this.sessionHelper.session,
                     localkey: local_key_counter_to_avoid_warning++,
-                    state: this.state
+                    state: this.state,
+                    visible: !this.state.showOrientationModal
                   }),
                   _react2.default.createElement(NoVideoSquare, { vidid: 'video-square4',
                     localkey: local_key_counter_to_avoid_warning++,
@@ -7935,10 +7988,7 @@ var JourneySpace = function (_Component15) {
             _react2.default.createElement('div', { style: { flex: 1 } }),
             _react2.default.createElement('div', { style: { marginLeft: 'auto', marginRight: '10px', alignSelf: 'center' } })
           ),
-          this.state.showShareModal && _react2.default.createElement(InviteModal, { journey: this.state.session, onComplete: this.onCompleteShare, onClose: this.onCloseShareModal }),
-          '/*',
-          this.state.showOrientationModal && _react2.default.createElement(IntroWrapper, { force: true }),
-          '*/'
+          this.state.showShareModal && _react2.default.createElement(InviteModal, { journey: this.state.session, onComplete: this.onCompleteShare, onClose: this.onCloseShareModal })
         )
       );
     }
@@ -7953,10 +8003,10 @@ var JourneySpace = function (_Component15) {
   }, {
     key: 'isHostUser',
     get: function get() {
-      var _this30 = this;
+      var _this29 = this;
 
       var currentParticipant = this.state.session && this.state.session.connection && _state2.default.journey && _state2.default.journey.participants.find(function (participant) {
-        return participant.connectionId === _this30.state.session.connection.id;
+        return participant.connectionId === _this29.state.session.connection.id;
       });
       return currentParticipant && _state2.default.journey.participants.indexOf(currentParticipant) === 0;
     }

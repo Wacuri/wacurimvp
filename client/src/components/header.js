@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import { view } from 'react-easy-state';
 import state from '../state';
 
-import logo from 'file-loader!isomorphic-loader!../../res/images/CuriousLiveLogoMark-150-300.png';
+// import logo from 'file-loader!isomorphic-loader!../../res/images/CuriousLiveLogoMark-150-300.png';
+import logo from 'file-loader!isomorphic-loader!../../res/images/CuriousLive-logo.png';
 
 
 class LeaveRoomButton extends Component {
@@ -35,11 +36,12 @@ class Header extends React.Component {
 	return (
 	<div  className="header">
                   <div style={{padding: '10px'}}>
-	</div>
-	<LeaveRoomButton history={this.props.history}/>
+		</div>
+		{ this.props.showLeave && 
+		  <LeaveRoomButton history={this.props.history}/> }
     <img className="logo" src={logo}/>
     {state.journey && !state.journey.startAt &&
-      <h2 style={{color: 'white', fontSize: '16px'}}>{state.journey.name}</h2>
+     <h2 style={{color: 'white'}}>{state.journey.name}</h2>
     }
     {false && state.loggedIn && state.user &&
       <div>
