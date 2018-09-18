@@ -6470,6 +6470,7 @@ var JourneyPhases = function (_Component4) {
 
       var NumPhases = 4;
       var Messages = ["Breathe and center yourself", "Journey in Progess", "Share your Insights", "Provide Feedback"];
+      console.log('ONE_SQUARE_WIDTH_X', someHelper.ONE_SQUARE_WIDTH);
       return _react2.default.createElement(
         'div',
         { ref: function ref(el) {
@@ -6495,7 +6496,7 @@ var JourneyPhases = function (_Component4) {
         ),
         _react2.default.createElement(
           'div',
-          { style: { width: 'calc(25vw)', display: 'flex', flexDirection: 'row' } },
+          { style: { width: someHelper.ONE_SQUARE_WIDTH + 'px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' } },
           _react2.default.createElement('div', { className: 'phase-bar bar-' + (this.stepIndex == 0 ? 'white' : 'green') }),
           _react2.default.createElement('div', { className: 'phase-bar bar-' + (this.stepIndex == 1 ? 'white' : 'green') }),
           _react2.default.createElement('div', { className: 'phase-bar bar-' + (this.stepIndex == 2 ? 'white' : 'green') }),
