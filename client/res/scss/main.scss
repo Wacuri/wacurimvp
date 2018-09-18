@@ -15,31 +15,7 @@ body {
 }
 
 
-// This works nicely for the body but sadly I must be changing font-sizes elsewhere
-@media all and (min-width: 960px) {
-    body{
-        font-size: 18px;
-    }
-}
- 
-@media all and (max-width: 959px) and (min-width: 600px) {
-    body{
-        font-size: 14px;
-    }
-}
- 
-@media all and (max-width: 599px) and (min-width: 320px) {
-    body{
-        font-size: 10px;
-    }
- 
-}
 
-@media all and (max-width: 319px)  {
-    body{
-        font-size: 6px;
-    }
-}
 
 :root {
     --heightpercentage: 0.8;
@@ -573,9 +549,9 @@ h2 {
 
 
 .phase-bar {
-    min-width: 20%;
-    height: calc(0.4vw);
-    margin-left: calc(0.2vw);
+    min-width: calc(10vw);
+    height: calc(0.8vh);
+    margin-left: calc(0.1vw);
     margin-right: calc(0.1vw);
 }
 
@@ -668,8 +644,8 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    
     color: white;
+    
     .fa-smile-o {
 	color: white;	
     }
@@ -678,9 +654,14 @@ h2 {
     }
     .btn {
 	font-size: 1rem;
-	background-color: rgb(75,176,88);    	
+	background-color: rgb(75,176,88);
     }
 }
+
+.invite-friends-button {
+    border-radius: 15px!important;
+}
+
 
 // The flag stuff is barely working
 .PartnerStream {
@@ -710,5 +691,33 @@ h2 {
     div {
 	color: white;
     }
+    h3 {
+	font-size: 1.5rem;
+    }
 }
 
+// This works nicely for the body but sadly I must be changing font-sizes elsewhere
+@media all and (min-width: 960px) {
+    body{
+        font-size: 18px;
+    }
+}
+ 
+@media all and (max-width: 959px) and (min-width: 600px) {
+    body{
+        font-size: 14px;
+    }
+}
+ 
+@media all and (max-width: 599px) and (min-width: 320px) {
+    body{
+        font-size: 10px;
+    }
+ 
+}
+
+@media all and (max-width: 319px)  {
+    body{
+        font-size: 6px;
+    }
+}

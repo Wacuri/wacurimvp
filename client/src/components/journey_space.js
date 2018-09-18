@@ -308,6 +308,7 @@ class JourneyPhases extends Component {
       const {journey} = this.props;
       const NumPhases = 4;
       const Messages = ["Breathe and center yourself","Journey in Progess","Share your Insights","Provide Feedback"];
+      console.log('ONE_SQUARE_WIDTH_X',someHelper.ONE_SQUARE_WIDTH);      
     return (
 	    <div ref={el => {this.container = el}} className={`journey-timeline step-${this.stepIndex.toString()}`}>
 	    <div>
@@ -320,7 +321,7 @@ class JourneyPhases extends Component {
 	}
 	    </div>
 	    </div>
-	    <div style={{width: 'calc(25vw)',  display: 'flex', flexDirection: 'row' }}>
+	    <div style={{width:  `${someHelper.ONE_SQUARE_WIDTH}px`,  display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
 	    <div className={ `phase-bar bar-${this.stepIndex == 0 ? 'white' : 'green'}`}>
 	      </div>
 	    <div className={ `phase-bar bar-${this.stepIndex == 1 ? 'white' : 'green'}`}>
