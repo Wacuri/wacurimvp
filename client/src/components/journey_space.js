@@ -1442,7 +1442,7 @@ class JourneySpace extends Component {
 
 		 
 		 <div id="titlebar" className='flexiblerow space-between-added'
-		 style={{backgroundColor: 'black', color: 'white'}}>
+		 style={{marginLeft: '20px', marginRight: '20px', backgroundColor: 'black', color: 'white'}}>
 		 
 		   <span style={{color: 'white'}} >{state.journey.name}</span>
 
