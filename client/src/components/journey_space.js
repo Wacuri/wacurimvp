@@ -306,6 +306,10 @@ class JourneyPhases extends Component {
 	return 2;
       case 'ended':
 	return 2;
+    case 'playing':
+	return 1;
+    case 'paused':
+	return 1;
       default:
         return 2;
     }
@@ -317,7 +321,7 @@ class JourneyPhases extends Component {
       const {journey} = this.props;
       const NumPhases = 4;
       const Messages = ["Breathe and center yourself","Journey in Progess","Share your Insights","Provide Feedback"];
-      console.log('ONE_SQUARE_WIDTH_X',someHelper.ONE_SQUARE_WIDTH);      
+      console.log("STEP INDEX",this.stepIndex,this.props.journey.state);
     return (
 	    <div ref={el => {this.container = el}} id={'journey-timeline0'} className={`journey-timeline step-${this.stepIndex.toString()}`}>
 	    <div>
@@ -345,7 +349,7 @@ class JourneyPhases extends Component {
   }
 }
 
-
+/*
 class JourneyTimeline extends Component {
 
   constructor(props) {
@@ -449,21 +453,13 @@ class JourneyTimeline extends Component {
     )
   }
 }
-
-/*
-function OBSOLETE_ARROW() {
-        <div className='arrow' style={{height: `${this.heightForActive}px`, width: `${this.heightForActive}px`, transform: `translateY(${this.positionForCaret}px)`}}>
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" className="svg-triangle" viewBox="0 0 100 100" preserveAspectRatio="none" shapeRendering="geometricPrecision">
-            <path d="M 70 50 100 5 100 100 Z"/>
-          </svg>
-        </div>
-
-}
 */
-
 class SkipButton extends Component {
-
-  skipToNext = (e) => {
+    constructor(props) {
+       super(props);
+    }
+    skipToNext = (e) => {
+	console.log("SKIP TO NEXT CALLED");
     e.preventDefault();
     fetch(`/api/journeys/${this.props.journey.room}/skip`, {
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -478,16 +474,17 @@ class SkipButton extends Component {
     });
       // I believe this should change the state to completed, but I am not sure
       // if that happens server side or client side
-      console.log("skipToNext event fired");
+	console.log("skipToNext event fired");
+	const vid = this.props.vidid;
+	const playerState = this.props.playerState;
+	const seekTo = this.props.seekTo;
+	// This is my attempt to seek to the end....
+	seekTo(90);
+	// figure out how to pause, and how to seek correctly....
   }
 
     render() {
-	{/*	this.props.journey.state != 'completed' ? */}
 	return (
-/*	    (true) ?
-	    <button style={this.props.style || {}} className='btn btn-primary' onClick={this.skipToNext}><i className='fa fa-step-forward fa-fw'></i></button> :
-		<span/>
-*/
 	    <span className={`fa-stack`} onClick={this.skipToNext}>
 	    <i className='fa fa-circle fa-stack-2x' 
 	style={{color: 'rgb(75,176,88)'}}
@@ -941,6 +938,51 @@ Some people like to leave their cameras on during the journey to increase the fe
 }
 
 
+class FeedbackModal extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      journeySpaceName: '',
+      error: false
+    }
+  }
+
+    onChange = (e) => {
+    e.preventDefault();	
+    this.setState({
+      journeySpaceName: e.target.value,
+      error: this.state.error && e.target.value != ''
+    });
+	e.stopPropagation();	
+  }
+    
+    render() {
+	console.log('ONE_SQUARE_WIDTH',someHelper.ONE_SQUARE_WIDTH);
+    return (
+	    <div style={{position: 'absolute',
+			 minHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
+			 maxWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,
+			 backgroundColor: 'rgba(89, 153, 222, 0.9)',
+			 disaply: 'flex',
+			 flexFlow: 'column',
+			 justifyContent: 'space-between'
+			 }
+		       }>
+
+            <div className='feedback-message'>
+            <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
+          <i className='fa fa-times' style={{fontSize: '22px', color: 'white'}}/>
+        </a>
+	    <div/>
+	    <div/>	    
+	    <h3>Give Feedback</h3>
+	    </div>
+	    </div>	    
+    );
+    }
+}
+
+
 class UnfilledVideoSquare extends React.Component {
   constructor(props) {
       super(props);
@@ -1004,25 +1046,30 @@ class NoVideoSquare extends React.Component {
   }    
   render() {
       const localkey = this.props.localkey;
-      const vid = this.props.vidid;      
-      return (
+      const vid = this.props.vidid;
+      const feedbackNotOrientation =
+	    this.props.playerState == 'ended' || this.props.playerState == 'completed';
+      const msg = (feedbackNotOrientation) ? "Leave and Give Feedback" : "Orientation";
+      const fnc = (feedbackNotOrientation) ? this.props.onFeedback : this.props.onOriendation;
+      console.log("MESSAGE",msg);
+      console.log("STATE",this.props.playerState);      
+	  return (
 	      <div key={localkey} id={vid} className='video-placeholder'>
 	        <div className='invite-indicator'>
 	          <div>
 	      <i className='fa fa-smile-o fa-2x' style={{ visibility: 'hidden'}}></i>
 	      
-              <p style={{visibility: 'hidden', color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '0.5rem'}}>Waiting...</p>
+              <p style={{visibility: 'hidden', color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem'}}>Waiting...</p>
 
               <div style={{color: 'white'}}>
 	      {/* I have no idea how to incease the roundness of these corners */}
-                      <button className='btn btn-primary' onClick={this.props.onOrientation}
+                  <button className='btn btn-primary' onClick={fnc}
 	  style={{margin: '0 auto',  marginTop: '0.5em', borderRadius: '15px' }}
- 	              >Orientation</button>
+ 	              >{msg}</button>
 	            </div>	      	  
   	         </div>
 	        </div>
-	      </div>
-      );
+		  </div>);
   }	  
 }
 
@@ -1047,39 +1094,39 @@ class JourneySpace extends Component {
     this.audioTag = {};
   }
 
-	componentDidMount() {
-	    state.audioTag.addEventListener('ended', (event) => {
-		consoleLog("CHANGING STATE TO ENDED!");
-      if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-        this.publisher.state.publisher.publishAudio(true);
-      }
-      this.setState({
-        playerState: 'ended'
-      });
+    componentDidMount() {
+	state.audioTag.addEventListener('ended', (event) => {
+	    consoleLog("CHANGING STATE TO ENDED!");
+	    if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+		this.publisher.state.publisher.publishAudio(true);
+	    }
+	    this.setState({
+		playerState: 'ended'
+	    });
 
-		console.log("DOING /completed fetch");
-      fetch(`/api/journeys/${this.props.match.params.room}/completed`, {
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, same-origin, *omit
-        headers: {
-          'content-type': 'application/json'
-        },
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, cors, *same-origin
-        redirect: 'follow', // manual, *follow, error
-        referrer: 'no-referrer', // *client, no-referrer
-      });
+	    console.log("DOING /completed fetch");
+	    fetch(`/api/journeys/${this.props.match.params.room}/completed`, {
+		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+		credentials: 'same-origin', // include, same-origin, *omit
+		headers: {
+		    'content-type': 'application/json'
+		},
+		method: 'POST', // *GET, POST, PUT, DELETE, etc.
+		mode: 'cors', // no-cors, cors, *same-origin
+		redirect: 'follow', // manual, *follow, error
+		referrer: 'no-referrer', // *client, no-referrer
+	    });
 
-      if (decodeURIComponent(state.audioTag.src) === `${window.location.origin}${state.journey.journey}`) {
-        state.audioTag.enqueue(['/chime.mp3', '/sharing.mp3']).then(() => {
-          // sharing audio ended
-          if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-            this.publisher.state.publisher.publishAudio(true);
-          }
-        });
-        state.audioTag.play();
-      }
-    });
+	    if (decodeURIComponent(state.audioTag.src) === `${window.location.origin}${state.journey.journey}`) {
+		state.audioTag.enqueue(['/chime.mp3', '/sharing.mp3']).then(() => {
+		    // sharing audio ended
+		    if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+			this.publisher.state.publisher.publishAudio(true);
+		    }
+		});
+		state.audioTag.play();
+	    }
+	});
 
 		fetch(`/api/journeys/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
 			.then(res => res.json())
@@ -1389,6 +1436,29 @@ class JourneySpace extends Component {
     });
     window.location = url + `?journey=${state.journey.name}&name=${name}`;
   }
+
+
+  onFeedback = (e) => {
+    e.preventDefault();
+    this.setState({
+      showFeedbackModal: true
+    });
+    e.stopPropagation();	
+  }
+
+  onCloseFeedbackModal = (e) => {
+    e.preventDefault();
+    this.setState({
+      showFeedbackModal: false
+    });
+  }
+
+  onCompleteFeedback = (url, name) => {
+    this.setState({
+      showFeedbackModal: false
+    });
+    window.location = url + `?journey=${state.journey.name}&name=${name}`;
+  }
     
 
     
@@ -1545,7 +1615,10 @@ class JourneySpace extends Component {
 		 <PauseButton style={{color: 'rgb(55,180,246)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
 		 journey={state.journey} player={state.audioTag}/>			 
 		 
-			 <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%',  }} journey={state.journey}/>
+		 <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%',  }} journey={state.journey}
+		 playerState={state.playerState}
+		 seekTo={this.seekTo}
+		 />
 	         </div>
 		 {/*
 		    }*/}		 
@@ -1564,7 +1637,8 @@ class JourneySpace extends Component {
 		 
 		 <NoVideoSquare vidid='video-square4'
 		 localkey={local_key_counter_to_avoid_warning++}
-		 onOrientation={this.onOrientation}		 		 
+		 onOrientation={this.onOrientation}
+		 playerState={this.state.playerState}
 		 ></NoVideoSquare>
 		 </div>
 		 

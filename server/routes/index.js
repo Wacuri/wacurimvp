@@ -35,6 +35,10 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use('/api', api);
 app.use('/*', ssr);
 
+// This is a test to see if this shows up in the Heroku log..
+console.log("HELLO WORLD");
+// This is a test to see if this shows up in the Heroku log..
+console.log("assigned port",process.env.PORT);
 app.listen(process.env.PORT || 5000, () => {
   console.log('Hello World listening on port 5000!');
 });
