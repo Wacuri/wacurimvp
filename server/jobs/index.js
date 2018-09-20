@@ -17,7 +17,7 @@ const db = mongoose.connection;
 var offset = 0;
 agenda.define('create journey space', async function(job, done) {
   try {
-    const total = await db.collection('journeycontents').count();
+    const total = await db.collection('journeycontents').countDocuments();
     const randomJourney = (await db.collection('journeycontents').find().skip(offset++ % total).limit(1).toArray())[0];
     const journeySpace = new JourneySpace({
       journey: randomJourney.filePath,

@@ -50,9 +50,10 @@ class Header extends React.Component {
 		{ this.props.showLeave && 
 		  <LeaveRoomButton history={this.props.history}/> }
     <img className="logo" src={logo}/>
-    {state.journey && !state.journey.startAt &&
+		{/*    {state.journey && !state.journey.startAt &&
      <h2 style={{color: 'white'}}>{state.journey.name}</h2>
     }
+		 */}
     {false && state.loggedIn && state.user &&
       <div>
         <span className='mr-2 text-secondary'>logged in as {state.user.name}</span>

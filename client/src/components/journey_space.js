@@ -321,14 +321,13 @@ class JourneyPhases extends Component {
       const {journey} = this.props;
       const NumPhases = 4;
       const Messages = ["Breathe and center yourself","Journey in Progess","Share your Insights","Provide Feedback"];
-      console.log("STEP INDEX",this.stepIndex,this.props.journey.state);
     return (
 	    <div ref={el => {this.container = el}} id={'journey-timeline0'} className={`journey-timeline step-${this.stepIndex.toString()}`}>
 	    <div>
 	    <div style={{display: 'flex', flexDirection: 'row' }}>
 	    <span>{Messages[this.stepIndex]}</span>
 
-	{
+	{ state.journey.startAt &&
 	    (this.stepIndex == 0) &&
                 <span className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</span>
 	}
@@ -1514,19 +1513,20 @@ class JourneySpace extends Component {
 		 <div id="titlebar" className='flexiblerow space-between-added'
 		 style={{marginLeft: '20px', marginRight: '20px', backgroundColor: 'black', color: 'white'}}>
 		 
-		   <span style={{color: 'white'}} >{state.journey.name}</span>
-
-                   <JourneyPhases journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
-
-                    {!state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed') &&
-                    <div style={{padding: '10px'}}>
-                      <select style={{width: '100%'}} onChange={this.onChangeJourney} value={state.journeys&& state.journey.journey}>
+		 {state.journey.startAt && <span style={{color: 'white'}} >{state.journey.name}</span>
+		 }
+                 { !state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed') &&
+		  <div style={{padding: '10px'}}>
+		   <select style={{width: '100%'}} onChange={this.onChangeJourney} value={state.journeys&& state.journey.journey}>
                         {state.journeys.map(journey => (
                           <option value={journey.filePath}>{journey.name}</option>
                         ))}
                       </select>
-                    </div>
-                    }
+                   </div>}
+
+
+                   <JourneyPhases journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
+
 		 {/* we may need to make the Invite Friends button modal by this condition */}
 		 {/*
 		 {state.journey.startAt && ['joined', 'created'].indexOf(state.journey.state) > -1 && 
