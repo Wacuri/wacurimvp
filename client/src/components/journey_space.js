@@ -13,7 +13,7 @@ import { view } from 'react-easy-state';
 import { Link } from 'react-router-dom';
 import Cookie from 'js-cookie';
 import SwipeableViews from 'react-swipeable-views';
-import SignaturePad from './signature_pad';
+// import SignaturePad from './signature_pad';
 import state from '../state';
 import PropTypes from 'prop-types';
 import uuid from 'uuid';
@@ -435,7 +435,7 @@ class JourneyTimeline extends Component {
               }
               {(journey.state === 'started' || journey.state === 'paused') &&
                 <div style={{position: 'absolute', bottom: '-12px', left: '10px', right: '10px'}}>
-               <progress ref={(progressBar) => this.progressBar = progressBar} onClick={this.onSeek} max={this.props.timer.total} value={this.props.timer.currentTime} style={{width: '90%',backgroundColor: 'orange'}}></progress>
+               <progress ref={(progressBar) => this.progressBar = progressBar} onClick={this.onSeeko} max={this.props.timer.total} value={this.props.timer.currentTime} style={{width: '90%',backgroundColor: 'orange'}}></progress>
                 </div>
               }
             </div>
@@ -459,18 +459,19 @@ class SkipButton extends Component {
     }
     skipToNext = (e) => {
 	console.log("SKIP TO NEXT CALLED");
-    e.preventDefault();
-    fetch(`/api/journeys/${this.props.journey.room}/skip`, {
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, same-origin, *omit
-      headers: {
-        'content-type': 'application/json'
-      },
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, cors, *same-origin
-      redirect: 'follow', // manual, *follow, error
-      referrer: 'no-referrer', // *client, no-referrer
-    });
+	e.preventDefault();
+   // This seeking to near the end works better than just calling skip, because it allows our natural processes to continue.
+    // fetch(`/api/journeys/${this.props.journey.room}/skip`, {
+    //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //   credentials: 'same-origin', // include, same-origin, *omit
+    //   headers: {
+    //     'content-type': 'application/json'
+    //   },
+    //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    //   mode: 'cors', // no-cors, cors, *same-origin
+    //   redirect: 'follow', // manual, *follow, error
+    //   referrer: 'no-referrer', // *client, no-referrer
+    // });
       // I believe this should change the state to completed, but I am not sure
       // if that happens server side or client side
 	console.log("skipToNext event fired");
@@ -478,7 +479,8 @@ class SkipButton extends Component {
 	const playerState = this.props.playerState;
 	const seekTo = this.props.seekTo;
 	// This is my attempt to seek to the end....
-	seekTo(90);
+	// It is not clear how the audio really works; I am not sure that "seek" functions.
+	seekTo(97/100);
 	// figure out how to pause, and how to seek correctly....
   }
 
@@ -1095,7 +1097,7 @@ class JourneySpace extends Component {
 
     componentDidMount() {
 	state.audioTag.addEventListener('ended', (event) => {
-	    consoleLog("CHANGING STATE TO ENDED!");
+	    console.log("CHANGING STATE TO ENDED!");
 	    if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
 		this.publisher.state.publisher.publishAudio(true);
 	    }
@@ -1213,7 +1215,8 @@ class JourneySpace extends Component {
 
         this.sessionHelper.session.on("signal:journeyUpdated", (event) => {
           const journey = JSON.parse(event.data);
-          state.journey = journey;
+            state.journey = journey;
+	    console.log(" Got signal:journeyUpdated ", event);
 
           if (state.journey.state != 'completed') {
             // if we are in completed state, then audio may be playing the sharing prompt
@@ -1351,7 +1354,9 @@ class JourneySpace extends Component {
     state.audioTag.addEventListener('timeupdate', this.onTimeUpdate);
   }
 
-  onTimeUpdate = (e) => {
+    onTimeUpdate = (e) => {
+	console.log("onTimeUpdate",e);
+	console.log("onTimeUpdate",e.target.currentTime);	
     this.setState({
       playerProgress: (e.target.currentTime / e.target.duration) * 100,
       playerProgressMS: e.target.currentTime,
@@ -1460,10 +1465,22 @@ class JourneySpace extends Component {
   }
     
 
-    
-  seekTo = (percent) => {
-    state.audioTag.currentTime = state.audioTag.duration * percent;
-    state.audioTag.play();
+
+    seekTo = (fraction) => {
+      console.log("duration",state.audioTag.duration);
+      console.log("audioTag",state.audioTag.currentTime);      
+	state.audioTag.play();
+
+	
+	
+    state.audioTag.currentTime = state.audioTag.duration * fraction;
+
+      console.log("SEEK called with:",fraction);
+	console.log("audioTag",state.audioTag.currentTime);
+	// This only needs a target...must determine what time that is..
+	// I think iit is the audioTag
+	var e = {target: {currentTime: state.audioTag.currentTime}};
+	this.onTimeUpdate(e);
   }
 
     togglePlayState = (e) => {
