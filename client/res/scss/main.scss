@@ -635,7 +635,7 @@ h2 {
     .fa-smile-o {
         font-size: 1.0rem;
     }
-    .invite-friends-button {
+    .invite-friends-button, {
         font-size: 1.0rem;	
     }
     #central_control_panel_id { 
@@ -711,12 +711,17 @@ h2 {
     display: flex;
     flex-flow: column;
     justify-content: space-between;
+    align-items: center;
     height: 100%;
     div {
 	color: white;
     }
     h3 {
 	font-size: 1.5rem;
+    }
+    .btn {
+	font-size: 1.0rem;
+	background-color: rgb(75,176,88);
     }
 }
 
@@ -725,6 +730,21 @@ h2 {
     grid-gap: 10px;
     grid-template-columns: auto auto auto auto ;
 }
+
+.feedback-rating {
+    .feedback-empty {
+	color: white;
+	margin-left: 5px;
+	margin-right: 5px;
+	
+    }
+    .feedback-full {
+	color: black;
+	margin-left: 5px;
+	margin-right: 5px;
+    }
+}
+
 
 // This works nicely for the body but sadly I must be changing font-sizes elsewhere
 @media all and (min-width: 960px) {

@@ -9138,6 +9138,20 @@ h2 {
   .orientation-message h3 {
     font-size: 1.5rem; }
 
+.feedback-message {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%; }
+  .feedback-message div {
+    color: white; }
+  .feedback-message h3 {
+    font-size: 1.5rem; }
+  .feedback-message .btn {
+    font-size: 1rem;
+    background-color: #4bb058; }
+
 #phase-bar0 {
   display: grid;
   grid-gap: 10px;

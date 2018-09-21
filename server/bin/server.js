@@ -1230,9 +1230,12 @@ var LANDSCAPE_NOT_PORTRAIT = exports.LANDSCAPE_NOT_PORTRAIT = true;
 // the view port (not counting the header), arranged either
 // vertically for portrait mode or horiontally for landscape.
 function setSizes() {
-   var fs = document.getElementById("flex-squares-main");
 
    var tb_and_h = document.getElementById("topbar_and_header");
+   if (!tb_and_h) {
+      // if we can't find an element, we are on the wrong page
+      return;
+   }
 
    var debug = 0;
 
@@ -3542,19 +3545,19 @@ var _ssr = __webpack_require__(88);
 
 var _ssr2 = _interopRequireDefault(_ssr);
 
-var _agenda = __webpack_require__(107);
+var _agenda = __webpack_require__(108);
 
 var _agenda2 = _interopRequireDefault(_agenda);
 
-var _agendash = __webpack_require__(108);
+var _agendash = __webpack_require__(109);
 
 var _agendash2 = _interopRequireDefault(_agendash);
 
-var _expressSession = __webpack_require__(109);
+var _expressSession = __webpack_require__(110);
 
 var _expressSession2 = _interopRequireDefault(_expressSession);
 
-var _connectMongo = __webpack_require__(110);
+var _connectMongo = __webpack_require__(111);
 
 var _connectMongo2 = _interopRequireDefault(_connectMongo);
 
@@ -4853,7 +4856,7 @@ var _intro = __webpack_require__(31);
 
 var _intro2 = _interopRequireDefault(_intro);
 
-var _countdown_message = __webpack_require__(106);
+var _countdown_message = __webpack_require__(107);
 
 var _countdown_message2 = _interopRequireDefault(_countdown_message);
 
@@ -6087,6 +6090,10 @@ var _intro = __webpack_require__(31);
 
 var _intro2 = _interopRequireDefault(_intro);
 
+var _reactRating = __webpack_require__(105);
+
+var _reactRating2 = _interopRequireDefault(_reactRating);
+
 var _utility = __webpack_require__(32);
 
 var someHelper = _interopRequireWildcard(_utility);
@@ -6111,7 +6118,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // import SignaturePad from './signature_pad';
 
 
-__webpack_require__(105).polyfill();
+// This may not be the right way to do this
+// var Rating = require('react-rating');
+
+
+__webpack_require__(106).polyfill();
 __webpack_require__(26);
 
 var _ref = {},
@@ -6737,7 +6748,7 @@ var SkipButton = function (_Component5) {
       var seekTo = _this13.props.seekTo;
       // This is my attempt to seek to the end....
       // It is not clear how the audio really works; I am not sure that "seek" functions.
-      seekTo(97 / 100);
+      seekTo(99 / 100);
       // figure out how to pause, and how to seek correctly....
     };
 
@@ -7345,6 +7356,14 @@ var FeedbackModal = function (_Component13) {
       e.stopPropagation();
     };
 
+    _this21.onSubmit = function (e) {
+      console.log("onSubmit clicked!");
+    };
+
+    _this21.onInvite = function (e) {
+      console.log("onInvite clicked!");
+    };
+
     _this21.state = {
       journeySpaceName: '',
       error: false
@@ -7355,12 +7374,13 @@ var FeedbackModal = function (_Component13) {
   _createClass(FeedbackModal, [{
     key: 'render',
     value: function render() {
-      console.log('ONE_SQUARE_WIDTH', someHelper.ONE_SQUARE_WIDTH);
+      console.log('FEEDBACK_MODAL', someHelper.ONE_SQUARE_WIDTH);
       return _react2.default.createElement(
         'div',
         { style: { position: 'absolute',
             minHeight: someHelper.ONE_SQUARE_WIDTH + 'px',
             maxWidth: someHelper.ONE_SQUARE_WIDTH + 'px',
+            width: someHelper.ONE_SQUARE_WIDTH + 'px',
             backgroundColor: 'rgba(89, 153, 222, 0.9)',
             disaply: 'flex',
             flexFlow: 'column',
@@ -7374,12 +7394,36 @@ var FeedbackModal = function (_Component13) {
             { href: '#', onClick: this.props.onClose, style: { position: 'absolute', right: '20px', top: '20px', zIndex: 100 } },
             _react2.default.createElement('i', { className: 'fa fa-times', style: { fontSize: '22px', color: 'white' } })
           ),
-          _react2.default.createElement('div', null),
-          _react2.default.createElement('div', null),
           _react2.default.createElement(
-            'h3',
+            'p',
             null,
-            'Give Feedback'
+            ' Please rate your experience for: '
+          ),
+          _react2.default.createElement(_reactRating2.default, null),
+          _react2.default.createElement(
+            'p',
+            null,
+            ' How do you Feel?'
+          ),
+          _react2.default.createElement(_reactRating2.default, null),
+          _react2.default.createElement(
+            'div',
+            { 'class': 'form-group' },
+            _react2.default.createElement('textarea', { 'class': 'form-control rounded-0', id: 'exampleFormControlTextarea2', rows: '3' })
+          ),
+          _react2.default.createElement(
+            'button',
+            { className: 'btn btn-primary', onClick: this.onSubmit,
+              style: { margin: '0 auto', marginTop: '0.5em', borderRadius: '15px' }
+            },
+            'Submit Feedback'
+          ),
+          _react2.default.createElement(
+            'button',
+            { className: 'btn btn-primary', onClick: this.onInvite,
+              style: { margin: '0 auto', marginTop: '0.5em', borderRadius: '15px' }
+            },
+            'Invite Friends to a New Journey'
           )
         )
       );
@@ -7489,9 +7533,10 @@ var NoVideoSquare = function (_React$Component2) {
       var vid = this.props.vidid;
       var feedbackNotOrientation = this.props.playerState == 'ended' || this.props.playerState == 'completed';
       var msg = feedbackNotOrientation ? "Leave and Give Feedback" : "Orientation";
-      var fnc = feedbackNotOrientation ? this.props.onFeedback : this.props.onOriendation;
-      console.log("MESSAGE", msg);
-      console.log("STATE", this.props.playerState);
+      var topmsg = feedbackNotOrientation ? "When all sharing is done..." : "nothing";
+      var topmsgvis = feedbackNotOrientation ? "visible" : "hidden";
+      var fnc = feedbackNotOrientation ? this.props.onFeedback : this.props.onOrientation;
+      console.log("Function", fnc);
       return _react2.default.createElement(
         'div',
         { key: localkey, id: vid, className: 'video-placeholder' },
@@ -7504,8 +7549,8 @@ var NoVideoSquare = function (_React$Component2) {
             _react2.default.createElement('i', { className: 'fa fa-smile-o fa-2x', style: { visibility: 'hidden' } }),
             _react2.default.createElement(
               'p',
-              { style: { visibility: 'hidden', color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem' } },
-              'Waiting...'
+              { style: { visibility: '' + topmsgvis, color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem' } },
+              topmsg
             ),
             _react2.default.createElement(
               'div',
@@ -7636,25 +7681,26 @@ var JourneySpace = function (_Component14) {
     _this24.onInvite = function (e) {
       e.preventDefault();
       _this24.setState({
-        showShareModal: true
+        showInviteModal: true
       });
     };
 
     _this24.onCloseShareModal = function (e) {
       e.preventDefault();
       _this24.setState({
-        showShareModal: false
+        showInviteModal: false
       });
     };
 
     _this24.onCompleteShare = function (url, name) {
       _this24.setState({
-        showShareModal: false
+        showInviteModal: false
       });
       window.location = url + ('?journey=' + _state2.default.journey.name + '&name=' + name);
     };
 
     _this24.onOrientation = function (e) {
+      console.log("onOrientation called");
       e.preventDefault();
       _this24.setState({
         showOrientationModal: true
@@ -7677,6 +7723,7 @@ var JourneySpace = function (_Component14) {
     };
 
     _this24.onFeedback = function (e) {
+      console.log("onFeedback called!");
       e.preventDefault();
       _this24.setState({
         showFeedbackModal: true
@@ -7749,8 +7796,9 @@ var JourneySpace = function (_Component14) {
       playerProgressMS: 0,
       journeyDuration: 0,
       currentlyActivePublisher: null,
-      showShareModal: false,
+      showInviteModal: false,
       showOrientationModal: false,
+      showFeedbackModal: false,
       showIntro: true
     };
     _this24.publisher = {};
@@ -8002,9 +8050,10 @@ var JourneySpace = function (_Component14) {
                 'div',
                 { id: 'secondsquare', className: 'flexiblecol' },
                 this.state.showOrientationModal && _react2.default.createElement(OrientationModal, { force: true, onComplete: this.onCompleteOrientation, onClose: this.onCloseOrientationModal }),
+                this.state.showFeedbackModal && _react2.default.createElement(FeedbackModal, { journey: this.state.session, onComplete: this.onCompleteFeedback, onClose: this.onCloseFeedbackModal }),
                 _react2.default.createElement(
                   'div',
-                  { style: { display: 'flex', flexDirection: 'row', visibility: '' + (this.state.showOrientationModal ? "hidden" : "visible") } },
+                  { style: { display: 'flex', flexDirection: 'row', visibility: '' + (this.state.showOrientationModal || this.state.showFeedbackModal ? "hidden" : "visible") } },
                   _react2.default.createElement(
                     'span',
                     { key: 'stream', id: 'video-square1', className: 'journeyspace-stream journeyspace-me' },
@@ -8036,7 +8085,7 @@ var JourneySpace = function (_Component14) {
                 _react2.default.createElement(
                   'div',
                   { id: 'central_control_panel_id',
-                    style: { visibility: '' + (!(this.state.showShareModal || this.state.showOrientationModal) ? "visible" : "hidden") }
+                    style: { visibility: '' + (!(this.state.showInviteModal || this.state.showOrientationModal || this.state.showFeedbackModal) ? "visible" : "hidden") }
                   },
                   _react2.default.createElement(VideoButton, {
                     publisher: this.publisher }),
@@ -8067,6 +8116,7 @@ var JourneySpace = function (_Component14) {
                   _react2.default.createElement(NoVideoSquare, { vidid: 'video-square4',
                     localkey: local_key_counter_to_avoid_warning++,
                     onOrientation: this.onOrientation,
+                    onFeedback: this.onFeedback,
                     playerState: this.state.playerState
                   })
                 )
@@ -8079,7 +8129,7 @@ var JourneySpace = function (_Component14) {
             _react2.default.createElement('div', { style: { flex: 1 } }),
             _react2.default.createElement('div', { style: { marginLeft: 'auto', marginRight: '10px', alignSelf: 'center' } })
           ),
-          this.state.showShareModal && _react2.default.createElement(InviteModal, { journey: this.state.session, onComplete: this.onCompleteShare, onClose: this.onCloseShareModal })
+          this.state.showInviteModal && _react2.default.createElement(InviteModal, { journey: this.state.session, onComplete: this.onCompleteShare, onClose: this.onCloseShareModal })
         )
       );
     }
@@ -8310,10 +8360,16 @@ if (__CLIENT__) {
 /* 105 */
 /***/ (function(module, exports) {
 
-module.exports = require("es6-promise");
+module.exports = require("react-rating");
 
 /***/ }),
 /* 106 */
+/***/ (function(module, exports) {
+
+module.exports = require("es6-promise");
+
+/***/ }),
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8410,25 +8466,25 @@ var CountdownMessage = function (_Component) {
 exports.default = CountdownMessage;
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, exports) {
 
 module.exports = require("agenda");
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, exports) {
 
 module.exports = require("agendash");
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, exports) {
 
 module.exports = require("express-session");
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, exports) {
 
 module.exports = require("connect-mongo");

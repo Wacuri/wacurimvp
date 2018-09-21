@@ -23,6 +23,10 @@ import JourneyStartsIn from './journey_starts_in';
 import Header from './header';
 import Intro from './intro';
 
+// This may not be the right way to do this
+// var Rating = require('react-rating');
+import Rating from 'react-rating';
+
 import * as someHelper from '../utility/utility'
 
 require('es6-promise').polyfill();
@@ -955,7 +959,13 @@ class FeedbackModal extends Component {
       error: this.state.error && e.target.value != ''
     });
 	e.stopPropagation();	
-  }
+    }
+    onSubmit = (e) => {
+	console.log("onSubmit clicked!");
+    }
+    onInvite = (e) => {
+	console.log("onInvite clicked!");	
+    }
     
     render() {
 	console.log('FEEDBACK_MODAL',someHelper.ONE_SQUARE_WIDTH);
@@ -974,10 +984,27 @@ class FeedbackModal extends Component {
             <div className='feedback-message'>
             <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
           <i className='fa fa-times' style={{fontSize: '22px', color: 'white'}}/>
-        </a>
-	    <div/>
-	    <div/>	    
-	    <h3>Give Feedback</h3>
+            </a>
+
+	    <p> Please rate your experience for: </p>
+
+	    <Rating start='0' stop='10' className='feedback-rating'
+	emptySymbol="fa fa-circle fa-2x feedback-empty"
+	fullSymbol="fa fa-circle fa-2x feedback-full" />	    
+	    <p> How do you Feel?</p>
+             <Rating start='0' stop='10' className='feedback-rating'
+	emptySymbol="fa fa-circle fa-2x feedback-empty"
+	fullSymbol="fa fa-circle fa-2x feedback-full"  />
+	    
+	<div class="form-group">
+    <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3"></textarea>
+</div>
+                  <button className='btn btn-primary' onClick={this.onSubmit}
+	  style={{margin: '0 auto',  marginTop: '0.5em', borderRadius: '15px' }}
+ 	              >Submit Feedback</button>
+                  <button className='btn btn-primary' onClick={this.onInvite}
+	  style={{margin: '0 auto',  marginTop: '0.5em', borderRadius: '15px' }}
+ 	              >Invite Friends to a New Journey</button>
 	    </div>
 	    </div>	    
     );
@@ -1065,7 +1092,8 @@ class NoVideoSquare extends React.Component {
 		  <p style={{visibility: `${topmsgvis}`, color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem'}}>{topmsg}</p>
 
               <div style={{color: 'white'}}>
-	      {/* I have no idea how to incease the roundness of these corners */}
+		  {/* I have no idea how to incease the roundness of these corners */}
+	      {/* We need to create a colore class to unify with invite-friends-button */}
                   <button className='btn btn-primary' onClick={fnc}
 	  style={{margin: '0 auto',  marginTop: '0.5em', borderRadius: '15px' }}
  	              >{msg}</button>
@@ -1089,7 +1117,7 @@ class JourneySpace extends Component {
       playerProgressMS: 0,
       journeyDuration: 0,
       currentlyActivePublisher: null,
-	showShareModal: false,
+	showInviteModal: false,
 	showOrientationModal: false,
 	showFeedbackModal: false,
       showIntro: true,
@@ -1404,20 +1432,20 @@ class JourneySpace extends Component {
   onInvite = (e) => {
     e.preventDefault();
     this.setState({
-      showShareModal: true
+      showInviteModal: true
     });
   }
 
   onCloseShareModal = (e) => {
     e.preventDefault();
     this.setState({
-      showShareModal: false
+      showInviteModal: false
     });
   }
 
   onCompleteShare = (url, name) => {
     this.setState({
-      showShareModal: false
+      showInviteModal: false
     });
     window.location = url + `?journey=${state.journey.name}&name=${name}`;
   }
@@ -1625,10 +1653,10 @@ class JourneySpace extends Component {
 
 		 {/*
 
-		 {!(this.state.showShareModal || this.state.showOrientationModal ) &&
+		 {!(this.state.showInviteModal || this.state.showOrientationModal ) &&
 		  */}
 		 <div id='central_control_panel_id'
-		 style={{visibility: `${(!(this.state.showShareModal || this.state.showOrientationModal || this.state.showFeedbackModal)) ? "visible" : "hidden"}`}}
+		 style={{visibility: `${(!(this.state.showInviteModal || this.state.showOrientationModal || this.state.showFeedbackModal)) ? "visible" : "hidden"}`}}
 		 >
 
 
@@ -1684,7 +1712,7 @@ class JourneySpace extends Component {
             <div style={{marginLeft: 'auto', marginRight: '10px', alignSelf: 'center'}}>
             </div>
           </div>
-          {this.state.showShareModal &&
+          {this.state.showInviteModal &&
             <InviteModal journey={this.state.session} onComplete={this.onCompleteShare} onClose={this.onCloseShareModal}/>
           }
 			</div>		 
