@@ -480,7 +480,7 @@ class SkipButton extends Component {
 	const seekTo = this.props.seekTo;
 	// This is my attempt to seek to the end....
 	// It is not clear how the audio really works; I am not sure that "seek" functions.
-	seekTo(97/100);
+	seekTo(99/100);
 	// figure out how to pause, and how to seek correctly....
   }
 
@@ -958,11 +958,12 @@ class FeedbackModal extends Component {
   }
     
     render() {
-	console.log('ONE_SQUARE_WIDTH',someHelper.ONE_SQUARE_WIDTH);
+	console.log('FEEDBACK_MODAL',someHelper.ONE_SQUARE_WIDTH);
     return (
 	    <div style={{position: 'absolute',
 			 minHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
 			 maxWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,
+			 width: `${someHelper.ONE_SQUARE_WIDTH}px`,			 
 			 backgroundColor: 'rgba(89, 153, 222, 0.9)',
 			 disaply: 'flex',
 			 flexFlow: 'column',
@@ -1050,17 +1051,18 @@ class NoVideoSquare extends React.Component {
       const vid = this.props.vidid;
       const feedbackNotOrientation =
 	    this.props.playerState == 'ended' || this.props.playerState == 'completed';
-      const msg = (feedbackNotOrientation) ? "Leave and Give Feedback" : "Orientation";
-      const fnc = (feedbackNotOrientation) ? this.props.onFeedback : this.props.onOriendation;
-      console.log("MESSAGE",msg);
-      console.log("STATE",this.props.playerState);      
+      const msg = (feedbackNotOrientation) ? "Leave and Give Feedback" : "Orientation"; 
+      const topmsg = (feedbackNotOrientation) ? "When all sharing is done..." : "nothing";
+      const topmsgvis = (feedbackNotOrientation) ? "visible" : "hidden";       
+      const fnc = (feedbackNotOrientation) ? this.props.onFeedback : this.props.onOrientation;
+      console.log("Function",fnc);      
 	  return (
 	      <div key={localkey} id={vid} className='video-placeholder'>
 	        <div className='invite-indicator'>
 	          <div>
 	      <i className='fa fa-smile-o fa-2x' style={{ visibility: 'hidden'}}></i>
 	      
-              <p style={{visibility: 'hidden', color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem'}}>Waiting...</p>
+		  <p style={{visibility: `${topmsgvis}`, color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem'}}>{topmsg}</p>
 
               <div style={{color: 'white'}}>
 	      {/* I have no idea how to incease the roundness of these corners */}
@@ -1089,6 +1091,7 @@ class JourneySpace extends Component {
       currentlyActivePublisher: null,
 	showShareModal: false,
 	showOrientationModal: false,
+	showFeedbackModal: false,
       showIntro: true,
     }
     this.publisher = {};
@@ -1420,6 +1423,7 @@ class JourneySpace extends Component {
   }
 
     onOrientation = (e) => {
+	console.log("onOrientation called");
     e.preventDefault();
     this.setState({
       showOrientationModal: true
@@ -1442,7 +1446,8 @@ class JourneySpace extends Component {
   }
 
 
-  onFeedback = (e) => {
+    onFeedback = (e) => {
+	console.log("onFeedback called!");
     e.preventDefault();
     this.setState({
       showFeedbackModal: true
@@ -1584,9 +1589,14 @@ class JourneySpace extends Component {
 		 {this.state.showOrientationModal &&
 		  <OrientationModal force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal}/>
 		 }
+
+		 {this.state.showFeedbackModal &&
+		  <FeedbackModal journey={this.state.session} onComplete={this.onCompleteFeedback} onClose={this.onCloseFeedbackModal}/>
+		 }
+		 
 		 
 
-		 <div style={{display: 'flex', flexDirection: 'row', visibility: `${(this.state.showOrientationModal) ? "hidden" : "visible"}`}}>
+		 <div style={{display: 'flex', flexDirection: 'row', visibility: `${(this.state.showOrientationModal || this.state.showFeedbackModal ) ? "hidden" : "visible"}`}}>
 		 <span key="stream" id='video-square1' className='journeyspace-stream journeyspace-me'>
                         <OTPublisher 
                           session={this.sessionHelper.session}
@@ -1618,7 +1628,7 @@ class JourneySpace extends Component {
 		 {!(this.state.showShareModal || this.state.showOrientationModal ) &&
 		  */}
 		 <div id='central_control_panel_id'
-		 style={{visibility: `${(!(this.state.showShareModal || this.state.showOrientationModal)) ? "visible" : "hidden"}`}}
+		 style={{visibility: `${(!(this.state.showShareModal || this.state.showOrientationModal || this.state.showFeedbackModal)) ? "visible" : "hidden"}`}}
 		 >
 
 
@@ -1655,6 +1665,7 @@ class JourneySpace extends Component {
 		 <NoVideoSquare vidid='video-square4'
 		 localkey={local_key_counter_to_avoid_warning++}
 		 onOrientation={this.onOrientation}
+		 onFeedback={this.onFeedback}		 
 		 playerState={this.state.playerState}
 		 ></NoVideoSquare>
 		 </div>

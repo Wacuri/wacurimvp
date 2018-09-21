@@ -707,6 +707,19 @@ h2 {
     }
 }
 
+.feedback-message {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    height: 100%;
+    div {
+	color: white;
+    }
+    h3 {
+	font-size: 1.5rem;
+    }
+}
+
 #phase-bar0 {
     display: grid;
     grid-gap: 10px;
