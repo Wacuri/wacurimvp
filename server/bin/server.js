@@ -7399,13 +7399,17 @@ var FeedbackModal = function (_Component13) {
             null,
             ' Please rate your experience for: '
           ),
-          _react2.default.createElement(_reactRating2.default, null),
+          _react2.default.createElement(_reactRating2.default, { start: '0', stop: '10', className: 'feedback-rating',
+            emptySymbol: 'fa fa-circle fa-2x feedback-empty',
+            fullSymbol: 'fa fa-circle fa-2x feedback-full' }),
           _react2.default.createElement(
             'p',
             null,
             ' How do you Feel?'
           ),
-          _react2.default.createElement(_reactRating2.default, null),
+          _react2.default.createElement(_reactRating2.default, { start: '0', stop: '10', className: 'feedback-rating',
+            emptySymbol: 'fa fa-circle fa-2x feedback-empty',
+            fullSymbol: 'fa fa-circle fa-2x feedback-full' }),
           _react2.default.createElement(
             'div',
             { 'class': 'form-group' },

@@ -9149,13 +9149,23 @@ h2 {
   .feedback-message h3 {
     font-size: 1.5rem; }
   .feedback-message .btn {
-    font-size: 1rem;
+    font-size: 1.0rem;
     background-color: #4bb058; }
 
 #phase-bar0 {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: auto auto auto auto; }
+
+.feedback-rating .feedback-empty {
+  color: white;
+  margin-left: 5px;
+  margin-right: 5px; }
+
+.feedback-rating .feedback-full {
+  color: black;
+  margin-left: 5px;
+  margin-right: 5px; }
 
 @media all and (min-width: 960px) {
   body {
