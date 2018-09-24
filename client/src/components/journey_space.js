@@ -13,6 +13,10 @@ import { view } from 'react-easy-state';
 import { Link } from 'react-router-dom';
 import Cookie from 'js-cookie';
 import SwipeableViews from 'react-swipeable-views';
+import { virtualize } from 'react-swipeable-views-utils';
+import { mod } from 'react-swipeable-views-core';
+const VirtualizeSwipeableViews = virtualize(SwipeableViews);
+
 // import SignaturePad from './signature_pad';
 import state from '../state';
 import PropTypes from 'prop-types';
@@ -302,7 +306,7 @@ class JourneyPhases extends Component {
       case 'created':
         return 0;
       case 'failed':
-	return 0;
+	return 3;
       case 'started':
       case 'paused':
         return 1;
@@ -324,7 +328,7 @@ class JourneyPhases extends Component {
   render() {
       const {journey} = this.props;
       const NumPhases = 4;
-      const Messages = ["Breathe and center yourself","Journey in Progess","Share your Insights","Provide Feedback"];
+      const Messages = ["Breathe and center yourself","Journey in Progess","ShareWhar your Insights","Provide Feedback"];
     return (
 	    <div ref={el => {this.container = el}} id={'journey-timeline0'} className={`journey-timeline step-${this.stepIndex.toString()}`}>
 	    <div>
@@ -880,7 +884,8 @@ class OrientationModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      journeySpaceName: '',
+	journeySpaceName: '',
+	index: 0,
       error: false
     }
   }
@@ -892,10 +897,92 @@ class OrientationModal extends Component {
       error: this.state.error && e.target.value != ''
     });
 	e.stopPropagation();	
+    }
+
+    left = () => {
+	this.handleChangeIndex((this.state.index-1) % 3);
+    }
+    right = () => {
+	this.handleChangeIndex((this.state.index+1) % 3);	
+    }
+
+    handleChangeIndex = index => {
+	this.setState(
+	    {index: index}
+	);
+    };
+
+  render() {
+      console.log("INDEX:",this.state.index);
+      const styles = {
+	  slide: {
+	      padding: 15,
+    minHeight: 100,
+    color: '#fff',
+  },
+  slide1: {
+    background: '#FEA900',
+  },
+  slide2: {
+    background: '#B3DC4A',
+  },
+  slide3: {
+    background: '#6AC0FF',
+  },
+      };
+
+      function slideRenderer(params) {
+	  console.log("params", params);
+  const { index, key } = params;
+
+  switch (mod(index, 3)) {
+    case 0:
+      return (
+	    <div style={Object.assign({}, styles.slide, styles.slide1)}>
+<h3>1.  Welcome to CuriousLive ...<br/>
+A five-minute guided journey - plus sharing - with others.</h3>
+<div>
+The journey will begin when the timer above elapses and you hear the cime.
+</div>
+<div>
+Breathe slowly and deeply and ajust your posture to be comfortable.
+	    </div>
+	      </div>
+      );
+
+    case 1:
+      return (
+    <div style={Object.assign({}, styles.slide, styles.slide2)}>	    
+<h3>2.  Next comes the Journey...</h3>
+<div>
+Your microphone will be muted.
+</div>
+<div>
+Some people like to leave their cameras on during the journey to increase the feeling of a shared experience. It is up to you.
+	    </div>
+	    </div>
+	      
+      );
+
+    case 2:
+      return (
+	    <div style={Object.assign({}, styles.slide, styles.slide3)}>
+<h3>3.  After the Journey comes the Sharing and Connecting.</h3>
+<div>
+	    After the journey you will have the opportunity to share your insights.
+	    Each person takes 1 or 2 minutes.
+</div>
+	    <div>
+	    When others are sharing, please listen deeply, and in turn they will listen more deeply to you.
+	    </div>
+	    </div>
+      );
+
+    default:
+      return null;
   }
-    
-    render() {
-	console.log('ONE_SQUARE_WIDTH',someHelper.ONE_SQUARE_WIDTH);
+}
+	
     return (
 	    <div style={{position: 'absolute',
 			 minHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
@@ -912,30 +999,20 @@ class OrientationModal extends Component {
           <i className='fa fa-times' style={{fontSize: '22px', color: 'white'}}/>
         </a>
 	    <div/>
-	    <div/>	    
-<h3>1.  Welcome to CuriousLive ...<br/>
-A five-minute guided journey - plus sharing - with others.</h3>
-<div>
-The journey will begin when the timer above elapses and you hear the cime.
-</div>
-<div>
-Breathe slowly and deeply and ajust your posture to be comfortable.
-</div>
-<h3>2.  Next comse the Journey...</h3>
-<div>
-Your microphone will be muted.
-</div>
-<div>
-Some people like to leave their cameras on during the journey to increase the feeling of a shared experience. It is up to you.
-</div>
-<h3>2.  After the Journey comes the Sharing and Connecting.</h3>
-<div>
-	    After the journey you will have the opportunity to share your insights.
-	    Each person takes 1 or 2 minutes.
-</div>
+	    <div/>
+	    <VirtualizeSwipeableViews
+          index={this.state.index}
+          onChangeIndex={this.handleChangeIndex}
+          slideRenderer={slideRenderer}
+        />	    
 	    <div>
-	    When others are sharing, please listen deeply, and in turn they will listen more deeply to you.
-</div>
+	    <button  onClick={this.left}>
+	    	    <i className="fa fa-chevron-left fa-fw"></i>
+	</button>
+	    <button onClick={this.right}>
+	    	    <i className="fa fa-chevron-right fa-fw" ></i>
+	</button>
+	    </div>
 	    </div>
 	</div>	    
     )
@@ -988,16 +1065,16 @@ class FeedbackModal extends Component {
 
 	    <p> Please rate your experience for: </p>
 
-	    <Rating start='0' stop='10' className='feedback-rating'
+	    <Rating start={0} stop={10} className='feedback-rating'
 	emptySymbol="fa fa-circle fa-2x feedback-empty"
 	fullSymbol="fa fa-circle fa-2x feedback-full" />	    
 	    <p> How do you Feel?</p>
-             <Rating start='0' stop='10' className='feedback-rating'
+	    <Rating start={0} stop={10} className='feedback-rating'
 	emptySymbol="fa fa-circle fa-2x feedback-empty"
 	fullSymbol="fa fa-circle fa-2x feedback-full"  />
 	    
-	<div class="form-group">
-    <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3"></textarea>
+	<div className="form-group">
+    <textarea className="form-control rounded-0" id="exampleFormControlTextarea2" rows="3"></textarea>
 </div>
                   <button className='btn btn-primary' onClick={this.onSubmit}
 	  style={{margin: '0 auto',  marginTop: '0.5em', borderRadius: '15px' }}
