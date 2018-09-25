@@ -8695,7 +8695,13 @@ h2 {
 
 .flex-squares {
   display: flex;
-  flex-flow: row wrap; }
+  flex-direction: row;
+  flex-wrap: nowrap; }
+
+#bigsquares {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap !important; }
 
 .flexiblerow {
   display: flex;
@@ -9159,21 +9165,64 @@ textarea {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-@media all and (min-width: 960px) {
+@media all and (orientation: portrait) and (min-width: 960px) {
   body, p, button, .invite-button {
-    font-size: 18px; }
+    font-size: 32px; }
   .fa-smile-o {
-    font-size: 3rem; }
+    font-size: 4rem; }
   .invite-button {
-    font-size: 1.5rem; }
+    font-size: 2rem; }
   #central_control_panel_id {
-    font-size: 2.0rem; }
+    font-size: 3rem; }
   .play-button {
-    font-size: 2.5rem; }
+    font-size: 3rem; }
   .rating-circle {
-    font-size: 2.0rem; } }
+    font-size: 3.0rem; } }
 
-@media all and (max-width: 959px) and (min-width: 600px) {
+@media all and (orientation: landscape) and (min-height: 960px) {
+  background-color: green;
+  body, p, button, .invite-button {
+    font-size: 32px; }
+  .fa-smile-o {
+    font-size: 4rem; }
+  .invite-button {
+    font-size: 2rem; }
+  #central_control_panel_id {
+    font-size: 2rem; }
+  .play-button {
+    font-size: 3rem; }
+  .rating-circle {
+    font-size: 3.0rem; } }
+
+@media all and (orientation: portrait) and (max-width: 959px) and (min-width: 760px) {
+  body, p, button, .invite-button {
+    font-size: 20px; }
+  .fa-smile-o {
+    font-size: 3.0rem; }
+  .invite-button {
+    font-size: 1.8rem; }
+  #central_control_panel_id {
+    font-size: 1.8rem; }
+  .play-button {
+    font-size: 2.4rem; }
+  .rating-circle {
+    font-size: 2rem; } }
+
+@media all and (orientation: landscape) and (max-height: 959px) and (min-height: 760px) {
+  body, p, button, .invite-button {
+    font-size: 14px; }
+  .fa-smile-o {
+    font-size: 3.0rem; }
+  .invite-button {
+    font-size: 1.8rem; }
+  #central_control_panel_id {
+    font-size: 1.8rem; }
+  .play-button {
+    font-size: 2.4rem; }
+  .rating-circle {
+    font-size: 2rem; } }
+
+@media all and (orientation: portrait) and (max-width: 759px) and (min-width: 600px) {
   body, p, button, .invite-button {
     font-size: 14px; }
   .fa-smile-o {
@@ -9187,11 +9236,39 @@ textarea {
   .rating-circle {
     font-size: 1.5rem; } }
 
-@media all and (max-width: 599px) and (min-width: 320px) {
+@media all and (orientation: landscape) and (max-height: 759px) and (min-height: 600px) {
+  body, p, button, .invite-button {
+    font-size: 14px; }
+  .fa-smile-o {
+    font-size: 2.0rem; }
+  .invite-button {
+    font-size: 1.2rem; }
+  #central_control_panel_id {
+    font-size: 1.2rem; }
+  .play-button {
+    font-size: 1.5rem; }
+  .rating-circle {
+    font-size: 1.5rem; } }
+
+@media all and (orientation: portrait) and (max-width: 599px) and (min-width: 320px) {
   body, p, button, .invite-button {
     font-size: 12px; }
   .fa-smile-o {
     font-size: 1.0rem; }
+  .invite-button {
+    font-size: 1.5rem; }
+  #central_control_panel_id {
+    font-size: 0.8rem; }
+  .play-button {
+    font-size: 1.2rem; }
+  .rating-circle {
+    font-size: 0.7rem; } }
+
+@media all and (orientation: landscape) and (max-height: 599px) and (min-height: 320px) {
+  body, p, button, .invite-button {
+    font-size: 12px; }
+  .fa-smile-o {
+    font-size: 1.5rem; }
   .invite-button {
     font-size: 1.0rem; }
   #central_control_panel_id {
@@ -9201,13 +9278,27 @@ textarea {
   .rating-circle {
     font-size: 0.7rem; } }
 
-@media all and (max-width: 319px) {
+@media all and (orientation: portrait) and (max-width: 319px) {
   body, p, button, .invite-button {
-    font-size: 10px; }
+    font-size: 8px; }
   .fa-smile-o {
     font-size: 1.0rem; }
   .invite-button {
+    font-size: 0.6rem; }
+  #central_control_panel_id {
+    font-size: 0.8rem; }
+  .play-button {
     font-size: 1.0rem; }
+  .rating-circle {
+    font-size: 0.5rem; } }
+
+@media all and (orientation: landscape) and (max-height: 319px) {
+  body, p, button, .invite-button {
+    font-size: 8px; }
+  .fa-smile-o {
+    font-size: 1.0rem; }
+  .invite-button {
+    font-size: .6rem; }
   #central_control_panel_id {
     font-size: 0.8rem; }
   .play-button {

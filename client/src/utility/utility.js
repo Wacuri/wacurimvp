@@ -21,11 +21,10 @@ export function setSizes() {
     }
     
 
-    var debug = 0;
+    var debug = 1;
     
 	var w = window.innerWidth;
     var h = window.innerHeight;
-    if (debug) console.log(w,h);
 	// TODO: this should actually be pulled from the header height
     var headerHeight = tb_and_h.offsetHeight;
     var h = h - headerHeight;
@@ -36,7 +35,11 @@ export function setSizes() {
     var LANDSCAPE_NOT_PORTRAIT = w > h;
     ONE_SQUARE_WIDTH = osw;
 
-    if (debug) console.log(osw);
+    if (debug) {
+	console.log("w, h", w, h);
+	console.log(osw);
+        console.log("landscape_not_portrati",LANDSCAPE_NOT_PORTRAIT);
+    }
     
     var osw_h = osw/2;
 
