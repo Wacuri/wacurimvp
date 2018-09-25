@@ -648,6 +648,7 @@ h2 {
 }
 
 
+
 .swipable-message {
     margin: 15%;
     height: 100%;
@@ -692,6 +693,8 @@ h2 {
     color: white;
     background-color: black;
     margin-top: 0.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
     font-size: 2rem;
     border-radius: 15px!important;
     border-width: 2px;
@@ -700,14 +703,25 @@ h2 {
 
 .invite-friends-button {
     background-color: black;
-    color: white;
 }
 
 .invite-orientation-button {
     background-color: rgb(75,176,88);
+    border-color: rgb(75,176,88);    
 }
 
+.feedback-button {
+    background-color: rgb(75,176,88);
+    border-color: rgb(75,176,88);    
+}
 
+textarea {
+    display: block;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
 // This works nicely for the body but sadly I must be changing font-sizes elsewhere
 @media all and (min-width: 960px) {
     body,p,button,.invite-button {
@@ -724,6 +738,9 @@ h2 {
     }
     .play-button {
     	font-size: 2.5rem;
+    }
+    .rating-circle {
+	font-size: 2.0rem;
     }
 }
  
@@ -743,8 +760,9 @@ h2 {
     .play-button {
     	font-size: 1.5rem;
     }
-    
-    
+    .rating-circle {
+	font-size: 1.5rem;
+    }
 }
  
 @media all and (max-width: 599px) and (min-width: 320px) {
@@ -763,7 +781,9 @@ h2 {
     .play-button {
     	font-size: 1.2rem;
     }
-    
+    .rating-circle {
+	font-size: 0.7rem;
+    }
 }
 
 @media all and (max-width: 319px)  {
@@ -782,5 +802,7 @@ h2 {
     .play-button {
     	font-size: 1.0rem;
     }
-    
+    .rating-circle {
+	font-size: 0.5rem;
+    }
 }

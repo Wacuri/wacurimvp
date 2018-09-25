@@ -9134,17 +9134,30 @@ h2 {
   color: white;
   background-color: black;
   margin-top: 0.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   font-size: 2rem;
   border-radius: 15px !important;
   border-width: 2px;
   border-color: white; }
 
 .invite-friends-button {
-  background-color: black;
-  color: white; }
+  background-color: black; }
 
 .invite-orientation-button {
-  background-color: #4bb058; }
+  background-color: #4bb058;
+  border-color: #4bb058; }
+
+.feedback-button {
+  background-color: #4bb058;
+  border-color: #4bb058; }
+
+textarea {
+  display: block;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
 
 @media all and (min-width: 960px) {
   body, p, button, .invite-button {
@@ -9156,7 +9169,9 @@ h2 {
   #central_control_panel_id {
     font-size: 2.0rem; }
   .play-button {
-    font-size: 2.5rem; } }
+    font-size: 2.5rem; }
+  .rating-circle {
+    font-size: 2.0rem; } }
 
 @media all and (max-width: 959px) and (min-width: 600px) {
   body, p, button, .invite-button {
@@ -9168,6 +9183,8 @@ h2 {
   #central_control_panel_id {
     font-size: 1.2rem; }
   .play-button {
+    font-size: 1.5rem; }
+  .rating-circle {
     font-size: 1.5rem; } }
 
 @media all and (max-width: 599px) and (min-width: 320px) {
@@ -9180,7 +9197,9 @@ h2 {
   #central_control_panel_id {
     font-size: 0.8rem; }
   .play-button {
-    font-size: 1.2rem; } }
+    font-size: 1.2rem; }
+  .rating-circle {
+    font-size: 0.7rem; } }
 
 @media all and (max-width: 319px) {
   body, p, button, .invite-button {
@@ -9192,6 +9211,8 @@ h2 {
   #central_control_panel_id {
     font-size: 0.8rem; }
   .play-button {
-    font-size: 1.0rem; } }
+    font-size: 1.0rem; }
+  .rating-circle {
+    font-size: 0.5rem; } }
 
 /*# sourceMappingURL=main.css.map*/

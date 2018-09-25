@@ -7280,7 +7280,6 @@ var OrientationModal = function (_Component12) {
   _createClass(OrientationModal, [{
     key: 'render',
     value: function render() {
-      console.log("INDEX:", this.state.index);
       function slideRenderer(params) {
         console.log("params", params);
         var index = params.index,
@@ -7375,17 +7374,17 @@ var OrientationModal = function (_Component12) {
             justifyContent: 'center'
           } },
         _react2.default.createElement(
+          'a',
+          { href: '#', onClick: this.props.onClose, style: { position: 'absolute', right: '20px', top: '20px', zIndex: 100 } },
+          _react2.default.createElement('i', { className: 'fa fa-times fa-2x', style: { color: 'white' } })
+        ),
+        _react2.default.createElement(
           'div',
           { style: {
               display: 'flex',
               flexFlow: 'column nowrap',
               justifyContent: 'center'
             } },
-          _react2.default.createElement(
-            'a',
-            { href: '#', onClick: this.props.onClose, style: { position: 'absolute', right: '20px', top: '20px', zIndex: 100 } },
-            _react2.default.createElement('i', { className: 'fa fa-times fa-2x', style: { color: 'white' } })
-          ),
           _react2.default.createElement(VirtualizeSwipeableViews, {
             index: this.state.index,
             onChangeIndex: this.handleChangeIndex,
@@ -7445,61 +7444,149 @@ var FeedbackModal = function (_Component13) {
   _createClass(FeedbackModal, [{
     key: 'render',
     value: function render() {
-      console.log('FEEDBACK_MODAL', someHelper.ONE_SQUARE_WIDTH);
+      console.log("journeySpacename", this.state.journeySpaceName);
+      console.log("journeySpacename", this.props.journeySpaceName);
       return _react2.default.createElement(
         'div',
         { style: { position: 'absolute',
             minHeight: someHelper.ONE_SQUARE_WIDTH + 'px',
             maxWidth: someHelper.ONE_SQUARE_WIDTH + 'px',
+            maxHeight: someHelper.ONE_SQUARE_WIDTH + 'px',
+            minWidth: someHelper.ONE_SQUARE_WIDTH + 'px',
             width: someHelper.ONE_SQUARE_WIDTH + 'px',
             backgroundColor: 'rgba(89, 153, 222, 0.9)',
             display: 'flex',
-            flexFlow: 'column',
-            justifyContent: 'space-between'
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center'
           } },
         _react2.default.createElement(
+          'a',
+          { href: '#', onClick: this.props.onClose, style: { position: 'absolute', right: '20px', top: '20px', zIndex: 100 } },
+          _react2.default.createElement('i', { className: 'fa fa-times', style: { fontSize: '22px', color: 'white' } })
+        ),
+        _react2.default.createElement(
           'div',
-          { className: 'feedback-message' },
-          _react2.default.createElement(
-            'a',
-            { href: '#', onClick: this.props.onClose, style: { position: 'absolute', right: '20px', top: '20px', zIndex: 100 } },
-            _react2.default.createElement('i', { className: 'fa fa-times', style: { fontSize: '22px', color: 'white' } })
-          ),
+          { style: {
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '1rem'
+            } },
           _react2.default.createElement(
             'p',
             null,
             ' Please rate your experience for: '
           ),
-          _react2.default.createElement(_reactRating2.default, { start: 0, stop: 10, className: 'feedback-rating',
-            emptySymbol: 'fa fa-circle fa-2x feedback-empty',
-            fullSymbol: 'fa fa-circle fa-2x feedback-full' }),
+          _react2.default.createElement(
+            'p',
+            null,
+            ' "',
+            this.props.journeySpaceName,
+            '"'
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(_reactRating2.default, { start: 0, stop: 10, className: 'feedback-rating',
+              emptySymbol: 'fa fa-circle rating-circle feedback-empty',
+              fullSymbol: 'fa fa-circle rating-circle feedback-full' }),
+            _react2.default.createElement(
+              'div',
+              { style: {
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
+                } },
+              _react2.default.createElement(
+                'div',
+                null,
+                '1'
+              ),
+              ' ',
+              _react2.default.createElement(
+                'div',
+                null,
+                '10'
+              ),
+              ' '
+            )
+          ),
           _react2.default.createElement(
             'p',
             null,
             ' How do you Feel?'
           ),
-          _react2.default.createElement(_reactRating2.default, { start: 0, stop: 10, className: 'feedback-rating',
-            emptySymbol: 'fa fa-circle fa-2x feedback-empty',
-            fullSymbol: 'fa fa-circle fa-2x feedback-full' }),
           _react2.default.createElement(
             'div',
-            { className: 'form-group' },
-            _react2.default.createElement('textarea', { className: 'form-control rounded-0', id: 'exampleFormControlTextarea2', rows: '3' })
+            null,
+            _react2.default.createElement(_reactRating2.default, { start: 0, stop: 10, className: 'feedback-rating',
+              emptySymbol: 'fa fa-circle rating-circle feedback-empty',
+              fullSymbol: 'fa fa-circle rating-circle feedback-full' }),
+            _react2.default.createElement(
+              'div',
+              { style: {
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
+                } },
+              _react2.default.createElement(
+                'div',
+                null,
+                'Worse'
+              ),
+              _react2.default.createElement(
+                'div',
+                null,
+                'The Same'
+              ),
+              _react2.default.createElement(
+                'div',
+                null,
+                'Better'
+              )
+            )
+          ),
+          _react2.default.createElement('p', null),
+          _react2.default.createElement('p', null),
+          _react2.default.createElement(
+            'div',
+            { className: 'form-group',
+              style: {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%'
+              } },
+            _react2.default.createElement('textarea', { className: 'form-control rounded-0', id: 'exampleFormControlTextarea2', rows: '4',
+              style: { borderRadius: '15px',
+                marginLeft: '1rem',
+                marginRight: '1rem',
+                marginBottom: '0px'
+              }
+            })
           ),
           _react2.default.createElement(
             'button',
-            { className: 'btn btn-primary', onClick: this.onSubmit,
-              style: { margin: '0 auto', marginTop: '0.5em', borderRadius: '15px' }
+            { className: 'invite-button feedback-button', onClick: this.onSubmit,
+              style: { borderRadius: '15px',
+                marginLeft: '1rem',
+                marginRight: '1rem',
+                marginTop: '-2rem'
+              }
             },
             'Submit Feedback'
-          ),
-          _react2.default.createElement(
-            'button',
-            { className: 'btn btn-primary', onClick: this.onInvite,
-              style: { margin: '0 auto', marginTop: '0.5em', borderRadius: '15px' }
-            },
-            'Invite Friends to a New Journey'
           )
+        ),
+        _react2.default.createElement('p', null),
+        _react2.default.createElement('p', null),
+        _react2.default.createElement(
+          'button',
+          { className: 'invite-button feedback-button', onClick: this.onInvite
+          },
+          'Invite Friends to a New Journey'
         )
       );
     }
@@ -8119,7 +8206,11 @@ var JourneySpace = function (_Component14) {
                 'div',
                 { id: 'secondsquare', className: 'flexiblecol' },
                 this.state.showOrientationModal && _react2.default.createElement(OrientationModal, { force: true, onComplete: this.onCompleteOrientation, onClose: this.onCloseOrientationModal }),
-                this.state.showFeedbackModal && _react2.default.createElement(FeedbackModal, { journey: this.state.session, onComplete: this.onCompleteFeedback, onClose: this.onCloseFeedbackModal }),
+                this.state.showFeedbackModal && _react2.default.createElement(FeedbackModal, {
+                  journeySpaceName: _state2.default.journey.name,
+                  journey: this.state.session,
+                  onComplete: this.onCompleteFeedback,
+                  onClose: this.onCloseFeedbackModal }),
                 _react2.default.createElement(
                   'div',
                   { style: { display: 'flex', flexDirection: 'row', visibility: '' + (this.state.showOrientationModal || this.state.showFeedbackModal ? "hidden" : "visible") } },

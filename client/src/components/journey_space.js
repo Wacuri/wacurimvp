@@ -911,7 +911,6 @@ class OrientationModal extends Component {
     };
 
   render() {
-      console.log("INDEX:",this.state.index);
       function slideRenderer(params) {
 	  console.log("params", params);
   const { index, key } = params;
@@ -980,15 +979,14 @@ Some people like to leave their cameras on during the journey to increase the fe
 			 justifyContent: 'center'
 			 }
 		       }>
-
+            <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
+          <i className='fa fa-times fa-2x' style={{color: 'white'}}/>
+        </a>
 	    <div style={{
 	    		 display: 'flex',
 			 flexFlow: 'column nowrap',
 			 justifyContent: 'center'
 	    }}>
-            <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
-          <i className='fa fa-times fa-2x' style={{color: 'white'}}/>
-        </a>
 	    <VirtualizeSwipeableViews
           index={this.state.index}
           onChangeIndex={this.handleChangeIndex}
@@ -1033,44 +1031,95 @@ class FeedbackModal extends Component {
     }
     
     render() {
-	console.log('FEEDBACK_MODAL',someHelper.ONE_SQUARE_WIDTH);
+	console.log("journeySpacename",this.state.journeySpaceName);
+	console.log("journeySpacename",this.props.journeySpaceName);	
     return (
 	    <div style={{position: 'absolute',
 			 minHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
 			 maxWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,
+			 maxHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
+			 minWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,			 
 			 width: `${someHelper.ONE_SQUARE_WIDTH}px`,			 
 			 backgroundColor: 'rgba(89, 153, 222, 0.9)',
 			 display: 'flex',
-			 flexFlow: 'column',
-			 justifyContent: 'space-between'
+			 flexDirection: 'column',
+			 justifyContent: 'center',
+			 alignItems: 'center'					 
 			 }
 		       }>
 
-            <div className='feedback-message'>
             <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
           <i className='fa fa-times' style={{fontSize: '22px', color: 'white'}}/>
             </a>
 
-	    <p> Please rate your experience for: </p>
+            <div style={{
+		display: 'flex',
+		flexDirection: 'column',		
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		padding: '1rem'
+	    }}>
 
+	    <p> Please rate your experience for: </p>
+	    <p> "{this.props.journeySpaceName}"</p>
+	    <div>
 	    <Rating start={0} stop={10} className='feedback-rating'
-	emptySymbol="fa fa-circle fa-2x feedback-empty"
-	fullSymbol="fa fa-circle fa-2x feedback-full" />	    
-	    <p> How do you Feel?</p>
-	    <Rating start={0} stop={10} className='feedback-rating'
-	emptySymbol="fa fa-circle fa-2x feedback-empty"
-	fullSymbol="fa fa-circle fa-2x feedback-full"  />
-	    
-	<div className="form-group">
-    <textarea className="form-control rounded-0" id="exampleFormControlTextarea2" rows="3"></textarea>
-</div>
-                  <button className='btn btn-primary' onClick={this.onSubmit}
-	  style={{margin: '0 auto',  marginTop: '0.5em', borderRadius: '15px' }}
- 	              >Submit Feedback</button>
-                  <button className='btn btn-primary' onClick={this.onInvite}
-	  style={{margin: '0 auto',  marginTop: '0.5em', borderRadius: '15px' }}
- 	              >Invite Friends to a New Journey</button>
+	emptySymbol="fa fa-circle rating-circle feedback-empty"
+	fullSymbol="fa fa-circle rating-circle feedback-full" />
+	    <div  style={{
+		display: 'flex',
+		flexDirection: 'row',		
+		justifyContent: 'space-between',
+	    }}>
+	    <div>1</div> <div>10</div> </div>
 	    </div>
+	    <p> How do you Feel?</p>
+	    <div>
+	    <Rating start={0} stop={10} className='feedback-rating'
+	emptySymbol="fa fa-circle rating-circle feedback-empty"
+	fullSymbol="fa fa-circle rating-circle feedback-full"  />
+	    <div  style={{
+		display: 'flex',
+		flexDirection: 'row',		
+		justifyContent: 'space-between',
+	    }}>
+	    <div>Worse</div>
+	    <div>The Same</div>
+	    <div>Better</div>
+	    </div>
+	    </div>
+	    <p />
+	    <p />	    
+	    <div className="form-group"
+	    style={{
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',					 
+		justifyContent: 'space-between',
+		width: '100%'
+	    }}>
+	    <textarea className="form-control rounded-0" id="exampleFormControlTextarea2" rows="4"
+	style={{borderRadius: '15px',
+		marginLeft: '1rem',
+		marginRight: '1rem',
+		marginBottom: '0px'
+	       }}
+	    >
+	    </textarea>
+	    </div>
+            <button className='invite-button feedback-button' onClick={this.onSubmit}
+	style={{borderRadius: '15px',
+		marginLeft: '1rem',
+		marginRight: '1rem',
+		marginTop: '-2rem'		
+	       }}
+ 	    >Submit Feedback</button>
+</div>
+	    <p />
+	    <p />	    	    
+                  <button className='invite-button feedback-button' onClick={this.onInvite}
+ 	              >Invite Friends to a New Journey</button>
+
 	    </div>	    
     );
     }
@@ -1682,7 +1731,11 @@ class JourneySpace extends Component {
 		 }
 
 		 {this.state.showFeedbackModal &&
-		  <FeedbackModal journey={this.state.session} onComplete={this.onCompleteFeedback} onClose={this.onCloseFeedbackModal}/>
+		  <FeedbackModal
+		  journeySpaceName={state.journey.name}
+		  journey={this.state.session}
+		  onComplete={this.onCompleteFeedback}
+		  onClose={this.onCloseFeedbackModal}/>
 		 }
 		 
 		 
