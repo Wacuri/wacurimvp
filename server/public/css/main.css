@@ -9169,6 +9169,7 @@ textarea {
   body, p, button, .invite-button {
     font-size: 32px; }
   .fa-smile-o {
+    background-color: blue;
     font-size: 4rem; }
   .invite-button {
     font-size: 2rem; }
@@ -9184,6 +9185,7 @@ textarea {
   body, p, button, .invite-button {
     font-size: 32px; }
   .fa-smile-o {
+    background-color: blue;
     font-size: 4rem; }
   .invite-button {
     font-size: 2rem; }
@@ -9198,13 +9200,14 @@ textarea {
   body, p, button, .invite-button {
     font-size: 20px; }
   .fa-smile-o {
+    background-color: red;
     font-size: 3.0rem; }
   .invite-button {
     font-size: 1.8rem; }
   #central_control_panel_id {
-    font-size: 1.8rem; }
-  .play-button {
     font-size: 2.4rem; }
+  .play-button {
+    font-size: 2.8rem; }
   .rating-circle {
     font-size: 2rem; } }
 
@@ -9212,13 +9215,14 @@ textarea {
   body, p, button, .invite-button {
     font-size: 14px; }
   .fa-smile-o {
+    background-color: red;
     font-size: 3.0rem; }
   .invite-button {
     font-size: 1.8rem; }
   #central_control_panel_id {
-    font-size: 1.8rem; }
-  .play-button {
     font-size: 2.4rem; }
+  .play-button {
+    font-size: 2.8rem; }
   .rating-circle {
     font-size: 2rem; } }
 
@@ -9226,13 +9230,14 @@ textarea {
   body, p, button, .invite-button {
     font-size: 14px; }
   .fa-smile-o {
+    background-color: pink;
     font-size: 2.0rem; }
   .invite-button {
-    font-size: 1.2rem; }
+    font-size: 1.0rem; }
   #central_control_panel_id {
-    font-size: 1.2rem; }
+    font-size: 2rem; }
   .play-button {
-    font-size: 1.5rem; }
+    font-size: 2.4rem; }
   .rating-circle {
     font-size: 1.5rem; } }
 
@@ -9240,39 +9245,72 @@ textarea {
   body, p, button, .invite-button {
     font-size: 14px; }
   .fa-smile-o {
+    background-color: pink;
     font-size: 2.0rem; }
   .invite-button {
-    font-size: 1.2rem; }
+    font-size: 1.0rem; }
   #central_control_panel_id {
-    font-size: 1.2rem; }
+    font-size: 2rem; }
   .play-button {
-    font-size: 1.5rem; }
+    font-size: 2.4rem; }
   .rating-circle {
     font-size: 1.5rem; } }
 
-@media all and (orientation: portrait) and (max-width: 599px) and (min-width: 320px) {
+@media all and (orientation: portrait) and (max-width: 599px) and (min-width: 450px) {
   body, p, button, .invite-button {
-    font-size: 12px; }
+    font-size: 11px; }
   .fa-smile-o {
+    background-color: yellow;
     font-size: 1.0rem; }
   .invite-button {
-    font-size: 1.5rem; }
-  #central_control_panel_id {
     font-size: 0.8rem; }
+  #central_control_panel_id {
+    font-size: 1.4rem; }
+  .play-button {
+    font-size: 1.6rem; }
+  .rating-circle {
+    font-size: 0.7rem; } }
+
+@media all and (orientation: landscape) and (max-height: 599px) and (min-height: 450px) {
+  body, p, button, .invite-button {
+    font-size: 11px; }
+  .fa-smile-o {
+    background-color: yellow;
+    font-size: 1.5rem; }
+  .invite-button {
+    font-size: 0.8rem; }
+  #central_control_panel_id {
+    font-size: 1.4rem; }
+  .play-button {
+    font-size: 1.6rem; }
+  .rating-circle {
+    font-size: 0.7rem; } }
+
+@media all and (orientation: portrait) and (max-width: 449px) and (min-width: 320px) {
+  body, p, button, .invite-button {
+    font-size: 11px; }
+  .fa-smile-o {
+    background-color: purple;
+    font-size: 1.0rem; }
+  .invite-button {
+    font-size: 0.8rem; }
+  #central_control_panel_id {
+    font-size: 1.0rem; }
   .play-button {
     font-size: 1.2rem; }
   .rating-circle {
     font-size: 0.7rem; } }
 
-@media all and (orientation: landscape) and (max-height: 599px) and (min-height: 320px) {
+@media all and (orientation: landscape) and (max-height: 449px) and (min-height: 320px) {
   body, p, button, .invite-button {
-    font-size: 12px; }
+    font-size: 11px; }
   .fa-smile-o {
+    background-color: purple;
     font-size: 1.5rem; }
   .invite-button {
-    font-size: 1.0rem; }
-  #central_control_panel_id {
     font-size: 0.8rem; }
+  #central_control_panel_id {
+    font-size: 1.0rem; }
   .play-button {
     font-size: 1.2rem; }
   .rating-circle {
