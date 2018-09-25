@@ -694,36 +694,6 @@ h2 {
     hegith: calc(0.5vw);
 }
 
-.orientation-message {
-    display: flex;
-    flex-flow: column;
-    justify-content: space-between;
-    height: 100%;
-    div {
-	color: white;
-    }
-    h3 {
-	font-size: 1.5rem;
-    }
-}
-
-.feedback-message {
-    display: flex;
-    flex-flow: column;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
-    div {
-	color: white;
-    }
-    h3 {
-	font-size: 1.5rem;
-    }
-    .btn {
-	font-size: 1.0rem;
-	background-color: rgb(75,176,88);
-    }
-}
 
 #phase-bar0 {
     display: grid;
@@ -743,6 +713,58 @@ h2 {
 	margin-left: 5px;
 	margin-right: 5px;
     }
+}
+
+.orientation-message {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    height: 100%;
+    div {
+	color: white;
+    }
+    h3 {
+	font-size: 1.5rem;
+    }
+}
+
+.feedback-message {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    div {
+	color: white;
+    }
+    h3 {
+	font-size: 1.5rem;
+    }
+    .btn {
+	font-size: 1.0rem;
+	background-color: rgb(75,176,88);
+    }
+}
+
+
+.swipable-message {
+    margin: 15%;
+    height: 100%;
+
+    h3 {
+	font-size: 2.0rem;	
+	color: black;
+	font-weight: 700;
+	font-family: 'Playfair Display'	
+    }
+    p {
+	font-size: 1.5rem;    
+	font-weight: 200;	    
+	color: white;
+    }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;    
 }
 
 

@@ -9128,30 +9128,6 @@ h2 {
   width: calc(0.5vw);
   hegith: calc(0.5vw); }
 
-.orientation-message {
-  display: flex;
-  flex-flow: column;
-  justify-content: space-between;
-  height: 100%; }
-  .orientation-message div {
-    color: white; }
-  .orientation-message h3 {
-    font-size: 1.5rem; }
-
-.feedback-message {
-  display: flex;
-  flex-flow: column;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%; }
-  .feedback-message div {
-    color: white; }
-  .feedback-message h3 {
-    font-size: 1.5rem; }
-  .feedback-message .btn {
-    font-size: 1.0rem;
-    background-color: #4bb058; }
-
 #phase-bar0 {
   display: grid;
   grid-gap: 10px;
@@ -9166,6 +9142,46 @@ h2 {
   color: black;
   margin-left: 5px;
   margin-right: 5px; }
+
+.orientation-message {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  height: 100%; }
+  .orientation-message div {
+    color: white; }
+  .orientation-message h3 {
+    font-size: 1.5rem; }
+
+.feedback-message {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%; }
+  .feedback-message div {
+    color: white; }
+  .feedback-message h3 {
+    font-size: 1.5rem; }
+  .feedback-message .btn {
+    font-size: 1.0rem;
+    background-color: #4bb058; }
+
+.swipable-message {
+  margin: 15%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; }
+  .swipable-message h3 {
+    font-size: 2.0rem;
+    color: black;
+    font-weight: 700;
+    font-family: 'Playfair Display'; }
+  .swipable-message p {
+    font-size: 1.5rem;
+    font-weight: 200;
+    color: white; }
 
 @media all and (min-width: 960px) {
   body {

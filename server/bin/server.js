@@ -3545,19 +3545,19 @@ var _ssr = __webpack_require__(88);
 
 var _ssr2 = _interopRequireDefault(_ssr);
 
-var _agenda = __webpack_require__(108);
+var _agenda = __webpack_require__(110);
 
 var _agenda2 = _interopRequireDefault(_agenda);
 
-var _agendash = __webpack_require__(109);
+var _agendash = __webpack_require__(111);
 
 var _agendash2 = _interopRequireDefault(_agendash);
 
-var _expressSession = __webpack_require__(110);
+var _expressSession = __webpack_require__(112);
 
 var _expressSession2 = _interopRequireDefault(_expressSession);
 
-var _connectMongo = __webpack_require__(111);
+var _connectMongo = __webpack_require__(113);
 
 var _connectMongo2 = _interopRequireDefault(_connectMongo);
 
@@ -4856,7 +4856,7 @@ var _intro = __webpack_require__(31);
 
 var _intro2 = _interopRequireDefault(_intro);
 
-var _countdown_message = __webpack_require__(107);
+var _countdown_message = __webpack_require__(109);
 
 var _countdown_message2 = _interopRequireDefault(_countdown_message);
 
@@ -6062,6 +6062,10 @@ var _reactSwipeableViews = __webpack_require__(29);
 
 var _reactSwipeableViews2 = _interopRequireDefault(_reactSwipeableViews);
 
+var _reactSwipeableViewsUtils = __webpack_require__(102);
+
+var _reactSwipeableViewsCore = __webpack_require__(103);
+
 var _state = __webpack_require__(2);
 
 var _state2 = _interopRequireDefault(_state);
@@ -6070,13 +6074,13 @@ var _propTypes = __webpack_require__(27);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _uuid = __webpack_require__(102);
+var _uuid = __webpack_require__(104);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _opentokLayoutJs = __webpack_require__(103);
+var _opentokLayoutJs = __webpack_require__(105);
 
-__webpack_require__(104);
+__webpack_require__(106);
 
 var _journey_starts_in = __webpack_require__(30);
 
@@ -6090,7 +6094,7 @@ var _intro = __webpack_require__(31);
 
 var _intro2 = _interopRequireDefault(_intro);
 
-var _reactRating = __webpack_require__(105);
+var _reactRating = __webpack_require__(107);
 
 var _reactRating2 = _interopRequireDefault(_reactRating);
 
@@ -6115,6 +6119,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 // You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+var VirtualizeSwipeableViews = (0, _reactSwipeableViewsUtils.virtualize)(_reactSwipeableViews2.default);
+
 // import SignaturePad from './signature_pad';
 
 
@@ -6122,7 +6128,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // var Rating = require('react-rating');
 
 
-__webpack_require__(106).polyfill();
+__webpack_require__(108).polyfill();
 __webpack_require__(26);
 
 var _ref = {},
@@ -6589,7 +6595,7 @@ var JourneyPhases = function (_Component4) {
         case 'created':
           return 0;
         case 'failed':
-          return 0;
+          return 3;
         case 'started':
         case 'paused':
           return 1;
@@ -6986,7 +6992,7 @@ var PlayButton = function (_Component8) {
         'span',
         { className: 'fa-stack play-button', onClick: this.togglePlay },
         _react2.default.createElement('i', { className: 'fa fa-circle fa-stack-2x',
-          style: { color: 'rgb(55,180,246)' }
+          style: { color: 'rgb(74,170,221)' }
         }),
         _react2.default.createElement('i', { className: 'fa fa-' + (_state2.default.audioTag.paused ? 'play' : 'pause') + ' fa-stack-1x',
           style: { color: 'white' } })
@@ -7253,9 +7259,20 @@ var OrientationModal = function (_Component12) {
       e.stopPropagation();
     };
 
+    _this20.left = function () {
+      _this20.handleChangeIndex((_this20.state.index - 1) % 3);
+    };
+
+    _this20.right = function () {
+      _this20.handleChangeIndex((_this20.state.index + 1) % 3);
+    };
+
+    _this20.handleChangeIndex = function (index) {
+      _this20.setState({ index: index });
+    };
+
     _this20.state = {
-      journeySpaceName: '',
-      error: false
+      index: 0
     };
     return _this20;
   }
@@ -7263,74 +7280,126 @@ var OrientationModal = function (_Component12) {
   _createClass(OrientationModal, [{
     key: 'render',
     value: function render() {
-      console.log('ONE_SQUARE_WIDTH', someHelper.ONE_SQUARE_WIDTH);
+      console.log("INDEX:", this.state.index);
+      function slideRenderer(params) {
+        console.log("params", params);
+        var index = params.index,
+            key = params.key;
+
+
+        switch ((0, _reactSwipeableViewsCore.mod)(index, 3)) {
+          case 0:
+            return _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'h3',
+                null,
+                '1.  Welcome to CuriousLive ...',
+                _react2.default.createElement('br', null),
+                'A five-minute guided journey - plus sharing - with others.'
+              ),
+              _react2.default.createElement('p', null),
+              _react2.default.createElement(
+                'p',
+                null,
+                'The journey will begin when the timer above elapses and you hear the cime.'
+              ),
+              _react2.default.createElement(
+                'p',
+                null,
+                'Breathe slowly and deeply and ajust your posture to be comfortable.'
+              )
+            );
+
+          case 1:
+            return _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'h3',
+                null,
+                '2.  Next comes the Journey...'
+              ),
+              _react2.default.createElement('p', null),
+              _react2.default.createElement(
+                'p',
+                null,
+                'Your microphone will be muted.'
+              ),
+              _react2.default.createElement(
+                'p',
+                null,
+                'Some people like to leave their cameras on during the journey to increase the feeling of a shared experience. It is up to you.'
+              )
+            );
+
+          case 2:
+            return _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'h3',
+                null,
+                '3.  After the Journey comes the Sharing and Connecting.'
+              ),
+              _react2.default.createElement('p', null),
+              _react2.default.createElement(
+                'p',
+                null,
+                'After the journey you will have the opportunity to share your insights. Each person takes 1 or 2 minutes.'
+              ),
+              _react2.default.createElement(
+                'p',
+                null,
+                'When others are sharing, please listen deeply, and in turn they will listen more deeply to you.'
+              )
+            );
+
+          default:
+            return null;
+        }
+      }
+
+      var index = this.state.index;
       return _react2.default.createElement(
         'div',
         { style: { position: 'absolute',
             minHeight: someHelper.ONE_SQUARE_WIDTH + 'px',
             maxWidth: someHelper.ONE_SQUARE_WIDTH + 'px',
-            backgroundColor: 'rgba(89, 153, 222, 0.9)',
-            disaply: 'flex',
-            flexFlow: 'column',
-            justifyContent: 'space-between'
+            backgroundColor: 'rgba(74, 170, 221, 1.0)',
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'center'
           } },
         _react2.default.createElement(
           'div',
-          { className: 'orientation-message' },
+          { style: {
+              display: 'flex',
+              flexFlow: 'column nowrap',
+              justifyContent: 'center'
+            } },
           _react2.default.createElement(
             'a',
             { href: '#', onClick: this.props.onClose, style: { position: 'absolute', right: '20px', top: '20px', zIndex: 100 } },
-            _react2.default.createElement('i', { className: 'fa fa-times', style: { fontSize: '22px', color: 'white' } })
+            _react2.default.createElement('i', { className: 'fa fa-times fa-3x', style: { color: 'white' } })
           ),
-          _react2.default.createElement('div', null),
-          _react2.default.createElement('div', null),
-          _react2.default.createElement(
-            'h3',
-            null,
-            '1.  Welcome to CuriousLive ...',
-            _react2.default.createElement('br', null),
-            'A five-minute guided journey - plus sharing - with others.'
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            'The journey will begin when the timer above elapses and you hear the cime.'
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            'Breathe slowly and deeply and ajust your posture to be comfortable.'
-          ),
-          _react2.default.createElement(
-            'h3',
-            null,
-            '2.  Next comse the Journey...'
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            'Your microphone will be muted.'
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            'Some people like to leave their cameras on during the journey to increase the feeling of a shared experience. It is up to you.'
-          ),
-          _react2.default.createElement(
-            'h3',
-            null,
-            '2.  After the Journey comes the Sharing and Connecting.'
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            'After the journey you will have the opportunity to share your insights. Each person takes 1 or 2 minutes.'
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            'When others are sharing, please listen deeply, and in turn they will listen more deeply to you.'
-          )
+          _react2.default.createElement(VirtualizeSwipeableViews, {
+            index: this.state.index,
+            onChangeIndex: this.handleChangeIndex,
+            slideRenderer: slideRenderer,
+            className: 'swipable-message'
+          })
+        ),
+        _react2.default.createElement(
+          'button',
+          { onClick: this.left, style: { visibility: '' + (index == 0 ? 'hidden' : 'visible'), position: 'absolute', left: '20px', top: '50%', zIndex: 100, backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px' } },
+          _react2.default.createElement('i', { className: 'fa fa-caret-left fa-3x' })
+        ),
+        _react2.default.createElement(
+          'button',
+          { onClick: this.right, style: { visibility: '' + (index == 2 ? 'hidden' : 'visible'), position: 'absolute', right: '20px', top: '50%', zIndex: 100, backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px' } },
+          _react2.default.createElement('i', { className: 'fa fa-caret-right fa-3x' })
         )
       );
     }
@@ -7382,7 +7451,7 @@ var FeedbackModal = function (_Component13) {
             maxWidth: someHelper.ONE_SQUARE_WIDTH + 'px',
             width: someHelper.ONE_SQUARE_WIDTH + 'px',
             backgroundColor: 'rgba(89, 153, 222, 0.9)',
-            disaply: 'flex',
+            display: 'flex',
             flexFlow: 'column',
             justifyContent: 'space-between'
           } },
@@ -7399,7 +7468,7 @@ var FeedbackModal = function (_Component13) {
             null,
             ' Please rate your experience for: '
           ),
-          _react2.default.createElement(_reactRating2.default, { start: '0', stop: '10', className: 'feedback-rating',
+          _react2.default.createElement(_reactRating2.default, { start: 0, stop: 10, className: 'feedback-rating',
             emptySymbol: 'fa fa-circle fa-2x feedback-empty',
             fullSymbol: 'fa fa-circle fa-2x feedback-full' }),
           _react2.default.createElement(
@@ -7407,13 +7476,13 @@ var FeedbackModal = function (_Component13) {
             null,
             ' How do you Feel?'
           ),
-          _react2.default.createElement(_reactRating2.default, { start: '0', stop: '10', className: 'feedback-rating',
+          _react2.default.createElement(_reactRating2.default, { start: 0, stop: 10, className: 'feedback-rating',
             emptySymbol: 'fa fa-circle fa-2x feedback-empty',
             fullSymbol: 'fa fa-circle fa-2x feedback-full' }),
           _react2.default.createElement(
             'div',
-            { 'class': 'form-group' },
-            _react2.default.createElement('textarea', { 'class': 'form-control rounded-0', id: 'exampleFormControlTextarea2', rows: '3' })
+            { className: 'form-group' },
+            _react2.default.createElement('textarea', { className: 'form-control rounded-0', id: 'exampleFormControlTextarea2', rows: '3' })
           ),
           _react2.default.createElement(
             'button',
@@ -8095,9 +8164,9 @@ var JourneySpace = function (_Component14) {
                     publisher: this.publisher }),
                   _react2.default.createElement(AudioButton, {
                     publisher: this.publisher }),
-                  _react2.default.createElement(PlayButton, { style: { color: 'rgb(55,180,246)', backgroundColor: 'rgb(75,176,88)', borderRadius: '50%' },
+                  _react2.default.createElement(PlayButton, { style: { color: 'rgb(74,170,221)', backgroundColor: 'rgb(75,176,88)', borderRadius: '50%' },
                     journey: _state2.default.journey, player: _state2.default.audioTag }),
-                  _react2.default.createElement(PauseButton, { style: { color: 'rgb(55,180,246)', backgroundColor: 'rgb(75,176,88)', borderRadius: '50%' },
+                  _react2.default.createElement(PauseButton, { style: { color: 'rgb(74,170,221)', backgroundColor: 'rgb(75,176,88)', borderRadius: '50%' },
                     journey: _state2.default.journey, player: _state2.default.audioTag }),
                   _react2.default.createElement(SkipButton, { style: { color: 'white', backgroundColor: 'rgb(75,176,88)', borderRadius: '50%' }, journey: _state2.default.journey,
                     playerState: _state2.default.playerState,
@@ -8183,16 +8252,28 @@ exports.default = (0, _reactEasyState.view)(JourneySpace);
 /* 102 */
 /***/ (function(module, exports) {
 
-module.exports = require("uuid");
+module.exports = require("react-swipeable-views-utils");
 
 /***/ }),
 /* 103 */
 /***/ (function(module, exports) {
 
-module.exports = require("opentok-layout-js");
+module.exports = require("react-swipeable-views-core");
 
 /***/ }),
 /* 104 */
+/***/ (function(module, exports) {
+
+module.exports = require("uuid");
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports) {
+
+module.exports = require("opentok-layout-js");
+
+/***/ }),
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8361,19 +8442,19 @@ if (__CLIENT__) {
 }
 
 /***/ }),
-/* 105 */
+/* 107 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-rating");
 
 /***/ }),
-/* 106 */
+/* 108 */
 /***/ (function(module, exports) {
 
 module.exports = require("es6-promise");
 
 /***/ }),
-/* 107 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8470,25 +8551,25 @@ var CountdownMessage = function (_Component) {
 exports.default = CountdownMessage;
 
 /***/ }),
-/* 108 */
+/* 110 */
 /***/ (function(module, exports) {
 
 module.exports = require("agenda");
 
 /***/ }),
-/* 109 */
+/* 111 */
 /***/ (function(module, exports) {
 
 module.exports = require("agendash");
 
 /***/ }),
-/* 110 */
+/* 112 */
 /***/ (function(module, exports) {
 
 module.exports = require("express-session");
 
 /***/ }),
-/* 111 */
+/* 113 */
 /***/ (function(module, exports) {
 
 module.exports = require("connect-mongo");

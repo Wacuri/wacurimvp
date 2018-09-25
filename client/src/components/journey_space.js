@@ -328,7 +328,7 @@ class JourneyPhases extends Component {
   render() {
       const {journey} = this.props;
       const NumPhases = 4;
-      const Messages = ["Breathe and center yourself","Journey in Progess","ShareWhar your Insights","Provide Feedback"];
+      const Messages = ["Breathe and center yourself","Journey in Progess","Share your Insights","Provide Feedback"];
     return (
 	    <div ref={el => {this.container = el}} id={'journey-timeline0'} className={`journey-timeline step-${this.stepIndex.toString()}`}>
 	    <div>
@@ -693,7 +693,7 @@ class PlayButton extends Component {
     return (
 	    <span className='fa-stack play-button' onClick={this.togglePlay}>
 	    <i className='fa fa-circle fa-stack-2x'
-    	      style={{color: 'rgb(55,180,246)'}}
+    	      style={{color: 'rgb(74,170,221)'}}
 	    ></i>
 	    {
             <i className={`fa fa-${state.audioTag.paused ? 'play' : 'pause'} fa-stack-1x`}
@@ -884,9 +884,7 @@ class OrientationModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-	journeySpaceName: '',
-	index: 0,
-      error: false
+	index: 0
     }
   }
 
@@ -914,23 +912,6 @@ class OrientationModal extends Component {
 
   render() {
       console.log("INDEX:",this.state.index);
-      const styles = {
-	  slide: {
-	      padding: 15,
-    minHeight: 100,
-    color: '#fff',
-  },
-  slide1: {
-    background: '#FEA900',
-  },
-  slide2: {
-    background: '#B3DC4A',
-  },
-  slide3: {
-    background: '#6AC0FF',
-  },
-      };
-
       function slideRenderer(params) {
 	  console.log("params", params);
   const { index, key } = params;
@@ -938,43 +919,46 @@ class OrientationModal extends Component {
   switch (mod(index, 3)) {
     case 0:
       return (
-	    <div style={Object.assign({}, styles.slide, styles.slide1)}>
+	    <div>
 <h3>1.  Welcome to CuriousLive ...<br/>
-A five-minute guided journey - plus sharing - with others.</h3>
-<div>
+	      A five-minute guided journey - plus sharing - with others.</h3>
+	      <p/>	      
+<p>
 The journey will begin when the timer above elapses and you hear the cime.
-</div>
-<div>
+</p>
+<p>
 Breathe slowly and deeply and ajust your posture to be comfortable.
-	    </div>
+	    </p>
 	      </div>
       );
 
     case 1:
       return (
-    <div style={Object.assign({}, styles.slide, styles.slide2)}>	    
-<h3>2.  Next comes the Journey...</h3>
-<div>
+    <div>	    
+	      <h3>2.  Next comes the Journey...</h3>
+	      <p/>	      
+<p>
 Your microphone will be muted.
-</div>
-<div>
+</p>
+<p>
 Some people like to leave their cameras on during the journey to increase the feeling of a shared experience. It is up to you.
-	    </div>
+	    </p>
 	    </div>
 	      
       );
 
     case 2:
       return (
-	    <div style={Object.assign({}, styles.slide, styles.slide3)}>
-<h3>3.  After the Journey comes the Sharing and Connecting.</h3>
-<div>
+	    <div>
+	      <h3>3.  After the Journey comes the Sharing and Connecting.</h3>
+	      <p/>
+<p>
 	    After the journey you will have the opportunity to share your insights.
 	    Each person takes 1 or 2 minutes.
-</div>
-	    <div>
+</p>
+	    <p>
 	    When others are sharing, please listen deeply, and in turn they will listen more deeply to you.
-	    </div>
+	    </p>
 	    </div>
       );
 
@@ -982,38 +966,40 @@ Some people like to leave their cameras on during the journey to increase the fe
       return null;
   }
 }
-	
+
+    const index = this.state.index;
     return (
 	    <div style={{position: 'absolute',
 			 minHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
 			 maxWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,
-			 backgroundColor: 'rgba(89, 153, 222, 0.9)',
-			 disaply: 'flex',
-			 flexFlow: 'column',
-			 justifyContent: 'space-between'
+			 backgroundColor: 'rgba(74, 170, 221, 1.0)',
+			 display: 'flex',
+			 flexFlow: 'column nowrap',
+			 justifyContent: 'center'
 			 }
 		       }>
 
-            <div className='orientation-message'>
+	    <div style={{
+	    		 display: 'flex',
+			 flexFlow: 'column nowrap',
+			 justifyContent: 'center'
+	    }}>
             <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
-          <i className='fa fa-times' style={{fontSize: '22px', color: 'white'}}/>
+          <i className='fa fa-times fa-3x' style={{color: 'white'}}/>
         </a>
-	    <div/>
-	    <div/>
 	    <VirtualizeSwipeableViews
           index={this.state.index}
           onChangeIndex={this.handleChangeIndex}
-          slideRenderer={slideRenderer}
+        slideRenderer={slideRenderer}
+	className='swipable-message'
         />	    
-	    <div>
-	    <button  onClick={this.left}>
-	    	    <i className="fa fa-chevron-left fa-fw"></i>
-	</button>
-	    <button onClick={this.right}>
-	    	    <i className="fa fa-chevron-right fa-fw" ></i>
-	</button>
 	    </div>
-	    </div>
+	    <button  onClick={this.left} style={{visibility: `${(index == 0) ? 'hidden' : 'visible'}`, position: 'absolute', left: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
+	    	    <i className="fa fa-caret-left fa-3x"></i>
+	</button>
+	    <button onClick={this.right} style={{visibility: `${(index == 2) ? 'hidden' : 'visible'}`, position: 'absolute', right: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
+	    	    <i className="fa fa-caret-right fa-3x" ></i>
+	    </button>
 	</div>	    
     )
   }
@@ -1052,7 +1038,7 @@ class FeedbackModal extends Component {
 			 maxWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,
 			 width: `${someHelper.ONE_SQUARE_WIDTH}px`,			 
 			 backgroundColor: 'rgba(89, 153, 222, 0.9)',
-			 disaply: 'flex',
+			 display: 'flex',
 			 flexFlow: 'column',
 			 justifyContent: 'space-between'
 			 }
@@ -1741,10 +1727,10 @@ class JourneySpace extends Component {
 			 publisher={this.publisher}/>
 			 <AudioButton
 			  publisher={this.publisher}/>
-		 <PlayButton style={{color: 'rgb(55,180,246)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
+		 <PlayButton style={{color: 'rgb(74,170,221)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
 		 journey={state.journey} player={state.audioTag}/>			 
 
-		 <PauseButton style={{color: 'rgb(55,180,246)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
+		 <PauseButton style={{color: 'rgb(74,170,221)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
 		 journey={state.journey} player={state.audioTag}/>			 
 		 
 		 <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%',  }} journey={state.journey}
