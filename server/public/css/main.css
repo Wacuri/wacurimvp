@@ -9048,80 +9048,6 @@ h2 {
 .bar-green {
   background-color: #4bb058; }
 
-.play-button {
-  font-size: 2rem; }
-
-@media all and (min-width: 960px) {
-  .fa-smile-o {
-    font-size: 3rem; }
-  .invite-friends-button {
-    font-size: 1.5rem; }
-  #central_control_panel_id {
-    font-size: 2.0rem; }
-  .play-button {
-    font-size: 2.5rem; } }
-
-@media all and (max-width: 959px) and (min-width: 600px) {
-  .fa-smile-o {
-    font-size: 2.0rem; }
-  .invite-friends-button {
-    font-size: 1.2rem; }
-  #central_control_panel_id {
-    font-size: 1.2rem; }
-  .play-button {
-    font-size: 1.5rem; } }
-
-@media all and (max-width: 599px) and (min-width: 300px) {
-  .fa-smile-o {
-    font-size: 1.0rem; }
-  .invite-friends-button {
-    font-size: 1.0rem; }
-  #central_control_panel_id {
-    font-size: 0.8rem; }
-  .play-button {
-    font-size: 1.2rem; } }
-
-@media all and (max-width: 319px) {
-  .fa-smile-o {
-    font-size: 1.0rem; }
-  .invite-friends-button {
-    font-size: 1.0rem; }
-  #central_control_panel_id {
-    font-size: 0.8rem; }
-  .play-button {
-    font-size: 1.0rem; } }
-
-.invite-indicator {
-  min-width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white; }
-  .invite-indicator .fa-smile-o {
-    color: white; }
-  .invite-indicator .p {
-    color: white; }
-  .invite-indicator .btn {
-    font-size: 1rem;
-    background-color: #4bb058; }
-
-.invite-button {
-  color: white;
-  background-color: black;
-  margin-top: 0.5rem;
-  font-size: 1.5rem;
-  border-radius: 15px !important;
-  border-width: 2px;
-  border-color: white; }
-
-.invite-friends-button {
-  background-color: black;
-  color: white; }
-
-.invite-orientation-button {
-  background-color: #4bb058;
-  font-size: 1.5rem !important; }
-
 .PartnerStream {
   display: flex;
   flex-flow: column; }
@@ -9190,20 +9116,82 @@ h2 {
     font-weight: 200;
     color: white; }
 
+.invite-indicator {
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; }
+  .invite-indicator .fa-smile-o {
+    color: white; }
+  .invite-indicator .p {
+    color: white; }
+  .invite-indicator .btn {
+    font-size: 1rem;
+    background-color: #4bb058; }
+
+.invite-button {
+  color: white;
+  background-color: black;
+  margin-top: 0.5rem;
+  font-size: 2rem;
+  border-radius: 15px !important;
+  border-width: 2px;
+  border-color: white; }
+
+.invite-friends-button {
+  background-color: black;
+  color: white; }
+
+.invite-orientation-button {
+  background-color: #4bb058; }
+
 @media all and (min-width: 960px) {
-  body, p {
-    font-size: 18px; } }
+  body, p, button, .invite-button {
+    font-size: 18px; }
+  .fa-smile-o {
+    font-size: 3rem; }
+  .invite-button {
+    font-size: 1.5rem; }
+  #central_control_panel_id {
+    font-size: 2.0rem; }
+  .play-button {
+    font-size: 2.5rem; } }
 
 @media all and (max-width: 959px) and (min-width: 600px) {
-  body, p {
-    font-size: 14px; } }
+  body, p, button, .invite-button {
+    font-size: 14px; }
+  .fa-smile-o {
+    font-size: 2.0rem; }
+  .invite-button {
+    font-size: 1.2rem; }
+  #central_control_panel_id {
+    font-size: 1.2rem; }
+  .play-button {
+    font-size: 1.5rem; } }
 
 @media all and (max-width: 599px) and (min-width: 320px) {
-  body, p {
-    font-size: 12px; } }
+  body, p, button, .invite-button {
+    font-size: 12px; }
+  .fa-smile-o {
+    font-size: 1.0rem; }
+  .invite-button {
+    font-size: 1.0rem; }
+  #central_control_panel_id {
+    font-size: 0.8rem; }
+  .play-button {
+    font-size: 1.2rem; } }
 
 @media all and (max-width: 319px) {
-  body, p {
-    font-size: 10px; } }
+  body, p, button, .invite-button {
+    font-size: 10px; }
+  .fa-smile-o {
+    font-size: 1.0rem; }
+  .invite-button {
+    font-size: 1.0rem; }
+  #central_control_panel_id {
+    font-size: 0.8rem; }
+  .play-button {
+    font-size: 1.0rem; } }
 
 /*# sourceMappingURL=main.css.map*/
