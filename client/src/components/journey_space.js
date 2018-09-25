@@ -920,8 +920,8 @@ class OrientationModal extends Component {
     case 0:
       return (
 	    <div>
-<h3>1.  Welcome to CuriousLive ...<br/>
-	      A five-minute guided journey - plus sharing - with others.</h3>
+<p className='message-heading'>1.  Welcome to CuriousLive ...<br/>
+	      A five-minute guided journey - plus sharing - with others.</p>
 	      <p/>	      
 <p>
 The journey will begin when the timer above elapses and you hear the cime.
@@ -935,7 +935,7 @@ Breathe slowly and deeply and ajust your posture to be comfortable.
     case 1:
       return (
     <div>	    
-	      <h3>2.  Next comes the Journey...</h3>
+	      <p className='message-heading'>2.  Next comes the Journey...</p>
 	      <p/>	      
 <p>
 Your microphone will be muted.
@@ -950,7 +950,7 @@ Some people like to leave their cameras on during the journey to increase the fe
     case 2:
       return (
 	    <div>
-	      <h3>3.  After the Journey comes the Sharing and Connecting.</h3>
+	      <p className='message-heading'>3.  After the Journey comes the Sharing and Connecting.</p>
 	      <p/>
 <p>
 	    After the journey you will have the opportunity to share your insights.
@@ -972,6 +972,8 @@ Some people like to leave their cameras on during the journey to increase the fe
 	    <div style={{position: 'absolute',
 			 minHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
 			 maxWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,
+			 maxHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
+			 minWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,			 
 			 backgroundColor: 'rgba(74, 170, 221, 1.0)',
 			 display: 'flex',
 			 flexFlow: 'column nowrap',
@@ -985,7 +987,7 @@ Some people like to leave their cameras on during the journey to increase the fe
 			 justifyContent: 'center'
 	    }}>
             <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
-          <i className='fa fa-times fa-3x' style={{color: 'white'}}/>
+          <i className='fa fa-times fa-2x' style={{color: 'white'}}/>
         </a>
 	    <VirtualizeSwipeableViews
           index={this.state.index}
@@ -1104,7 +1106,7 @@ class UnfilledVideoSquare extends React.Component {
 	      <div style={{visibility: `${hide_control ? 'hidden' : 'visible'}` }}>
               <i className='fa fa-smile-o fa-2x'></i>
               <p style={{color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem'}}>Waiting...</p>
-              <button className='invite-friends-button'  onClick={this.props.onInvite}>Invite Friends
+              <button className='invite-button invite-friends-button'  onClick={this.props.onInvite}>Invite Friends
 	        </button>
 	      </div>
 	      </div>
@@ -1145,7 +1147,6 @@ class NoVideoSquare extends React.Component {
       const topmsg = (feedbackNotOrientation) ? "When all sharing is done..." : "nothing";
       const topmsgvis = (feedbackNotOrientation) ? "visible" : "hidden";       
       const fnc = (feedbackNotOrientation) ? this.props.onFeedback : this.props.onOrientation;
-      console.log("Function",fnc);      
 	  return (
 	      <div key={localkey} id={vid} className='video-placeholder'>
 	        <div className='invite-indicator'>
@@ -1154,13 +1155,12 @@ class NoVideoSquare extends React.Component {
 	      
 		  <p style={{visibility: `${topmsgvis}`, color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem'}}>{topmsg}</p>
 
-              <div style={{color: 'white'}}>
+	      {/*              <div style={{color: 'white'}}> */}
 		  {/* I have no idea how to incease the roundness of these corners */}
 	      {/* We need to create a colore class to unify with invite-friends-button */}
-                  <button className='btn btn-primary' onClick={fnc}
-	  style={{margin: '0 auto',  marginTop: '0.5em', borderRadius: '15px' }}
+                  <button className='invite-button invite-orientation-button' onClick={fnc}
  	              >{msg}</button>
-	            </div>	      	  
+		  {/*	            </div>	      	  */}
   	         </div>
 	        </div>
 		  </div>);

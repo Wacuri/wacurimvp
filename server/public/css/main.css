@@ -9048,12 +9048,6 @@ h2 {
 .bar-green {
   background-color: #4bb058; }
 
-.invite-friends-button {
-  color: white;
-  background-color: black;
-  margin-top: 0.5rem;
-  font-size: 1.5rem; }
-
 .play-button {
   font-size: 2rem; }
 
@@ -9111,9 +9105,22 @@ h2 {
     font-size: 1rem;
     background-color: #4bb058; }
 
-.invite-friends-button {
+.invite-button {
+  color: white;
+  background-color: black;
+  margin-top: 0.5rem;
+  font-size: 1.5rem;
   border-radius: 15px !important;
-  border-width: 2px; }
+  border-width: 2px;
+  border-color: white; }
+
+.invite-friends-button {
+  background-color: black;
+  color: white; }
+
+.invite-orientation-button {
+  background-color: #4bb058;
+  font-size: 1.5rem !important; }
 
 .PartnerStream {
   display: flex;
@@ -9173,30 +9180,30 @@ h2 {
   display: flex;
   flex-direction: column;
   justify-content: center; }
-  .swipable-message h3 {
-    font-size: 2.0rem;
+  .swipable-message .message-heading {
+    font-size: 1.5rem;
     color: black;
     font-weight: 700;
     font-family: 'Playfair Display'; }
   .swipable-message p {
-    font-size: 1.5rem;
+    font-size: 1.0rem;
     font-weight: 200;
     color: white; }
 
 @media all and (min-width: 960px) {
-  body {
+  body, p {
     font-size: 18px; } }
 
 @media all and (max-width: 959px) and (min-width: 600px) {
-  body {
+  body, p {
     font-size: 14px; } }
 
 @media all and (max-width: 599px) and (min-width: 320px) {
-  body {
+  body, p {
     font-size: 12px; } }
 
 @media all and (max-width: 319px) {
-  body {
+  body, p {
     font-size: 10px; } }
 
 /*# sourceMappingURL=main.css.map*/

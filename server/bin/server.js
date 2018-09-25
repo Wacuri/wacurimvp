@@ -7293,8 +7293,8 @@ var OrientationModal = function (_Component12) {
               'div',
               null,
               _react2.default.createElement(
-                'h3',
-                null,
+                'p',
+                { className: 'message-heading' },
                 '1.  Welcome to CuriousLive ...',
                 _react2.default.createElement('br', null),
                 'A five-minute guided journey - plus sharing - with others.'
@@ -7317,8 +7317,8 @@ var OrientationModal = function (_Component12) {
               'div',
               null,
               _react2.default.createElement(
-                'h3',
-                null,
+                'p',
+                { className: 'message-heading' },
                 '2.  Next comes the Journey...'
               ),
               _react2.default.createElement('p', null),
@@ -7339,8 +7339,8 @@ var OrientationModal = function (_Component12) {
               'div',
               null,
               _react2.default.createElement(
-                'h3',
-                null,
+                'p',
+                { className: 'message-heading' },
                 '3.  After the Journey comes the Sharing and Connecting.'
               ),
               _react2.default.createElement('p', null),
@@ -7367,6 +7367,8 @@ var OrientationModal = function (_Component12) {
         { style: { position: 'absolute',
             minHeight: someHelper.ONE_SQUARE_WIDTH + 'px',
             maxWidth: someHelper.ONE_SQUARE_WIDTH + 'px',
+            maxHeight: someHelper.ONE_SQUARE_WIDTH + 'px',
+            minWidth: someHelper.ONE_SQUARE_WIDTH + 'px',
             backgroundColor: 'rgba(74, 170, 221, 1.0)',
             display: 'flex',
             flexFlow: 'column nowrap',
@@ -7382,7 +7384,7 @@ var OrientationModal = function (_Component12) {
           _react2.default.createElement(
             'a',
             { href: '#', onClick: this.props.onClose, style: { position: 'absolute', right: '20px', top: '20px', zIndex: 100 } },
-            _react2.default.createElement('i', { className: 'fa fa-times fa-3x', style: { color: 'white' } })
+            _react2.default.createElement('i', { className: 'fa fa-times fa-2x', style: { color: 'white' } })
           ),
           _react2.default.createElement(VirtualizeSwipeableViews, {
             index: this.state.index,
@@ -7554,7 +7556,7 @@ var UnfilledVideoSquare = function (_React$Component) {
             ),
             _react2.default.createElement(
               'button',
-              { className: 'invite-friends-button', onClick: this.props.onInvite },
+              { className: 'invite-button invite-friends-button', onClick: this.props.onInvite },
               'Invite Friends'
             )
           )
@@ -7609,7 +7611,6 @@ var NoVideoSquare = function (_React$Component2) {
       var topmsg = feedbackNotOrientation ? "When all sharing is done..." : "nothing";
       var topmsgvis = feedbackNotOrientation ? "visible" : "hidden";
       var fnc = feedbackNotOrientation ? this.props.onFeedback : this.props.onOrientation;
-      console.log("Function", fnc);
       return _react2.default.createElement(
         'div',
         { key: localkey, id: vid, className: 'video-placeholder' },
@@ -7626,15 +7627,10 @@ var NoVideoSquare = function (_React$Component2) {
               topmsg
             ),
             _react2.default.createElement(
-              'div',
-              { style: { color: 'white' } },
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-primary', onClick: fnc,
-                  style: { margin: '0 auto', marginTop: '0.5em', borderRadius: '15px' }
-                },
-                msg
-              )
+              'button',
+              { className: 'invite-button invite-orientation-button', onClick: fnc
+              },
+              msg
             )
           )
         )
