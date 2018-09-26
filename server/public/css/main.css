@@ -9169,7 +9169,6 @@ textarea {
   body, p, button, .invite-button {
     font-size: 32px; }
   .fa-smile-o {
-    background-color: blue;
     font-size: 4rem; }
   .invite-button {
     font-size: 2rem; }
@@ -9181,11 +9180,9 @@ textarea {
     font-size: 3.0rem; } }
 
 @media all and (orientation: landscape) and (min-height: 960px) {
-  background-color: green;
   body, p, button, .invite-button {
     font-size: 32px; }
   .fa-smile-o {
-    background-color: blue;
     font-size: 4rem; }
   .invite-button {
     font-size: 2rem; }
@@ -9200,7 +9197,6 @@ textarea {
   body, p, button, .invite-button {
     font-size: 20px; }
   .fa-smile-o {
-    background-color: red;
     font-size: 3.0rem; }
   .invite-button {
     font-size: 1.8rem; }
@@ -9215,7 +9211,6 @@ textarea {
   body, p, button, .invite-button {
     font-size: 14px; }
   .fa-smile-o {
-    background-color: red;
     font-size: 3.0rem; }
   .invite-button {
     font-size: 1.8rem; }
@@ -9230,7 +9225,6 @@ textarea {
   body, p, button, .invite-button {
     font-size: 14px; }
   .fa-smile-o {
-    background-color: pink;
     font-size: 2.0rem; }
   .invite-button {
     font-size: 1.0rem; }
@@ -9245,7 +9239,6 @@ textarea {
   body, p, button, .invite-button {
     font-size: 14px; }
   .fa-smile-o {
-    background-color: pink;
     font-size: 2.0rem; }
   .invite-button {
     font-size: 1.0rem; }
@@ -9260,14 +9253,13 @@ textarea {
   body, p, button, .invite-button {
     font-size: 11px; }
   .fa-smile-o {
-    background-color: yellow;
-    font-size: 1.0rem; }
+    font-size: 1.5rem; }
   .invite-button {
     font-size: 0.8rem; }
   #central_control_panel_id {
-    font-size: 1.4rem; }
+    font-size: 1.2rem; }
   .play-button {
-    font-size: 1.6rem; }
+    font-size: 1.4rem; }
   .rating-circle {
     font-size: 0.7rem; } }
 
@@ -9275,14 +9267,13 @@ textarea {
   body, p, button, .invite-button {
     font-size: 11px; }
   .fa-smile-o {
-    background-color: yellow;
     font-size: 1.5rem; }
   .invite-button {
     font-size: 0.8rem; }
   #central_control_panel_id {
-    font-size: 1.4rem; }
+    font-size: 1.2rem; }
   .play-button {
-    font-size: 1.6rem; }
+    font-size: 1.4rem; }
   .rating-circle {
     font-size: 0.7rem; } }
 
@@ -9290,7 +9281,6 @@ textarea {
   body, p, button, .invite-button {
     font-size: 11px; }
   .fa-smile-o {
-    background-color: purple;
     font-size: 1.0rem; }
   .invite-button {
     font-size: 0.8rem; }
@@ -9305,7 +9295,6 @@ textarea {
   body, p, button, .invite-button {
     font-size: 11px; }
   .fa-smile-o {
-    background-color: purple;
     font-size: 1.5rem; }
   .invite-button {
     font-size: 0.8rem; }
