@@ -66,3 +66,8 @@ It is begun with:
 
 And configured as the local session monitoring seeting at TokBox. Which will look something like:  http://9cd44610.ngrok.io/api/event
 
+# License
+
+All files Copyright Robert L. Read, 2018, and others. All comptuer program files in the Repo, except for the content files consisting of audio files and images, are released under the GNU AFFERO GENERAL PUBLIC LICENSE Version 3.
+
+All rights are reserved on all images and audio files.
