@@ -534,9 +534,14 @@ class VideoButton extends Component {
 	style={{color: 'rgb(75,176,88)'}}
 	    ></i>
 	    {
-            <i className={`fa fa-video-camera fa-stack-1x`}
-	     style={{color: 'white'}}></i>
-	     }
+	    <i className={`fa fa-video-camera fa-stack-1x`}		
+		style={{color: 'white'}}>
+		</i>
+	    }
+	    {!this.state.publishing && 
+	    <i className={`fa fa-ban  fa-stack-2x`}		
+	     style={{color: 'rgb(75,176,88)'}}>
+		</i> }
 		 </span>
     )
   }
@@ -626,11 +631,11 @@ class AudioButton extends Component {
 	    </button>
 */	    
 	    <span className={`fa-stack`} onClick={this.toggleMicrophone}>
-	    <i className='fa fa-circle fa-stack-2x' 
+	    <i className={`fa fa-circle fa-stack-2x`} 
 	style={{color: 'rgb(75,176,88)'}}
 	    ></i>
 	    {
-            <i className={`fa fa-microphone fa-stack-1x`}
+            <i className={`fa ${this.state.publishing ? 'fa-microphone' : 'fa-microphone-slash'}  fa-stack-1x`}
 	     style={{color: 'white'}}></i>
 	     }
 		 </span>

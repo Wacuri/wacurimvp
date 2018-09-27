@@ -6818,7 +6818,9 @@ var VideoButton = function (_Component6) {
           style: { color: 'rgb(75,176,88)' }
         }),
         _react2.default.createElement('i', { className: 'fa fa-video-camera fa-stack-1x',
-          style: { color: 'white' } })
+          style: { color: 'white' } }),
+        !this.state.publishing && _react2.default.createElement('i', { className: 'fa fa-ban  fa-stack-2x',
+          style: { color: 'rgb(75,176,88)' } })
       );
     }
   }]);
@@ -6924,7 +6926,7 @@ var AudioButton = function (_Component7) {
           _react2.default.createElement('i', { className: 'fa fa-circle fa-stack-2x',
             style: { color: 'rgb(75,176,88)' }
           }),
-          _react2.default.createElement('i', { className: 'fa fa-microphone fa-stack-1x',
+          _react2.default.createElement('i', { className: 'fa ' + (this.state.publishing ? 'fa-microphone' : 'fa-microphone-slash') + '  fa-stack-1x',
             style: { color: 'white' } })
         )
       );
@@ -7577,7 +7579,8 @@ var FeedbackModal = function (_Component13) {
               style: { borderRadius: '15px',
                 marginLeft: '1rem',
                 marginRight: '1rem',
-                marginTop: '-2rem'
+                marginTop: '-2rem',
+                zIndex: '1001'
               }
             },
             'Submit Feedback'
