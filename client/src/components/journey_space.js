@@ -1111,7 +1111,8 @@ class FeedbackModal extends Component {
 	style={{borderRadius: '15px',
 		marginLeft: '1rem',
 		marginRight: '1rem',
-		marginTop: '-2rem'		
+		marginTop: '-2rem',
+		zIndex: '1001',
 	       }}
  	    >Submit Feedback</button>
 </div>
