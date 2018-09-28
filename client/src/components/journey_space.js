@@ -595,12 +595,15 @@ class AudioButton extends Component {
 
     changeToggleValue = () => {
 	this.setState((prevState) => {
+	    var curMuted = this.props.state.microphoneMuted;
+	    this.props.setMicrophoneMutedState(!curMuted);
 	    return { publishing: !prevState.publishing};
-	})
+	});
+	
     };
     
     toggleMicrophone = (e) => {
-	const DEBUG_MUTE = 1;	
+	const DEBUG_MUTE = 0;	
 	e.preventDefault();
       const {publisher} = this.props;
       if (DEBUG_MUTE) {
@@ -623,19 +626,15 @@ class AudioButton extends Component {
   }
   
 
-  render() {
+    render() {
+	console.log("AUDIO BUTTON STATE",this.props.state.microphoneMuted);
     return (
-/*	    <button id="microphoneButton" style={this.props.style || {}} onClick={this.toggleMicrophone} className={`btn btn-${this.state.publishing ? 'primary' : 'secondary'}`}> 
-
-	    <i className="fa fa-microphone fa-fw" ></i>
-	    </button>
-*/	    
 	    <span className={`fa-stack`} onClick={this.toggleMicrophone}>
 	    <i className={`fa fa-circle fa-stack-2x`} 
 	style={{color: 'rgb(75,176,88)'}}
 	    ></i>
 	    {
-            <i className={`fa ${this.state.publishing ? 'fa-microphone' : 'fa-microphone-slash'}  fa-stack-1x`}
+            <i className={`fa ${!this.props.state.microphoneMuted ? 'fa-microphone' : 'fa-microphone-slash'}  fa-stack-1x`}
 	     style={{color: 'white'}}></i>
 	     }
 		 </span>
@@ -1153,8 +1152,6 @@ class UnfilledVideoSquare extends React.Component {
       	    !(state.playerState == "waiting" ||
 	      state.playerState == "failed");
 
-      console.log("visible",visible);
-
       return ((slength < limit) ?
 	      <div key={localkey} id={vid} className='video-placeholder'>
 	      <div className='invite-indicator'>
@@ -1226,7 +1223,8 @@ class JourneySpace extends Component {
 
   constructor(props) {
       super(props);
-    this.state = {
+      this.state = {
+	  microphoneMuted: false,
       streams: [],
       publisherId: '',
       session: null,
@@ -1247,9 +1245,9 @@ class JourneySpace extends Component {
     componentDidMount() {
 	state.audioTag.addEventListener('ended', (event) => {
 	    console.log("CHANGING STATE TO ENDED!");
-	    if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-		this.publisher.state.publisher.publishAudio(true);
-	    }
+//	    if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+//		this.publisher.state.publisher.publishAudio(true);
+//	    }
 	    this.setState({
 		playerState: 'ended'
 	    });
@@ -1270,9 +1268,10 @@ class JourneySpace extends Component {
 	    if (decodeURIComponent(state.audioTag.src) === `${window.location.origin}${state.journey.journey}`) {
 		state.audioTag.enqueue(['/chime.mp3', '/sharing.mp3']).then(() => {
 		    // sharing audio ended
-		    if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-			this.publisher.state.publisher.publishAudio(true);
-		    }
+		    // If we do this directly, we lose control of the buttons!
+		    // if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+		    // 	this.publisher.state.publisher.publishAudio(true);
+		    // }
 		});
 		state.audioTag.play();
 	    }
@@ -1334,7 +1333,8 @@ class JourneySpace extends Component {
 
         this.sessionHelper.session.on("signal:startJourney", (event) => {
           if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-            this.publisher.state.publisher.publishAudio(false);
+              this.publisher.state.publisher.publishAudio(false);
+
           }
           const playPromise = state.audioTag.play();
           if (playPromise !== undefined) {
@@ -1348,13 +1348,17 @@ class JourneySpace extends Component {
             });
           }
           this.setState({
-            playerState: 'playing'
+              playerState: 'playing',
+	      // we also want to mute the microphone here!
+	      microphoneMuted: true,
           });
+	    // In theory, this could be the place to mute microphones
+	    console.log("MUTE HERE!!!!!!");
         });
 
         this.sessionHelper.session.on("signal:pauseJourney", (event) => {
-          if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-            this.publisher.state.publisher.publishAudio(true);
+          if (this.publisher && this.publisher.state && this.publisher.state.publisher && !this.state.microphoneMuted) {
+//            this.publisher.state.publisher.publishAudio(true);
           }
           state.audioTag.pause();
           this.setState({
@@ -1748,13 +1752,17 @@ class JourneySpace extends Component {
 
 		 <div style={{display: 'flex', flexDirection: 'row', visibility: `${(this.state.showOrientationModal || this.state.showFeedbackModal ) ? "hidden" : "visible"}`}}>
 		 <span key="stream" id='video-square1' className='journeyspace-stream journeyspace-me'>
+		 {console.log("RENDERING PUBLISHER")}
                         <OTPublisher 
                           session={this.sessionHelper.session}
                           onInit={this.onInitPublisher}
-                         ref={publisher => {this.publisher = publisher}}
-                              properties={{
+                 ref={publisher => {this.publisher = publisher}}
+                 properties={{
+
                                 width: '100%',
-                                height: '100%',
+                     height: '100%',
+  		     style: {buttonDisplayMode: 'off',
+			    }
                               }}
                         />
 		 </span>
@@ -1785,7 +1793,13 @@ class JourneySpace extends Component {
 			 <VideoButton
 			 publisher={this.publisher}/>
 			 <AudioButton
-			  publisher={this.publisher}/>
+		 publisher={this.publisher}
+		 state={this.state}
+		 setMicrophoneMutedState={(b) => {
+		     this.publisher.state.publisher.publishAudio(!b);		     
+		     this.setState({microphoneMuted: b});
+		 }}
+		 />
 		 <PlayButton style={{color: 'rgb(74,170,221)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
 		 journey={state.journey} player={state.audioTag}/>			 
 

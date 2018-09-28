@@ -21,7 +21,7 @@ export function setSizes() {
     }
     
 
-    var debug = 1;
+    var debug = 0;
     
 	var w = window.innerWidth;
     var h = window.innerHeight;
