@@ -1052,14 +1052,14 @@ class FeedbackModal extends Component {
         method: 'POST',
         mode: 'cors',
       });
+	// Return to the journeyboard....
+      this.props.history.push('/');      	
     }
     onInvite = (e) => {
 	console.log("onInvite clicked!");	
     }
     
     render() {
-	console.log("journeySpacename",this.state.journeySpaceName);
-	console.log("journeySpacename",this.props.journeySpaceName);	
     return (
 	    <div style={{position: 'absolute',
 			 minHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
@@ -1155,7 +1155,7 @@ class FeedbackModal extends Component {
 </div>
 	    <p />
 	    <p />	    	    
-                  <button className='invite-button feedback-button' onClick={this.onInvite}
+                  <button className='invite-button feedback-button' onClick={this.props.onCloseAndInvite}
  	              >Invite Friends to a New Journey</button>
 
 	    </div>	    
@@ -1779,7 +1779,11 @@ class JourneySpace extends Component {
 		  journey={this.state.session}
 		  onComplete={this.onCompleteFeedback}
 		  onClose={this.onCloseFeedbackModal}
+		  onCloseAndInvite={(e) => { this.onCloseFeedbackModal(e);
+					    this.onInvite(e);
+		  }}
 		  room={this.props.match.params.room}
+		  history={this.props.history}
 		  />
 		 }
 		 

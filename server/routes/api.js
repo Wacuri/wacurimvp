@@ -233,13 +233,6 @@ router.put('/journeys/:room/progress', async (req, res) => {
 });
 
 router.post('/journeys/:id/feedback', async (req, res) => {
-    console.log("FEEBACK", req.body.rating);
-    console.log("FEEBACK", req.body.feeling);
-    console.log("FEEBACK", req.body.text);
-    console.log("FEEBACK", req.body.journey);
-    console.log("FEEBACK", req.body.room);    
-
-    
     const newFeedback = new Feedback({rating: req.body.rating,
 				      feeling: req.body.feeling,
 				      text: req.body.text,
