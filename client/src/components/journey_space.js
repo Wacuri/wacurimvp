@@ -538,7 +538,7 @@ class VideoButton extends Component {
 		style={{color: 'white'}}>
 		</i>
 	    }
-	    {!this.state.publishing && 
+	    { !this.state.publishing && 
 	    <i className={`fa fa-ban  fa-stack-2x`}		
 	     style={{color: 'rgb(75,176,88)'}}>
 		</i> }
@@ -1014,21 +1014,44 @@ class FeedbackModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      journeySpaceName: '',
+	journeySpaceName: '',
+	rating: 0,
+	feeling: 0,
+	text: '',
       error: false
     }
   }
-
+    
     onChange = (e) => {
     e.preventDefault();	
-    this.setState({
-      journeySpaceName: e.target.value,
-      error: this.state.error && e.target.value != ''
-    });
+	this.setState({
+	    journeySpaceName: e.target.value,
+	    error: this.state.error && e.target.value != ''
+	});
 	e.stopPropagation();	
     }
     onSubmit = (e) => {
 	console.log("onSubmit clicked!");
+	// NEXT
+	// Here is where we will hit an api to access the database.
+	console.log(this.props.room);
+
+      fetch(`/api/journeys/${this.props.room}/feedback`, {
+          body: JSON.stringify({
+	      rating: this.state.rating,
+	      feeling: this.state.feeling,
+	      text: document.getElementById("feedback_text").value,
+	      journey: this.props.journeySpaceName,
+	      room: this.props.room
+	  }),
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+        mode: 'cors',
+      });
     }
     onInvite = (e) => {
 	console.log("onInvite clicked!");	
@@ -1069,7 +1092,9 @@ class FeedbackModal extends Component {
 	    <div>
 	    <Rating start={0} stop={10} className='feedback-rating'
 	emptySymbol="fa fa-circle rating-circle feedback-empty"
-	fullSymbol="fa fa-circle rating-circle feedback-full" />
+	fullSymbol="fa fa-circle rating-circle feedback-full"
+	onChange={ (v) => { this.state.rating = v;}
+	}/>
 	    <div  style={{
 		display: 'flex',
 		flexDirection: 'row',		
@@ -1081,7 +1106,10 @@ class FeedbackModal extends Component {
 	    <div>
 	    <Rating start={0} stop={10} className='feedback-rating'
 	emptySymbol="fa fa-circle rating-circle feedback-empty"
-	fullSymbol="fa fa-circle rating-circle feedback-full"  />
+	fullSymbol="fa fa-circle rating-circle feedback-full"
+	onChange={ (v) => { this.state.feeling = v;}
+	}/>
+	    />
 	    <div  style={{
 		display: 'flex',
 		flexDirection: 'row',		
@@ -1102,12 +1130,17 @@ class FeedbackModal extends Component {
 		justifyContent: 'space-between',
 		width: '100%'
 	    }}>
-	    <textarea className="form-control rounded-0" id="exampleFormControlTextarea2" rows="4"
+	    <textarea id="feedback_text" className="form-control rounded-0" rows="4"
 	style={{borderRadius: '15px',
 		marginLeft: '1rem',
 		marginRight: '1rem',
-		marginBottom: '0px'
-	       }}
+		marginBottom: '0px',
+		onChange: (e) => {
+		    // no need to call setState since we are only keeping for submit...
+		    console.log("ONCHANGE OF TEXT",e);
+		    this.state.text = e.target.value;
+		}
+		  }}
 	    >
 	    </textarea>
 	    </div>
@@ -1745,7 +1778,9 @@ class JourneySpace extends Component {
 		  journeySpaceName={state.journey.name}
 		  journey={this.state.session}
 		  onComplete={this.onCompleteFeedback}
-		  onClose={this.onCloseFeedbackModal}/>
+		  onClose={this.onCloseFeedbackModal}
+		  room={this.props.match.params.room}
+		  />
 		 }
 		 
 		 

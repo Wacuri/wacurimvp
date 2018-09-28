@@ -231,6 +231,20 @@ router.put('/journeys/:room/progress', async (req, res) => {
   res.sendStatus(200);
 });
 
+router.post('/journeys/:id/feedback', async (req, res) => {
+  const journey = await JourneySpace.findOne({room: req.params.id}).exec();
+  await journey.skip();
+  const response = journey.toJSON();
+  const participants = await JourneyParticipant.find({session: journey, present: true}).lean().exec();
+    response.participants = participants;
+    console.log("FEEBACK", req.body.rating);
+    console.log("FEEBACK", req.body.feeling);
+    console.log("FEEBACK", req.body.text);
+    console.log("FEEBACK", req.body.journey);
+    console.log("FEEBACK", req.body.room);    
+    //  opentok.signal(journey.sessionId, null, { 'type': 'journeyUpdated', 'data': JSON.stringify(response) }, () => {});
+});
+
 router.post('/journeys/:id/skip', async (req, res) => {
   const journey = await JourneySpace.findOne({room: req.params.id}).exec();
   await journey.skip();
