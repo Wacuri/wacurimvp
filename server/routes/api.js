@@ -16,6 +16,7 @@ import JourneySpace from '../models/journey_space';
 import JourneyParticipant from '../models/journey_participant';
 import JourneyRSVP from '../models/journey_rsvp';
 import JourneyContent from '../models/journey_content';
+import Feedback from '../models/feedback';
 import dotenv from 'dotenv';
 require('isomorphic-fetch');
 
@@ -232,17 +233,24 @@ router.put('/journeys/:room/progress', async (req, res) => {
 });
 
 router.post('/journeys/:id/feedback', async (req, res) => {
-  const journey = await JourneySpace.findOne({room: req.params.id}).exec();
-  await journey.skip();
-  const response = journey.toJSON();
-  const participants = await JourneyParticipant.find({session: journey, present: true}).lean().exec();
-    response.participants = participants;
     console.log("FEEBACK", req.body.rating);
     console.log("FEEBACK", req.body.feeling);
     console.log("FEEBACK", req.body.text);
     console.log("FEEBACK", req.body.journey);
     console.log("FEEBACK", req.body.room);    
-    //  opentok.signal(journey.sessionId, null, { 'type': 'journeyUpdated', 'data': JSON.stringify(response) }, () => {});
+
+    
+    const newFeedback = new Feedback({rating: req.body.rating,
+				      feeling: req.body.feeling,
+				      text: req.body.text,
+				      journey: req.body.journey,
+				      room: req.body.room });
+    
+    console.log("newFeedback",newFeedback);
+    
+    await newFeedback.save(function (err, fluffy) {
+	if (err) return console.error(err);
+    });
 });
 
 router.post('/journeys/:id/skip', async (req, res) => {
