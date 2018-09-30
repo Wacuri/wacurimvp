@@ -16,7 +16,8 @@ import moment from 'moment';
 import Cookie from 'js-cookie';
 import Header from './components/header';
 import Home from './components/home';
-import JourneySpace from './components/journey_space';
+import * as JSP from './components/journey_space';
+// import JourneySpace from './components/journey_space';
 import Intro from './components/intro';
 import CountdownMessage from './components/countdown_message';
 import state from './state';
@@ -148,8 +149,9 @@ class JoinableJourneyCard extends Component {
 		    <li key={"item"+i}><i className={`fa fa-user ${journey.participants.length > i ? 'fill' : ''}`}></i></li>
             ))}
             
-          </ul>
-          <Link to={`/${journey.room}`} className='btn btn-primary'>{currentUserHasRSVP ? 'Go there now' : 'Join'}</Link>
+        </ul>
+	    {/* here "j" is inserted as a convenient means of marking this entry as a Journeyboard space rather than a permanent one */}
+          <Link to={`/j/${journey.room}`} className='btn btn-primary'>{currentUserHasRSVP ? 'Go there now' : 'Join'}</Link>
         </div>
       </div>
     )
@@ -280,8 +282,8 @@ class IntroWrapper extends Component {
 }
 
 const RouteWithIntro = ({component: Component, ...rest}) => {
-  const showIntro = __CLIENT__ && !Cookie.get('saw intro');
-  return (
+    const showIntro = __CLIENT__ && !Cookie.get('saw intro');
+    return (
     <div>
       {showIntro && 
         <Route {...rest} render={renderProps => {
@@ -310,8 +312,9 @@ class App extends Component {
         <Switch>
           <RouteWithIntro exact path="/login" component={withRouter(Login)} />
           <RouteWithIntro exact path="/" component={view(JourneyBoard)} />
-          <RouteWithIntro exact path="/old" component={Home} />
-          <RouteWithIntro exact path="/:room" component={JourneySpace} />
+            <RouteWithIntro exact path="/old" component={Home} />
+	    <RouteWithIntro exact path="/j/:room" component={JSP.JourneySpaceP}/>
+            <RouteWithIntro exact path="/:room" component={JSP.JourneySpace} />
         </Switch>
       </div>
     )

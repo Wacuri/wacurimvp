@@ -1251,9 +1251,12 @@ class NoVideoSquare extends React.Component {
 		  </div>);
   }	  
 }
+// return null if not a permanent-room, return the name if it is a permanent room.
+function isPermanentRoom(url) {
+    console.log("URL",url);
+}
 
-class JourneySpace extends Component {
-
+export class JourneySpace extends Component {
   constructor(props) {
       super(props);
       this.state = {
@@ -1269,18 +1272,20 @@ class JourneySpace extends Component {
 	showInviteModal: false,
 	showOrientationModal: false,
 	showFeedbackModal: false,
-      showIntro: true,
+	  showIntro: true,
+	  permanentRoom: false,
     }
     this.publisher = {};
-    this.audioTag = {};
+      this.audioTag = {};
+      console.log('PROPS',props);
   }
 
     componentDidMount() {
 	state.audioTag.addEventListener('ended', (event) => {
 	    console.log("CHANGING STATE TO ENDED!");
-//	    if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-//		this.publisher.state.publisher.publishAudio(true);
-//	    }
+	    //	    if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+	    //		this.publisher.state.publisher.publishAudio(true);
+	    //	    }
 	    this.setState({
 		playerState: 'ended'
 	    });
@@ -1310,149 +1315,156 @@ class JourneySpace extends Component {
 	    }
 	});
 
-		fetch(`/api/journeys/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
-			.then(res => res.json())
-			.then(json => {
-				state.journey = json;
+	fetch(`/api/journeys/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
+	    .then(res => res.json())
+	    .then(json => {
+		state.journey = json;
+		
 
-        state.audioTag.src = state.journey.journey;
-        state.audioTag.currentTime = 0;
+		state.audioTag.src = state.journey.journey;
 
-        this.sessionHelper = createSession({
-          apiKey: state.openTokKey,
-          sessionId: state.journey.sessionId,
-          token: state.journey.token,
-          onConnect: () => {
-            console.log('assigned connection to publisher', this.sessionHelper.session.connection);
-            fetch(`/api/journeys/${this.props.match.params.room}/joined`, {
-              body: JSON.stringify({id: this.sessionHelper.session.connection.id}),
-              credentials: 'same-origin', // include, same-origin, *omit
-              headers: {
-                'content-type': 'application/json'
-              },
-              method: 'POST', // *GET, POST, PUT, DELETE, etc.
-              mode: 'cors', // no-cors, cors, *same-origin
-              redirect: 'follow', // manual, *follow, error
-              referrer: 'no-referrer', // *client, no-referrer
-            });
-          },
-          onStreamsUpdated: streams => {
-            console.log('Current subscriber streams:', streams);
-            this.setState({ streams });
-            if (!this.state.currentlyActivePublisher) {
-              this.setState({
-                currentlyActivePublisher: streams[0]
-              });
-            }
-          }
-        });
-        this.sessionHelper.session.on("connectionDestroyed", (event) => {
-          const data = {
-            sessionId: this.sessionHelper.session.sessionId,
-            connection: {
-              id: event.connection.id
-            },
-            event: 'connectionDestroyed',
-          }
-          this.refreshSession();
-        });
-        this.sessionHelper.session.on("connectionCreated", (event) => {
-          this.refreshSession();
-        });
-        this.sessionHelper.session.on('signal', (event) => {
-          console.log("Signal sent from connection ", event);
-          this.refreshSession();
-        });
+		console.log("JOURNEY INFO",state.journey);
+		console.log("ROOM",this.props.match.params.room);		
+		if (state.journey.name) {
+		    console.log("JOURNEY BOARD ROOM");
+		} else {
+		    console.log("PERMANENT ROOM");		    
+		}
+		state.audioTag.currentTime = 0;
 
-        this.sessionHelper.session.on("signal:startJourney", (event) => {
-          if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-              this.publisher.state.publisher.publishAudio(false);
-
-          }
-          const playPromise = state.audioTag.play();
-          if (playPromise !== undefined) {
-            playPromise
-            .then(() => {
-              console.log('audio promise resolve');
-            })
-            // Safety first!
-            .catch(e => {
-              console.error(e);
-            });
-          }
-          this.setState({
-              playerState: 'playing',
-	      // we also want to mute the microphone here!
-	      microphoneMuted: true,
-          });
-	    // In theory, this could be the place to mute microphones
-	    console.log("MUTE HERE!!!!!!");
-        });
-
-        this.sessionHelper.session.on("signal:pauseJourney", (event) => {
-          if (this.publisher && this.publisher.state && this.publisher.state.publisher && !this.state.microphoneMuted) {
-//            this.publisher.state.publisher.publishAudio(true);
-          }
-          state.audioTag.pause();
-          this.setState({
-            playerState: 'paused'
-          });
-        });
-
-        this.sessionHelper.session.on("signal:journeyUpdated", (event) => {
-          const journey = JSON.parse(event.data);
-            state.journey = journey;
-	    console.log(" Got signal:journeyUpdated ", event);
-
-          if (state.journey.state != 'completed') {
-            // if we are in completed state, then audio may be playing the sharing prompt
-            state.audioTag.src = state.journey.journey;
-            state.audioTag.currentTime = 0;
-          }
-
-          if (state.journey.state === 'started') {
-
-            if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-              this.publisher.state.publisher.publishAudio(false);
-            }
-            state.audioTag.play();
-            this.setState({
-              playerState: 'playing'
-            });
-          }
-        });
-        
-
-        this.sessionHelper.session.on("signal:fail", (event) => {
-          state.journey.state = 'failed';
-        });
-
-
-        this.setState({
-          session: this.sessionHelper.session
-        });
-
-        const onAudioCanPlay = (event) => { 
-          if (state.journey.state === 'started') {
-            state.audioTag.play();
-            if (!isNaN(state.journey.currentTime)) {
-              state.audioTag.currentTime = state.journey.currentTime;
-            }
-          }
-          state.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
-        }
-
-        state.audioTag.addEventListener('canplaythrough', onAudioCanPlay, false);
-        state.audioTag.load();
+		this.sessionHelper = createSession({
+		    apiKey: state.openTokKey,
+		    sessionId: state.journey.sessionId,
+		    token: state.journey.token,
+		    onConnect: () => {
+			console.log('assigned connection to publisher', this.sessionHelper.session.connection);
+			fetch(`/api/journeys/${this.props.match.params.room}/joined`, {
+			    body: JSON.stringify({id: this.sessionHelper.session.connection.id}),
+			    credentials: 'same-origin', // include, same-origin, *omit
+			    headers: {
+				'content-type': 'application/json'
+			    },
+			    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+			    mode: 'cors', // no-cors, cors, *same-origin
+			    redirect: 'follow', // manual, *follow, error
+			    referrer: 'no-referrer', // *client, no-referrer
 			});
-    fetch('/api/journeys')
-      .then(res => res.json())
-      .then(json => {
-        state.journeys = json;
-      });
+		    },
+		    onStreamsUpdated: streams => {
+			console.log('Current subscriber streams:', streams);
+			this.setState({ streams });
+			if (!this.state.currentlyActivePublisher) {
+			    this.setState({
+				currentlyActivePublisher: streams[0]
+			    });
+			}
+		    }
+		});
+		this.sessionHelper.session.on("connectionDestroyed", (event) => {
+		    const data = {
+			sessionId: this.sessionHelper.session.sessionId,
+			connection: {
+			    id: event.connection.id
+			},
+			event: 'connectionDestroyed',
+		    }
+		    this.refreshSession();
+		});
+		this.sessionHelper.session.on("connectionCreated", (event) => {
+		    this.refreshSession();
+		});
+		this.sessionHelper.session.on('signal', (event) => {
+		    console.log("Signal sent from connection ", event);
+		    this.refreshSession();
+		});
+
+		this.sessionHelper.session.on("signal:startJourney", (event) => {
+		    if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+			this.publisher.state.publisher.publishAudio(false);
+
+		    }
+		    const playPromise = state.audioTag.play();
+		    if (playPromise !== undefined) {
+			playPromise
+			    .then(() => {
+				console.log('audio promise resolve');
+			    })
+			// Safety first!
+			    .catch(e => {
+				console.error(e);
+			    });
+		    }
+		    this.setState({
+			playerState: 'playing',
+			// we also want to mute the microphone here!
+			microphoneMuted: true,
+		    });
+		    // In theory, this could be the place to mute microphones
+		    console.log("MUTE HERE!!!!!!");
+		});
+
+		this.sessionHelper.session.on("signal:pauseJourney", (event) => {
+		    if (this.publisher && this.publisher.state && this.publisher.state.publisher && !this.state.microphoneMuted) {
+			//            this.publisher.state.publisher.publishAudio(true);
+		    }
+		    state.audioTag.pause();
+		    this.setState({
+			playerState: 'paused'
+		    });
+		});
+
+		this.sessionHelper.session.on("signal:journeyUpdated", (event) => {
+		    const journey = JSON.parse(event.data);
+		    state.journey = journey;
+		    console.log(" Got signal:journeyUpdated ", event);
+
+		    if (state.journey.state != 'completed') {
+			// if we are in completed state, then audio may be playing the sharing prompt
+			state.audioTag.src = state.journey.journey;
+			state.audioTag.currentTime = 0;
+		    }
+
+		    if (state.journey.state === 'started') {
+
+			if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
+			    this.publisher.state.publisher.publishAudio(false);
+			}
+			state.audioTag.play();
+			this.setState({
+			    playerState: 'playing'
+			});
+		    }
+		});
+		
+
+		this.sessionHelper.session.on("signal:fail", (event) => {
+		    state.journey.state = 'failed';
+		});
 
 
-	}
+		this.setState({
+		    session: this.sessionHelper.session
+		});
+
+		const onAudioCanPlay = (event) => { 
+		    if (state.journey.state === 'started') {
+			state.audioTag.play();
+			if (!isNaN(state.journey.currentTime)) {
+			    state.audioTag.currentTime = state.journey.currentTime;
+			}
+		    }
+		    state.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
+		}
+
+		state.audioTag.addEventListener('canplaythrough', onAudioCanPlay, false);
+		state.audioTag.load();
+	    });
+	fetch('/api/journeys')
+	    .then(res => res.json())
+	    .then(json => {
+		state.journeys = json;
+	    });
+    }
 
   componentWillUnmount() {
     if (this.sessionHelper) {
@@ -1703,7 +1715,11 @@ class JourneySpace extends Component {
 	    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
 	    var local_key_counter_to_avoid_warning = 0;	    
 	    let currentUserHasFlaggedJourney = state.journey && state.journey.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
-	    var stream0 = this.state.streams[0];
+	var stream0 = this.state.streams[0];
+	// NEXT
+	// If the journey is not defined, then we are in a "permanentRoom". We can
+	// enter a permament room form a straight URL or from within these pages.
+	console.log("JOURNEY NAME",this.state.journey);
 	return (
 		<div className='journeyspace' style={{position: 'relative'}}>
 	    {/*          <div className='journeyspace-content flexiblerow'> */}
@@ -1901,5 +1917,12 @@ class JourneySpace extends Component {
 	}
 }
 
-export default view(JourneySpace);
+
+// This is "Permanent" Journey Space, which behaves somewheat differently than
+// a "Journeyboard Journy Space"
+export class JourneySpaceP extends JourneySpace {
+    constructor(props) {
+	super({journeyBoard: true,...props});
+     }
+}
 
