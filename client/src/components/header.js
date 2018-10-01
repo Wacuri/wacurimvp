@@ -45,7 +45,7 @@ class Header extends React.Component {
     render() {
 	return (
 	<div  className="header">
-                  <div style={{padding: '10px'}}>
+                  <div style={{padding: '5px'}}>
 		</div>
 		{ this.props.showLeave && 
 		  <LeaveRoomButton history={this.props.history}/> }

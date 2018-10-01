@@ -109,6 +109,15 @@ h2 {
     display: flex;
     flex-flow: column;
 }
+#titlebar {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-left: 20px;
+    background-color: black;
+    color: white;    
+}
 
 .space-between-added {
     justify-content: space-between;
@@ -414,51 +423,24 @@ h2 {
   user-select: none;
 }
 
-.journey-timeline ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  li {
-    border-bottom: 1px solid rgb(88, 88, 88);
-    padding: 10px;
-  }
-}
 
 .journey-timeline {
   position: relative;
 
-  .fa-caret-left {
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-
-  .arrow {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 64px;
-    transition: all 200ms ease-in-out;
-
-    svg {
-      fill: rgb(251, 188, 90);
-    }
-  }
-
-
   h4 {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold;
   }
 
   p {
-    font-size: 12px;
+    font-size: 1rem;
     margin-bottom: 0;
   }
 
   .timer {
-    font-weight: bold;
+      font-weight: bold;
+      margin-left: 1rem;
+      margin-right: 1rem;
   }
 }
 
@@ -574,8 +556,8 @@ h2 {
 
 .phase-bar {
     height: calc(0.8vh);
-    margin-left: calc(0.1vw);
-    margin-right: calc(0.1vw);
+//    margin-left: calc(0.1vw);
+//    margin-right: calc(0.1vw);
 }
 
 .bar-white {
@@ -611,7 +593,7 @@ h2 {
 
 #phase-bar0 {
     display: grid;
-    grid-gap: 10px;
+    grid-gap: 12px;
     grid-template-columns: auto auto auto auto ;
 }
 

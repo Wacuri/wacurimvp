@@ -332,13 +332,15 @@ class JourneyPhases extends Component {
     return (
 	    <div ref={el => {this.container = el}} id={'journey-timeline0'} className={`journey-timeline step-${this.stepIndex.toString()}`}>
 	    <div>
-	    <div style={{display: 'flex', flexDirection: 'row' }}>
-	    <span>{Messages[this.stepIndex]}</span>
+	    <div style={{display: 'flex', flexDirection: 'row-reverse',  alignItems: 'flex-end' }}>
+	    <span style={{marginRight: '10px'}}>
 
 	{ state.journey.startAt &&
 	    (this.stepIndex == 0) &&
                 <span className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</span>
 	}
+	    <span>{Messages[this.stepIndex]}</span>
+	</span>
 	    </div>
 	    </div>
 	    <div id={'phase-bar0'}>
@@ -1734,14 +1736,13 @@ export class JourneySpace extends Component {
 		 />
 
 		 
-		 <div id="titlebar" className='flexiblerow space-between-added'
-		 style={{marginLeft: '20px', marginRight: '20px', backgroundColor: 'black', color: 'white'}}>
+		 <div id="titlebar" >
 		 
 		 {state.journey.startAt && <span style={{color: 'white'}} >{state.journey.name}</span>
 		 }
                  { (this.props.isPermanentSpace ||
 		    (!state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed'))) &&
-		  <div style={{padding: '10px'}}>
+		  <div style={{paddingTop: '8px'}}>
 		   <select style={{width: '100%'}} onChange={this.onChangeJourney} value={state.journeys&& state.journey.journey}>
                     <option value={''}>{'Pulldown to select a new Journey'}</option>		   
                      {

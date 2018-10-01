@@ -8716,6 +8716,15 @@ h2 {
   display: flex;
   flex-flow: column; }
 
+#titlebar {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-left: 20px;
+  background-color: black;
+  color: white; }
+
 .space-between-added {
   justify-content: space-between; }
 
@@ -8938,36 +8947,18 @@ h2 {
   -ms-user-select: none;
   user-select: none; }
 
-.journey-timeline ul {
-  margin: 0;
-  padding: 0;
-  list-style: none; }
-  .journey-timeline ul li {
-    border-bottom: 1px solid #585858;
-    padding: 10px; }
-
 .journey-timeline {
   position: relative; }
-  .journey-timeline .fa-caret-left {
-    position: absolute;
-    top: 0;
-    right: 0; }
-  .journey-timeline .arrow {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 64px;
-    transition: all 200ms ease-in-out; }
-    .journey-timeline .arrow svg {
-      fill: #fbbc5a; }
   .journey-timeline h4 {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold; }
   .journey-timeline p {
-    font-size: 12px;
+    font-size: 1rem;
     margin-bottom: 0; }
   .journey-timeline .timer {
-    font-weight: bold; }
+    font-weight: bold;
+    margin-left: 1rem;
+    margin-right: 1rem; }
 
 .intro h2 {
   color: white;
@@ -9049,9 +9040,7 @@ h2 {
   z-index: 1000; }
 
 .phase-bar {
-  height: calc(0.8vh);
-  margin-left: calc(0.1vw);
-  margin-right: calc(0.1vw); }
+  height: calc(0.8vh); }
 
 .bar-white {
   background-color: white; }
@@ -9074,7 +9063,7 @@ h2 {
 
 #phase-bar0 {
   display: grid;
-  grid-gap: 10px;
+  grid-gap: 12px;
   grid-template-columns: auto auto auto auto; }
 
 .feedback-rating .feedback-empty {

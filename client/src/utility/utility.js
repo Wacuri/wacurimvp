@@ -77,7 +77,7 @@ export function setSizes() {
         s4.style.width = osw_h+"px";
 
     // This is fragile and stupid, i need to do better.
-    jt.style.width = (osw-40)+"px";
+    jt.style.width = (osw/2)+"px";
 
     
     var tb = document.getElementById("titlebar");
