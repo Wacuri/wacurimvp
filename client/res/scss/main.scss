@@ -56,11 +56,17 @@ h2 {
 		       
   .logo {
     width: 150px;
-    max-height: 46px;
+    max-height: 60px;
     display: block;
     margin-left: auto;
     margin-right: auto;
   
+  }
+  .journeyspacetitle {
+      color: black;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-left: 1rem;
   }
 }
 
@@ -455,7 +461,6 @@ h2 {
     font-weight: bold;
   }
 }
-
 
 
 .intro {

@@ -49,6 +49,10 @@ class Header extends React.Component {
 		</div>
 		{ this.props.showLeave && 
 		  <LeaveRoomButton history={this.props.history}/> }
+	    { this.props.isPermanentSpace &&
+	      <span className="journeyspacetitle"> Journey Space Name: {this.props.spaceName} </span>
+	    }
+	    
     <img className="logo" src={logo}/>
 		{/*    {state.journey && !state.journey.startAt &&
      <h2 style={{color: 'white'}}>{state.journey.name}</h2>

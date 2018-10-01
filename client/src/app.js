@@ -294,9 +294,11 @@ const RouteWithIntro = ({component: Component, ...rest}) => {
       }
 
       {!showIntro &&
-        <Route {...rest} render={renderProps => {
+       <Route {...rest} render={renderProps => {
+	   console.log("REST",rest);
+	   const myprops = {isPermanentSpace: rest.isPermanentSpace,...renderProps};    
           return (
-            <Component {...renderProps} />
+		  <Component {...myprops} />
           )
         }}/>
       }
@@ -313,8 +315,8 @@ class App extends Component {
           <RouteWithIntro exact path="/login" component={withRouter(Login)} />
           <RouteWithIntro exact path="/" component={view(JourneyBoard)} />
             <RouteWithIntro exact path="/old" component={Home} />
-	    <RouteWithIntro exact path="/j/:room" component={JSP.JourneySpaceP}/>
-            <RouteWithIntro exact path="/:room" component={JSP.JourneySpace} />
+	    <RouteWithIntro exact path="/j/:room" component={JSP.JourneySpace} isPermanentSpace={false} />
+            <RouteWithIntro exact path="/:room" component={JSP.JourneySpace} isPermanentSpace={true}  />
         </Switch>
       </div>
     )

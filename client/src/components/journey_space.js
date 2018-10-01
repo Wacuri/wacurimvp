@@ -1109,7 +1109,6 @@ class FeedbackModal extends Component {
 	fullSymbol="fa fa-circle rating-circle feedback-full"
 	onChange={ (v) => { this.state.feeling = v;}
 	}/>
-	    />
 	    <div  style={{
 		display: 'flex',
 		flexDirection: 'row',		
@@ -1719,7 +1718,8 @@ export class JourneySpace extends Component {
 	// NEXT
 	// If the journey is not defined, then we are in a "permanentRoom". We can
 	// enter a permament room form a straight URL or from within these pages.
-	console.log("JOURNEY NAME",this.state.journey);
+	console.log("JOURNEY NAME",this.props.match.params.room);
+	const spaceName = this.props.match.params.room;
 	return (
 		<div className='journeyspace' style={{position: 'relative'}}>
 	    {/*          <div className='journeyspace-content flexiblerow'> */}
@@ -1728,7 +1728,10 @@ export class JourneySpace extends Component {
 
 		{/* tob bar */}
 		<div id="topbar_and_header">
-		 <Header history={this.props.history} showLeave={true} />
+		 <Header history={this.props.history} showLeave={true}
+		 isPermanentSpace={this.props.isPermanentSpace}
+		 spaceName={spaceName}
+		 />
 
 		 
 		 <div id="titlebar" className='flexiblerow space-between-added'
@@ -1736,14 +1739,17 @@ export class JourneySpace extends Component {
 		 
 		 {state.journey.startAt && <span style={{color: 'white'}} >{state.journey.name}</span>
 		 }
-                 { !state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed') &&
+                 { (this.props.isPermanentSpace ||
+		    (!state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed'))) &&
 		  <div style={{padding: '10px'}}>
 		   <select style={{width: '100%'}} onChange={this.onChangeJourney} value={state.journeys&& state.journey.journey}>
-                        {state.journeys.map(journey => (
+                    <option value={''}>{'Pulldown to select a new Journey'}</option>		   
+                     {
+		           state.journeys.map(journey => (
                           <option value={journey.filePath}>{journey.name}</option>
                         ))}
                       </select>
-                   </div>}
+                   </div> }
 
 
                    <JourneyPhases journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
@@ -1917,12 +1923,4 @@ export class JourneySpace extends Component {
 	}
 }
 
-
-// This is "Permanent" Journey Space, which behaves somewheat differently than
-// a "Journeyboard Journy Space"
-export class JourneySpaceP extends JourneySpace {
-    constructor(props) {
-	super({journeyBoard: true,...props});
-     }
-}
 
