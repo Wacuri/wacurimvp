@@ -520,21 +520,24 @@ class VideoButton extends Component {
 
   toggle = (e) => {
     e.preventDefault();
-    const {publisher} = this.props;
-    if (publisher && publisher.state && publisher.state.publisher) {
-      publisher.state.publisher.publishVideo(!this.state.publishing);
-      this.setState({
-        publishing: !this.state.publishing
-      });
-    }
+      const {publisher} = this.props;
+      console.log("TOGGLE: PUBLIHSER ", publisher);
+      if (publisher && publisher.state && publisher.state.publisher) {
+	  publisher.state.publisher.publishVideo(!this.state.publishing);
+	  this.setState({
+              publishing: !this.state.publishing
+	  });
+      }
   }
 
-  render() {
+    render() {
+	console.log("PUBLISHING",this.state.publishing);
     return (
 	    <span className={`fa-stack`} onClick={this.toggle}>
 	    <i className='fa fa-circle fa-stack-2x' 
 	style={{color: 'rgb(75,176,88)'}}
 	    ></i>
+	    {/* This mechanism is a stop-gap because I can't get the Font Awesome icon to work
 	    {
 	    <i className={`fa fa-video-camera fa-stack-1x`}		
 		style={{color: 'white'}}>
@@ -543,7 +546,19 @@ class VideoButton extends Component {
 	    { !this.state.publishing && 
 	    <i className={`fa fa-ban  fa-stack-2x`}		
 	     style={{color: 'rgb(75,176,88)'}}>
-		</i> }
+	      </i> }
+	     */}
+	{/* This is an attempt to use a proper icon */}
+	    { this.state.publishing &&
+	    <i className={`fas fa-video fa-stack-1x`}		
+		style={{color: 'white'}}>
+		</i>
+	    }
+	{ !this.state.publishing &&
+	    <i className={`fas fa-video-slash fa-stack-1x`}		
+		style={{color: 'white'}}>
+		</i>
+	    }
 		 </span>
     )
   }
@@ -1190,7 +1205,7 @@ class UnfilledVideoSquare extends React.Component {
 	      <div key={localkey} id={vid} className='video-placeholder'>
 	      <div className='invite-indicator'>
 	      <div style={{visibility: `${hide_control ? 'hidden' : 'visible'}` }}>
-              <i className='fa fa-smile-o fa-2x'></i>
+              <i className='far fa-smile fa-2x'></i>
               <p style={{color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem'}}>Waiting...</p>
               <button className='invite-button invite-friends-button'  onClick={this.props.onInvite}>Invite Friends
 	        </button>
@@ -1274,19 +1289,15 @@ export class JourneySpace extends Component {
 	showOrientationModal: false,
 	showFeedbackModal: false,
 	  showIntro: true,
-	  permanentRoom: false,
-    }
-    this.publisher = {};
+	  permanentRoom: false, // what is publisher?
+      }
+      this.publisher = {};
       this.audioTag = {};
       console.log('PROPS',props);
   }
 
     componentDidMount() {
 	state.audioTag.addEventListener('ended', (event) => {
-	    console.log("CHANGING STATE TO ENDED!");
-	    //	    if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-	    //		this.publisher.state.publisher.publishAudio(true);
-	    //	    }
 	    this.setState({
 		playerState: 'ended'
 	    });
@@ -1307,10 +1318,6 @@ export class JourneySpace extends Component {
 	    if (decodeURIComponent(state.audioTag.src) === `${window.location.origin}${state.journey.journey}`) {
 		state.audioTag.enqueue(['/chime.mp3', '/sharing.mp3']).then(() => {
 		    // sharing audio ended
-		    // If we do this directly, we lose control of the buttons!
-		    // if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-		    // 	this.publisher.state.publisher.publishAudio(true);
-		    // }
 		});
 		state.audioTag.play();
 	    }
@@ -1511,7 +1518,9 @@ export class JourneySpace extends Component {
   }
 
   onInitPublisher = () => {
-    console.log('initialized publisher');
+      console.log('initialized publisher');
+      // Possibly this means publisher should be moved into the state!
+      this.setState(state: state);
   }
 
   onConfirmReady = (e) => {
@@ -1722,6 +1731,7 @@ export class JourneySpace extends Component {
 	// enter a permament room form a straight URL or from within these pages.
 	console.log("JOURNEY NAME",this.props.match.params.room);
 	const spaceName = this.props.match.params.room;
+	console.log("this.publisher", this.publisher);
 	return (
 		<div className='journeyspace' style={{position: 'relative'}}>
 	    {/*          <div className='journeyspace-content flexiblerow'> */}
@@ -1853,7 +1863,8 @@ export class JourneySpace extends Component {
 
 
 			 <VideoButton
-			 publisher={this.publisher}/>
+		 publisher={this.publisher}/>
+		 
 			 <AudioButton
 		 publisher={this.publisher}
 		 state={this.state}

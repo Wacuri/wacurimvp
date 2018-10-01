@@ -146,7 +146,7 @@ class JoinableJourneyCard extends Component {
             {Array(3).fill(0).map((k, i) => (
 		// Rob is changing this to "user" just as a test of my ability to change things...
 		// Note: Adding a "key" here seems unneeded but made a confusing waring disappear...
-		    <li key={"item"+i}><i className={`fa fa-user ${journey.participants.length > i ? 'fill' : ''}`}></i></li>
+		    <li key={"item"+i}><i className={`fas fa-user ${journey.participants.length > i ? 'fill' : ''}`}></i></li>
             ))}
             
         </ul>

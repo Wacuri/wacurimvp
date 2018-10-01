@@ -8,10 +8,11 @@
 // You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
+// $fa-font-path: "./webfonts" !default;
 
 @import "~bootstrap/scss/bootstrap.scss";
-$fa-font-path: "~font-awesome/fonts";
-@import "~font-awesome/scss/font-awesome.scss";
+@import "~@fortawesome/fontawesome-pro/css/all.css";
+
 
 // Bootstrap overrides
 
@@ -24,8 +25,6 @@ body {
     cursor: pointer;
   }
 }
-
-
 
 
 :root {
@@ -64,7 +63,7 @@ h2 {
   }
   .journeyspacetitle {
       color: black;
-      font-size: 1.2rem;
+      font-size: 1.0rem;
       font-weight: 700;
       margin-left: 1rem;
   }
@@ -672,7 +671,7 @@ h2 {
     justify-content: center;
     color: white;
     
-    .fa-smile-o {
+    .fa-smile {
 	color: white;	
     }
     .p {
