@@ -531,7 +531,6 @@ class VideoButton extends Component {
   }
 
     render() {
-	console.log("PUBLISHING",this.state.publishing);
     return (
 	    <span className={`fa-stack`} onClick={this.toggle}>
 	    <i className='fa fa-circle fa-stack-2x' 
@@ -644,7 +643,6 @@ class AudioButton extends Component {
   
 
     render() {
-	console.log("AUDIO BUTTON STATE",this.props.state.microphoneMuted);
     return (
 	    <span className={`fa-stack`} onClick={this.toggleMicrophone}>
 	    <i className={`fa fa-circle fa-stack-2x`} 
@@ -1201,6 +1199,9 @@ class UnfilledVideoSquare extends React.Component {
       	    !(state.playerState == "waiting" ||
 	      state.playerState == "failed");
 
+      console.log("vid",vid);
+      console.log("stream",stream);
+
       return ((slength < limit) ?
 	      <div key={localkey} id={vid} className='video-placeholder'>
 	      <div className='invite-indicator'>
@@ -1732,6 +1733,9 @@ export class JourneySpace extends Component {
 	console.log("JOURNEY NAME",this.props.match.params.room);
 	const spaceName = this.props.match.params.room;
 	console.log("this.publisher", this.publisher);
+
+	console.log("streams",this.state.streams);
+	
 	return (
 		<div className='journeyspace' style={{position: 'relative'}}>
 	    {/*          <div className='journeyspace-content flexiblerow'> */}
@@ -1894,9 +1898,12 @@ export class JourneySpace extends Component {
 		 streamlength={this.state.streams.length}
 		 stream={this.state.streams[1]}
 		 session={this.sessionHelper.session}
-		  localkey={local_key_counter_to_avoid_warning++}
+		 localkey={local_key_counter_to_avoid_warning++}
 		 state={this.state}
-		 visible={(!this.state.showOrientationModal)}		 
+		 journey={state.journey}
+		 sessionId={state.sessionId}
+		 visible={(!this.state.showOrientationModal)}
+		 
 		 ></UnfilledVideoSquare>
 		 
 		 <NoVideoSquare vidid='video-square4'
