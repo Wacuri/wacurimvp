@@ -130,8 +130,10 @@ class JoinableJourneyCard extends Component {
 
   render() {
     const {journey} = this.props;
-    const currentUserHasRSVP = (journey.participants || []).find(participant => participant.user === state.sessionId) != null;
+      const currentUserHasRSVP = (journey.participants || []).find(participant => participant.user === state.sessionId) != null;
 
+      const image_name = "images/SPOTS-0"+journey.participants.length+".png";
+      console.log("IMAGE_NAME",image_name);
     return (
       <div className='joinable-journey-card'>
         <div className='image'>
@@ -141,15 +143,13 @@ class JoinableJourneyCard extends Component {
           <CountdownMessage endTime={journey.startAt} />
           <h4>{journey.name}</h4>
           <p>Starts at: {moment(journey.startAt).format('LT')}</p>
-          <ul className='journey-vacant-spots' style={{display: 'flex', listStyle: 'none', margin: 0, padding: 0}}>
-            <li key="msg">{3 - journey.participants.length} spot{3 - journey.participants.length > 1 ? 's' : ''} available:</li>
-            {Array(3).fill(0).map((k, i) => (
-		// Rob is changing this to "user" just as a test of my ability to change things...
-		// Note: Adding a "key" here seems unneeded but made a confusing waring disappear...
-		    <li key={"item"+i}><i className={`fas fa-user ${journey.participants.length > i ? 'fill' : ''}`}></i></li>
-            ))}
-            
-        </ul>
+            <div className='journey-vacant-spots' style={{display: 'flex', listStyle: 'none',
+							  alignItems: 'center', margin: 0, padding: 0}}>
+            <span key="msg" style={{marginRight: '1rem'}}>{3 - journey.participants.length} spot{3 - journey.participants.length > 1 ? 's' : ''} available: </span>
+	    <img src={image_name} />
+        </div>
+
+
 	    {/* here "j" is inserted as a convenient means of marking this entry as a Journeyboard space rather than a permanent one */}
           <Link to={`/j/${journey.room}`} className='btn btn-primary'>{currentUserHasRSVP ? 'Go there now' : 'Join'}</Link>
         </div>
@@ -157,6 +157,14 @@ class JoinableJourneyCard extends Component {
     )
   }
 }
+
+	    {/*
+            {Array(3).fill(0).map((k, i) => (
+		// Rob is changing this to "user" just as a test of my ability to change things...
+		// Note: Adding a "key" here seems unneeded but made a confusing waring disappear...
+		    <li key={"item"+i}><i className={`fas fa-user ${journey.participants.length > i ? 'fill' : ''}`}></i></li>
+		    ))} */}
+
 
 class JourneyBoard extends Component {
 
@@ -295,7 +303,6 @@ const RouteWithIntro = ({component: Component, ...rest}) => {
 
       {!showIntro &&
        <Route {...rest} render={renderProps => {
-	   console.log("REST",rest);
 	   const myprops = {isPermanentSpace: rest.isPermanentSpace,...renderProps};    
           return (
 		  <Component {...myprops} />

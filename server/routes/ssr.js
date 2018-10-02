@@ -10,7 +10,9 @@ import state from '../../client/src/state';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  const context = {};
+    const context = {};
+
+// NEXT:    console.log("req",req);
 
   state.loggedIn = req.session.loggedIn;
   state.user = req.session.user;

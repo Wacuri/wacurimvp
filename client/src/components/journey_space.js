@@ -358,111 +358,6 @@ class JourneyPhases extends Component {
   }
 }
 
-/*
-class JourneyTimeline extends Component {
-
-  constructor(props) {
-    super(props);
-    props.timer.on('tick', (current) => {
-      this.setState({
-        timerValue: current
-      });
-    });
-  }
-
-  componentWillReceiveProps(newProps) {
-    newProps.timer.on('tick', (current) => {
-      this.setState({
-        timerValue: current
-      });
-    });
-  }
-
-  get stepIndex() {
-    switch(this.props.journey.state) {
-      case 'joined':
-      case 'created':
-        return 0;
-      case 'started':
-      case 'paused':
-        return 1;
-      default:
-        return 2;
-    }
-  }
-
-  get positionForCaret() {
-    if (!this.container) { return 0; }
-    const idx = this.stepIndex;
-    const items = this.container.querySelectorAll('li');
-    return Array(idx + 1).fill(0).reduce((memo, i, j) => {
-      if (j == 0) {
-        return 0;
-      } else {
-        return memo + items[j - 0].offsetHeight;
-      }
-    }, 0);
-  }
-  
-  get heightForActive() {
-    if (!this.container) { return 0; }
-    const idx = this.stepIndex;
-    const items = this.container.querySelectorAll('li');
-    return items[idx].offsetHeight;
-  }
-
-  onSeek = (e) => {
-    const percent = e.nativeEvent.offsetX / this.progressBar.offsetWidth;
-    this.props.seekTo(percent);
-  }
-
-    // Note: setting the backgroudnColor below to orange does not work, but at least gives us a
-    // gray that can be seen against the black background
-   
-  render() {
-    const {journey} = this.props;
-    return (
-	    <div ref={el => {this.container = el}} className={`journey-timeline step-${this.stepIndex.toString()}`}>
-	    <div style={{display: 'flex'}}>
-        <ul>
-          <li key="Prepare" className={journey.state === 'joined' ? 'active' : ''}>
-            <h4>Prepare</h4>
-            <div style={{display: 'flex'}}>
-              <p>Breathe and center yourself</p>
-              {journey.state === 'joined' && journey.startAt &&
-                <p className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</p>
-              }
-        </div>
-            </li>
-	    </ul>
-	    <ul>
-          <li key="Journey" className={journey.state === 'started' ? 'active' : ''} style={{position: 'relative'}}>
-            <h4>Journey</h4>
-            <div style={{display: 'flex'}}>
-              <p>Listen and imagine</p>
-              {(journey.state === 'started' || journey.state === 'paused') &&
-                <p className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</p>
-              }
-              {(journey.state === 'started' || journey.state === 'paused') &&
-                <div style={{position: 'absolute', bottom: '-12px', left: '10px', right: '10px'}}>
-               <progress ref={(progressBar) => this.progressBar = progressBar} onClick={this.onSeeko} max={this.props.timer.total} value={this.props.timer.currentTime} style={{width: '90%',backgroundColor: 'orange'}}></progress>
-                </div>
-              }
-            </div>
-            </li>
-	    </ul>
-	    <ul>
-          <li key="Sharing">
-            <h4>Sharing</h4>
-            <p>Feelings and thoughts</p>
-          </li>
-			</ul>
-			</div>
-	</div>			
-    )
-  }
-}
-*/
 class SkipButton extends Component {
     constructor(props) {
        super(props);
@@ -1778,27 +1673,11 @@ export class JourneySpace extends Component {
 
                    <JourneyPhases journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
 
-		 {/* we may need to make the Invite Friends button modal by this condition */}
-		 {/*
-		 {state.journey.startAt && ['joined', 'created'].indexOf(state.journey.state) > -1 && 
-                    <div className='journeyspace-meta pr-3 pl-3 pt-3'>
-                      <SharePrompt onInvite={this.onInvite}/>
-                  </div>
-		 }
-		  */}
 
 		 </div>
 
 	    </div>
 
-		 {/*
-                 {state.journey.state === 'failed' &&
-                      <p className='p-3'>Nobody else has joined this Journey Space. 
-                        You can either <a href='#' onClick={this.onStartSession}>hit play</a> and take the Journey by
-                        yourself of return to the <Link to='/join'>JourneyBoard</Link> to find another Journey Space
-                      </p>
-                  }
-		  */}
 
 
 
