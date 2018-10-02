@@ -70,8 +70,10 @@
     "redux": "^3.5.2",
     "ssl-express-www": "https://github.com/keithnorm/ssl-express-www"
   },
+    "scriptComment": {
+	"start": "we are in fact using fontawesome pro 5.3.1, but it is isntalled by hand  '@fortawesome/fontawesome-pro: ^5.3.1'"
+    },
   "devDependencies": {
-    "@fortawesome/fontawesome-pro": "^5.3.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.1",

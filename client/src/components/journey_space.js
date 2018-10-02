@@ -1199,9 +1199,6 @@ class UnfilledVideoSquare extends React.Component {
       	    !(state.playerState == "waiting" ||
 	      state.playerState == "failed");
 
-      console.log("vid",vid);
-      console.log("stream",stream);
-
       return ((slength < limit) ?
 	      <div key={localkey} id={vid} className='video-placeholder'>
 	      <div className='invite-indicator'>
@@ -1291,6 +1288,7 @@ export class JourneySpace extends Component {
 	showFeedbackModal: false,
 	  showIntro: true,
 	  permanentRoom: false, // what is publisher?
+	  journey: null,
       }
       this.publisher = {};
       this.audioTag = {};
@@ -1384,7 +1382,7 @@ export class JourneySpace extends Component {
 		});
 		this.sessionHelper.session.on('signal', (event) => {
 		    console.log("Signal sent from connection ", event);
-		    this.refreshSession();
+//		    this.refreshSession();
 		});
 
 		this.sessionHelper.session.on("signal:startJourney", (event) => {
@@ -1424,8 +1422,12 @@ export class JourneySpace extends Component {
 
 		this.sessionHelper.session.on("signal:journeyUpdated", (event) => {
 		    const journey = JSON.parse(event.data);
-		    state.journey = journey;
-		    console.log(" Got signal:journeyUpdated ", event);
+		    // Rob doesn't understand this apparently I have to call setState and use the statement above?
+		    state.journey = journey;		    
+		    this.setState({
+			journey: journey
+		    });
+		    console.log(" Got signal:journeyUpdated ", event, journey);
 
 		    if (state.journey.state != 'completed') {
 			// if we are in completed state, then audio may be playing the sharing prompt
@@ -1484,8 +1486,11 @@ export class JourneySpace extends Component {
   refreshSession = () => {
 		fetch(`/api/journeys/${this.props.match.params.room}`, {credentials: 'include'})
 			.then(res => res.json())
-			.then(json => {
-			    state.journey = json;
+	  .then(json => {
+	      
+//	      this.setState({
+		  state.journey = json
+//	      })
 			});
       setTimeout(someHelper.setSizes,1000);
   }
@@ -1528,7 +1533,10 @@ export class JourneySpace extends Component {
     fetch(`/api/journeys/${this.props.match.params.room}/connections/${this.sessionHelper.session.connection.id}/ready`);
   }
 
-  onChangeJourney = (e) => {
+
+    // how can it be that the argument is not used here?
+    onChangeJourney = (e) => {
+	console.log("onChangeJourney",e);
     fetch(`/api/journeys/${this.props.match.params.room}/journey`, {
       body: JSON.stringify({journey: e.target.value}), // must match 'Content-Type' header
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -1540,7 +1548,7 @@ export class JourneySpace extends Component {
       mode: 'cors', // no-cors, cors, *same-origin
       redirect: 'follow', // manual, *follow, error
       referrer: 'no-referrer', // *client, no-referrer
-    });
+    }).then( this.setState(state: state) );
   }
 
   onStartSession = (e) => {
@@ -1730,11 +1738,12 @@ export class JourneySpace extends Component {
 	// NEXT
 	// If the journey is not defined, then we are in a "permanentRoom". We can
 	// enter a permament room form a straight URL or from within these pages.
-	console.log("JOURNEY NAME",this.props.match.params.room);
 	const spaceName = this.props.match.params.room;
-	console.log("this.publisher", this.publisher);
 
-	console.log("streams",this.state.streams);
+	console.log("RENDERING JOURNEY",state.journey);
+	
+
+	var optionkey = 0;
 	
 	return (
 		<div className='journeyspace' style={{position: 'relative'}}>
@@ -1761,7 +1770,7 @@ export class JourneySpace extends Component {
                     <option value={''}>{'Pulldown to select a new Journey'}</option>		   
                      {
 		           state.journeys.map(journey => (
-                          <option value={journey.filePath}>{journey.name}</option>
+				   <option key={optionkey++} value={journey.filePath}>{journey.name}</option>
                         ))}
                       </select>
                    </div> }
@@ -1799,8 +1808,10 @@ export class JourneySpace extends Component {
 		 <div id="bigsquares">
 
                     <span   key="name">
-                      <img id='video-square0' className="journey-image" src={state.journey.image} onClick={this.togglePlayState}/>
-                    </span>
+                      <img id='video-square0' className="journey-image" src={state.journey.image} onClick={this.togglePlayState} />
+                 </span>
+
+
 
 		 {/* This is the second square;  */}		 
 		 <div id='secondsquare' className='flexiblecol'>
