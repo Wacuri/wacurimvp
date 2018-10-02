@@ -11818,6 +11818,17 @@ textarea {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
+topbar_and_header {
+  height: 8%; }
+
+#firstsquare {
+  width: calc(50vw);
+  height: calc(50vh - 100px); }
+
+#secondsquare {
+  width: calc(50vw);
+  height: calc(50vh - 100px); }
+
 @media all and (orientation: portrait) and (min-width: 960px) {
   body, p, button, .invite-button {
     font-size: 32px; }
@@ -11830,7 +11841,15 @@ textarea {
   .play-button {
     font-size: 3rem; }
   .rating-circle {
-    font-size: 3.0rem; } }
+    font-size: 3.0rem; }
+  #bigsquares {
+    flex-direction: column; }
+  #firstsquare {
+    width: calc(50vh);
+    height: calc(50vh); }
+  #secondsquare {
+    width: calc(50vh);
+    height: calc(50vh); } }
 
 @media all and (orientation: landscape) and (min-height: 960px) {
   body, p, button, .invite-button {
@@ -11844,7 +11863,15 @@ textarea {
   .play-button {
     font-size: 3rem; }
   .rating-circle {
-    font-size: 3.0rem; } }
+    font-size: 3.0rem; }
+  #bigsquares {
+    flex-direction: row; }
+  #firstsquare {
+    width: calc(50vw);
+    height: calc(50vw); }
+  #secondsquare {
+    width: calc(50vw);
+    height: calc(50vw); } }
 
 @media all and (orientation: portrait) and (max-width: 959px) and (min-width: 760px) {
   body, p, button, .invite-button {
@@ -11858,7 +11885,15 @@ textarea {
   .play-button {
     font-size: 2.8rem; }
   .rating-circle {
-    font-size: 2rem; } }
+    font-size: 2rem; }
+  #bigsquares {
+    flex-direction: column; }
+  #firstsquare {
+    width: calc(50vh);
+    height: calc(50vh); }
+  #secondsquare {
+    width: calc(50vh);
+    height: calc(50vh); } }
 
 @media all and (orientation: landscape) and (max-height: 959px) and (min-height: 760px) {
   body, p, button, .invite-button {
@@ -11872,7 +11907,15 @@ textarea {
   .play-button {
     font-size: 2.8rem; }
   .rating-circle {
-    font-size: 2rem; } }
+    font-size: 2rem; }
+  #bigsquares {
+    flex-direction: row; }
+  #firstsquare {
+    width: calc(50vw);
+    height: calc(50vw); }
+  #secondsquare {
+    width: calc(50vw);
+    height: calc(50vw); } }
 
 @media all and (orientation: portrait) and (max-width: 759px) and (min-width: 600px) {
   body, p, button, .invite-button {
@@ -11886,7 +11929,15 @@ textarea {
   .play-button {
     font-size: 2.4rem; }
   .rating-circle {
-    font-size: 1.5rem; } }
+    font-size: 1.5rem; }
+  #bigsquares {
+    flex-direction: column; }
+  #firstsquare {
+    width: calc(50vh);
+    height: calc(50vh); }
+  #secondsquare {
+    width: calc(50vh);
+    height: calc(50vh); } }
 
 @media all and (orientation: landscape) and (max-height: 759px) and (min-height: 600px) {
   body, p, button, .invite-button {
@@ -11900,7 +11951,15 @@ textarea {
   .play-button {
     font-size: 2.4rem; }
   .rating-circle {
-    font-size: 1.5rem; } }
+    font-size: 1.5rem; }
+  #bigsquares {
+    flex-direction: row; }
+  #firstsquare {
+    width: calc(50vw);
+    height: calc(50vw); }
+  #secondsquare {
+    width: calc(50vw);
+    height: calc(50vw); } }
 
 @media all and (orientation: portrait) and (max-width: 599px) and (min-width: 450px) {
   body, p, button, .invite-button {
@@ -11914,7 +11973,15 @@ textarea {
   .play-button {
     font-size: 1.4rem; }
   .rating-circle {
-    font-size: 0.7rem; } }
+    font-size: 0.7rem; }
+  #bigsquares {
+    flex-direction: column; }
+  #firstsquare {
+    width: calc(50vh);
+    height: calc(50vh); }
+  #secondsquare {
+    width: calc(50vh);
+    height: calc(50vh); } }
 
 @media all and (orientation: landscape) and (max-height: 599px) and (min-height: 450px) {
   body, p, button, .invite-button {
@@ -11928,7 +11995,15 @@ textarea {
   .play-button {
     font-size: 1.4rem; }
   .rating-circle {
-    font-size: 0.7rem; } }
+    font-size: 0.7rem; }
+  #bigsquares {
+    flex-direction: row; }
+  #firstsquare {
+    width: calc(50vw);
+    height: calc(50vw); }
+  #secondsquare {
+    width: calc(50vw);
+    height: calc(50vw); } }
 
 @media all and (orientation: portrait) and (max-width: 449px) and (min-width: 320px) {
   body, p, button, .invite-button {
@@ -11942,7 +12017,15 @@ textarea {
   .play-button {
     font-size: 1.2rem; }
   .rating-circle {
-    font-size: 0.7rem; } }
+    font-size: 0.7rem; }
+  #bigsquares {
+    flex-direction: column; }
+  #firstsquare {
+    width: calc(50vh);
+    height: calc(50vh); }
+  #secondsquare {
+    width: calc(50vh);
+    height: calc(50vh); } }
 
 @media all and (orientation: landscape) and (max-height: 449px) and (min-height: 320px) {
   body, p, button, .invite-button {
@@ -11956,7 +12039,15 @@ textarea {
   .play-button {
     font-size: 1.2rem; }
   .rating-circle {
-    font-size: 0.7rem; } }
+    font-size: 0.7rem; }
+  #bigsquares {
+    flex-direction: row; }
+  #firstsquare {
+    width: calc(50vw);
+    height: calc(50vw); }
+  #secondsquare {
+    width: calc(50vw);
+    height: calc(50vw); } }
 
 @media all and (orientation: portrait) and (max-width: 319px) {
   body, p, button, .invite-button {
@@ -11970,7 +12061,15 @@ textarea {
   .play-button {
     font-size: 1.0rem; }
   .rating-circle {
-    font-size: 0.5rem; } }
+    font-size: 0.5rem; }
+  #bigsquares {
+    flex-direction: column; }
+  #firstsquare {
+    width: calc(50vh);
+    height: calc(50vh); }
+  #secondsquare {
+    width: calc(50vh);
+    height: calc(50vh); } }
 
 @media all and (orientation: landscape) and (max-height: 319px) {
   body, p, button, .invite-button {
@@ -11984,6 +12083,14 @@ textarea {
   .play-button {
     font-size: 1.0rem; }
   .rating-circle {
-    font-size: 0.5rem; } }
+    font-size: 0.5rem; }
+  #bigsquares {
+    flex-direction: row; }
+  #firstsquare {
+    width: calc(50vw);
+    height: calc(50vw); }
+  #secondsquare {
+    width: calc(50vw);
+    height: calc(50vw); } }
 
 /*# sourceMappingURL=main.css.map*/

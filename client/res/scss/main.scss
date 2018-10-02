@@ -100,6 +100,8 @@ h2 {
     flex-wrap: nowrap !important;
 }
 
+
+
 .flexiblerow {
     display: flex;
     flex-flow: row wrap;
@@ -717,6 +719,20 @@ textarea {
             box-sizing: border-box;
 }
 
+topbar_and_header {
+    height: 8%;
+}
+
+// This is basic, but we want to change this...
+#firstsquare {
+    width: calc(50vw);
+    height: calc(50vh - 100px);
+}
+#secondsquare {
+    width: calc(50vw);
+    height: calc(50vh - 100px);
+}
+
 
 
 // Sadly, I can't get advance media queries to work---curse it, forcing this duplication
@@ -741,6 +757,21 @@ textarea {
     .rating-circle {
 	font-size: 3.0rem;
     }
+    #bigsquares {
+	flex-direction: column;	
+    }
+
+    // In portrait mode, we are computing by height over 50%
+#firstsquare {
+    width: calc(50vh);
+    height: calc(50vh);
+}
+#secondsquare {
+    width: calc(50vh);
+    height: calc(50vh);
+}
+
+    
 }
 
 // for debugging: body::before{ content: "Tablet media query (768 < 979) fired"; 
@@ -765,6 +796,18 @@ textarea {
     .rating-circle {
 	font-size: 3.0rem;
     }
+    #bigsquares {
+	flex-direction: row;	
+    }
+    // In landscape mode, we are computing by height over 50%
+#firstsquare {
+    width: calc(50vw);
+    height: calc(50vw;
+}
+#secondsquare {
+    width: calc(50vw);
+    height: calc(50vw);
+}
 }
 
  @media all and (orientation: portrait) and (max-width: 959px) and (min-width: 760px) 
@@ -788,6 +831,18 @@ textarea {
     .rating-circle {
 	font-size: 2rem;
     }
+    #bigsquares {
+	flex-direction: column;	
+    }
+    // In portrait mode, we are computing by height over 50%
+#firstsquare {
+    width: calc(50vh);
+    height: calc(50vh);
+}
+#secondsquare {
+    width: calc(50vh);
+    height: calc(50vh);
+}
 }
  @media all and (orientation: landscape) and (max-height: 959px) and (min-height: 760px) 
  {
@@ -810,6 +865,18 @@ textarea {
     .rating-circle {
 	font-size: 2rem;
     }
+    #bigsquares {
+	flex-direction: row;	
+    }
+    // In landscape mode, we are computing by height over 50%
+#firstsquare {
+    width: calc(50vw);
+    height: calc(50vw;
+}
+#secondsquare {
+    width: calc(50vw);
+    height: calc(50vw);
+}
 }
  @media all and (orientation: portrait) and (max-width: 759px) and (min-width: 600px) 
  {
@@ -832,6 +899,18 @@ textarea {
     .rating-circle {
 	font-size: 1.5rem;
     }
+    #bigsquares {
+	flex-direction: column;	
+    }
+    // In portrait mode, we are computing by height over 50%
+#firstsquare {
+    width: calc(50vh);
+    height: calc(50vh);
+}
+#secondsquare {
+    width: calc(50vh);
+    height: calc(50vh);
+}
 }
  @media all and (orientation: landscape) and (max-height:759px) and (min-height: 600px) 
  {
@@ -854,6 +933,18 @@ textarea {
     .rating-circle {
 	font-size: 1.5rem;
     }
+    #bigsquares {
+	flex-direction: row;	
+    }
+    // In landscape mode, we are computing by height over 50%
+#firstsquare {
+    width: calc(50vw);
+    height: calc(50vw;
+}
+#secondsquare {
+    width: calc(50vw);
+    height: calc(50vw);
+}
 }
 
  
@@ -877,6 +968,18 @@ textarea {
     .rating-circle {
 	font-size: 0.7rem;
     }
+    #bigsquares {
+	flex-direction: column;	
+    }
+    // In portrait mode, we are computing by height over 50%
+#firstsquare {
+    width: calc(50vh);
+    height: calc(50vh);
+}
+#secondsquare {
+    width: calc(50vh);
+    height: calc(50vh);
+}
 }
 @media all and  (orientation: landscape) and  (max-height: 599px) and (min-height: 450px) {
     body,p,button,.invite-button {
@@ -898,6 +1001,18 @@ textarea {
     .rating-circle {
 	font-size: 0.7rem;
     }
+    #bigsquares {
+	flex-direction: row;	
+    }
+    // In landscape mode, we are computing by height over 50%
+#firstsquare {
+    width: calc(50vw);
+    height: calc(50vw;
+}
+#secondsquare {
+    width: calc(50vw);
+    height: calc(50vw);
+}
 }
 
 @media all and  (orientation: portrait) and  (max-width: 449px) and (min-width: 320px) {
@@ -920,6 +1035,18 @@ textarea {
     .rating-circle {
 	font-size: 0.7rem;
     }
+    #bigsquares {
+	flex-direction: column;	
+    }
+    // In portrait mode, we are computing by height over 50%
+#firstsquare {
+    width: calc(50vh);
+    height: calc(50vh);
+}
+#secondsquare {
+    width: calc(50vh);
+    height: calc(50vh);
+}
 }
 @media all and  (orientation: landscape) and  (max-height: 449px) and (min-height: 320px) {
     body,p,button,.invite-button {
@@ -941,6 +1068,18 @@ textarea {
     .rating-circle {
 	font-size: 0.7rem;
     }
+    #bigsquares {
+	flex-direction: row;	
+    }
+    // In landscape mode, we are computing by height over 50%
+#firstsquare {
+    width: calc(50vw);
+    height: calc(50vw;
+}
+#secondsquare {
+    width: calc(50vw);
+    height: calc(50vw);
+}
 }
 
 @media all and  (orientation: portrait) and (max-width: 319px)  {
@@ -962,6 +1101,19 @@ textarea {
     .rating-circle {
 	font-size: 0.5rem;
     }
+    #bigsquares {
+	flex-direction: column;	
+    }
+    // In portrait mode, we are computing by height over 50%
+#firstsquare {
+    width: calc(50vh);
+    height: calc(50vh);
+}
+#secondsquare {
+    width: calc(50vh);
+    height: calc(50vh);
+}
+
 }
 @media all and  (orientation: landscape) and (max-height: 319px)  {
     body,p,button,.invite-button {
@@ -982,6 +1134,18 @@ textarea {
     .rating-circle {
 	font-size: 0.5rem;
     }
+    #bigsquares {
+	flex-direction: row;	
+    }
+    // In landscape mode, we are computing by height over 50%
+#firstsquare {
+    width: calc(50vw);
+    height: calc(50vw;
+}
+#secondsquare {
+    width: calc(50vw);
+    height: calc(50vw);
+}
 }
 
 
