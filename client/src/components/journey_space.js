@@ -1678,17 +1678,14 @@ export class JourneySpace extends Component {
 
 	    </div>
 
-
-
-
 		 <div className="flex-squares"> 
 			 
 		 {/* here we create the two big squares;  */}
 		 <div id="bigsquares">
 
-                    <span  id="firstsquare" key="name">
+                    <div  id="firstsquare" key="name">
                       <img id='video-square0' className="journey-image" src={state.journey.image} onClick={this.togglePlayState} />
-                 </span>
+                 </div>
 
 
 
@@ -1717,7 +1714,7 @@ export class JourneySpace extends Component {
 		 
 
 		 <div style={{display: 'flex', flexDirection: 'row', visibility: `${(this.state.showOrientationModal || this.state.showFeedbackModal ) ? "hidden" : "visible"}`}}>
-		 <span key="stream" id='video-square1' className='journeyspace-stream journeyspace-me'>
+		 <div key="stream" id='video-square1' className='journeyspace-stream journeyspace-me'>
 		 {console.log("RENDERING PUBLISHER")}
                         <OTPublisher 
                           session={this.sessionHelper.session}
@@ -1731,7 +1728,7 @@ export class JourneySpace extends Component {
 			    }
                               }}
                         />
-		 </span>
+		 </div>
 		 
 		 <UnfilledVideoSquare vidid='video-square2'
 		 limit={1}
@@ -1832,6 +1829,8 @@ export class JourneySpace extends Component {
 	}
 }
 
+
+// This class is used only for testing the Styling to match our code
 export class JourneySpaceTest extends Component {
   constructor(props) {
       super(props);

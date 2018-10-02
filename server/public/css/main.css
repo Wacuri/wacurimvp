@@ -11423,13 +11423,6 @@ h2 {
     color: #535353; }
   .video-placeholder p {
     color: #535353; }
-  .video-placeholder > div {
-    min-height: calc(100vw * .4);
-    margin-bottom: 10px; }
-    @media (min-width: 992px) {
-      .video-placeholder > div {
-        min-height: calc(100vw * .25);
-        width: height; } }
   .video-placeholder li:first-child {
     border: none; }
 
@@ -11828,6 +11821,14 @@ topbar_and_header {
 #secondsquare {
   width: calc(50vw);
   height: calc(50vh - 100px); }
+
+#video-square0 {
+  width: 100%;
+  height: 100%; }
+
+#video-square1 {
+  width: 100%;
+  height: 100%; }
 
 @media all and (orientation: portrait) and (min-width: 960px) {
   body, p, button, .invite-button {

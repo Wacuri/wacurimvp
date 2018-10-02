@@ -184,18 +184,18 @@ h2 {
     color: rgb(83, 83, 83);
   }
   
-  > div {
-      min-height: calc(100vw * .4);
-      margin-bottom: 10px; 
+  // > div {
+  //     min-height: calc(100vw * .4);
+  //     margin-bottom: 10px; 
 
-    @media (min-width: 992px) {
-      & {
-	  min-height: calc(100vw * .25);
-	  width: height;
-      }
-    }
-    
-  }
+  //   @media (min-width: 992px) {
+  //     & {
+  // 	  min-height: calc(100vw * .25);
+  // 	  width: height;
+  //     }
+  //   }
+  //  
+  // }
 
   li:first-child {
     border: none;
@@ -733,7 +733,14 @@ topbar_and_header {
     height: calc(50vh - 100px);
 }
 
-
+#video-square0 {
+    width: 100%;
+    height: 100%;
+}
+#video-square1 {
+    width: 100%;
+    height: 100%;
+}
 
 // Sadly, I can't get advance media queries to work---curse it, forcing this duplication
 @media all and (orientation: portrait) and (min-width: 960px)
