@@ -14,15 +14,15 @@ export var LANDSCAPE_NOT_PORTRAIT = true;
     // the view port (not counting the header), arranged either
     // vertically for portrait mode or horiontally for landscape.
 export function setSizes() {
+
     var tb_and_h = document.getElementById("topbar_and_header");
     if (!tb_and_h) { // if we can't find an element, we are on the wrong page
 	return;
     }
-    
 
     var debug = 0;
     
-	var w = window.innerWidth;
+    var w = window.innerWidth;
     var h = window.innerHeight;
 	// TODO: this should actually be pulled from the header height
     var headerHeight = tb_and_h.offsetHeight;

@@ -11737,6 +11737,8 @@ h2 {
     color: white; }
   .orientation-message h3 {
     font-size: 1.5rem; }
+  .orientation-message p {
+    font-size: 0.5rem; }
 
 .feedback-message {
   display: flex;
@@ -11759,12 +11761,12 @@ h2 {
   flex-direction: column;
   justify-content: center; }
   .swipable-message .message-heading {
-    font-size: 1.5rem;
+    font-size: 1.0rem;
     color: black;
     font-weight: 700;
     font-family: 'Playfair Display'; }
   .swipable-message p {
-    font-size: 1.0rem;
+    font-size: 0.8rem;
     font-weight: 200;
     color: white; }
 
@@ -11785,7 +11787,6 @@ h2 {
 .invite-button {
   color: white;
   background-color: black;
-  margin-top: 0.5rem;
   margin-left: 1rem;
   margin-right: 1rem;
   font-size: 2rem;
@@ -11822,14 +11823,6 @@ topbar_and_header {
   width: calc(50vw);
   height: calc(50vh - 100px); }
 
-#video-square0 {
-  width: 100%;
-  height: 100%; }
-
-#video-square1 {
-  width: 100%;
-  height: 100%; }
-
 @media all and (orientation: portrait) and (min-width: 960px) {
   body, p, button, .invite-button {
     font-size: 32px; }
@@ -11850,7 +11843,11 @@ topbar_and_header {
     height: calc(50vh); }
   #secondsquare {
     width: calc(50vh);
-    height: calc(50vh); } }
+    height: calc(50vh); }
+  .swipable-message .message-heading {
+    font-size: 2.5rem; }
+  .swipable-message p {
+    font-size: 1.5rem; } }
 
 @media all and (orientation: landscape) and (min-height: 960px) {
   body, p, button, .invite-button {
@@ -11872,7 +11869,11 @@ topbar_and_header {
     height: calc(50vw); }
   #secondsquare {
     width: calc(50vw);
-    height: calc(50vw); } }
+    height: calc(50vw); }
+  .swipable-message .message-heading {
+    font-size: 2.5rem; }
+  .swipable-message p {
+    font-size: 1.5rem; } }
 
 @media all and (orientation: portrait) and (max-width: 959px) and (min-width: 760px) {
   body, p, button, .invite-button {
@@ -11894,7 +11895,11 @@ topbar_and_header {
     height: calc(50vh); }
   #secondsquare {
     width: calc(50vh);
-    height: calc(50vh); } }
+    height: calc(50vh); }
+  .swipable-message .message-heading {
+    font-size: 1.8rem; }
+  .swipable-message p {
+    font-size: 1.3rem; } }
 
 @media all and (orientation: landscape) and (max-height: 959px) and (min-height: 760px) {
   body, p, button, .invite-button {
@@ -11916,7 +11921,11 @@ topbar_and_header {
     height: calc(50vw); }
   #secondsquare {
     width: calc(50vw);
-    height: calc(50vw); } }
+    height: calc(50vw); }
+  .swipable-message .message-heading {
+    font-size: 1.8rem; }
+  .swipable-message p {
+    font-size: 1.3rem; } }
 
 @media all and (orientation: portrait) and (max-width: 759px) and (min-width: 600px) {
   body, p, button, .invite-button {
@@ -11938,7 +11947,11 @@ topbar_and_header {
     height: calc(50vh); }
   #secondsquare {
     width: calc(50vh);
-    height: calc(50vh); } }
+    height: calc(50vh); }
+  .swipable-message .message-heading {
+    font-size: 1.5rem; }
+  .swipable-message p {
+    font-size: 1.0rem; } }
 
 @media all and (orientation: landscape) and (max-height: 759px) and (min-height: 600px) {
   body, p, button, .invite-button {
@@ -11960,7 +11973,11 @@ topbar_and_header {
     height: calc(50vw); }
   #secondsquare {
     width: calc(50vw);
-    height: calc(50vw); } }
+    height: calc(50vw); }
+  .swipable-message .message-heading {
+    font-size: 1.5rem; }
+  .swipable-message p {
+    font-size: 1.0rem; } }
 
 @media all and (orientation: portrait) and (max-width: 599px) and (min-width: 450px) {
   body, p, button, .invite-button {
@@ -11982,7 +11999,11 @@ topbar_and_header {
     height: calc(50vh); }
   #secondsquare {
     width: calc(50vh);
-    height: calc(50vh); } }
+    height: calc(50vh); }
+  .swipable-message .message-heading {
+    font-size: 1.0rem; }
+  .swipable-message p {
+    font-size: 0.7rem; } }
 
 @media all and (orientation: landscape) and (max-height: 599px) and (min-height: 450px) {
   body, p, button, .invite-button {
@@ -12004,7 +12025,11 @@ topbar_and_header {
     height: calc(50vw); }
   #secondsquare {
     width: calc(50vw);
-    height: calc(50vw); } }
+    height: calc(50vw); }
+  .swipable-message .message-heading {
+    font-size: 1.0rem; }
+  .swipable-message p {
+    font-size: 0.7rem; } }
 
 @media all and (orientation: portrait) and (max-width: 449px) and (min-width: 320px) {
   body, p, button, .invite-button {
@@ -12012,13 +12037,13 @@ topbar_and_header {
   .fa-smile-o {
     font-size: 1.0rem; }
   .invite-button {
-    font-size: 0.8rem; }
+    font-size: 0.6rem; }
   #central_control_panel_id {
     font-size: 1.0rem; }
   .play-button {
     font-size: 1.2rem; }
   .rating-circle {
-    font-size: 0.7rem; }
+    font-size: 0.5rem; }
   #bigsquares {
     flex-direction: column; }
   #firstsquare {
@@ -12026,7 +12051,13 @@ topbar_and_header {
     height: calc(50vh); }
   #secondsquare {
     width: calc(50vh);
-    height: calc(50vh); } }
+    height: calc(50vh); }
+  .swipable-message .message-heading {
+    font-size: 0.7rem; }
+  .swipable-message p {
+    font-size: 0.5rem; }
+  p {
+    font-size: 0.5rem; } }
 
 @media all and (orientation: landscape) and (max-height: 449px) and (min-height: 320px) {
   body, p, button, .invite-button {
@@ -12034,13 +12065,13 @@ topbar_and_header {
   .fa-smile-o {
     font-size: 1.5rem; }
   .invite-button {
-    font-size: 0.8rem; }
+    font-size: 0.6rem; }
   #central_control_panel_id {
     font-size: 1.0rem; }
   .play-button {
     font-size: 1.2rem; }
   .rating-circle {
-    font-size: 0.7rem; }
+    font-size: 0.5rem; }
   #bigsquares {
     flex-direction: row; }
   #firstsquare {
@@ -12048,7 +12079,13 @@ topbar_and_header {
     height: calc(50vw); }
   #secondsquare {
     width: calc(50vw);
-    height: calc(50vw); } }
+    height: calc(50vw); }
+  .swipable-message .message-heading {
+    font-size: 0.7rem; }
+  .swipable-message p {
+    font-size: 0.5rem; }
+  p {
+    font-size: 0.5rem; } }
 
 @media all and (orientation: portrait) and (max-width: 319px) {
   body, p, button, .invite-button {
@@ -12056,7 +12093,7 @@ topbar_and_header {
   .fa-smile-o {
     font-size: 1.0rem; }
   .invite-button {
-    font-size: 0.6rem; }
+    font-size: 0.5rem; }
   #central_control_panel_id {
     font-size: 0.8rem; }
   .play-button {
@@ -12070,7 +12107,13 @@ topbar_and_header {
     height: calc(50vh); }
   #secondsquare {
     width: calc(50vh);
-    height: calc(50vh); } }
+    height: calc(50vh); }
+  .swipable-message .message-heading {
+    font-size: 0.4rem; }
+  .swipable-message p {
+    font-size: 0.3rem; }
+  p {
+    font-size: 0.4rem; } }
 
 @media all and (orientation: landscape) and (max-height: 319px) {
   body, p, button, .invite-button {
@@ -12078,7 +12121,7 @@ topbar_and_header {
   .fa-smile-o {
     font-size: 1.0rem; }
   .invite-button {
-    font-size: .6rem; }
+    font-size: .5rem; }
   #central_control_panel_id {
     font-size: 0.8rem; }
   .play-button {
@@ -12092,6 +12135,12 @@ topbar_and_header {
     height: calc(50vw); }
   #secondsquare {
     width: calc(50vw);
-    height: calc(50vw); } }
+    height: calc(50vw); }
+  .swipable-message .message-heading {
+    font-size: 0.6rem; }
+  .swipable-message p {
+    font-size: 0.4rem; }
+  p {
+    font-size: 0.4rem; } }
 
 /*# sourceMappingURL=main.css.map*/

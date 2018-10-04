@@ -541,7 +541,7 @@ class AudioButton extends Component {
     return (
 	    <span className={`fa-stack`} onClick={this.toggleMicrophone}>
 	    <i className={`fa fa-circle fa-stack-2x`} 
-	style={{color: 'rgb(75,176,88)'}}
+	   style={{color: `${!this.props.state.microphoneMuted ? 'rgb(75,176,88)' : 'red'}`}}
 	    ></i>
 	    {
             <i className={`fa ${!this.props.state.microphoneMuted ? 'fa-microphone' : 'fa-microphone-slash'}  fa-stack-1x`}
@@ -994,9 +994,8 @@ class FeedbackModal extends Component {
 		flexDirection: 'column',		
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		padding: '1rem'
+		padding: '0.5rem'
 	    }}>
-
 	    <p> Please rate your experience for: </p>
 	    <p> "{this.props.journeySpaceName}"</p>
 	    <div>
@@ -1024,13 +1023,12 @@ class FeedbackModal extends Component {
 		flexDirection: 'row',		
 		justifyContent: 'space-between',
 	    }}>
-	    <div>Worse</div>
-	    <div>The Same</div>
-	    <div>Better</div>
+	    <p>Worse</p>
+	    <p>The Same</p>
+	    <p>Better</p>
 	    </div>
 	    </div>
 	    <p />
-	    <p />	    
 	    <div className="form-group"
 	    style={{
 		display: 'flex',
@@ -1147,7 +1145,7 @@ class NoVideoSquare extends React.Component {
 	          <div>
 	      <i className='fa fa-smile-o fa-2x' style={{ visibility: 'hidden'}}></i>
 	      
-		  <p style={{visibility: `${topmsgvis}`, color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem'}}>{topmsg}</p>
+		  <p style={{visibility: `${topmsgvis}`, color: 'white', maxWidth: '80%', margin: '0 auto'}}>{topmsg}</p>
 
 	      {/*              <div style={{color: 'white'}}> */}
 		  {/* I have no idea how to incease the roundness of these corners */}
@@ -1808,13 +1806,15 @@ export class JourneySpace extends Component {
 		 
 
 		 
-			 </div>
+		 </div>
+		 {/*
           <div className='journeyspace-footer' style={{display: 'flex'}}>
             <div style={{flex: 1}}>
             </div>
             <div style={{marginLeft: 'auto', marginRight: '10px', alignSelf: 'center'}}>
             </div>
           </div>
+		  */}
           {this.state.showInviteModal &&
             <InviteModal journey={this.state.session} onComplete={this.onCompleteShare} onClose={this.onCloseShareModal}/>
           }
@@ -2300,9 +2300,6 @@ export class JourneySpaceTest extends Component {
 	// If the journey is not defined, then we are in a "permanentRoom". We can
 	// enter a permament room form a straight URL or from within these pages.
 	const spaceName = this.props.match.params.room;
-
-	console.log("RENDERING JOURNEY",state.journey);
-	
 
 	var optionkey = 0;
 	
