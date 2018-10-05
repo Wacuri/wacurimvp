@@ -11302,7 +11302,12 @@ a.text-dark:hover, a.text-dark:focus {
     border-color: #dee2e6; } }
 
 body {
-  font-family: 'Playfair Display'; }
+  font-family: 'Playfair Display';
+  margin: 0; }
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto; }
 
 @media (max-width: 767.98px) {
   body {
@@ -11333,7 +11338,9 @@ h2 {
     max-height: 60px;
     display: block;
     margin-left: auto;
-    margin-right: auto; }
+    margin-right: auto;
+    margin-top: 2px;
+    margin-bottom: 2px; }
   .header .journeyspacetitle {
     color: black;
     font-size: 1.0rem;
@@ -11428,13 +11435,6 @@ h2 {
 
 .journeyspace-stream {
   position: relative; }
-  .journeyspace-stream > div {
-    border: 1px solid #535353;
-    width: 100%;
-    height: calc(100% - 25px);
-    position: absolute;
-    top: 0;
-    left: 0; }
   .journeyspace-stream .journeyspace-stream-controls {
     position: absolute;
     bottom: 0;
@@ -11682,8 +11682,42 @@ h2 {
 .journey-vacant-spots li {
   margin-left: 4px; }
 
-#central_control_panel_id {
+.outer {
+  display: table;
   position: relative;
+  height: 100%;
+  width: 100%; }
+
+.middle {
+  display: table-cell;
+  vertical-align: middle;
+  height: 100%; }
+
+.inner {
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+  /*whatever width you want*/
+  color: red;
+  z-index: 1002; }
+
+.center-div p {
+  position: relative;
+  top: 50%;
+  transform: perspective(1px) translateY(-50%);
+  color: red;
+  z-index: 1002; }
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1002;
+  color: red;
+  transform: translate(-50%, -50%); }
+
+#central_control_panel_id {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11708,10 +11742,6 @@ h2 {
 
 .journeyspace-stream-controls {
   height: 20px; }
-
-.journey-image {
-  width: calc(0.5vw);
-  hegith: calc(0.5vw); }
 
 #phase-bar0 {
   display: grid;
@@ -11770,20 +11800,6 @@ h2 {
     font-weight: 200;
     color: white; }
 
-.invite-indicator {
-  min-width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white; }
-  .invite-indicator .fa-smile {
-    color: white; }
-  .invite-indicator .p {
-    color: white; }
-  .invite-indicator .btn {
-    font-size: 1rem;
-    background-color: #4bb058; }
-
 .invite-button {
   color: white;
   background-color: black;
@@ -11815,14 +11831,6 @@ textarea {
 topbar_and_header {
   height: 8%; }
 
-#firstsquare {
-  width: calc(50vw);
-  height: calc(50vh - 100px); }
-
-#secondsquare {
-  width: calc(50vw);
-  height: calc(50vh - 100px); }
-
 @media all and (orientation: portrait) and (min-width: 960px) {
   body, p, button, .invite-button {
     font-size: 32px; }
@@ -11838,12 +11846,6 @@ topbar_and_header {
     font-size: 3.0rem; }
   #bigsquares {
     flex-direction: column; }
-  #firstsquare {
-    width: calc(50vh);
-    height: calc(50vh); }
-  #secondsquare {
-    width: calc(50vh);
-    height: calc(50vh); }
   .swipable-message .message-heading {
     font-size: 2.5rem; }
   .swipable-message p {
@@ -11864,12 +11866,6 @@ topbar_and_header {
     font-size: 3.0rem; }
   #bigsquares {
     flex-direction: row; }
-  #firstsquare {
-    width: calc(50vw);
-    height: calc(50vw); }
-  #secondsquare {
-    width: calc(50vw);
-    height: calc(50vw); }
   .swipable-message .message-heading {
     font-size: 2.5rem; }
   .swipable-message p {
@@ -11890,12 +11886,6 @@ topbar_and_header {
     font-size: 2rem; }
   #bigsquares {
     flex-direction: column; }
-  #firstsquare {
-    width: calc(50vh);
-    height: calc(50vh); }
-  #secondsquare {
-    width: calc(50vh);
-    height: calc(50vh); }
   .swipable-message .message-heading {
     font-size: 1.8rem; }
   .swipable-message p {
@@ -11916,12 +11906,6 @@ topbar_and_header {
     font-size: 2rem; }
   #bigsquares {
     flex-direction: row; }
-  #firstsquare {
-    width: calc(50vw);
-    height: calc(50vw); }
-  #secondsquare {
-    width: calc(50vw);
-    height: calc(50vw); }
   .swipable-message .message-heading {
     font-size: 1.8rem; }
   .swipable-message p {
@@ -11942,12 +11926,6 @@ topbar_and_header {
     font-size: 1.5rem; }
   #bigsquares {
     flex-direction: column; }
-  #firstsquare {
-    width: calc(50vh);
-    height: calc(50vh); }
-  #secondsquare {
-    width: calc(50vh);
-    height: calc(50vh); }
   .swipable-message .message-heading {
     font-size: 1.5rem; }
   .swipable-message p {
@@ -11968,12 +11946,6 @@ topbar_and_header {
     font-size: 1.5rem; }
   #bigsquares {
     flex-direction: row; }
-  #firstsquare {
-    width: calc(50vw);
-    height: calc(50vw); }
-  #secondsquare {
-    width: calc(50vw);
-    height: calc(50vw); }
   .swipable-message .message-heading {
     font-size: 1.5rem; }
   .swipable-message p {
@@ -11994,12 +11966,6 @@ topbar_and_header {
     font-size: 0.7rem; }
   #bigsquares {
     flex-direction: column; }
-  #firstsquare {
-    width: calc(50vh);
-    height: calc(50vh); }
-  #secondsquare {
-    width: calc(50vh);
-    height: calc(50vh); }
   .swipable-message .message-heading {
     font-size: 1.0rem; }
   .swipable-message p {
@@ -12020,12 +11986,6 @@ topbar_and_header {
     font-size: 0.7rem; }
   #bigsquares {
     flex-direction: row; }
-  #firstsquare {
-    width: calc(50vw);
-    height: calc(50vw); }
-  #secondsquare {
-    width: calc(50vw);
-    height: calc(50vw); }
   .swipable-message .message-heading {
     font-size: 1.0rem; }
   .swipable-message p {
@@ -12046,12 +12006,6 @@ topbar_and_header {
     font-size: 0.5rem; }
   #bigsquares {
     flex-direction: column; }
-  #firstsquare {
-    width: calc(50vh);
-    height: calc(50vh); }
-  #secondsquare {
-    width: calc(50vh);
-    height: calc(50vh); }
   .swipable-message .message-heading {
     font-size: 0.7rem; }
   .swipable-message p {
@@ -12074,12 +12028,6 @@ topbar_and_header {
     font-size: 0.5rem; }
   #bigsquares {
     flex-direction: row; }
-  #firstsquare {
-    width: calc(50vw);
-    height: calc(50vw); }
-  #secondsquare {
-    width: calc(50vw);
-    height: calc(50vw); }
   .swipable-message .message-heading {
     font-size: 0.7rem; }
   .swipable-message p {
@@ -12102,12 +12050,6 @@ topbar_and_header {
     font-size: 0.5rem; }
   #bigsquares {
     flex-direction: column; }
-  #firstsquare {
-    width: calc(50vh);
-    height: calc(50vh); }
-  #secondsquare {
-    width: calc(50vh);
-    height: calc(50vh); }
   .swipable-message .message-heading {
     font-size: 0.4rem; }
   .swipable-message p {
@@ -12130,17 +12072,111 @@ topbar_and_header {
     font-size: 0.5rem; }
   #bigsquares {
     flex-direction: row; }
-  #firstsquare {
-    width: calc(50vw);
-    height: calc(50vw); }
-  #secondsquare {
-    width: calc(50vw);
-    height: calc(50vw); }
   .swipable-message .message-heading {
     font-size: 0.6rem; }
   .swipable-message p {
     font-size: 0.4rem; }
   p {
     font-size: 0.4rem; } }
+
+.flexiblecol:after {
+  content: '';
+  height: 50%; }
+
+.flexiblecol {
+  width: 50%;
+  position: relative;
+  padding-bottom: 50%;
+  display: block;
+  float: left; }
+
+.flexiblecol-content {
+  position: absolute;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #000; }
+
+.flexiblecol-content img {
+  width: 100%; }
+
+.flex-box {
+  width: 50%;
+  position: absolute;
+  padding-bottom: 50%;
+  display: block;
+  float: left; }
+
+.flex-box:after {
+  content: '';
+  height: 50%; }
+
+.box-content {
+  position: absolute;
+  border: 1px solid #000;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white; }
+  .box-content div {
+    width: 100%;
+    height: 100%; }
+  .box-content .fa-smile {
+    color: white; }
+  .box-content .p {
+    color: white; }
+  .box-content .btn {
+    font-size: 1rem;
+    background-color: #4bb058; }
+
+.second-box.flex-box {
+  left: 50%; }
+
+.third-box.flex-box {
+  top: 50%; }
+
+.forth-box.flex-box {
+  top: 50%;
+  left: 50%; }
+
+@media screen and (max-width: 767px) {
+  .flexiblecol {
+    width: 100%;
+    float: none;
+    padding-bottom: 0; }
+  .flexiblecol:after {
+    content: '';
+    height: 100%;
+    display: block; }
+  div#firstsquare:after {
+    display: none; }
+  .flexiblecol-content {
+    position: relative; }
+  .flex-box {
+    position: relative;
+    display: inline-block;
+    left: 0 !important; }
+  .container {
+    max-width: 400px;
+    margin: 0 auto; } }
+
+@media screen and (max-width: 300px) {
+  .flex-box {
+    width: 100%;
+    padding-bottom: 100%; }
+  .flex-box:after {
+    content: '';
+    height: 100%; } }
+
+.centered {
+  position: absolute;
+  top: 100%;
+  left: 100%;
+  color: red;
+  z-index: 1003;
+  transform: translate(-50%, -50%);
+  width: 200%; }
 
 /*# sourceMappingURL=main.css.map*/

@@ -890,7 +890,8 @@ Some people like to leave their cameras on during the journey to increase the fe
 			 backgroundColor: 'rgba(74, 170, 221, 1.0)',
 			 display: 'flex',
 			 flexFlow: 'column nowrap',
-			 justifyContent: 'center'
+			 justifyContent: 'center',
+			 zIndex: '1003'
 			 }
 		       }>
             <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
@@ -976,12 +977,13 @@ class FeedbackModal extends Component {
 			 maxWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,
 			 maxHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
 			 minWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,			 
-			 width: `${someHelper.ONE_SQUARE_WIDTH}px`,			 
+			 width: `${someHelper.ONE_SQUARE_WIDTH}pxog`,			 
 			 backgroundColor: 'rgba(89, 153, 222, 0.9)',
 			 display: 'flex',
 			 flexDirection: 'column',
 			 justifyContent: 'center',
-			 alignItems: 'center'					 
+			 alignItems: 'center',
+			 zIndex: '1003',
 			 }
 		       }>
 
@@ -1091,16 +1093,16 @@ class UnfilledVideoSquare extends React.Component {
       const hide_control = (!visible) ||
       	    !(state.playerState == "waiting" ||
 	      state.playerState == "failed");
+      const additionalClass = this.props.additionalClass;
 
       return ((slength < limit) ?
-	      <div key={localkey} id={vid} className='video-placeholder'>
-	      <div className='invite-indicator'>
-	      <div style={{visibility: `${hide_control ? 'hidden' : 'visible'}` }}>
+	      <div key={localkey} id={vid} className={`${additionalClass} flex-box video-placeholder`}>
+	      <div className='box-content'
+	      style={{visibility: `${hide_control ? 'hidden' : 'visible'}` }}>
               <i className='far fa-smile fa-2x'></i>
               <p style={{color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem'}}>Waiting...</p>
               <button className='invite-button invite-friends-button'  onClick={this.props.onInvite}>Invite Friends
 	        </button>
-	      </div>
 	      </div>
 	      </div>
 				     :
@@ -1139,9 +1141,10 @@ class NoVideoSquare extends React.Component {
       const topmsg = (feedbackNotOrientation) ? "When all sharing is done..." : "nothing";
       const topmsgvis = (feedbackNotOrientation) ? "visible" : "hidden";       
       const fnc = (feedbackNotOrientation) ? this.props.onFeedback : this.props.onOrientation;
+      const additionalClass = this.props.additionalClass;      
 	  return (
-	      <div key={localkey} id={vid} className='video-placeholder'>
-	        <div className='invite-indicator'>
+		  <div key={localkey} id={vid} className={`${additionalClass} flex-box video-placeholder`}>
+	        <div className='box-content'>
 	          <div>
 	      <i className='fa fa-smile-o fa-2x' style={{ visibility: 'hidden'}}></i>
 	      
@@ -1679,16 +1682,22 @@ export class JourneySpace extends Component {
 		 <div className="flex-squares"> 
 			 
 		 {/* here we create the two big squares;  */}
+		 <div className="container">
+		 
 		 <div id="bigsquares">
-
-                    <div  id="firstsquare" key="name">
-                      <img id='video-square0' className="journey-image" src={state.journey.image} onClick={this.togglePlayState} />
+		 
+                 <div  id="firstsquare" className="flexiblecol" key="name">
+		 <div className="flexiblecol-content">
+                 <img id='video-square0' className="journey-image" src={state.journey.image} onClick={this.togglePlayState} />
+		 </div>
                  </div>
 
 
 
 		 {/* This is the second square;  */}		 
 		 <div id='secondsquare' className='flexiblecol'>
+		 
+
 
 		 {/* This is a modal which is usually invisible. */}
 		 {this.state.showOrientationModal &&
@@ -1710,10 +1719,14 @@ export class JourneySpace extends Component {
 		 }
 		 
 		 
+		 {/*
+		  <div style={{display: 'flex', flexDirection: 'row', visibility: `${(this.state.showOrientationModal || this.state.showFeedbackModal ) ? "hidden" : "visible"}`}}>
+		  */}
+		  
 
-		 <div style={{display: 'flex', flexDirection: 'row', visibility: `${(this.state.showOrientationModal || this.state.showFeedbackModal ) ? "hidden" : "visible"}`}}>
-		 <div key="stream" id='video-square1' className='journeyspace-stream journeyspace-me'>
-		 {console.log("RENDERING PUBLISHER")}
+		 
+		 <div key="stream" id='video-square1' className='first-box flex-box journeyspace-stream journeyspace-me'>
+		 <div className='box-content'>
                         <OTPublisher 
                           session={this.sessionHelper.session}
                           onInit={this.onInitPublisher}
@@ -1725,32 +1738,15 @@ export class JourneySpace extends Component {
   		     style: {buttonDisplayMode: 'off',
 			    }
                               }}
-                        />
+                 />
 		 </div>
+		 {/* <div className='centered'>GET THIS CENTERED IN THE second-square</div> */}
+
+		 {/* BEGIN CENTRAL CONTROL PANEL */}
 		 
-		 <UnfilledVideoSquare vidid='video-square2'
-		 limit={1}
-		 onInvite={this.onInvite}		 
-		 streamlength={this.state.streams.length}
-		 stream={this.state.streams[0]}
-		 session={this.sessionHelper.session}
-		 localkey={local_key_counter_to_avoid_warning++}
-		 state={this.state}
-		 journey={state.journey}
-		 sessionId={state.sessionId}
-		 visible={(!this.state.showOrientationModal)}
-		 ></UnfilledVideoSquare>
-		 </div>
-
-		 {/*
-
-		 {!(this.state.showInviteModal || this.state.showOrientationModal ) &&
-		  */}
-		 <div id='central_control_panel_id'
+		 <div id='central_control_panel_id' className='centered' 
 		 style={{visibility: `${(!(this.state.showInviteModal || this.state.showOrientationModal || this.state.showFeedbackModal)) ? "visible" : "hidden"}`}}
-		 >
-
-
+		  >
 			 <VideoButton
 		 publisher={this.publisher}/>
 		 
@@ -1773,11 +1769,33 @@ export class JourneySpace extends Component {
 		 seekTo={this.seekTo}
 		 />
 	         </div>
-		 {/*
-		    }*/}		 
+		 
+		 {/* END CENTRAL CONTROL PANEL */}
 
+		 </div>
+		 
+		 <UnfilledVideoSquare vidid='video-square2'
+		 additionalClass={'second-box'}
+		 limit={1}
+		 onInvite={this.onInvite}		 
+		 streamlength={this.state.streams.length}
+		 stream={this.state.streams[0]}
+		 session={this.sessionHelper.session}
+		 localkey={local_key_counter_to_avoid_warning++}
+		 state={this.state}
+		 journey={state.journey}
+		 sessionId={state.sessionId}
+		 visible={(!this.state.showOrientationModal)}
+		 >
+
+		 </UnfilledVideoSquare>
+
+		 
+		 {/*
 		 <div style={{display: 'flex', flexDirection: 'row', visibility: `${(this.state.showOrientationModal) ? "hidden" : "visible"}`}}>
+		  */}
 		 <UnfilledVideoSquare vidid='video-square3'
+		 additionalClass={'third-box'}		 
 		 limit={2}
 		 onInvite={this.onInvite}		 
 		 streamlength={this.state.streams.length}
@@ -1792,18 +1810,23 @@ export class JourneySpace extends Component {
 		 ></UnfilledVideoSquare>
 		 
 		 <NoVideoSquare vidid='video-square4'
+		 additionalClass={'forth-box'}		 
 		 localkey={local_key_counter_to_avoid_warning++}
 		 onOrientation={this.onOrientation}
 		 onFeedback={this.onFeedback}		 
 		 playerState={this.state.playerState}
 		 ></NoVideoSquare>
 		 </div>
-		 
+
+		 {/*
+		 </div>
+		  */}
+		 {/*
+		 </div>
+		  */}
 		 </div>
 		 
-		 </div>
-		 
-		 
+</div>		 
 
 		 
 		 </div>

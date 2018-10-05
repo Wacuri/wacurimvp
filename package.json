@@ -51,12 +51,12 @@
     "isomorphic-fetch": "^2.2.1",
     "isomorphic-loader": "^2.0.2",
     "js-cookie": "^2.2.0",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "moment": "^2.22.1",
     "mongoose": "^5.0.14",
     "opentok": "^2.6.2",
     "opentok-layout-js": "^1.1.0",
-    "opentok-react": "^0.7.0",
+    "opentok-react": "^0.8.0",
     "prop-types": "^15.5.10",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
@@ -70,10 +70,11 @@
     "redux": "^3.5.2",
     "ssl-express-www": "https://github.com/keithnorm/ssl-express-www"
   },
-    "scriptComment": {
-	"start": "we are in fact using fontawesome pro 5.3.1, but it is isntalled by hand  '@fortawesome/fontawesome-pro: ^5.3.1'"
-    },
+  "scriptComment": {
+    "start": "we are in fact using fontawesome pro 5.3.1, but it is isntalled by hand  '@fortawesome/fontawesome-pro: ^5.3.1'"
+  },
   "devDependencies": {
+    "@fortawesome/fontawesome-pro": "^5.3.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.1",
