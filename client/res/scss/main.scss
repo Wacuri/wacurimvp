@@ -19,10 +19,11 @@
 body {
     font-family: 'Playfair Display';
     margin: 0; // xxx
+    font-size: 1.9vw;
 }
 // xxx
 .container {
-    max-width: 1300px;
+    max-width: 1800px;
     margin: 0 auto;
 }
 
@@ -48,7 +49,7 @@ body {
 }
 
 h2 {
-  font-size: 1.7rem;
+  font-size: 1.7em;
 }
 
 .header {
@@ -70,9 +71,9 @@ h2 {
   }
   .journeyspacetitle {
       color: black;
-      font-size: 1.0rem;
+      font-size: 1.0em;
       font-weight: 700;
-      margin-left: 1rem;
+      margin-left: 1em;
   }
 }
 
@@ -84,13 +85,13 @@ h2 {
   background: black;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 46px);
+//  min-height: calc(100vh - 46px);
 }
-.control-region {
-    max-height: 15%;
-    display: flex;
-    flex-direction: row wrap;
-}
+// .control-region {
+//     max-height: 15%;
+//     display: flex;
+//     flex-direction: row wrap;
+// }
 
 .journey-image {
      object-fit: contain
@@ -152,25 +153,25 @@ h2 {
 // This is what makes the height of the video expand as you change the width.
 // This took some work. This is in part to maintain an aspect ratio.
 // Having elments fill 100% of available height is tricky.
-.journeyspace-streams {
-  padding: 15px 10px 0 10px;
+// .journeyspace-streams {
+//   padding: 15px 10px 0 10px;
 
-  li {
-      min-height: calc(100vw * .4);	          
-      margin-bottom: 10px; 
+//   li {
+//       min-height: calc(100vw * .4);	          
+//       margin-bottom: 10px; 
 
-    @media (min-width: 992px) {
-	& {
-	  min-height: calc(100vw * .25);	    
-      }
-    }
+//     @media (min-width: 992px) {
+// 	& {
+// 	  min-height: calc(100vw * .25);	    
+//       }
+//     }
     
-  }
+//   }
 
-  li:first-child {
-    border: none;
-  }
-}
+//   li:first-child {
+//     border: none;
+//   }
+// }
 
 // Possibly the div is obsolete
 .video-placeholder {
@@ -249,7 +250,7 @@ h2 {
     text-transform: uppercase;
     color: white;
     font-weight: 100;
-    font-size: 0.7rem;
+    font-size: 0.7em;
   }
 
   progress[value] {
@@ -298,7 +299,7 @@ h2 {
   padding-top: 2px;
 
   .journeyspace-attendeeCountLabel {
-    font-size: 0.7rem;
+    font-size: 0.7em;
     text-transform: uppercase;
     color: white;
     margin: 0;
@@ -366,7 +367,7 @@ h2 {
     padding: 16px 23px;
     text-align: left;
     color: black;
-    transform: translateY(10vh);
+//    transform: translateY(10vh);
     opacity: 0;
     transition: transform .4s, opacity .4s;
 }
@@ -437,19 +438,19 @@ h2 {
   position: relative;
 
   h4 {
-    font-size: 1rem;
+    font-size: 1em;
     font-weight: bold;
   }
 
   p {
-    font-size: 1rem;
+    font-size: 1em;
     margin-bottom: 0;
   }
 
   .timer {
       font-weight: bold;
-      margin-left: 1rem;
-      margin-right: 1rem;
+      margin-left: 1em;
+      margin-right: 1em;
   }
 }
 
@@ -602,7 +603,8 @@ h2 {
 
 
 .phase-bar {
-    height: calc(0.8vh);
+    height: 5px;
+//    height: calc(0.8vh);
 //    margin-left: calc(0.1vw);
 //    margin-right: calc(0.1vw);
 }
@@ -667,10 +669,10 @@ h2 {
 	color: white;
     }
     h3 {
-	font-size: 1.5rem;
+	font-size: 1.5em;
     }
     p {
-	font-size: 0.5rem;	
+	font-size: 0.5em;	
     }
 }
 
@@ -684,10 +686,10 @@ h2 {
 	color: white;
     }
     h3 {
-	font-size: 1.5rem;
+	font-size: 1.5em;
     }
     .btn {
-	font-size: 1.0rem;
+	font-size: 1.0em;
 	background-color: rgb(75,176,88);
     }
 }
@@ -699,13 +701,13 @@ h2 {
     height: 100%;
 
     .message-heading {
-	font-size: 1.0rem;	
+	font-size: 1.0em;	
 	color: black;
 	font-weight: 700;
 	font-family: 'Playfair Display'	
     }
     p {
-	font-size: 0.8rem;    
+	font-size: 0.8em;    
 	font-weight: 200;	    
 	color: white;
     }
@@ -714,33 +716,12 @@ h2 {
     justify-content: center;    
 }
 
-
-// .invite-indicator {
-//     min-width: 100%;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     color: white;
-    
-//     .fa-smile {
-// 	color: white;	
-//     }
-//     .p {
-// 	color: white;
-//     }
-//     .btn {
-// 	font-size: 1rem;
-// 	background-color: rgb(75,176,88);
-//     }
-// }
-
 .invite-button {
     color: white;
     background-color: black;
-//    margin-top: 0.5rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    font-size: 2rem;
+    margin-left: 0.7em;
+    margin-right: 0.7em;
+    font-size: 0.8em;
     border-radius: 15px!important;
     border-width: 2px;
     border-color: white;
@@ -772,561 +753,6 @@ topbar_and_header {
     height: 8%;
 }
 
-// This is basic, but we want to change this...
-// #firstsquare {
-//     width: calc(50vw);
-//     height: calc(50vh - 100px);
-// }
-// #secondsquare {
-//     width: calc(50vw);
-//     height: calc(50vh - 100px);
-// }
-
-// #video-square0 {
-//     width: 100%;
-//     height: 100%;
-// }
-// #video-square1 {
-//     width: 100%;
-//     height: 100%;
-// }
-
-// Sadly, I can't get advance media queries to work---curse it, forcing this duplication
-@media all and (orientation: portrait) and (min-width: 960px)
-{
-    body,p,button,.invite-button {
-        font-size: 32px;
-    }
-    .fa-smile-o {
-//	background-color: blue;	// debug		
-    	font-size: 4rem;
-    }
-    .invite-button {
-    	font-size: 2rem;	
-    }
-    #central_control_panel_id { 
-    	font-size: 3rem;    
-    }
-    .play-button {
-    	font-size: 3rem;
-    }
-    .rating-circle {
-	font-size: 3.0rem;
-    }
-    #bigsquares {
-	flex-direction: column;	
-    }
-
-    // In portrait mode, we are computing by height over 50%
-// #firstsquare {
-//     width: calc(50vh);
-//     height: calc(50vh);
-// }
-// #secondsquare {
-//     width: calc(50vh);
-//     height: calc(50vh);
-// }
-
-.swipable-message {
-    .message-heading {
-	font-size: 2.5rem;	
-    }
-    p {
-	font-size: 1.5rem;    
-    }
-}
-    
-}
-
-// for debugging: body::before{ content: "Tablet media query (768 < 979) fired"; 
-@media all and (orientation: landscape) and (min-height: 960px)
-{
-    body,p,button,.invite-button {
-        font-size: 32px;
-    }
-    .fa-smile-o {
-//	background-color: blue;	// debug	
-    	font-size: 4rem;
-    }
-    .invite-button {
-    	font-size: 2rem;	
-    }
-    #central_control_panel_id { 
-    	font-size: 2rem;    
-    }
-    .play-button {
-    	font-size: 3rem;
-    }
-    .rating-circle {
-	font-size: 3.0rem;
-    }
-    #bigsquares {
-	flex-direction: row;	
-    }
-    // In landscape mode, we are computing by height over 50%
-// #firstsquare {
-//     width: calc(50vw);
-//     height: calc(50vw;
-// }
-// #secondsquare {
-//     width: calc(50vw);
-//     height: calc(50vw);
-// }
-
-
-.swipable-message {
-    .message-heading {
-	font-size: 2.5rem;	
-    }
-    p {
-	font-size: 1.5rem;    
-    }
-}
-}
-
- @media all and (orientation: portrait) and (max-width: 959px) and (min-width: 760px) 
- {
-    body,p,button,.invite-button {
-        font-size: 20px;
-    }
-    .fa-smile-o {
-//	background-color: red;	// debug
-    	font-size: 3.0rem;
-    }
-    .invite-button {
-    	font-size: 1.8rem;	
-    }
-    #central_control_panel_id { 
-    	font-size: 2.4rem;    
-    }
-    .play-button {
-    	font-size: 2.8rem;
-    }
-    .rating-circle {
-	font-size: 2rem;
-    }
-    #bigsquares {
-	flex-direction: column;	
-    }
-    // In portrait mode, we are computing by height over 50%
-// #firstsquare {
-//     width: calc(50vh);
-//     height: calc(50vh);
-// }
-// #secondsquare {
-//     width: calc(50vh);
-//     height: calc(50vh);
-// }
-
-.swipable-message {
-    .message-heading {
-	font-size: 1.8rem;	
-    }
-    p {
-	font-size: 1.3rem;    
-    }
-}
-    
-
-}
- @media all and (orientation: landscape) and (max-height: 959px) and (min-height: 760px) 
- {
-    body,p,button,.invite-button {
-        font-size: 14px;
-    }
-    .fa-smile-o {
-// 	background-color: red; // debug
-    	font-size: 3.0rem;
-    }
-    .invite-button {
-    	font-size: 1.8rem;	
-    }
-    #central_control_panel_id { 
-    	font-size: 2.4rem;    
-    }
-    .play-button {
-    	font-size: 2.8rem;
-    }
-    .rating-circle {
-	font-size: 2rem;
-    }
-    #bigsquares {
-	flex-direction: row;	
-    }
-    // In landscape mode, we are computing by height over 50%
-// #firstsquare {
-//     width: calc(50vw);
-//     height: calc(50vw;
-// }
-// #secondsquare {
-//     width: calc(50vw);
-//     height: calc(50vw);
-// }
-
-.swipable-message {
-    .message-heading {
-	font-size: 1.8rem;	
-    }
-    p {
-	font-size: 1.3rem;    
-    }
-}
-    
-
-}
- @media all and (orientation: portrait) and (max-width: 759px) and (min-width: 600px) 
- {
-    body,p,button,.invite-button {
-        font-size: 14px;
-    }
-    .fa-smile-o {
-// 	background-color: pink;	// debug
-    	font-size: 2.0rem;
-    }
-    .invite-button {
-    	font-size: 1.0rem;	
-    }
-    #central_control_panel_id { 
-    	font-size: 2rem;    
-    }
-    .play-button {
-    	font-size: 2.4rem;
-    }
-    .rating-circle {
-	font-size: 1.5rem;
-    }
-    #bigsquares {
-	flex-direction: column;	
-    }
-    // In portrait mode, we are computing by height over 50%
-// #firstsquare {
-//     width: calc(50vh);
-//     height: calc(50vh);
-// }
-// #secondsquare {
-//     width: calc(50vh);
-//     height: calc(50vh);
-    // }
-    
-.swipable-message {
-    .message-heading {
-	font-size: 1.5rem;	
-    }
-    p {
-	font-size: 1.0rem;    
-    }
-}
-
-}
- @media all and (orientation: landscape) and (max-height:759px) and (min-height: 600px) 
- {
-    body,p,button,.invite-button {
-        font-size: 14px;
-    }
-    .fa-smile-o {
-// 	background-color: pink; // debug
-    	font-size: 2.0rem;
-    }
-    .invite-button {
-    	font-size: 1.0rem;	
-    }
-    #central_control_panel_id { 
-    	font-size: 2rem;    
-    }
-    .play-button {
-    	font-size: 2.4rem;
-    }
-    .rating-circle {
-	font-size: 1.5rem;
-    }
-    #bigsquares {
-	flex-direction: row;	
-    }
-    // In landscape mode, we are computing by height over 50%
-// #firstsquare {
-//     width: calc(50vw);
-//     height: calc(50vw;
-// }
-// #secondsquare {
-//     width: calc(50vw);
-//     height: calc(50vw);
-    // }
-    
-.swipable-message {
-    .message-heading {
-	font-size: 1.5rem;	
-    }
-    p {
-	font-size: 1.0rem;    
-    }
-}
-
-}
-
- 
-@media all and  (orientation: portrait) and  (max-width: 599px) and (min-width: 450px) {
-    body,p,button,.invite-button {
-        font-size: 11px;
-    }
-    .fa-smile-o {
-// 	background-color: green;	// debu
-        font-size: 1.5rem;
-    }
-    .invite-button {
-        font-size: 0.8rem;	
-    }
-    #central_control_panel_id { 
-    	font-size: 1.2rem;    
-    }
-    .play-button {
-    	font-size: 1.4rem;
-    }
-    .rating-circle {
-	font-size: 0.7rem;
-    }
-    #bigsquares {
-	flex-direction: column;	
-    }
-    // In portrait mode, we are computing by height over 50%
-// #firstsquare {
-//     width: calc(50vh);
-//     height: calc(50vh);
-// }
-// #secondsquare {
-//     width: calc(50vh);
-//     height: calc(50vh);
-// }
-.swipable-message {
-    .message-heading {
-	font-size: 1.0rem;	
-    }
-    p {
-	font-size: 0.7rem;    
-    }
-}
-
-}
-@media all and  (orientation: landscape) and  (max-height: 599px) and (min-height: 450px) {
-    body,p,button,.invite-button {
-        font-size: 11px;
-    }
-    .fa-smile-o {
-// 	background-color: green;	// debug
-        font-size: 1.5rem;
-    }
-    .invite-button {
-        font-size: 0.8rem;	
-    }
-    #central_control_panel_id { 
-    	font-size: 1.2rem;    
-    }
-    .play-button {
-    	font-size: 1.4rem;
-    }
-    .rating-circle {
-	font-size: 0.7rem;
-    }
-    #bigsquares {
-	flex-direction: row;	
-    }
-    // In landscape mode, we are computing by height over 50%
-// #firstsquare {
-//     width: calc(50vw);
-//     height: calc(50vw;
-// }
-// #secondsquare {
-//     width: calc(50vw);
-//     height: calc(50vw);
-// }
-.swipable-message {
-    .message-heading {
-	font-size: 1.0rem;	
-    }
-    p {
-	font-size: 0.7rem;    
-    }
-}
-
-}
-
-@media all and  (orientation: portrait) and  (max-width: 449px) and (min-width: 320px) {
-    body,p,button,.invite-button {
-        font-size: 11px;
-    }
-    .fa-smile-o {
-// 	background-color: purple;	// debug
-        font-size: 1.0rem;
-    }
-    .invite-button {
-        font-size: 0.6rem;	
-    }
-    #central_control_panel_id { 
-    	font-size: 1.0rem;    
-    }
-    .play-button {
-    	font-size: 1.2rem;
-    }
-    .rating-circle {
-	font-size: 0.5rem;
-    }
-    #bigsquares {
-	flex-direction: column;	
-    }
-    // In portrait mode, we are computing by height over 50%
-// #firstsquare {
-//     width: calc(50vh);
-//     height: calc(50vh);
-// }
-// #secondsquare {
-//     width: calc(50vh);
-//     height: calc(50vh);
-// }
-.swipable-message {
-    .message-heading {
-	font-size: 0.7rem;	
-    }
-    p {
-	font-size: 0.5rem;    
-    }
-}
-p {
-	font-size: 0.5rem;    
-    }
-}
-@media all and  (orientation: landscape) and  (max-height: 449px) and (min-height: 320px) {
-    body,p,button,.invite-button {
-        font-size: 11px;
-    }
-    .fa-smile-o {
-// 	background-color: purple;	// debug
-        font-size: 1.5rem;
-    }
-    .invite-button {
-        font-size: 0.6rem;	
-    }
-    #central_control_panel_id { 
-    	font-size: 1.0rem;    
-    }
-    .play-button {
-    	font-size: 1.2rem;
-    }
-    .rating-circle {
-	font-size: 0.5rem;
-    }
-    #bigsquares {
-	flex-direction: row;	
-    }
-    // In landscape mode, we are computing by height over 50%
-// #firstsquare {
-//     width: calc(50vw);
-//     height: calc(50vw;
-// }
-// #secondsquare {
-//     width: calc(50vw);
-//     height: calc(50vw);
-// }
-.swipable-message {
-    .message-heading {
-	font-size: 0.7rem;	
-    }
-    p {
-	font-size: 0.5rem;    
-    }
-}
-p {
-	font-size: 0.5rem;    
-    }
-}
-
-@media all and  (orientation: portrait) and (max-width: 319px)  {
-    body,p,button,.invite-button {
-        font-size: 8px;
-    }
-    .fa-smile-o {
-        font-size: 1.0rem;
-    }
-    .invite-button, {
-        font-size: 0.5rem;	
-    }
-    #central_control_panel_id { 
-	font-size: 0.8rem;    
-    }
-    .play-button {
-    	font-size: 1.0rem;
-    }
-    .rating-circle {
-	font-size: 0.5rem;
-    }
-    #bigsquares {
-	flex-direction: column;	
-    }
-    // In portrait mode, we are computing by height over 50%
-// #firstsquare {
-//     width: calc(50vh);
-//     height: calc(50vh);
-// }
-// #secondsquare {
-//     width: calc(50vh);
-//     height: calc(50vh);
-// }
-.swipable-message {
-    .message-heading {
-	font-size: 0.4rem;	
-    }
-    p {
-	font-size: 0.3rem;    
-    }
-}
-   p {
-	font-size: 0.4rem;    
-    }
-}
-@media all and  (orientation: landscape) and (max-height: 319px)  {
-    body,p,button,.invite-button {
-        font-size: 8px;
-    }
-    .fa-smile-o {
-        font-size: 1.0rem;
-    }
-    .invite-button, {
-        font-size: .5rem;	
-    }
-    #central_control_panel_id { 
-	font-size: 0.8rem;    
-    }
-    .play-button {
-    	font-size: 1.0rem;
-    }
-    .rating-circle {
-	font-size: 0.5rem;
-    }
-    #bigsquares {
-	flex-direction: row;	
-    }
-    // In landscape mode, we are computing by height over 50%
-// #firstsquare {
-//      width: calc(50vw);
-//      height: calc(50vw;
-// }
-// #secondsquare {
-//      width: calc(50vw);
-//      height: calc(50vw);
-// }
-.swipable-message {
-    .message-heading {
-	font-size: 0.6rem;	
-    }
-    p {
-	font-size: 0.4rem;    
-    }
-}
-
-   p {
-	font-size: 0.4rem;    
-    }
-}
-
-
 
 .flexiblecol:after {
     content: '';
@@ -1350,7 +776,7 @@ p {
     width: 100%;
 }
 .flex-box {
-	width: 50%;
+    width: 50%;
     position: absolute;
     padding-bottom: 50%;
     display: block;
@@ -1385,7 +811,7 @@ p {
 	color: white;
     }
     .btn {
-	font-size: 1rem;
+	font-size: 1em;
 	background-color: rgb(75,176,88);
     }
 }
@@ -1400,15 +826,39 @@ p {
     left: 50%;
 }
 
-@media screen and (max-width:767px){
-.flexiblecol {
+.centered {
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    color: red;
+    z-index: 1003;
+    transform: translate(-50%, -50%);
+    width: 200%;
+    
+}
+
+.play-button {
+    font-size: 1.4em;
+}
+#central_control_panel_id { 
+     	font-size: 1.2em;    
+}
+.fa-smile-o {
+         font-size: 1.3em;
+}
+
+
+@media screen and (orientation: portrait) and (max-width:767px){
+
+   .flexiblecol {
     width: 100%;
     float: none;
     padding-bottom: 0;
 }
 .flexiblecol:after {
     content: '';
-    height: 100%;
+    //    height: 100%;
+    height: 50%;
     display: block;
 }
 div#firstsquare:after{
@@ -1426,27 +876,27 @@ div#firstsquare:after{
     max-width: 400px;
     margin: 0 auto;
 }
+    #bigsquares {
+	flex-direction: column;	
+    }
 }
+
+
 @media screen and (max-width:300px){
-.flex-box {
-    width: 100%;
-    padding-bottom: 100%;
-}
-.flex-box:after {
-    content: '';
-    height: 100%;
-}
+ .flex-box {
+     width: 100%;
+     padding-bottom: 100%;
+ }
+ .flex-box:after {
+     content: '';
+     height: 100%;
+ }
 
 }
 
-.centered {
-    position: absolute;
-    top: 100%;
-    left: 100%;
-    color: red;
-    z-index: 1003;
-    transform: translate(-50%, -50%);
-    width: 200%;
-    
+@media all and (orientation: landscape)
+{
+    #bigsquares {
+	flex-direction: row;	
+    }
 }
-

@@ -881,7 +881,7 @@ Some people like to leave their cameras on during the journey to increase the fe
 }
 
     const index = this.state.index;
-    return (
+      return (
 	    <div style={{position: 'absolute',
 			 minHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
 			 maxWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,
@@ -996,7 +996,7 @@ class FeedbackModal extends Component {
 		flexDirection: 'column',		
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		padding: '0.5rem'
+		padding: '0.5em'
 	    }}>
 	    <p> Please rate your experience for: </p>
 	    <p> "{this.props.journeySpaceName}"</p>
@@ -1041,8 +1041,8 @@ class FeedbackModal extends Component {
 	    }}>
 	    <textarea id="feedback_text" className="form-control rounded-0" rows="4"
 	style={{borderRadius: '15px',
-		marginLeft: '1rem',
-		marginRight: '1rem',
+		marginLeft: '1em',
+		marginRight: '1em',
 		marginBottom: '0px',
 		onChange: (e) => {
 		    // no need to call setState since we are only keeping for submit...
@@ -1055,9 +1055,9 @@ class FeedbackModal extends Component {
 	    </div>
             <button className='invite-button feedback-button' onClick={this.onSubmit}
 	style={{borderRadius: '15px',
-		marginLeft: '1rem',
-		marginRight: '1rem',
-		marginTop: '-2rem',
+		marginLeft: '1em',
+		marginRight: '1em',
+		marginTop: '-2em',
 		zIndex: '1001',
 	       }}
  	    >Submit Feedback</button>
@@ -1100,7 +1100,7 @@ class UnfilledVideoSquare extends React.Component {
 	      <div className='box-content'
 	      style={{visibility: `${hide_control ? 'hidden' : 'visible'}` }}>
               <i className='far fa-smile fa-2x'></i>
-              <p style={{color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1rem'}}>Waiting...</p>
+              <p style={{color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1em'}}>Waiting...</p>
               <button className='invite-button invite-friends-button'  onClick={this.props.onInvite}>Invite Friends
 	        </button>
 	      </div>
@@ -1164,6 +1164,33 @@ class NoVideoSquare extends React.Component {
 // return null if not a permanent-room, return the name if it is a permanent room.
 function isPermanentRoom(url) {
     console.log("URL",url);
+}
+
+
+class Controls extends Component {
+    constructor(props) {
+	super(props);
+    }    
+    render() {
+	return (
+		 <div id='central_control_panel_id' className='centered' style={this.props.visibility}>
+		      <VideoButton publisher={this.props.publisher}/>
+		      <AudioButton publisher={this.props.publisher}
+  		         state={this.props.state}
+		         setMicrophoneMutedState={this.props.setMicrophoneMutedState}
+		      />
+		      <PlayButton style={{color: 'rgb(74,170,221)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
+		          journey={this.props.journey} player={this.props.player}/>			 
+		      <PauseButton style={{color: 'rgb(74,170,221)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
+		          journey={this.props.journey} player={this.props.player}/>			 
+		      <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%',  }}
+	                  journey={this.props.journey} playerState={this.props.playerState}
+		          seekTo={this.props.seekTo}
+		      />
+	         </div>
+	);
+    }
+    
 }
 
 export class JourneySpace extends Component {
@@ -1740,37 +1767,19 @@ export class JourneySpace extends Component {
                               }}
                  />
 		 </div>
-		 {/* <div className='centered'>GET THIS CENTERED IN THE second-square</div> */}
-
-		 {/* BEGIN CENTRAL CONTROL PANEL */}
-		 
-		 <div id='central_control_panel_id' className='centered' 
-		 style={{visibility: `${(!(this.state.showInviteModal || this.state.showOrientationModal || this.state.showFeedbackModal)) ? "visible" : "hidden"}`}}
-		  >
-			 <VideoButton
-		 publisher={this.publisher}/>
-		 
-			 <AudioButton
+		 <Controls
+		 visibility={{visibility: `${(!(this.state.showInviteModal || this.state.showOrientationModal || this.state.showFeedbackModal)) ? "visible" : "hidden"}`}}
 		 publisher={this.publisher}
 		 state={this.state}
 		 setMicrophoneMutedState={(b) => {
 		     this.publisher.state.publisher.publishAudio(!b);		     
 		     this.setState({microphoneMuted: b});
 		 }}
-		 />
-		 <PlayButton style={{color: 'rgb(74,170,221)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
-		 journey={state.journey} player={state.audioTag}/>			 
-
-		 <PauseButton style={{color: 'rgb(74,170,221)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
-		 journey={state.journey} player={state.audioTag}/>			 
-		 
-		 <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%',  }} journey={state.journey}
+		 player={state.audioTag}
+		 journey= {state.journey}
 		 playerState={state.playerState}
 		 seekTo={this.seekTo}
 		 />
-	         </div>
-		 
-		 {/* END CENTRAL CONTROL PANEL */}
 
 		 </div>
 		 
