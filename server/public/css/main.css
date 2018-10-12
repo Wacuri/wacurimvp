@@ -11661,7 +11661,7 @@ h2 {
   display: grid;
   float: right;
   width: 25vw;
-  grid-gap: 12px;
+  grid-gap: 0.4vw;
   grid-template-columns: auto auto auto auto; }
 
 .feedback-rating .feedback-empty {

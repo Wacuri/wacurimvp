@@ -572,12 +572,12 @@ h2 {
     height: 20px;
 }
 
-
+// The grid gap is: (8/500)*25vw = 
 #phase-bar0 {
     display: grid;
     float: right;
     width: 25vw;
-    grid-gap: 12px;
+    grid-gap: 0.4vw;
     grid-template-columns: auto auto auto auto ;
 }
 
@@ -1070,7 +1070,8 @@ textarea {
 	}
     }
 }
-
+// This is awkward but the only good way to keep the icons
+// the "same" size inside a larger circle.
 .play-button {
     font-size: 1.4em;
     margin-left: 0.2em;
@@ -1090,55 +1091,3 @@ textarea {
 }
 
 
-// @media screen and (orientation: portrait) and (max-width:767px){
-
-//    .flexiblecol {
-//     width: 100%;
-//     float: none;
-//     padding-bottom: 0;
-// }
-// .flexiblecol:after {
-//     content: '';
-//     //    height: 100%;
-//     height: 50%;
-//     display: block;
-// }
-// div#firstsquare:after{
-// 	display: none;
-// }	
-// .flexiblecol-content {
-//     position: relative;
-// }
-// .flex-box {
-//     position: relative;
-//     display: inline-block;
-//     left: 0!important;
-// }
-// .container {
-//     max-width: 400px;
-//     margin: 0 auto;
-// }
-//     #bigsquares {
-// 	flex-direction: column;	
-//     }
-// }
-
-
-// @media screen and (max-width:300px){
-//  .flex-box {
-//      width: 100%;
-//      padding-bottom: 100%;
-//  }
-//  .flex-box:after {
-//      content: '';
-//      height: 100%;
-//  }
-
-// }
-
-// @media all and (orientation: landscape)
-// {
-//     #bigsquares {
-// 	flex-direction: row;	
-//     }
-// }
