@@ -1212,13 +1212,9 @@ class NoVideoSquare extends React.Component {
 	      <i className='far fa-smile fa-2x'  style={{ visibility: 'hidden'}}></i>
 	      
 		  <p style={{visibility: `${topmsgvis}`, color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1em'}}>{topmsg}</p>
-
-	      {/*              <div style={{color: 'white'}}> */}
-		  {/* I have no idea how to incease the roundness of these corners */}
 	      {/* We need to create a colore class to unify with invite-friends-button */}
                   <button className='invite-button invite-orientation-button' onClick={fnc}
  	              >{msg}</button>
-		  {/*	            </div>	      	  */}
   	         </div>
 		  </div>);
   }	  
@@ -1718,7 +1714,15 @@ export class JourneySpace extends Component {
     }, 20);
     }
 
-    
+    prepJourneyName = (name) => {
+	const maxlen = 65;
+	var value = name;
+	if (value.length > maxlen) {
+	    value = value.substring(0,62)+"...";
+	}
+	
+	return value;
+    }
     render() {
 	    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
 	    var local_key_counter_to_avoid_warning = 0;	    
@@ -1729,8 +1733,6 @@ export class JourneySpace extends Component {
 	// enter a permament room form a straight URL or from within these pages.
 	const spaceName = this.props.match.params.room;
 
-	console.log("RENDERING JOURNEY",state.journey);
-	
 
 	var optionkey = 0;
 	
@@ -1749,7 +1751,9 @@ export class JourneySpace extends Component {
 
 		 <div style={{ overflow: 'auto'}} >
 		 <div id="titlebar" >
-		 {state.journey.startAt && <span style={{color: 'white'}} >{state.journey.name}</span>
+		 {/* Here I am testing the length of the journey title  */}
+		 {state.journey.startAt && <span id={"journeyname"} style={{color: 'white'}} >
+		  {this.prepJourneyName(state.journey.name)}</span>
 		 }
                  { (this.props.isPermanentSpace ||
 		    (!state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed'))) &&

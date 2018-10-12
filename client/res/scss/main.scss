@@ -65,7 +65,7 @@ h2 {
 }
 
 .logobar_and_titlebar {
-    height: calc(8vh);
+    min-height: calc(8vh);
     background: black;
 }
 
@@ -139,6 +139,9 @@ h2 {
     align-content: center;
 }
 
+#journeyname {
+    max-width: 40vw;
+}
 
 
 #bigsquares {
@@ -168,7 +171,7 @@ h2 {
     margin-right: 1em;    
     background-color: black;
     color: white;
-    height: calc(4vh);
+    min-height: calc(4vh);
     select {
 	-webkit-appearance: menulist;
     	color: black;

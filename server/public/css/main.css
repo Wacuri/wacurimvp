@@ -11327,7 +11327,7 @@ h2 {
   font-size: 1.7em; }
 
 .logobar_and_titlebar {
-  height: calc(8vh);
+  min-height: calc(8vh);
   background: black; }
 
 .logobar {
@@ -11375,6 +11375,9 @@ h2 {
   justify-content: center;
   align-content: center; }
 
+#journeyname {
+  max-width: 40vw; }
+
 #bigsquares {
   display: flex;
   flex-direction: row;
@@ -11398,7 +11401,7 @@ h2 {
   margin-right: 1em;
   background-color: black;
   color: white;
-  height: calc(4vh);
+  min-height: calc(4vh);
   overflow: auto;
   z-index: 4; }
   #titlebar select {
