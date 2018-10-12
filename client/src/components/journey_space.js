@@ -24,7 +24,7 @@ import uuid from 'uuid';
 import {initLayoutContainer} from 'opentok-layout-js';
 import './share';
 import JourneyStartsIn from './journey_starts_in';
-import Header from './header';
+import LogoAndTitleBar from './header';
 import Intro from './intro';
 
 // This may not be the right way to do this
@@ -280,28 +280,12 @@ class JourneyStateProgressBar extends Component {
 // We need to implement the state indicator bar as a series of colors. This should be
 // easy with background color and CSS
 
-// We need to implement the 
-class JourneyPhases extends Component {
 
-  constructor(props) {
-    super(props);
-    props.timer.on('tick', (current) => {
-      this.setState({
-        timerValue: current
-      });
-    });
-  }
 
-  componentWillReceiveProps(newProps) {
-    newProps.timer.on('tick', (current) => {
-      this.setState({
-        timerValue: current
-      });
-    });
-  }
 
-    get stepIndex() {
-    switch(this.props.journey.state) {
+
+function stepIndexAux(s) {
+    switch(s) {
       case 'joined':
       case 'created':
         return 0;
@@ -321,7 +305,30 @@ class JourneyPhases extends Component {
       default:
         return 2;
     }
+}
+
+class JourneyPhases extends Component {
+
+  constructor(props) {
+    super(props);
+    props.timer.on('tick', (current) => {
+      this.setState({
+        timerValue: current
+      });
+    });
   }
+
+  componentWillReceiveProps(newProps) {
+    newProps.timer.on('tick', (current) => {
+      this.setState({
+        timerValue: current
+      });
+    });
+  }
+
+   get stepIndex() {
+       return stepIndexAux(this.props.journey.state);
+   }
     // Note: setting the backgroudnColor below to orange does not work, but at least gives us a
     // gray that can be seen against the black background
    
@@ -330,10 +337,10 @@ class JourneyPhases extends Component {
       const NumPhases = 4;
       const Messages = ["Breathe and center yourself","Journey in Progess","Share your Insights","Provide Feedback"];
     return (
-	    <div ref={el => {this.container = el}} id={'journey-timeline0'} className={`journey-timeline step-${this.stepIndex.toString()}`}>
+	    <div ref={el => {this.container = el}} className={`journey-timeline step-${this.stepIndex.toString()}`}>
 	    <div>
 	    <div style={{display: 'flex', flexDirection: 'row-reverse',  alignItems: 'flex-end' }}>
-	    <span style={{marginRight: '10px'}}>
+	    <span >
 
 	{ state.journey.startAt &&
 	    (this.stepIndex == 0) &&
@@ -343,6 +350,27 @@ class JourneyPhases extends Component {
 	</span>
 	    </div>
 	    </div>
+	</div>			
+    )
+  }
+}
+
+class PhaseIndicator extends Component {
+  constructor(props) {
+    super(props);
+  }
+    get stepIndex() {
+       return stepIndexAux(this.props.journey.state);	
+    }
+    // Note: setting the backgroudnColor below to orange does not work, but at least gives us a
+    // gray that can be seen against the black background
+   
+  render() {
+      const {journey} = this.props;
+      const NumPhases = 4;
+      const Messages = ["Breathe and center yourself","Journey in Progess","Share your Insights","Provide Feedback"];
+      console.log("PHASE INDICATOR RENDERED");
+    return (
 	    <div id={'phase-bar0'}>
 	    <div className={ `phase-bar bar-${this.stepIndex == 0 ? 'white' : 'green'}`}>
 	      </div>
@@ -353,12 +381,60 @@ class JourneyPhases extends Component {
 	    <div className={ `phase-bar bar-${this.stepIndex == 3 ? 'white' : 'green'}`}>
 	      </div>
 	    </div>
-	</div>			
     )
   }
 }
 
-class SkipButton extends Component {
+
+
+// class SkipButton extends Component {
+//     constructor(props) {
+//        super(props);
+//     }
+//     skipToNext = (e) => {
+// 	console.log("SKIP TO NEXT CALLED");
+// 	e.preventDefault();
+//    // This seeking to near the end works better than just calling skip, because it allows our natural processes to continue.
+//     // fetch(`/api/journeys/${this.props.journey.room}/skip`, {
+//     //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+//     //   credentials: 'same-origin', // include, same-origin, *omit
+//     //   headers: {
+//     //     'content-type': 'application/json'
+//     //   },
+//     //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+//     //   mode: 'cors', // no-cors, cors, *same-origin
+//     //   redirect: 'follow', // manual, *follow, error
+//     //   referrer: 'no-referrer', // *client, no-referrer
+//     // });
+//       // I believe this should change the state to completed, but I am not sure
+//       // if that happens server side or client side
+// 	console.log("skipToNext event fired");
+// 	const vid = this.props.vidid;
+// 	const playerState = this.props.playerState;
+// 	const seekTo = this.props.seekTo;
+// 	// This is my attempt to seek to the end....
+// 	// It is not clear how the audio really works; I am not sure that "seek" functions.
+// 	seekTo(99/100);
+// 	// figure out how to pause, and how to seek correctly....
+//   }
+
+//     render() {
+// 	return (
+// 	    <span className={`fa-stack`} onClick={this.skipToNext}>
+// 	    <i className='fa fa-circle fa-stack-2x' 
+// 	style={{color: 'rgb(75,176,88)'}}
+// 	    ></i>
+// 	    {
+//             <i className={`fa fa-step-forward fa-stack-1x`}
+// 	     style={{color: 'white'}}></i>
+// 	     }
+// 		 </span>
+//     )
+//   }
+// }
+
+
+class SkipButtonClear extends Component {
     constructor(props) {
        super(props);
     }
@@ -390,22 +466,22 @@ class SkipButton extends Component {
   }
 
     render() {
-	return (
-	    <span className={`fa-stack`} onClick={this.skipToNext}>
-	    <i className='fa fa-circle fa-stack-2x' 
-	style={{color: 'rgb(75,176,88)'}}
-	    ></i>
+	return (<div id={'imageskipbutton'}>
+		<span className={'invisible-finger-target'}>
+		<span className={`fa-stack`} onClick={this.skipToNext}
+	    style={{zIndex: 2}}>
 	    {
             <i className={`fa fa-step-forward fa-stack-1x`}
 	     style={{color: 'white'}}></i>
 	     }
-		 </span>
+		</span>
+		</span>
+		</div>
     )
   }
 }
 
 class VideoButton extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -429,20 +505,8 @@ class VideoButton extends Component {
     return (
 	    <span className={`fa-stack`} onClick={this.toggle}>
 	    <i className='fa fa-circle fa-stack-2x' 
-	style={{color: 'rgb(75,176,88)'}}
+	style={{color: `${this.state.publishing ? 'rgb(75,176,88)' : 'red'}`}}	
 	    ></i>
-	    {/* This mechanism is a stop-gap because I can't get the Font Awesome icon to work
-	    {
-	    <i className={`fa fa-video-camera fa-stack-1x`}		
-		style={{color: 'white'}}>
-		</i>
-	    }
-	    { !this.state.publishing && 
-	    <i className={`fa fa-ban  fa-stack-2x`}		
-	     style={{color: 'rgb(75,176,88)'}}>
-	      </i> }
-	     */}
-	{/* This is an attempt to use a proper icon */}
 	    { this.state.publishing &&
 	    <i className={`fas fa-video fa-stack-1x`}		
 		style={{color: 'white'}}>
@@ -1138,17 +1202,16 @@ class NoVideoSquare extends React.Component {
       const feedbackNotOrientation =
 	    this.props.playerState == 'ended' || this.props.playerState == 'completed';
       const msg = (feedbackNotOrientation) ? "Leave and Give Feedback" : "Orientation"; 
-      const topmsg = (feedbackNotOrientation) ? "When all sharing is done..." : "nothing";
+      const topmsg = (feedbackNotOrientation) ? "When all sharing is done..." : "Waiting...";
       const topmsgvis = (feedbackNotOrientation) ? "visible" : "hidden";       
       const fnc = (feedbackNotOrientation) ? this.props.onFeedback : this.props.onOrientation;
       const additionalClass = this.props.additionalClass;      
 	  return (
 		  <div key={localkey} id={vid} className={`${additionalClass} flex-box video-placeholder`}>
 	        <div className='box-content'>
-	          <div>
-	      <i className='fa fa-smile-o fa-2x' style={{ visibility: 'hidden'}}></i>
+	      <i className='far fa-smile fa-2x'  style={{ visibility: 'hidden'}}></i>
 	      
-		  <p style={{visibility: `${topmsgvis}`, color: 'white', maxWidth: '80%', margin: '0 auto'}}>{topmsg}</p>
+		  <p style={{visibility: `${topmsgvis}`, color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1em'}}>{topmsg}</p>
 
 	      {/*              <div style={{color: 'white'}}> */}
 		  {/* I have no idea how to incease the roundness of these corners */}
@@ -1157,7 +1220,6 @@ class NoVideoSquare extends React.Component {
  	              >{msg}</button>
 		  {/*	            </div>	      	  */}
   	         </div>
-	        </div>
 		  </div>);
   }	  
 }
@@ -1173,20 +1235,24 @@ class Controls extends Component {
     }    
     render() {
 	return (
-		 <div id='central_control_panel_id' className='centered' style={this.props.visibility}>
-		      <VideoButton publisher={this.props.publisher}/>
+		<div id='central_control_panel_id' className='centered' style={this.props.visibility}>
+		
 		      <AudioButton publisher={this.props.publisher}
   		         state={this.props.state}
 		         setMicrophoneMutedState={this.props.setMicrophoneMutedState}
 		      />
-		      <PlayButton style={{color: 'rgb(74,170,221)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
-		          journey={this.props.journey} player={this.props.player}/>			 
+		<PlayButton style={{color: 'rgb(74,170,221)',
+				    backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
+	    journey={this.props.journey} player={this.props.player}/>
+		<VideoButton publisher={this.props.publisher}/>
+		{/*
 		      <PauseButton style={{color: 'rgb(74,170,221)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
 		          journey={this.props.journey} player={this.props.player}/>			 
 		      <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%',  }}
 	                  journey={this.props.journey} playerState={this.props.playerState}
 		          seekTo={this.props.seekTo}
 		      />
+		 */}
 	         </div>
 	);
     }
@@ -1676,46 +1742,56 @@ export class JourneySpace extends Component {
 
 		{/* tob bar */}
 		<div id="topbar_and_header">
-		 <Header history={this.props.history} showLeave={true}
+		 <LogoAndTitleBar history={this.props.history} showLeave={true}
 		 isPermanentSpace={this.props.isPermanentSpace}
 		 spaceName={spaceName}
 		 />
 
-		 
+		 <div style={{ overflow: 'auto'}} >
 		 <div id="titlebar" >
-		 
 		 {state.journey.startAt && <span style={{color: 'white'}} >{state.journey.name}</span>
 		 }
                  { (this.props.isPermanentSpace ||
 		    (!state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed'))) &&
-		  <div style={{paddingTop: '8px'}}>
-		   <select style={{width: '100%'}} onChange={this.onChangeJourney} value={state.journeys&& state.journey.journey}>
+		   <select onChange={this.onChangeJourney} value={state.journeys&& state.journey.journey}>
                     <option value={''}>{'Pulldown to select a new Journey'}</option>		   
                      {
 		           state.journeys.map(journey => (
-				   <option key={optionkey++} value={journey.filePath}>{journey.name}</option>
+				   <option key={optionkey++} value={journey.filePath}>{journey.name}
+			       <i className='far fa-smile'/>
+			       </option>
                         ))}
                       </select>
-                   </div> }
+		 }
 
-
-                   <JourneyPhases journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
-
-
+                 <JourneyPhases journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
 		 </div>
-
+		 <PhaseIndicator journey={state.journey} />	     
+		 </div>
 	    </div>
 
 		 <div className="flex-squares"> 
 			 
 		 {/* here we create the two big squares;  */}
-		 <div className="container">
 		 
 		 <div id="bigsquares">
 		 
                  <div  id="firstsquare" className="flexiblecol" key="name">
 		 <div className="flexiblecol-content">
-                 <img id='video-square0' className="journey-image" src={state.journey.image} onClick={this.togglePlayState} />
+                 <img id='video-square0' className="journey-image" src={state.journey.image} onClick={this.togglePlayState}/>
+		 <SkipButtonClear
+		 visibility={{visibility: `${(!(this.state.showInviteModal || this.state.showOrientationModal || this.state.showFeedbackModal)) ? "visible" : "hidden"}`}}
+		 publisher={this.publisher}
+		 state={this.state}
+		 setMicrophoneMutedState={(b) => {
+		     this.publisher.state.publisher.publishAudio(!b);		     
+		     this.setState({microphoneMuted: b});
+		 }}
+		 player={state.audioTag}
+		 journey= {state.journey}
+		 playerState={state.playerState}
+		 seekTo={this.seekTo}>
+		  </SkipButtonClear>
 		 </div>
                  </div>
 
@@ -1819,7 +1895,7 @@ export class JourneySpace extends Component {
 		 ></UnfilledVideoSquare>
 		 
 		 <NoVideoSquare vidid='video-square4'
-		 additionalClass={'forth-box'}		 
+		 additionalClass={'fourth-box'}		 
 		 localkey={local_key_counter_to_avoid_warning++}
 		 onOrientation={this.onOrientation}
 		 onFeedback={this.onFeedback}		 
@@ -1835,7 +1911,6 @@ export class JourneySpace extends Component {
 		  */}
 		 </div>
 		 
-</div>		 
 
 		 
 		 </div>
@@ -2342,17 +2417,16 @@ export class JourneySpaceTest extends Component {
              <div className='journeyspace-content'>		 
 
 	     {/* tob bar */}
-	     <div id="topbar_and_header">
-	     <Header history={this.props.history} showLeave={true}
-	     isPermanentSpace={this.props.isPermanentSpace}
-	     spaceName={spaceName}
-	     />
+	     <div >
+	       <Header history={this.props.history} showLeave={true}
+	       isPermanentSpace={this.props.isPermanentSpace}
+	       spaceName={spaceName}>
+	     	     </Header>
+	          <div id="titlebar" />
 
-	     
-	     <div id="titlebar" >
-	     
 	     {state.journey.startAt && <span style={{color: 'white'}} >{state.journey.name}</span>
 	     }
+	     
              { (this.props.isPermanentSpace ||
 		(!state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed'))) &&
 	       <div style={{paddingTop: '8px'}}>
@@ -2365,9 +2439,12 @@ export class JourneySpaceTest extends Component {
                </select>
                </div> }
              <JourneyPhases journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
-	     </div>
+	     
+
+	     
 	     </div>
 
+	     <PhaseIndicator journey={state.journey} />
 	     
 	     <div className="flex-squares"> 
 	     <div id="bigsquares">

@@ -11301,14 +11301,13 @@ a.text-dark:hover, a.text-dark:focus {
     color: inherit;
     border-color: #dee2e6; } }
 
+* {
+  box-sizing: border-box; }
+
 body {
   font-family: 'Playfair Display';
-  margin: 0;
+  margin: 0 auto;
   font-size: 1.9vw; }
-
-.container {
-  max-width: 1800px;
-  margin: 0 auto; }
 
 @media (max-width: 767.98px) {
   body {
@@ -11327,22 +11326,27 @@ body {
 h2 {
   font-size: 1.7em; }
 
-.header {
-  margin: 0;
-  background: #fcbd51;
-  padding: 0;
+.logobar_and_titlebar {
+  height: calc(8vh);
+  background: black; }
+
+.logobar {
+  margin: 0px;
+  background: #9ec13a;
+  padding: 3px;
   display: flex;
   align-items: center;
-  justify-content: center; }
-  .header .logo {
-    width: 150px;
-    max-height: 60px;
+  justify-content: center;
+  height: calc(4vh);
+  font-size: 1.9vh; }
+  .logobar .logo {
+    height: 100%;
     display: block;
     margin-left: auto;
     margin-right: auto;
     margin-top: 2px;
     margin-bottom: 2px; }
-  .header .journeyspacetitle {
+  .logobar .journeyspacetitle {
     color: black;
     font-size: 1.0em;
     font-weight: 700;
@@ -11360,9 +11364,16 @@ h2 {
   object-fit: contain; }
 
 .flex-squares {
+  margin: auto;
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap; }
+  justify-content: center;
+  align-content: center; }
+
+.flex-squares {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-content: center; }
 
 #bigsquares {
   display: flex;
@@ -11379,18 +11390,38 @@ h2 {
 
 #titlebar {
   display: flex;
+  font-size: 1.9vh;
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: flex-end;
-  margin-left: 20px;
+  margin-left: 1em;
+  margin-right: 1em;
   background-color: black;
-  color: white; }
+  color: white;
+  height: calc(4vh);
+  overflow: auto;
+  z-index: 4; }
+  #titlebar select {
+    -webkit-appearance: menulist;
+    color: black;
+    background-color: white;
+    width: 33vw; }
+  #titlebar select:after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    right: 8px;
+    top: 50%;
+    margin-top: -3px;
+    height: 0;
+    width: 0;
+    border-top: 6px solid #f99300;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    pointer-events: none; }
 
 .space-between-added {
   justify-content: space-between; }
-
-.journeyspace-content {
-  flex: 1; }
 
 .journeyspace-footer {
   background: #fcbd51; }
@@ -11432,26 +11463,6 @@ h2 {
 .journeyspace-share a {
   color: white; }
 
-.journeyspace-progress small {
-  text-transform: uppercase;
-  color: white;
-  font-weight: 100;
-  font-size: 0.7em; }
-
-.journeyspace-progress progress[value] {
-  -webkit-appearance: none;
-  appearance: none;
-  height: 4px;
-  display: block; }
-
-.journeyspace-progress progress[value]::-webkit-progress-bar {
-  background-color: #ffbf35;
-  border-radius: 2px; }
-
-.journeyspace-progress progress[value]::-webkit-progress-value {
-  background-color: #616161;
-  border-radius: 2px 0 0 2px; }
-
 .joinable-journeys {
   padding: 20px; }
 
@@ -11491,80 +11502,6 @@ h2 {
   transition: all 400ms ease-in-out; }
   .waiting h3, .waiting p {
     color: white; }
-
-/* Fonts */
-.web-share-title {
-  font-size: 16px;
-  font-weight: 400;
-  letter-spacing: 0.12em;
-  opacity: 0.7; }
-
-.web-share {
-  position: fixed;
-  top: -10px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0);
-  transition: background .4s;
-  padding: 8px;
-  flex-direction: column;
-  justify-content: flex-end;
-  z-index: 100000;
-  display: none; }
-  .web-share .fa {
-    display: block;
-    text-align: center; }
-
-.web-share-container {
-  max-width: 490px;
-  width: 100%;
-  box-sizing: border-box;
-  margin: 0 auto 8px;
-  background: #F8F8F8;
-  border-radius: 12px;
-  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
-  padding: 16px 23px;
-  text-align: left;
-  color: black;
-  opacity: 0;
-  transition: transform .4s, opacity .4s; }
-
-.web-share-container.web-share-cancel {
-  color: #0076FF;
-  font-size: 16px;
-  text-align: center;
-  cursor: pointer; }
-
-.web-share-item {
-  margin: 16px 8px;
-  display: inline-block;
-  text-decoration: none !important;
-  color: black !important;
-  cursor: pointer;
-  width: 64px; }
-
-.web-share-item [class^="web-share-icon-"] {
-  background-color: white;
-  border-radius: 12px;
-  padding: 12px;
-  color: black;
-  font-size: 32px;
-  width: 32px;
-  height: 32px;
-  background-position: center;
-  background-repeat: no-repeat;
-  margin: 0 auto; }
-
-.web-share-item[href=""] {
-  display: none; }
-
-.web-share-item-desc {
-  text-align: center;
-  margin-top: 4px; }
-
-.web-share.desktop .web-share-sms {
-  display: none; }
 
 .signature-pad {
   position: absolute;
@@ -11692,14 +11629,6 @@ h2 {
   color: red;
   z-index: 1002; }
 
-.centered {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 1002;
-  color: red;
-  transform: translate(-50%, -50%); }
-
 #central_control_panel_id {
   display: flex;
   justify-content: center;
@@ -11719,7 +11648,9 @@ h2 {
 
 .PartnerStream {
   display: flex;
-  flex-flow: column; }
+  flex-flow: column;
+  width: 50%;
+  height: 50%; }
   .PartnerStream div {
     height: 90%; }
 
@@ -11728,6 +11659,8 @@ h2 {
 
 #phase-bar0 {
   display: grid;
+  float: right;
+  width: 25vw;
   grid-gap: 12px;
   grid-template-columns: auto auto auto auto; }
 
@@ -11811,43 +11744,229 @@ textarea {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-topbar_and_header {
-  height: 8%; }
-
-.flexiblecol:after {
-  content: '';
-  height: 50%; }
-
-.flexiblecol {
-  width: 50%;
-  position: relative;
-  padding-bottom: 50%;
-  display: block;
-  float: left; }
-
 .flexiblecol-content {
-  position: absolute;
   width: 100%;
-  overflow: hidden;
-  border: 1px solid #000; }
+  overflow: hidden; }
 
 .flexiblecol-content img {
   width: 100%; }
 
 .flex-box {
   width: 50%;
-  position: absolute;
-  padding-bottom: 50%;
-  display: block;
-  float: left; }
-
-.flex-box:after {
-  content: '';
   height: 50%; }
 
 .box-content {
   position: absolute;
-  border: 1px solid #000;
+  width: 100%;
+  height: 100%; }
+
+#bigsquares {
+  display: flex;
+  flex-wrap: wrap; }
+
+#secondsquare {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; }
+
+@media screen and (orientation: portrait) {
+  #bigsquares {
+    flex-direction: column;
+    height: calc(92vh);
+    justify-content: center;
+    align-content: center; }
+  #secondsquare {
+    height: calc(46vh);
+    width: calc(46vh); }
+  #firstsquare {
+    height: calc(46vh);
+    width: calc(46vh); }
+  display: grid;
+  width: 25vw;
+  grid-gap: 12px;
+  grid-template-columns: auto auto auto auto; }
+
+.feedback-rating .feedback-empty {
+  color: white;
+  margin-left: 5px;
+  margin-right: 5px; }
+
+.feedback-rating .feedback-full {
+  color: black;
+  margin-left: 5px;
+  margin-right: 5px; }
+
+.orientation-message {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  height: 100%; }
+  .orientation-message div {
+    color: white; }
+  .orientation-message h3 {
+    font-size: 1.5em; }
+  .orientation-message p {
+    font-size: 0.5em; }
+
+.feedback-message {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%; }
+  .feedback-message div {
+    color: white; }
+  .feedback-message h3 {
+    font-size: 1.5em; }
+  .feedback-message .btn {
+    font-size: 1.0em;
+    background-color: #4bb058; }
+
+.swipable-message {
+  margin: 15%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; }
+  .swipable-message .message-heading {
+    font-size: 1.0em;
+    color: black;
+    font-weight: 700;
+    font-family: 'Playfair Display'; }
+  .swipable-message p {
+    font-size: 0.8em;
+    font-weight: 200;
+    color: white; }
+
+.invite-button {
+  color: white;
+  background-color: black;
+  margin-left: 0.7em;
+  margin-right: 0.7em;
+  font-size: 0.8em;
+  border-radius: 15px !important;
+  border-width: 2px;
+  border-color: white; }
+
+.invite-friends-button {
+  background-color: black; }
+
+.invite-orientation-button {
+  background-color: #4bb058;
+  border-color: #4bb058; }
+
+.feedback-button {
+  background-color: #4bb058;
+  border-color: #4bb058; }
+
+textarea {
+  display: block;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+.flexiblecol-content {
+  width: 100%;
+  overflow: hidden; }
+
+.flexiblecol-content img {
+  width: 100%; }
+
+.flex-box {
+  width: 50%;
+  height: 50%; }
+
+.box-content {
+  position: absolute;
+  width: 100%;
+  height: 100%; }
+
+#bigsquares {
+  display: flex;
+  flex-wrap: wrap; }
+
+#secondsquare {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; }
+
+@media screen and (orientation: portrait) {
+  #bigsquares {
+    flex-direction: column;
+    height: calc(92vh);
+    justify-content: center;
+    align-content: center; }
+  #secondsquare {
+    height: calc(46vh);
+    width: calc(46vh); }
+  #firstsquare {
+    height: calc(46vh);
+    width: calc(46vh); }
+  #phase-bar0 {
+    width: calc(23vh); } }
+
+@media screen and (orientation: landscape) {
+  #bigsquares {
+    flex-direction: row;
+    height: calc(92vh); }
+  #secondsquare {
+    height: calc(50vw);
+    width: calc(50vw); }
+  #firstsquare {
+    height: calc(50vw);
+    width: calc(50vw); }
+  #phase-bar0 {
+    width: calc(25vw); } }
+
+/* iphone X  -- this device is more than twice as long as wide */
+/* In this case, we have to calculate differently. */
+@media only screen and (min-device-width: 375px) and (max-device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape) {
+  #bigsquares {
+    flex-direction: row;
+    height: calc(92vh); }
+  #secondsquare {
+    height: calc(92vh);
+    width: calc(92vh); }
+  #firstsquare {
+    height: calc(92vh);
+    width: calc(92vh); }
+  #phase-bar0 {
+    width: calc(46vh); } }
+
+@media only screen and (min-device-width: 375px) and (max-device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
+  #bigsquares {
+    flex-direction: column;
+    height: calc(92vh); }
+  #secondsquare {
+    height: calc(100vw);
+    width: calc(100vw); }
+  #firstsquare {
+    height: calc(100vw);
+    width: calc(100vw); }
+  #phase-bar0 {
+    width: calc(50vw); } }
+
+#overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  cursor: pointer; }
+
+#centeringcontainer {
+  position: relative;
+  text-align: center;
+  color: lack; }
+
+.box-content {
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
@@ -11866,16 +11985,6 @@ topbar_and_header {
     font-size: 1em;
     background-color: #4bb058; }
 
-.second-box.flex-box {
-  left: 50%; }
-
-.third-box.flex-box {
-  top: 50%; }
-
-.forth-box.flex-box {
-  top: 50%;
-  left: 50%; }
-
 .centered {
   position: absolute;
   top: 100%;
@@ -11885,48 +11994,36 @@ topbar_and_header {
   transform: translate(-50%, -50%);
   width: 200%; }
 
+#imageskipbutton {
+  position: relative; }
+  #imageskipbutton .invisible-finger-target {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: red;
+    width: 4em;
+    height: 4em;
+    z-index: 10; }
+    #imageskipbutton .invisible-finger-target .fa-stack {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 1.5em;
+      z-index: 4; }
+
 .play-button {
-  font-size: 1.4em; }
+  font-size: 1.4em;
+  margin-left: 0.2em;
+  margin-right: 0.2em; }
+  .play-button .fa-play {
+    font-size: 0.7em; }
+  .play-button .fa-pause {
+    font-size: 0.7em; }
 
 #central_control_panel_id {
   font-size: 1.2em; }
 
 .fa-smile-o {
   font-size: 1.3em; }
-
-@media screen and (orientation: portrait) and (max-width: 767px) {
-  .flexiblecol {
-    width: 100%;
-    float: none;
-    padding-bottom: 0; }
-  .flexiblecol:after {
-    content: '';
-    height: 50%;
-    display: block; }
-  div#firstsquare:after {
-    display: none; }
-  .flexiblecol-content {
-    position: relative; }
-  .flex-box {
-    position: relative;
-    display: inline-block;
-    left: 0 !important; }
-  .container {
-    max-width: 400px;
-    margin: 0 auto; }
-  #bigsquares {
-    flex-direction: column; } }
-
-@media screen and (max-width: 300px) {
-  .flex-box {
-    width: 100%;
-    padding-bottom: 100%; }
-  .flex-box:after {
-    content: '';
-    height: 100%; } }
-
-@media all and (orientation: landscape) {
-  #bigsquares {
-    flex-direction: row; } }
 
 /*# sourceMappingURL=main.css.map*/

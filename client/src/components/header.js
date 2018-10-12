@@ -27,30 +27,43 @@ class LeaveRoomButton extends Component {
   }
 
   render() {
-    return (
-	    <button onClick={this.onLeave}
-	style={{backgroundColor: 'rgb(250,188,91)', borderStyle: 'none'}}	
-	    >
-	    <i className="fas fa-home" style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', padding: '8px', fontSize: '24px'}}></i></button>
-    )
+      return (
+	    <span className='fa-stack' onClick={this.onLeave}>
+	    <i className='fa fa-circle fa-stack-2x' 
+	style={{color: 'rgb(75,176,88)'}}
+	    ></i>
+	    {
+            <i className={`fas fa-home fa-stack-1x`}
+	     style={{color: 'white'}}></i>
+	     }
+		 </span>
+      );
   }
+    
 }
 
+	      {/*	  
+	    <button onClick={this.onLeave}
+	style={{backgroundColor: 'rgb(250,188,91)', borderStyle: 'none', height: '100%'}}	
+	    >
+	    <i className="fas fa-home" style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', fontSize: '0.5em'}}></i></button>
+	       */}
 
-class Header extends React.Component {
+
+class LogoAndTitleBar extends React.Component {
     constructor(props) {
 	super(props);
     }
     
     render() {
 	return (
-	<div  className="header">
+	<div  className="logobar">
 		<div style={{padding: '5px'}}>
 		</div>
 		{ this.props.showLeave && 
 		  <LeaveRoomButton history={this.props.history}/> }
 	    { this.props.isPermanentSpace &&
-	      <span className="journeyspacetitle"> Journey Space Name: {this.props.spaceName} </span>
+	      <span className="journeyspacetitle">Space Name: {this.props.spaceName} </span>
 	    }
 	    
     <img className="logo" src={logo}/>
@@ -68,4 +81,4 @@ class Header extends React.Component {
 	)}
 }
 
-export default view(Header);
+export default view(LogoAndTitleBar);

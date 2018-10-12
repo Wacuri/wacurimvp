@@ -14,7 +14,7 @@ import { view } from 'react-easy-state';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import Cookie from 'js-cookie';
-import Header from './components/header';
+import LogoAndTitleBar from './components/header';
 import Home from './components/home';
 import * as JSP from './components/journey_space';
 // import JourneySpace from './components/journey_space';
@@ -250,7 +250,7 @@ class JourneyBoard extends Component {
 	var discriminator = 0;
 	return (
 		<div>
-		<Header history={this.props.history} showLeave={false}/>	    
+		<LogoAndTitleBar history={this.props.history} showLeave={false}/>	    
       <div className='joinable-journeys'>
         {state.joinableJourneys.map(journey => <JoinableJourneyCard key={journey._id+"_"+discriminator++} journey={journey} audioTag={this.audioTag}/>)}
 	    </div>

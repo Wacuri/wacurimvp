@@ -81,9 +81,14 @@ agenda.define('start journey', async function(job, done) {
 
 
 agenda.on('ready', function() {
-   for(var i= 0; i < 10; i++) {
-       agenda.schedule(i+' seconds','create journey space');
-       console.log('certain no',i);
+    var j = 0;
+    for(var i= 0; i < 5; i++) {
+	j = i*10;
+       agenda.schedule(j+' seconds','create journey space');
+   }
+    for(var i= 0; i < 5; i++) {
+	j += 30;
+       agenda.schedule(j+' seconds','create journey space');
    }
 
   agenda.every('1 minute', 'create journey space');
