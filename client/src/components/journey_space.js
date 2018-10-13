@@ -311,7 +311,7 @@ class JourneyPhases extends Component {
 
   constructor(props) {
     super(props);
-    props.timer.on('tick', (current) => {
+      props.timer.on('tick', (current) => {
       this.setState({
         timerValue: current
       });
@@ -342,8 +342,8 @@ class JourneyPhases extends Component {
 	    <div style={{display: 'flex', flexDirection: 'row-reverse',  alignItems: 'flex-end' }}>
 	    <span >
 
-	{ state.journey.startAt &&
-	    (this.stepIndex == 0) &&
+	{ (((state.journey.startAt &&
+	     (this.stepIndex == 0))) || (this.stepIndex == 1) ) &&
                 <span className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</span>
 	}
 	    <span>{Messages[this.stepIndex]}</span>
@@ -2179,7 +2179,8 @@ export class JourneySpaceTest extends Component {
     return currentParticipant && state.journey.participants.indexOf(currentParticipant) === 0
   }
 
-  get journeyStateTimer() {
+    get journeyStateTimer() {
+	console.log("RETURNING SECONDSEMITTER" + state.journey.state);	
     switch(state.journey.state) {
       case 'started':
       case 'paused':
@@ -2191,6 +2192,7 @@ export class JourneySpaceTest extends Component {
         if (!this.secondsEmitter) {
           this.secondsEmitter = new SecondsTimerEmitter(new Date(state.journey.createdAt), new Date(state.journey.startAt));
         }
+	console.log("RETURNING SECONDSEMITTER");
         return this.secondsEmitter;
     }
   }
@@ -2244,8 +2246,6 @@ export class JourneySpaceTest extends Component {
   }
 
     onTimeUpdate = (e) => {
-	console.log("onTimeUpdate",e);
-	console.log("onTimeUpdate",e.target.currentTime);	
     this.setState({
       playerProgress: (e.target.currentTime / e.target.duration) * 100,
       playerProgressMS: e.target.currentTime,
@@ -2309,7 +2309,6 @@ export class JourneySpaceTest extends Component {
   }
 
     onOrientation = (e) => {
-	console.log("onOrientation called");
     e.preventDefault();
     this.setState({
       showOrientationModal: true
@@ -2333,7 +2332,6 @@ export class JourneySpaceTest extends Component {
 
 
     onFeedback = (e) => {
-	console.log("onFeedback called!");
     e.preventDefault();
     this.setState({
       showFeedbackModal: true
@@ -2358,16 +2356,10 @@ export class JourneySpaceTest extends Component {
 
 
     seekTo = (fraction) => {
-      console.log("duration",state.audioTag.duration);
-      console.log("audioTag",state.audioTag.currentTime);      
+
 	state.audioTag.play();
+	state.audioTag.currentTime = state.audioTag.duration * fraction;
 
-	
-	
-    state.audioTag.currentTime = state.audioTag.duration * fraction;
-
-      console.log("SEEK called with:",fraction);
-	console.log("audioTag",state.audioTag.currentTime);
 	// This only needs a target...must determine what time that is..
 	// I think iit is the audioTag
 	var e = {target: {currentTime: state.audioTag.currentTime}};

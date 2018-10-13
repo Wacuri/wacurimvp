@@ -23,6 +23,12 @@ import CountdownMessage from './components/countdown_message';
 import state from './state';
 import * as someHelper from './utility/utility'
 
+import SwipeableViews from 'react-swipeable-views';
+import { virtualize } from 'react-swipeable-views-utils';
+import { mod } from 'react-swipeable-views-core';
+const VirtualizeSwipeableViews = virtualize(SwipeableViews);
+
+
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 
 
@@ -167,7 +173,35 @@ class JoinableJourneyCard extends Component {
 
 
 class JourneyBoard extends Component {
+  constructor(props) {
+      super(props);
+      this.state = {
+	  showOrientationModal: false,
+      }
+  }
 
+    onOrientation = (e) => {
+	console.log("onOrientation called");
+    e.preventDefault();
+    this.setState({
+      showOrientationModal: true
+    });
+    e.stopPropagation();	
+  }
+
+  onCloseOrientationModal = (e) => {
+    e.preventDefault();
+    this.setState({
+      showOrientationModal: false
+    });
+  }
+
+  onCompleteOrienetation = (url, name) => {
+    this.setState({
+      showOrientationModal: false
+    });
+  }
+    
   componentDidMount() {
     const roomUrl = 'temp-home-location'
 
@@ -248,16 +282,157 @@ class JourneyBoard extends Component {
 	// I want to remove the warnings I am getting, but this is a dangerous way to do it.
 	// Possibly I should deal with this in a different way.
 	var discriminator = 0;
+	console.log("SHOW ORIENTATION MODAL",this.state.showOrientationModal);
 	return (
 		<div>
-		<LogoAndTitleBar history={this.props.history} showLeave={false}/>	    
+		 {this.state.showOrientationModal &&
+		  <JourneyBoardOrientationModal force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal}>
+		  LSKASLDKFJLSDJFLSDJFLKSDFJLKJSFDLKFDSJLDFKS
+		  </JourneyBoardOrientationModal>
+		 }
+		<LogoAndTitleBar history={this.props.history} showLeave={false} showOrientation={true}
+	          onOrientation={this.onOrientation}
+		/>	    
       <div className='joinable-journeys'>
         {state.joinableJourneys.map(journey => <JoinableJourneyCard key={journey._id+"_"+discriminator++} journey={journey} audioTag={this.audioTag}/>)}
 	    </div>
+
+	    
 		</div>
     )
   }
 }
+
+class JourneyBoardOrientationModal extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+	index: 0
+    }
+      this.bogus = 40000;
+  };
+
+    onChange = (e) => {
+    e.preventDefault();	
+    this.setState({
+      journeySpaceName: e.target.value,
+      error: this.state.error && e.target.value != ''
+    });
+	e.stopPropagation();	
+    }
+
+    left = () => {
+	this.handleChangeIndex((this.state.index-1) % 3);
+    }
+    right = () => {
+	this.handleChangeIndex((this.state.index+1) % 3);	
+    }
+
+    handleChangeIndex = index => {
+	this.setState(
+	    {index: index}
+	);
+    };
+
+  render() {
+      function slideRenderer(params) {
+	  console.log("params", params);
+  const { index, key } = params;
+
+  switch (mod(index, 3)) {
+    case 0:
+      return (
+	      <div>
+	      <p  className='message-heading'>1.  Welcome to CuriousLive ...<br/>
+	      A five-minute guided journey - plus sharing - with others.</p>
+	      <p/>	      
+<p  >
+The journey will begin when the timer above elapses and you hear the cime.
+</p>
+<p  >
+Breathe slowly and deeply and ajust your posture to be comfortable.
+	    </p>
+	      </div>
+      );
+
+    case 1:
+      return (
+	      <div  >	    
+	      <p  className='message-heading'>2.  Next comes the Journey...</p>
+	      <p/>	      
+<p  >
+Your microphone will be muted.
+</p>
+<p >
+Some people like to leave their cameras on during the journey to increase the feeling of a shared experience. It is up to you.
+	    </p>
+	    </div>
+	      
+      );
+
+    case 2:
+      return (
+	    <div>
+	      <p className='message-heading'>3.  After the Journey comes the Sharing and Connecting.</p>
+	      <p/>
+<p >
+	    After the journey you will have the opportunity to share your insights.
+	    Each person takes 1 or 2 minutes.
+</p>
+	    <p >
+	    When others are sharing, please listen deeply, and in turn they will listen more deeply to you.
+	    </p>
+	    </div>
+      );
+
+    default:
+      return null;
+  }
+      }
+      const index = this.state.index;
+      console.log("INDEX",index);
+      this.bogus += 10000;
+      return (
+	    <div key='xxx' style={{position: 'absolute',
+			 minHeight: '100%',
+			 maxWidth: '100%',
+     		         maxHeight: '100%',
+	    			   minWidth:  '100%',
+				   width: '100%',
+			 backgroundColor: 'rgba(74, 170, 221, 1.0)',
+			 display: 'flex',
+			 flexFlow: 'column nowrap',
+			 justifyContent: 'center',
+			 zIndex: '1003'
+			 }
+		       }>
+            <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
+          <i className='fa fa-times fa-2x' style={{color: 'white'}}/>
+        </a>
+	    <div key='encapsulating' style={{
+	    		 display: 'flex',
+			 flexFlow: 'column nowrap',
+			 justifyContent: 'center'
+	    }}>
+	    <VirtualizeSwipeableViews
+          index={this.state.index}
+          onChangeIndex={this.handleChangeIndex}
+          slideRenderer={slideRenderer}
+	  className='swipable-message'
+              />	 
+	      </div>
+	    <button  onClick={this.left} style={{visibility: `${(index == 0) ? 'hidden' : 'visible'}`, position: 'absolute', left: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
+	    	    <i className="fa fa-caret-left fa-3x"></i>
+	</button>
+	    <button onClick={this.right} style={{visibility: `${(index == 2) ? 'hidden' : 'visible'}`, position: 'absolute', right: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
+	    	    <i className="fa fa-caret-right fa-3x" ></i>
+	    </button>
+	</div>	    
+    )
+  }
+}
+      
+
 
 class IntroWrapper extends Component {
   constructor(props) {

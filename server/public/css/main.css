@@ -11736,6 +11736,12 @@ h2 {
   background-color: #4bb058;
   border-color: #4bb058; }
 
+.header-orientation-button {
+  background-color: white;
+  border-color: white;
+  border-radius: 15px !important;
+  color: black; }
+
 .feedback-button {
   background-color: #4bb058;
   border-color: #4bb058; }

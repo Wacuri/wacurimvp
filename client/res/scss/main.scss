@@ -103,23 +103,11 @@ h2 {
   background: black;
   display: flex;
   flex-direction: column;
-//  min-height: calc(100vh - 46px);
 }
-// .control-region {
-//     max-height: 15%;
-//     display: flex;
-//     flex-direction: row wrap;
-// }
 
 .journey-image {
      object-fit: contain
 }
-
-// .flex-squares {
-//     display: flex;
-//     flex-direction: row;
-//     flex-wrap: nowrap;
-// }
 
 
 .flex-squares {
@@ -217,28 +205,6 @@ h2 {
 .journeyspace-container {
   position: relative;
 }
-// This is what makes the height of the video expand as you change the width.
-// This took some work. This is in part to maintain an aspect ratio.
-// Having elments fill 100% of available height is tricky.
-// .journeyspace-streams {
-//   padding: 15px 10px 0 10px;
-
-//   li {
-//       min-height: calc(100vw * .4);	          
-//       margin-bottom: 10px; 
-
-//     @media (min-width: 992px) {
-// 	& {
-// 	  min-height: calc(100vw * .25);	    
-//       }
-//     }
-    
-//   }
-
-//   li:first-child {
-//     border: none;
-//   }
-// }
 
 // Possibly the div is obsolete
 .video-placeholder {
@@ -260,19 +226,6 @@ h2 {
     color: rgb(83, 83, 83);
   }
   
-  // > div {
-  //     min-height: calc(100vw * .4);
-  //     margin-bottom: 10px; 
-
-  //   @media (min-width: 992px) {
-  //     & {
-  // 	  min-height: calc(100vw * .25);
-  // 	  width: height;
-  //     }
-  //   }
-  //  
-  // }
-
   li:first-child {
     border: none;
   }
@@ -672,6 +625,12 @@ h2 {
 .invite-orientation-button {
     background-color: rgb(75,176,88);
     border-color: rgb(75,176,88);    
+}
+.header-orientation-button {
+    background-color: white;
+    border-color: white;
+    border-radius: 15px!important;    
+    color: black;
 }
 
 .feedback-button {

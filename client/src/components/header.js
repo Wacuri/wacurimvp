@@ -42,13 +42,6 @@ class LeaveRoomButton extends Component {
     
 }
 
-	      {/*	  
-	    <button onClick={this.onLeave}
-	style={{backgroundColor: 'rgb(250,188,91)', borderStyle: 'none', height: '100%'}}	
-	    >
-	    <i className="fas fa-home" style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', fontSize: '0.5em'}}></i></button>
-	       */}
-
 
 class LogoAndTitleBar extends React.Component {
     constructor(props) {
@@ -66,11 +59,13 @@ class LogoAndTitleBar extends React.Component {
 	      <span className="journeyspacetitle">Space Name: {this.props.spaceName} </span>
 	    }
 	    
-    <img className="logo" src={logo}/>
-		{/*    {state.journey && !state.journey.startAt &&
-     <h2 style={{color: 'white'}}>{state.journey.name}</h2>
-    }
-		 */}
+		<img className="logo" src={logo}/>
+            { this.props.showOrientation &&
+	      <span className="header-orientation-button"
+	      onClick={this.props.onOrientation}
+	    >Orientation</span>
+	    }
+
     {false && state.loggedIn && state.user &&
       <div>
         <span className='mr-2 text-secondary'>logged in as {state.user.name}</span>
