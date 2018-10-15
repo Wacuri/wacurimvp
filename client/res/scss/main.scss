@@ -151,7 +151,7 @@ h2 {
 
 #titlebar {
     display: flex;
-    font-size: 1.9vh;	          
+    font-size: 1.7vh;	          
     flex-flow: row wrap;
     justify-content: space-between;
     align-items: flex-end;
@@ -362,20 +362,22 @@ h2 {
 
 
 .intro {
+    padding: 8em;
   h2 {
     color: white;
-    font-size: 16px;
   }
-
+  
   h3 {
     font-family: Playfair Display, serif;
     color: rgb(132, 253, 49);
-    font-size: 20px;
+    font-size: 3em;
+  }
+  p {
+    font-size: 2em;      
   }
 
   .intro-screen p {
     font-family: Playfair Display, serif;
-    font-size: 16px;
     color: white;
   }
 
@@ -612,7 +614,7 @@ h2 {
     background-color: black;
     margin-left: 0.7em;
     margin-right: 0.7em;
-    font-size: 0.8em;
+    font-size: 1em;
     border-radius: 15px!important;
     border-width: 2px;
     border-color: white;
@@ -627,6 +629,8 @@ h2 {
     border-color: rgb(75,176,88);    
 }
 .header-orientation-button {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
     background-color: white;
     border-color: white;
     border-radius: 15px!important;    
@@ -889,12 +893,25 @@ textarea {
     #phase-bar0 {
 	width: calc(23vh);	
     }
+    .logobar_and_titlebar {
+        min-height: calc(8vh);
+    }
+    .logobar {
+        height: calc(4vh);
+    }
+    #titlebar {
+        min-height: calc(4vh);
+        font-size: 1.7vh;
+    }
+    body {
+        font-size: 1.8vw;
+    }
 }
 
 @media screen and (orientation: landscape){
     #bigsquares {
 	flex-direction: row;
-	height: calc(92vh);
+	height: calc(88vh);
     }
     #secondsquare {
 	height: calc(50vw);
@@ -907,28 +924,23 @@ textarea {
     #phase-bar0 {
 	width: calc(25vw);	
     }
+    .logobar_and_titlebar {
+        min-height: calc(12vh);
+    }
+    .logobar {
+        height: calc(6vh);
+    }
+    #titlebar {
+        min-height: calc(6vh);
+        font-size: 1.7vw;        
+    }
+    body {
+        font-size: 1.8vh;
+    }
 }
 
 /* iphone X  -- this device is more than twice as long as wide */
 /* In this case, we have to calculate differently. */
-@media only screen and (min-device-width: 375px) and (max-device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape) {
-    #bigsquares {
-	flex-direction: row;
-	height: calc(92vh);
-    }
-    #secondsquare {
-	height: calc(92vh);
-	width: calc(92vh);
-    }
-    #firstsquare {
-	height: calc(92vh);
-	width: calc(92vh);
-    }
-    #phase-bar0 {
-	width: calc(46vh);	
-    }
-}
-
 @media only screen and (min-device-width: 375px) and (max-device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
     #bigsquares {
 	flex-direction: column;
@@ -945,7 +957,45 @@ textarea {
     #phase-bar0 {
 	width: calc(50vw);	
     }
+    #titlebar {
+        font-size: 1.7vh;
+    }
+    body {
+        font-size: 1.8vw;
+    }
 }
+
+@media only screen and (min-device-width: 375px) and (max-device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape) {
+    #bigsquares {
+	flex-direction: row;
+	height: calc(88vh);
+    }
+    #secondsquare {
+	height: calc(88vh);
+	width: calc(88vh);
+    }
+    #firstsquare {
+	height: calc(88vh);
+	width: calc(88vh);
+    }
+    #phase-bar0 {
+	width: calc(44vh);	
+    }
+    .logobar_and_titlebar {
+        min-height: calc(12vh);
+    }
+    .logobar {
+        height: calc(6vh);
+    }
+    #titlebar {
+        min-height: calc(6vh);
+        font-size: 1.7vw;                
+    }
+    body {
+        font-size: 1.8vh;
+    }
+}
+
 
 // Need to center main column, and put the two special media queries here
 

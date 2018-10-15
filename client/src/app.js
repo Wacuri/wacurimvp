@@ -18,7 +18,7 @@ import LogoAndTitleBar from './components/header';
 import Home from './components/home';
 import * as JSP from './components/journey_space';
 // import JourneySpace from './components/journey_space';
-import Intro from './components/intro';
+import * as INTRO from './components/intro';
 import CountdownMessage from './components/countdown_message';
 import state from './state';
 import * as someHelper from './utility/utility'
@@ -287,7 +287,6 @@ class JourneyBoard extends Component {
 		<div>
 		 {this.state.showOrientationModal &&
 		  <JourneyBoardOrientationModal force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal}>
-		  LSKASLDKFJLSDJFLSDJFLKSDFJLKJSFDLKFDSJLDFKS
 		  </JourneyBoardOrientationModal>
 		 }
 		<LogoAndTitleBar history={this.props.history} showLeave={false} showOrientation={true}
@@ -306,10 +305,14 @@ class JourneyBoard extends Component {
 class JourneyBoardOrientationModal extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-	index: 0
+    // this.state = {
+    //     index: 0
+    // }
+      this.state = {
+      streams: [],
+          views: INTRO.INTRO_VIEWS,
+          index: 0
     }
-      this.bogus = 40000;
   };
 
     onChange = (e) => {
@@ -322,10 +325,10 @@ class JourneyBoardOrientationModal extends Component {
     }
 
     left = () => {
-	this.handleChangeIndex((this.state.index-1) % 3);
+	this.handleChangeIndex((this.state.index-1) % this.state.views.length);
     }
     right = () => {
-	this.handleChangeIndex((this.state.index+1) % 3);	
+	this.handleChangeIndex((this.state.index+1) % this.state.views.length);	
     }
 
     handleChangeIndex = index => {
@@ -335,65 +338,10 @@ class JourneyBoardOrientationModal extends Component {
     };
 
   render() {
-      function slideRenderer(params) {
-	  console.log("params", params);
-  const { index, key } = params;
-
-  switch (mod(index, 3)) {
-    case 0:
-      return (
-	      <div>
-	      <p  className='message-heading'>1.  Welcome to CuriousLive ...<br/>
-	      A five-minute guided journey - plus sharing - with others.</p>
-	      <p/>	      
-<p  >
-The journey will begin when the timer above elapses and you hear the cime.
-</p>
-<p  >
-Breathe slowly and deeply and ajust your posture to be comfortable.
-	    </p>
-	      </div>
-      );
-
-    case 1:
-      return (
-	      <div  >	    
-	      <p  className='message-heading'>2.  Next comes the Journey...</p>
-	      <p/>	      
-<p  >
-Your microphone will be muted.
-</p>
-<p >
-Some people like to leave their cameras on during the journey to increase the feeling of a shared experience. It is up to you.
-	    </p>
-	    </div>
-	      
-      );
-
-    case 2:
-      return (
-	    <div>
-	      <p className='message-heading'>3.  After the Journey comes the Sharing and Connecting.</p>
-	      <p/>
-<p >
-	    After the journey you will have the opportunity to share your insights.
-	    Each person takes 1 or 2 minutes.
-</p>
-	    <p >
-	    When others are sharing, please listen deeply, and in turn they will listen more deeply to you.
-	    </p>
-	    </div>
-      );
-
-    default:
-      return null;
-  }
-      }
       const index = this.state.index;
       console.log("INDEX",index);
-      this.bogus += 10000;
       return (
-	    <div key='xxx' style={{position: 'absolute',
+	    <div key='xxx' className='intro' style={{position: 'absolute',
 			 minHeight: '100%',
 			 maxWidth: '100%',
      		         maxHeight: '100%',
@@ -413,18 +361,15 @@ Some people like to leave their cameras on during the journey to increase the fe
 	    		 display: 'flex',
 			 flexFlow: 'column nowrap',
 			 justifyContent: 'center'
-	    }}>
-	    <VirtualizeSwipeableViews
-          index={this.state.index}
-          onChangeIndex={this.handleChangeIndex}
-          slideRenderer={slideRenderer}
-	  className='swipable-message'
-              />	 
+	     }}>
+           <SwipeableViews onChangeIndex={this.onChangeIndex} index={this.state.index} enableMouseEvents ref={swipeable => this.swipeable = swipeable}>
+             {this.state.views}
+           </SwipeableViews>
 	      </div>
 	    <button  onClick={this.left} style={{visibility: `${(index == 0) ? 'hidden' : 'visible'}`, position: 'absolute', left: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
 	    	    <i className="fa fa-caret-left fa-3x"></i>
 	</button>
-	    <button onClick={this.right} style={{visibility: `${(index == 2) ? 'hidden' : 'visible'}`, position: 'absolute', right: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
+	    <button onClick={this.right} style={{visibility: `${(index == this.state.views.length-1) ? 'hidden' : 'visible'}`, position: 'absolute', right: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
 	    	    <i className="fa fa-caret-right fa-3x" ></i>
 	    </button>
 	</div>	    

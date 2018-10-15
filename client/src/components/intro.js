@@ -15,24 +15,31 @@ if (__CLIENT__) {
 	window.state = state;
 }
 
-class Intro extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      streams: [],
-      views: [
-        <div className='intro-screen'>
-          <h3>1. Welcome to CuriousLive&hellip; A five-minute guided journey &ndash; plus sharing &ndash; with others.</h3>
+export const INTRO_VIEWS = [
+                    <div className='intro-screen'>
+          <h3>1. Welcome to CuriousLive&hellip; five-minute guided journeys &ndash; plus sharing &ndash; with others.</h3>
           <p>
-            You are now in the JourneySpace and the
-            journey will begin shortly when the timer
-            above elapses and you hear the chime.
+                      For each journey, you can see when it will start and how many people are in the JourneySpace.
+                      To promote sharing, each JourneySpace is limited to two or three participants.
+                      You can join a journeyspace at any time.
+          </p>
+                      <p>
+                      You can join a journeyspace that already has someone present, or go to a Journey
+                      you would like to take and wait for someone else to join.
           </p>
           <p>
-            If more spots are available for this journey,
-            we invite you to invite a friend to two… use
-            the INVITE FRIENDS button.
+                      If no one joins, you can take the journey by yourself, or even create
+                      a permanent space to invite your personal friends to.
+          </p>
+        </div>,
+                  
+        <div className='intro-screen'>
+                      <h3>2. When you enter a JourneySpace&hellip; </h3>
+          <p>
+                      When you enter a JourneySpace, your
+            journey will begin shortly when the timer
+            above elapses and you hear the chime.
           </p>
           <p>
             Then we’ll mute your microphones and for
@@ -47,11 +54,11 @@ class Intro extends Component {
         </div>,
 
         <div className='intro-screen'>
-          <h3>2. Next comes the Journey&hellip;</h3>
+          <h3>3. Next comes the Journey&hellip;</h3>
           <p>
             The CuriousLive&trade; experience is
             intentionally short so busy people can find
-            the time to do it regularly. That's when you
+            the time to do it regularly. That is when you
             get the real benefits.
           </p>
           <p>
@@ -71,16 +78,15 @@ class Intro extends Component {
         </div>,
 
         <div className='intro-screen'>
-          <h3>3. After the Journey comes the Sharing and Connecting.</h3>
+          <h3>4. After the Journey comes the Sharing and Connecting.</h3>
           <p>
-            Now you’ll have the opportunity to briefly
+            Then you’ll have the opportunity to briefly
             share with others your insights and
             experience. Each person takes 1 or 2
             minutes.
           </p>
           <p>
-            When you’re ready, click on the “Share”
-            button to start your Share. Go deep. Drop
+            When you’re ready, start sharing with the other jourrneyers. Go deep. Drop
             in to your insights and intuitions and o!er
             the others something special about your
             experience.
@@ -93,17 +99,22 @@ class Intro extends Component {
         </div>,
 
         <div className='intro-screen'>
-          <h3>4. How was your experience? We Love Feedback from Our Community.</h3>
+          <h3>5. How was your experience? We Love Feedback from Our Community.</h3>
           <p>
             We welcome your feedback about the
             process and the Wacuri Method even
-            after the group experience. Please take
+            after the group experience. When you are done sharing, please take
             a moment to rate your experience and
-            give us your valuable feedback.
+            give us your valuable feedback using the feedback button.
           </p>
         </div>
-      
-      ],
+                      ];
+export class Intro extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        streams: [],
+        views: INTRO_VIEWS,
       index: 0
     }
   }
@@ -210,4 +221,4 @@ class Intro extends Component {
 
 }
 
-export default view(Intro);
+// export default view(Intro);

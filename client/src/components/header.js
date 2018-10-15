@@ -63,7 +63,7 @@ class LogoAndTitleBar extends React.Component {
             { this.props.showOrientation &&
 	      <span className="header-orientation-button"
 	      onClick={this.props.onOrientation}
-	    >Orientation</span>
+	    > Orientation </span>
 	    }
 
     {false && state.loggedIn && state.user &&
