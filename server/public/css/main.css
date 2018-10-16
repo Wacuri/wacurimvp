@@ -12187,15 +12187,21 @@ textarea {
       .jb-banner .banner-text p {
         margin-right: 20px;
         font-size: 10px; }
+  .joinable-journeys {
+    padding: 5px; }
   .joinable-journey-card {
     margin-bottom: 10px;
-    font-size: 10px; }
+    max-width: 240px;
+    min-width: 260px;
+    height: 250px;
+    font-size: 8px; }
     .joinable-journey-card .image img {
-      max-width: 120px; }
+      max-width: 120px;
+      margin-left: -20px; }
     .joinable-journey-card h4 {
-      font-size: 12px; }
+      font-size: 10px; }
     .joinable-journey-card .time-message {
-      font-size: 12px; }
+      font-size: 11px; }
     .joinable-journey-card .spotnumber {
       font-size: 20px;
       font-weight: 700;
@@ -12207,9 +12213,9 @@ textarea {
     .joinable-journey-card .content {
       height: 120px; }
       .joinable-journey-card .content .btn {
-        font-size: 16px;
-        padding-left: 10px;
-        padding-right: 10px;
-        max-width: 100px; } }
+        font-size: 14px;
+        padding-left: 5px;
+        padding-right: 1px;
+        width: 60px; } }
 
 /*# sourceMappingURL=main.css.map*/
