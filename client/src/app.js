@@ -157,8 +157,6 @@ class JoinableJourneyCard extends Component {
 	    <img src={image_name} />
             </div>
 
-
-
 	    {/* here "j" is inserted as a convenient means of marking this entry as a Journeyboard space rather than a permanent one */}
             <Link to={`/j/${journey.room}`} className='btn btn-primary'>{currentUserHasRSVP ? 'Go there now' : 'Join'}</Link>
             </div>            
@@ -296,20 +294,17 @@ class JourneyBoard extends Component {
 		<LTB.JourneyBoardBar history={this.props.history} showLeave={false} showOrientation={true}
 	          onOrientation={this.onOrientation}
 		/>
-                <div className="jb-banner-image">
-                <div className="banner-text">
-                <div>
-                <h1>The CuriousLive JourneyBoard</h1>
-                <p>Welcome to the CuriousLive JourneyBoard
-            "Wake Up Curious" &hellip; It's the five-minute mental day spa everybody's talking about.
-                </p>
-                <p>
-                Select a journey to begin whenever you are ready. Wait for others to join, or invite friends!
-                </p>
-                </div>
-                <img  src={journeyboardbannerimage}/>                
-                </div>
-
+                <div className="jb-banner">
+                     <div  className="banner-text">
+                        <h1>The CuriousLive JourneyBoard</h1>
+                        <p>Welcome to the CuriousLive JourneyBoard
+                          "Wake Up Curious" &hellip; It's the five-minute mental day spa everybody's talking about.
+                        </p>
+                         <p>
+                           Select a journey to begin whenever you are ready. Wait for others to join, or invite friends!
+                         </p>
+                     </div>
+                     <img  src={journeyboardbannerimage}/>                
                 </div>
       <div className='joinable-journeys'>
         {state.joinableJourneys.map(journey => <JoinableJourneyCard key={journey._id+"_"+discriminator++} journey={journey} audioTag={this.audioTag}/>)}

@@ -1,30 +1,12 @@
 {
   "valid": true,
   "version": "2.0.2",
-  "timestamp": 1539666495898,
+  "timestamp": 1539701644510,
   "context": "client",
   "output": {
     "path": "server/public",
     "filename": "./js/index.js",
-    "publicPath": "http://localhost:8080/"
+    "publicPath": "/"
   },
-  "assets": {
-    "marked": {
-      "client/res/images/CuriousLive-logo.png": "7d7cdc1523d104f06849d7e9c11e45db.png",
-      "client/res/images/JourneyBoardWoman-Phone.jpg": "a5ddebecdd8d8729459a2ddc5a969e2f.jpg"
-    },
-    "chunks": {
-      "main": [
-        "./js/index.js",
-        "css/main.css"
-      ]
-    }
-  },
-  "webpackDev": {
-    "skipSetEnv": false,
-    "url": "http://localhost:8080",
-    "addUrl": false
-  },
-  "isWebpackDev": true,
   "assetsFile": "server/public/isomorphic-assets.json"
 }

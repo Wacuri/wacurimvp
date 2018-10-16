@@ -113,22 +113,24 @@ h2 {
   background: white;
   padding: 3px;
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   height: calc(6vh);  
   font-size: 1.9vh;	      
   .logo {
       height: 100%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     margin-top: 2px; // xxx
     margin-bottom: 2px; // xxx    
   }
   .header-orientation-button {
       font-size: 2.4vh;	            
-    padding-left: 0.5em;
-    padding-right: 0.5em;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+    margin-right: 20px;
     background-color: rgb(75,176,88);    
     border-radius: 10px!important;    
     color: white;
@@ -305,34 +307,46 @@ h2 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: space-evenly;
     
 }
-.jb-banner-image {
+
+.jb-banner {
     background-color: black;
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
     img {
         height: 400px;
         display: block;
         margin-left: auto;
     }
     .banner-text {
+        background-color: black;
+        margin-left: 20px;
+        margin-right: 40px;
         color: white;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
+        p {
+            font-size: 16px;
+        }
+        h1 {
+            margin-right: 20px;
+        }
+        p {
+            margin-right: 20px;
+        }
     }
-
 }
+
 .joinable-journey-card {
     font-size: 10px;
-    height: 175x;
+    height: 175px;
     max-width: 500px;
     min-width: 500px;
     display: flex;
   margin-bottom: 20px;
-
-  .image {
-    flex: 1;
-    max-width: 200px;
-  }
 
   .image img {
     border-radius: 10px;
@@ -1199,3 +1213,87 @@ textarea {
 }
 
 
+// Here we deal with the JourneyBoard top banner
+@media screen and (orientation: landscape) {
+    .jb-banner {    
+        flex-direction: row;
+    }
+}
+
+@media screen and (orientation: portrait) {
+    .jb-banner {
+        img {
+            margin-right: auto;
+        }
+        flex-direction: column-reverse;
+    }
+    .banner-text {
+        width: 100%;
+      
+    }
+}
+
+
+@media screen and (max-width: 550px) {
+    background: red;
+    .jb-banner {
+        // This is a bug --- this needed with NO EXPLANATION
+        background-color: white;
+        img {
+            height: 250px;
+        }
+         .banner-text {
+        background-color: black;
+        margin-left: 20px;
+        margin-right: 40px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        p {
+            font-size: 16px;
+        }
+        h1 {
+            margin-right: 20px;
+            font-size: 16px;
+        }
+        p {
+            margin-right: 20px;
+            font-size: 10px;
+        }
+    }
+    }
+    .joinable-journey-card {
+        margin-bottom: 10px;
+//        height: 120px;
+       
+        .image img {
+            max-width: 120px;
+        }
+         font-size: 10px;      
+      h4 {
+          font-size: 12px;
+      }
+      .time-message {
+          font-size: 12px;
+      }
+      .spotnumber {
+          font-size: 20px;
+          font-weight: 700;
+          margin-right:3px;
+          margin-top: -10px;
+      }
+      .time {
+          font-weight: 700;
+          font-size: 14px;
+      }
+      .content {
+          height: 120px;
+          .btn {
+              font-size: 16px;
+              padding-left: 10px;
+              padding-right: 10px;
+              max-width: 100px;
+          }
+      }
+    }
+}

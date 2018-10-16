@@ -11364,6 +11364,32 @@ h2 {
     font-weight: 700;
     margin-left: 1em; }
 
+.jblogobar {
+  margin: 0px;
+  background: white;
+  padding: 3px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  height: calc(6vh);
+  font-size: 1.9vh; }
+  .jblogobar .logo {
+    height: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2px;
+    margin-bottom: 2px; }
+  .jblogobar .header-orientation-button {
+    font-size: 2.4vh;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    margin-right: 20px;
+    background-color: #4bb058;
+    border-radius: 10px !important;
+    color: white; }
+
 #messages {
   border: 1px solid #f00; }
 
@@ -11474,21 +11500,89 @@ h2 {
   color: white; }
 
 .joinable-journeys {
-  padding: 20px; }
+  width: 100vw;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly; }
+
+.jb-banner {
+  background-color: black;
+  width: 100%;
+  display: flex;
+  flex-direction: column-reverse; }
+  .jb-banner img {
+    height: 400px;
+    display: block;
+    margin-left: auto; }
+  .jb-banner .banner-text {
+    background-color: black;
+    margin-left: 20px;
+    margin-right: 40px;
+    color: white;
+    display: flex;
+    flex-direction: column; }
+    .jb-banner .banner-text p {
+      font-size: 16px; }
+    .jb-banner .banner-text h1 {
+      margin-right: 20px; }
+    .jb-banner .banner-text p {
+      margin-right: 20px; }
 
 .joinable-journey-card {
+  font-size: 10px;
+  height: 175px;
+  max-width: 500px;
+  min-width: 500px;
   display: flex;
   margin-bottom: 20px; }
-  .joinable-journey-card .image {
-    flex: 1;
-    max-width: 200px; }
   .joinable-journey-card .image img {
     border-radius: 10px;
-    width: 100%;
-    max-width: 200px; }
+    width: 175px; }
   .joinable-journey-card .content {
+    height: 175px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 12px;
     flex: 2;
     margin-left: 10px; }
+    .joinable-journey-card .content h4 {
+      font-size: 24px; }
+    .joinable-journey-card .content .time-message {
+      font-size: 16px; }
+    .joinable-journey-card .content .spotnumber {
+      font-size: 30px;
+      font-weight: 700;
+      margin-right: 3px;
+      margin-top: -10px; }
+    .joinable-journey-card .content .time {
+      font-weight: 700;
+      font-size: 18px; }
+    .joinable-journey-card .content .btn {
+      font-size: 16px;
+      padding-left: 2em;
+      padding-right: 2em;
+      background-color: #4bb058;
+      border-radius: 10px;
+      max-width: 100px; }
+    .joinable-journey-card .content .tightcol {
+      display: block; }
+    .joinable-journey-card .content .journey-vacant-spots {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-top: -5px; }
+      .joinable-journey-card .content .journey-vacant-spots img {
+        height: 30px;
+        margin-left: 0.5em; }
+      .joinable-journey-card .content .journey-vacant-spots i {
+        color: rgba(0, 0, 0, 0.2); }
+      .joinable-journey-card .content .journey-vacant-spots .fill {
+        color: black; }
+      .joinable-journey-card .content .journey-vacant-spots li {
+        margin-left: 4px; }
 
 .journeyspace-attendeeCount {
   padding-top: 2px; }
@@ -11596,15 +11690,6 @@ h2 {
     z-index: 100; }
   .intro-wrapper .intro-next {
     z-index: 10; }
-
-.journey-vacant-spots i {
-  color: rgba(0, 0, 0, 0.2); }
-
-.journey-vacant-spots .fill {
-  color: black; }
-
-.journey-vacant-spots li {
-  margin-left: 4px; }
 
 .outer {
   display: table;
@@ -12068,5 +12153,63 @@ textarea {
 
 .fa-smile-o {
   font-size: 1.3em; }
+
+@media screen and (orientation: landscape) {
+  .jb-banner {
+    flex-direction: row; } }
+
+@media screen and (orientation: portrait) {
+  .jb-banner {
+    flex-direction: column-reverse; }
+    .jb-banner img {
+      margin-right: auto; }
+  .banner-text {
+    width: 100%; } }
+
+@media screen and (max-width: 550px) {
+  background: red;
+  .jb-banner {
+    background-color: white; }
+    .jb-banner img {
+      height: 250px; }
+    .jb-banner .banner-text {
+      background-color: black;
+      margin-left: 20px;
+      margin-right: 40px;
+      color: white;
+      display: flex;
+      flex-direction: column; }
+      .jb-banner .banner-text p {
+        font-size: 16px; }
+      .jb-banner .banner-text h1 {
+        margin-right: 20px;
+        font-size: 16px; }
+      .jb-banner .banner-text p {
+        margin-right: 20px;
+        font-size: 10px; }
+  .joinable-journey-card {
+    margin-bottom: 10px;
+    font-size: 10px; }
+    .joinable-journey-card .image img {
+      max-width: 120px; }
+    .joinable-journey-card h4 {
+      font-size: 12px; }
+    .joinable-journey-card .time-message {
+      font-size: 12px; }
+    .joinable-journey-card .spotnumber {
+      font-size: 20px;
+      font-weight: 700;
+      margin-right: 3px;
+      margin-top: -10px; }
+    .joinable-journey-card .time {
+      font-weight: 700;
+      font-size: 14px; }
+    .joinable-journey-card .content {
+      height: 120px; }
+      .joinable-journey-card .content .btn {
+        font-size: 16px;
+        padding-left: 10px;
+        padding-right: 10px;
+        max-width: 100px; } }
 
 /*# sourceMappingURL=main.css.map*/
