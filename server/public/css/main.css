@@ -11309,6 +11309,15 @@ body {
   margin: 0 auto;
   font-size: 1.9vw; }
 
+#crazybackgroundimage {
+  min-height: 100%;
+  min-width: 100%;
+  width: 100%;
+  height: auto;
+  position: relative;
+  top: 0;
+  left: 0; }
+
 @media (max-width: 767.98px) {
   body {
     cursor: pointer; } }
@@ -11328,6 +11337,9 @@ h2 {
 
 .logobar_and_titlebar {
   min-height: calc(8vh);
+  background: black; }
+
+#topbar_and_header {
   background: black; }
 
 .logobar {
@@ -11356,7 +11368,6 @@ h2 {
   border: 1px solid #f00; }
 
 .journeyspace {
-  background: black;
   display: flex;
   flex-direction: column; }
 
@@ -11367,13 +11378,9 @@ h2 {
   margin: auto;
   display: flex;
   justify-content: center;
-  align-content: center; }
-
-.flex-squares {
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  align-content: center; }
+  align-content: center;
+  backgroundSize: 'cover';
+  background-color: gray; }
 
 #journeyname {
   max-width: 40vw; }

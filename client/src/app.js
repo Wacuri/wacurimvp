@@ -14,7 +14,7 @@ import { view } from 'react-easy-state';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import Cookie from 'js-cookie';
-import LogoAndTitleBar from './components/header';
+import * as LTB from './components/header';
 import Home from './components/home';
 import * as JSP from './components/journey_space';
 // import JourneySpace from './components/journey_space';
@@ -28,6 +28,7 @@ import { virtualize } from 'react-swipeable-views-utils';
 import { mod } from 'react-swipeable-views-core';
 const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
+import journeyboardbannerimage from 'file-loader!isomorphic-loader!../res/images/JourneyBoardWoman-Phone.jpg';
 
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 
@@ -146,18 +147,21 @@ class JoinableJourneyCard extends Component {
           <img src={journey.image}/>
         </div>
         <div className='content'>
+            <h4>{journey.name}</h4>
+            <div className="tightcol">
           <CountdownMessage endTime={journey.startAt} />
-          <h4>{journey.name}</h4>
-          <p>Starts at: {moment(journey.startAt).format('LT')}</p>
-            <div className='journey-vacant-spots' style={{display: 'flex', listStyle: 'none',
-							  alignItems: 'center', margin: 0, padding: 0}}>
-            <span key="msg" style={{marginRight: '1rem'}}>{3 - journey.participants.length} spot{3 - journey.participants.length > 1 ? 's' : ''} available: </span>
+            <div className='journey-vacant-spots'>
+            <span className='spotnumber' key="msg">{3 - journey.participants.length} </span>
+
+        <span> spot{3 - journey.participants.length > 1 ? 's' : ''} available: </span>
 	    <img src={image_name} />
-        </div>
+            </div>
+
 
 
 	    {/* here "j" is inserted as a convenient means of marking this entry as a Journeyboard space rather than a permanent one */}
-          <Link to={`/j/${journey.room}`} className='btn btn-primary'>{currentUserHasRSVP ? 'Go there now' : 'Join'}</Link>
+            <Link to={`/j/${journey.room}`} className='btn btn-primary'>{currentUserHasRSVP ? 'Go there now' : 'Join'}</Link>
+            </div>            
         </div>
       </div>
     )
@@ -289,14 +293,27 @@ class JourneyBoard extends Component {
 		  <JourneyBoardOrientationModal force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal}>
 		  </JourneyBoardOrientationModal>
 		 }
-		<LogoAndTitleBar history={this.props.history} showLeave={false} showOrientation={true}
+		<LTB.JourneyBoardBar history={this.props.history} showLeave={false} showOrientation={true}
 	          onOrientation={this.onOrientation}
-		/>	    
+		/>
+                <div className="jb-banner-image">
+                <div className="banner-text">
+                <div>
+                <h1>The CuriousLive JourneyBoard</h1>
+                <p>Welcome to the CuriousLive JourneyBoard
+            "Wake Up Curious" &hellip; It's the five-minute mental day spa everybody's talking about.
+                </p>
+                <p>
+                Select a journey to begin whenever you are ready. Wait for others to join, or invite friends!
+                </p>
+                </div>
+                <img  src={journeyboardbannerimage}/>                
+                </div>
+
+                </div>
       <div className='joinable-journeys'>
         {state.joinableJourneys.map(journey => <JoinableJourneyCard key={journey._id+"_"+discriminator++} journey={journey} audioTag={this.audioTag}/>)}
 	    </div>
-
-	    
 		</div>
     )
   }

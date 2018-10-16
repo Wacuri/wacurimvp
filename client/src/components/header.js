@@ -43,7 +43,7 @@ class LeaveRoomButton extends Component {
 }
 
 
-class LogoAndTitleBar extends React.Component {
+export class LogoAndTitleBar extends React.Component {
     constructor(props) {
 	super(props);
     }
@@ -76,4 +76,37 @@ class LogoAndTitleBar extends React.Component {
 	)}
 }
 
-export default view(LogoAndTitleBar);
+export class JourneyBoardBar extends React.Component {
+    constructor(props) {
+	super(props);
+    }
+    
+    render() {
+	return (
+	<div  className="jblogobar">
+		<div style={{padding: '5px'}}>
+		</div>
+		{ this.props.showLeave && 
+		  <LeaveRoomButton history={this.props.history}/> }
+	    { this.props.isPermanentSpace &&
+	      <span className="journeyspacetitle">Space Name: {this.props.spaceName} </span>
+	    }
+	    
+		<img className="logo" src={logo}/>
+            { this.props.showOrientation &&
+	      <span className="header-orientation-button"
+	      onClick={this.props.onOrientation}
+	    > Orientation </span>
+	    }
+
+    {false && state.loggedIn && state.user &&
+      <div>
+        <span className='mr-2 text-secondary'>logged in as {state.user.name}</span>
+        <a href='/api/logout'>Logout</a>
+      </div>
+    }
+  </div>
+	)}
+}
+
+

@@ -24,7 +24,7 @@ import uuid from 'uuid';
 import {initLayoutContainer} from 'opentok-layout-js';
 import './share';
 import JourneyStartsIn from './journey_starts_in';
-import LogoAndTitleBar from './header';
+import * as LTB from './header';
 import Intro from './intro';
 
 // This may not be the right way to do this
@@ -985,6 +985,8 @@ Some people like to leave their cameras on during the journey to increase the fe
 }
 
 
+
+
 class FeedbackModal extends Component {
   constructor(props) {
     super(props);
@@ -1461,7 +1463,7 @@ export class JourneySpace extends Component {
 		state.journeys = json;
 	    });
     }
-
+    
   componentWillUnmount() {
     if (this.sessionHelper) {
       this.sessionHelper.disconnect();
@@ -1724,6 +1726,8 @@ export class JourneySpace extends Component {
 	return value;
     }
     render() {
+        // Here I am attempting to set the background image---really thise needs to be done with the journy changes, not in render.
+        
 	    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
 	    var local_key_counter_to_avoid_warning = 0;	    
 	    let currentUserHasFlaggedJourney = state.journey && state.journey.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
@@ -1733,18 +1737,30 @@ export class JourneySpace extends Component {
 	// enter a permament room form a straight URL or from within these pages.
 	const spaceName = this.props.match.params.room;
 
-
 	var optionkey = 0;
-	
+        // Here deal with the proper construction of the url.... may be dependent on the JourneySpace
+        var urlprefix = (this.props.isPermanentSpace ? '.' : '..') + '/';
+        var urlsuffix = '.bkg.jpg';
+
+        // Note: I remove single quotes from the journey name here, I am not sure why this
+        // is required, but it is.
+        var url = (state.journey && state.journey.name) ? 'url(' + urlprefix + "journeyBackgrounds/" +  encodeURIComponent(state.journey.name.replace('\'','')) +urlsuffix + ')' : "none";
+        if (state.journey && state.journey.name) {
+            console.log("YYYY" + url);
+        }
 	return (
-		<div className='journeyspace' style={{position: 'relative'}}>
+		<div className='journeyspace'
+            id='journeyspace_id'
+            style={{position: 'relative'}}
+                >
+
 	    {/*          <div className='journeyspace-content flexiblerow'> */}
 		{this.state.session && /* AAA */
-          <div className='journeyspace-content'>		 
+                 <div className='journeyspace-content' >		 
 
 		{/* tob bar */}
 		<div id="topbar_and_header">
-		 <LogoAndTitleBar history={this.props.history} showLeave={true}
+		 <LTB.LogoAndTitleBar history={this.props.history} showLeave={true}
 		 isPermanentSpace={this.props.isPermanentSpace}
 		 spaceName={spaceName}
 		 />
@@ -1774,7 +1790,10 @@ export class JourneySpace extends Component {
 		 </div>
 	    </div>
 
-		 <div className="flex-squares"> 
+		 <div className="flex-squares" id="flex-squares-id"
+                             style={{position: 'relative',
+                                     backgroundImage: url,
+                    backgroundSize: 'cover'}}>
 			 
 		 {/* here we create the two big squares;  */}
 		 
@@ -1938,537 +1957,6 @@ export class JourneySpace extends Component {
 		    </div>						
 	)
 	}
-}
-
-
-// This class is used only for testing the Styling to match our code
-export class JourneySpaceTest extends Component {
-  constructor(props) {
-      super(props);
-      this.state = {
-	  microphoneMuted: false,
-      streams: [],
-      publisherId: '',
-      session: null,
-      playerState: 'waiting',
-      playerProgress: 0,
-      playerProgressMS: 0,
-      journeyDuration: 0,
-      currentlyActivePublisher: null,
-	showInviteModal: false,
-	showOrientationModal: false,
-	showFeedbackModal: false,
-	  showIntro: true,
-	  permanentRoom: false, // what is publisher?
-	  journey: null,
-      }
-      this.publisher = {};
-      this.audioTag = {};
-      console.log('PROPS',props);
-  }
-
-    componentDidMount() {
-	state.audioTag.addEventListener('ended', (event) => {
-	    this.setState({
-		playerState: 'ended'
-	    });
-
-	    console.log("DOING /completed fetch");
-	    fetch(`/api/journeys/${this.props.match.params.room}/completed`, {
-		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-		credentials: 'same-origin', // include, same-origin, *omit
-		headers: {
-		    'content-type': 'application/json'
-		},
-		method: 'POST', // *GET, POST, PUT, DELETE, etc.
-		mode: 'cors', // no-cors, cors, *same-origin
-		redirect: 'follow', // manual, *follow, error
-		referrer: 'no-referrer', // *client, no-referrer
-	    });
-
-	    if (decodeURIComponent(state.audioTag.src) === `${window.location.origin}${state.journey.journey}`) {
-		state.audioTag.enqueue(['/chime.mp3', '/sharing.mp3']).then(() => {
-		    // sharing audio ended
-		});
-		state.audioTag.play();
-	    }
-	});
-
-	fetch(`/api/journeys/${this.props.match.params.room}${window.location.search}`, {credentials: 'include'})
-	    .then(res => res.json())
-	    .then(json => {
-		state.journey = json;
-		
-
-		state.audioTag.src = state.journey.journey;
-
-		console.log("JOURNEY INFO",state.journey);
-		console.log("ROOM",this.props.match.params.room);		
-		if (state.journey.name) {
-		    console.log("JOURNEY BOARD ROOM");
-		} else {
-		    console.log("PERMANENT ROOM");		    
-		}
-		state.audioTag.currentTime = 0;
-
-		this.sessionHelper = createSession({
-		    apiKey: state.openTokKey,
-		    sessionId: state.journey.sessionId,
-		    token: state.journey.token,
-		    onConnect: () => {
-			console.log('assigned connection to publisher', this.sessionHelper.session.connection);
-			fetch(`/api/journeys/${this.props.match.params.room}/joined`, {
-			    body: JSON.stringify({id: this.sessionHelper.session.connection.id}),
-			    credentials: 'same-origin', // include, same-origin, *omit
-			    headers: {
-				'content-type': 'application/json'
-			    },
-			    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-			    mode: 'cors', // no-cors, cors, *same-origin
-			    redirect: 'follow', // manual, *follow, error
-			    referrer: 'no-referrer', // *client, no-referrer
-			});
-		    },
-		    onStreamsUpdated: streams => {
-			console.log('Current subscriber streams:', streams);
-			this.setState({ streams });
-			if (!this.state.currentlyActivePublisher) {
-			    this.setState({
-				currentlyActivePublisher: streams[0]
-			    });
-			}
-		    }
-		});
-		this.sessionHelper.session.on("connectionDestroyed", (event) => {
-		    const data = {
-			sessionId: this.sessionHelper.session.sessionId,
-			connection: {
-			    id: event.connection.id
-			},
-			event: 'connectionDestroyed',
-		    }
-		    this.refreshSession();
-		});
-		this.sessionHelper.session.on("connectionCreated", (event) => {
-		    this.refreshSession();
-		});
-		this.sessionHelper.session.on('signal', (event) => {
-		    console.log("Signal sent from connection ", event);
-//		    this.refreshSession();
-		});
-
-		this.sessionHelper.session.on("signal:startJourney", (event) => {
-		    if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-			this.publisher.state.publisher.publishAudio(false);
-
-		    }
-		    const playPromise = state.audioTag.play();
-		    if (playPromise !== undefined) {
-			playPromise
-			    .then(() => {
-				console.log('audio promise resolve');
-			    })
-			// Safety first!
-			    .catch(e => {
-				console.error(e);
-			    });
-		    }
-		    this.setState({
-			playerState: 'playing',
-			// we also want to mute the microphone here!
-			microphoneMuted: true,
-		    });
-		    // In theory, this could be the place to mute microphones
-		    console.log("MUTE HERE!!!!!!");
-		});
-
-		this.sessionHelper.session.on("signal:pauseJourney", (event) => {
-		    if (this.publisher && this.publisher.state && this.publisher.state.publisher && !this.state.microphoneMuted) {
-			//            this.publisher.state.publisher.publishAudio(true);
-		    }
-		    state.audioTag.pause();
-		    this.setState({
-			playerState: 'paused'
-		    });
-		});
-
-		this.sessionHelper.session.on("signal:journeyUpdated", (event) => {
-		    const journey = JSON.parse(event.data);
-		    // Rob doesn't understand this apparently I have to call setState and use the statement above?
-		    state.journey = journey;		    
-		    this.setState({
-			journey: journey
-		    });
-		    console.log(" Got signal:journeyUpdated ", event, journey);
-
-		    if (state.journey.state != 'completed') {
-			// if we are in completed state, then audio may be playing the sharing prompt
-			state.audioTag.src = state.journey.journey;
-			state.audioTag.currentTime = 0;
-		    }
-
-		    if (state.journey.state === 'started') {
-
-			if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
-			    this.publisher.state.publisher.publishAudio(false);
-			}
-			state.audioTag.play();
-			this.setState({
-			    playerState: 'playing'
-			});
-		    }
-		});
-		
-
-		this.sessionHelper.session.on("signal:fail", (event) => {
-		    state.journey.state = 'failed';
-		});
-
-
-		this.setState({
-		    session: this.sessionHelper.session
-		});
-
-		const onAudioCanPlay = (event) => { 
-		    if (state.journey.state === 'started') {
-			state.audioTag.play();
-			if (!isNaN(state.journey.currentTime)) {
-			    state.audioTag.currentTime = state.journey.currentTime;
-			}
-		    }
-		    state.audioTag.removeEventListener('canplaythrough', onAudioCanPlay);
-		}
-
-		state.audioTag.addEventListener('canplaythrough', onAudioCanPlay, false);
-		state.audioTag.load();
-	    });
-	fetch('/api/journeys')
-	    .then(res => res.json())
-	    .then(json => {
-		state.journeys = json;
-	    });
-    }
-
-  componentWillUnmount() {
-    if (this.sessionHelper) {
-      this.sessionHelper.disconnect();
-    }
-  }
-
-  refreshSession = () => {
-		fetch(`/api/journeys/${this.props.match.params.room}`, {credentials: 'include'})
-			.then(res => res.json())
-	  .then(json => {
-	      
-//	      this.setState({
-		  state.journey = json
-//	      })
-			});
-      setTimeout(someHelper.setSizes,1000);
-  }
-
-  get timeRemaining() {
-    const seconds = this.state.journeyDuration - this.state.playerProgressMS;
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = (seconds % 60).toFixed(0);
-    return minutes + ":" + (remainingSeconds < 10 ? '0' : '') + remainingSeconds;
-  }
-
-  get isHostUser() {
-    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
-    return currentParticipant && state.journey.participants.indexOf(currentParticipant) === 0
-  }
-
-    get journeyStateTimer() {
-	console.log("RETURNING SECONDSEMITTER" + state.journey.state);	
-    switch(state.journey.state) {
-      case 'started':
-      case 'paused':
-        if (!this.playerTimeEmitter) {
-          this.playerTimeEmitter = new AudioPlayTickEmitter(state.audioTag);
-        }
-        return this.playerTimeEmitter;
-      default:
-        if (!this.secondsEmitter) {
-          this.secondsEmitter = new SecondsTimerEmitter(new Date(state.journey.createdAt), new Date(state.journey.startAt));
-        }
-	console.log("RETURNING SECONDSEMITTER");
-        return this.secondsEmitter;
-    }
-  }
-
-  onInitPublisher = () => {
-      console.log('initialized publisher');
-      // Possibly this means publisher should be moved into the state!
-      this.setState(state: state);
-  }
-
-  onConfirmReady = (e) => {
-    fetch(`/api/journeys/${this.props.match.params.room}/connections/${this.sessionHelper.session.connection.id}/ready`);
-  }
-
-
-    // how can it be that the argument is not used here?
-    onChangeJourney = (e) => {
-	console.log("onChangeJourney",e);
-    fetch(`/api/journeys/${this.props.match.params.room}/journey`, {
-      body: JSON.stringify({journey: e.target.value}), // must match 'Content-Type' header
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, same-origin, *omit
-      headers: {
-        'content-type': 'application/json'
-      },
-      method: 'PUT', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, cors, *same-origin
-      redirect: 'follow', // manual, *follow, error
-      referrer: 'no-referrer', // *client, no-referrer
-    }).then( this.setState(state: state) );
-  }
-
-  onStartSession = (e) => {
-    fetch(`/api/journeys/${this.props.match.params.room}/start`, {
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'content-type': 'application/json'
-      },
-      method: 'POST',
-      mode: 'cors',
-    });
-  }
-
-  onLoadedMetadata = (e) => {
-    this.setState({
-      journeyDuration: e.target.duration
-    });
-    state.audioTag.removeEventListener('timeupdate', this.onTimeUpdate);
-    state.audioTag.addEventListener('timeupdate', this.onTimeUpdate);
-  }
-
-    onTimeUpdate = (e) => {
-    this.setState({
-      playerProgress: (e.target.currentTime / e.target.duration) * 100,
-      playerProgressMS: e.target.currentTime,
-    });
-    if (this.isHostUser) {
-      fetch(`/api/journeys/${this.props.match.params.room}/progress`, {
-        body: JSON.stringify({currentTime: e.target.currentTime}),
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-          'content-type': 'application/json'
-        },
-        method: 'PUT',
-        mode: 'cors',
-      });
-    }
-  }
-
-  onFlag = (stream) => {
-    fetch(`/api/journeys/${this.props.match.params.room}/flag`, {
-      cache: 'no-cache',
-      body: JSON.stringify({connectionId: this.state.session.connection.id, stream}),
-      credentials: 'same-origin',
-      headers: {
-        'content-type': 'application/json'
-      },
-      method: 'POST',
-      mode: 'cors',
-    })
-      .then(res => res.json())
-      .then(json => state.journey = json);
-  }
-
-  onShare = (e) => {
-    navigator.share({
-      title: 'Take a Journey With Me!',
-      text: `Join me on ${state.journey.name}`,
-      url: `${window.location.protocol}//${window.location.host}/${state.journey.room}`,
-    });
-  }
-
-  onInvite = (e) => {
-    e.preventDefault();
-    this.setState({
-      showInviteModal: true
-    });
-  }
-
-  onCloseShareModal = (e) => {
-    e.preventDefault();
-    this.setState({
-      showInviteModal: false
-    });
-  }
-
-  onCompleteShare = (url, name) => {
-    this.setState({
-      showInviteModal: false
-    });
-    window.location = url + `?journey=${state.journey.name}&name=${name}`;
-  }
-
-    onOrientation = (e) => {
-    e.preventDefault();
-    this.setState({
-      showOrientationModal: true
-    });
-    e.stopPropagation();	
-  }
-
-  onCloseOrientationModal = (e) => {
-    e.preventDefault();
-    this.setState({
-      showOrientationModal: false
-    });
-  }
-
-  onCompleteOrienetation = (url, name) => {
-    this.setState({
-      showOrientationModal: false
-    });
-    window.location = url + `?journey=${state.journey.name}&name=${name}`;
-  }
-
-
-    onFeedback = (e) => {
-    e.preventDefault();
-    this.setState({
-      showFeedbackModal: true
-    });
-    e.stopPropagation();	
-  }
-
-  onCloseFeedbackModal = (e) => {
-    e.preventDefault();
-    this.setState({
-      showFeedbackModal: false
-    });
-  }
-
-  onCompleteFeedback = (url, name) => {
-    this.setState({
-      showFeedbackModal: false
-    });
-    window.location = url + `?journey=${state.journey.name}&name=${name}`;
-  }
-    
-
-
-    seekTo = (fraction) => {
-
-	state.audioTag.play();
-	state.audioTag.currentTime = state.audioTag.duration * fraction;
-
-	// This only needs a target...must determine what time that is..
-	// I think iit is the audioTag
-	var e = {target: {currentTime: state.audioTag.currentTime}};
-	this.onTimeUpdate(e);
-  }
-
-    togglePlayState = (e) => {
-    e.preventDefault();
-    setTimeout(() => {
-      if (state.audioTag.paused) {
-        fetch(`/api/journeys/${state.journey.room}/start`, {
-          cache: 'no-cache',
-          credentials: 'same-origin',
-          headers: {
-            'content-type': 'application/json'
-          },
-          method: 'POST',
-          mode: 'cors',
-        });
-      } else {
-        fetch(`/api/journeys/${state.journey.room}/pause`, {
-          cache: 'no-cache',
-          credentials: 'same-origin',
-          headers: {
-            'content-type': 'application/json'
-          },
-          method: 'POST',
-          mode: 'cors',
-        });
-      }
-    }, 20);
-    }
-
-    
-    render() {
-	const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
-	var local_key_counter_to_avoid_warning = 0;	    
-	let currentUserHasFlaggedJourney = state.journey && state.journey.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
-	var stream0 = this.state.streams[0];
-	// NEXT
-	// If the journey is not defined, then we are in a "permanentRoom". We can
-	// enter a permament room form a straight URL or from within these pages.
-	const spaceName = this.props.match.params.room;
-
-	var optionkey = 0;
-	
-	return (
-		<div className='journeyspace' style={{position: 'relative'}}>
-		{/*          <div className='journeyspace-content flexiblerow'> */}
-	    {this.state.session && /* AAA */
-             <div className='journeyspace-content'>		 
-
-	     {/* tob bar */}
-	     <div >
-	       <Header history={this.props.history} showLeave={true}
-	       isPermanentSpace={this.props.isPermanentSpace}
-	       spaceName={spaceName}>
-	     	     </Header>
-	          <div id="titlebar" />
-
-	     {state.journey.startAt && <span style={{color: 'white'}} >{state.journey.name}</span>
-	     }
-	     
-             { (this.props.isPermanentSpace ||
-		(!state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed'))) &&
-	       <div style={{paddingTop: '8px'}}>
-	       <select style={{width: '100%'}} onChange={this.onChangeJourney} value={state.journeys&& state.journey.journey}>
-               <option value={''}>{'Pulldown to select a new Journey'}</option>		   
-               {
-		   state.journeys.map(journey => (
-			   <option key={optionkey++} value={journey.filePath}>{journey.name}</option>
-                   ))}
-               </select>
-               </div> }
-             <JourneyPhases journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
-	     
-
-	     
-	     </div>
-
-	     <PhaseIndicator journey={state.journey} />
-	     
-	     <div className="flex-squares"> 
-	     <div id="bigsquares">
-	     <div id="firstsquare" key="name" style={{backgroundColor: 'red'}}>
-	     RED
-	     </div>
-
-
-
-
-	     {/* This is the second square;  */}		 
-	     <div id='secondsquare' className='flexiblecol' style={{backgroundColor: 'blue'}}>
-	     BLUE
-	     </div>
-	     
-	     </div>
-	     
-	     
-	     </div>
-	     </div>		 
-	    }
-	    
-	    {/* AAA */}
-
-
-	    </div>						
-	)
-    }
 }
 
 

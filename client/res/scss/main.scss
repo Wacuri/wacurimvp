@@ -39,6 +39,16 @@ body {
     font-size: 1.9vw;
 }
 
+#crazybackgroundimage {
+    min-height: 100%;
+    min-width: 100%;
+    width: 100%;
+    height: auto;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
 @media (max-width: 767.98px) { 
   body {
     cursor: pointer;
@@ -69,6 +79,10 @@ h2 {
     background: black;
 }
 
+#topbar_and_header {
+    background: black;
+}
+
 .logobar {
   margin: 0px;
   background: #9ec13a;
@@ -94,13 +108,41 @@ h2 {
   }
 }
 
+.jblogobar {
+  margin: 0px;
+  background: white;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(6vh);  
+  font-size: 1.9vh;	      
+  .logo {
+      height: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2px; // xxx
+    margin-bottom: 2px; // xxx    
+  }
+  .header-orientation-button {
+      font-size: 2.4vh;	            
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    background-color: rgb(75,176,88);    
+    border-radius: 10px!important;    
+    color: white;
+}
+  
+}
+
 
 #messages {
   border: 1px solid #f00;
 }
 
 .journeyspace {
-  background: black;
+//  background: black;
   display: flex;
   flex-direction: column;
 }
@@ -115,16 +157,8 @@ h2 {
     display: flex;
     justify-content: center;
     align-content: center;
-    
-}
-
-.flex-squares {
-    margin: auto;
-    display: flex;
-//    flex-direction: row;
-//    flex-wrap: nowrap;
-    justify-content: center;
-    align-content: center;
+    backgroundSize: 'cover';
+    background-color: gray;
 }
 
 #journeyname {
@@ -266,11 +300,33 @@ h2 {
 }
 
 .joinable-journeys {
-  padding: 20px;
+    width: 100vw;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    
 }
+.jb-banner-image {
+    background-color: black;
+    img {
+        height: 400px;
+        display: block;
+        margin-left: auto;
+    }
+    .banner-text {
+        color: white;
+        display: flex;
+        flex-direction: row;
+    }
 
+}
 .joinable-journey-card {
-  display: flex;
+    font-size: 10px;
+    height: 175x;
+    max-width: 500px;
+    min-width: 500px;
+    display: flex;
   margin-bottom: 20px;
 
   .image {
@@ -280,13 +336,66 @@ h2 {
 
   .image img {
     border-radius: 10px;
-    width: 100%;
-    max-width: 200px;
+    width: 175px;
   }
 
   .content {
-    flex: 2;
-    margin-left: 10px;
+      height: 175px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      font-size: 12px;      
+      h4 {
+          font-size: 24px;
+      }
+      .time-message {
+          font-size: 16px;
+      }
+      .spotnumber {
+          font-size: 30px;
+          font-weight: 700;
+          margin-right:3px;
+          margin-top: -10px;
+      }
+      .time {
+          font-weight: 700;
+          font-size: 18px;
+      }
+      .btn {
+          font-size: 16px;
+          padding-left: 2em;
+          padding-right: 2em;
+          background-color: rgb(75,176,88);
+          border-radius: 10px;
+          max-width: 100px;
+      }
+      flex: 2;
+      margin-left: 10px;
+      .tightcol {
+          display: block;
+      }
+      .journey-vacant-spots {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         margin-top: -5px;
+        img {
+            height: 30px;
+            margin-left: 0.5em;
+        }
+        i {
+            color: rgba(0, 0, 0, 0.2);
+        }
+
+        .fill {
+            color: black;
+        }
+
+        li {
+            margin-left: 4px;
+        }
+    }
   }
 }
 
@@ -445,19 +554,6 @@ h2 {
   }
 }
 
-.journey-vacant-spots {
-  i {
-    color: rgba(0, 0, 0, 0.2);
-  }
-
-  .fill {
-    color: black;
-  }
-
-  li {
-    margin-left: 4px;
-  }
-}
 
 .outer {
   display: table;

@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import moment from 'moment';
 
 class CountdownMessage extends Component {
   constructor(props) {
@@ -41,23 +42,25 @@ class CountdownMessage extends Component {
 
   render() {
     var totalTimeInMinutes = this.state.total/1000/60
-    if(totalTimeInMinutes > 0 && totalTimeInMinutes < 5) {
-      var message = `Starting in: ${this.state.minutes > 0 ? this.state.minutes + "min" : ""} ${this.state.seconds}sec`
-    } else {
-      var message = "Started"
+      if(totalTimeInMinutes > 0 && totalTimeInMinutes < 5) {
+          var tmessage = ' Starts in: ';
+      var message = `${this.state.minutes > 0 ? this.state.minutes + "min" : ""} ${this.state.seconds}sec`
+      } else {
+          var tmessage = ' Starts at: ';
+        var message =  moment(this.props.endTime).format('LT');
     }
 
-    if (totalTimeInMinutes < 5) {
+//    if (totalTimeInMinutes < 5) {
       return (
-        <div id='countdown-time' className='btn btn-info' ref='countdown_ref'>
-          {message}
+        <div  ref='countdown_ref'>
+              <span className="time-message"> {tmessage}</span><span className="time"> {message}</span>
         </div>
       );
-    } else {
-      return (
-        <div></div>
-        )
-    }
+//    } else {
+//      return (
+//        <div></div>
+//        )
+//    }
   }
 }
 
