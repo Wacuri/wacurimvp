@@ -311,34 +311,34 @@ h2 {
     
 }
 
-.jb-banner {
-    background-color: black;
-    width: 100%;
-    display: flex;
-    flex-direction: column-reverse;
-    img {
-        height: 400px;
-        display: block;
-        margin-left: auto;
-    }
-    .banner-text {
-        background-color: black;
-        margin-left: 20px;
-        margin-right: 40px;
-        color: white;
-        display: flex;
-        flex-direction: column;
-        p {
-            font-size: 16px;
-        }
-        h1 {
-            margin-right: 20px;
-        }
-        p {
-            margin-right: 20px;
-        }
-    }
-}
+// .jb-banner {
+//     background-color: black;
+//     width: 100%;
+//     display: flex;
+//     flex-direction: column-reverse;
+//     img {
+//         height: 400px;
+//         display: block;
+//         margin-left: auto;
+//     }
+//     .banner-text {
+//         background-color: black;
+//         margin-left: 20px;
+//         margin-right: 40px;
+//         color: white;
+//         display: flex;
+//         flex-direction: column;
+//         p {
+//             font-size: 16px;
+//         }
+//         h1 {
+//             margin-right: 20px;
+//         }
+//         p {
+//             margin-right: 20px;
+//         }
+//     }
+// }
 
 .joinable-journey-card {
     font-size: 10px;
@@ -1215,18 +1215,18 @@ textarea {
 
 // Here we deal with the JourneyBoard top banner
 @media screen and (orientation: landscape) {
-    .jb-banner {    
-        flex-direction: row;
-    }
+    // .jb-banner {    
+    //     flex-direction: row;
+    // }
 }
 
 @media screen and (orientation: portrait) {
-    .jb-banner {
-        img {
-            margin-right: auto;
-        }
-        flex-direction: column-reverse;
-    }
+    // .jb-banner {
+    //     img {
+    //         margin-right: auto;
+    //     }
+    //     flex-direction: column-reverse;
+    // }
     .banner-text {
         width: 100%;
       
@@ -1235,33 +1235,33 @@ textarea {
 
 
 @media screen and (max-width: 550px) {
-    background: red;
-    .jb-banner {
-        // This is a bug --- this needed with NO EXPLANATION
-        background-color: white;
-        img {
-            height: 250px;
-        }
-        .banner-text {
-            background-color: black;
-            margin-left: 20px;
-            margin-right: 40px;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            p {
-                font-size: 16px;
-            }
-            h1 {
-                margin-right: 20px;
-                font-size: 16px;
-            }
-            p {
-                margin-right: 20px;
-                font-size: 10px;
-            }
-        }
-    }
+    // background: red;
+    // .jb-banner {
+    //     // This is a bug --- this needed with NO EXPLANATION
+    //     background-color: white;
+    //     img {
+    //         height: 250px;
+    //     }
+    //     .banner-text {
+    //         background-color: black;
+    //         margin-left: 20px;
+    //         margin-right: 40px;
+    //         color: white;
+    //         display: flex;
+    //         flex-direction: column;
+    //         p {
+    //             font-size: 16px;
+    //         }
+    //         h1 {
+    //             margin-right: 20px;
+    //             font-size: 16px;
+    //         }
+    //         p {
+    //             margin-right: 20px;
+    //             font-size: 10px;
+    //         }
+    //     }
+    // }
     .joinable-journeys {
         padding: 5px;
     }
@@ -1303,4 +1303,115 @@ textarea {
             }
         }
     }
+}
+
+
+/* New CSS --- This is mainly to make the journeyboard banner look elegant */
+
+.main-header.clearfix img {
+    width: 100%;
+}
+.main-content>.container {
+    max-width: 920px;
+    margin: 0 auto;
+    background: #fff;
+}
+.main-content {
+    background: #0e0e0e;
+}
+.main-banner img {
+    width: 100%;
+}
+.main-banner {
+    h1 {
+        font-weight: 700;
+    }
+    padding: 30px 0px;
+    background: #000;
+    background-position: right;
+    background-size: 60%;
+    background-repeat: no-repeat;
+}
+.main-banner h1, .main-banner p {
+    color: #fff;
+}
+.main-banner>.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+h1 {
+    margin: 0;
+    font-size: 60px;
+    line-height: 0.9em;
+    padding-bottom: 11px;
+    letter-spacing: -0.03em;
+    padding-bottom: 30px;
+}
+.main-banner p {
+    max-width: 380px;
+    padding-bottom: 14px;
+}
+
+@media screen and (max-width:1024px){
+}
+@media screen and (max-width:880px){
+}
+
+@media screen and (max-width:768px){
+}
+
+@media screen and (max-width:680px){
+.main-banner>.container {
+    max-width: 86%;
+    margin: 0 auto;
+}
+.main-banner h1, .main-banner p {
+    text-align: center;
+}
+
+.main-banner h1, .main-banner p {
+    color: #fff;
+}
+h4, p {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-bottom: 7px;
+}
+.main-banner p {
+    max-width: 100%;
+}
+.main-banner {
+    padding-top: 300px;
+}
+.main-banner {
+    padding-top: 250px;
+    background-position: top center;
+}
+h1 {
+    font-size: 48px;
+}
+.main-banner p {
+    font-size: 14px;
+}
+}
+
+@media screen and (max-width:550px){
+h1 {
+    font-size: 38px;
+    padding-bottom: 15px;
+}
+.main-banner {
+    padding-top: 210px;
+}
+}
+
+@media screen and (max-width: 480px){
+}
+
+@media screen and (max-width: 370px){
+.main-banner {
+    padding-top: 170px;
+}
+}
+@media screen and (max-width: 322px){
 }
