@@ -18,13 +18,23 @@ var offset = 0;
 agenda.define('create journey space', async function(job, done) {
   try {
     const total = await db.collection('journeycontents').countDocuments();
-    const randomJourney = (await db.collection('journeycontents').find().skip(offset++ % total).limit(1).toArray())[0];
+      const randomJourney = (await db.collection('journeycontents').find().skip(offset++ % total).limit(1).toArray())[0];
+      var seconds_to_add_to_now = 0;
+      if (job.attrs.data && job.attrs.data.separation_sec) {
+          console.log("DATA",job.attrs.data.separation_sec);
+          seconds_to_add_to_now = job.attrs.data.separation_sec;          
+      } else {
+          console.log("NO DATA");
+          seconds_to_add_to_now = 10*60;
+      }
+      var start_at = moment().add(seconds_to_add_to_now, 'seconds').toDate();
+      console.log("START_AT",start_at);
     const journeySpace = new JourneySpace({
       journey: randomJourney.filePath,
       name: randomJourney.name,
       image: randomJourney.image,
       room: `${randomJourney.name.toLowerCase().replace(/[^a-z]/ig, '-')}-${(new Date()).getTime()}`,
-      startAt: moment().add(10, 'minutes').toDate()
+        startAt: start_at,
     });
     await journeySpace.save();
     await agenda.schedule(journeySpace.startAt, 'start journey', {journey: journeySpace._id});
@@ -58,6 +68,25 @@ agenda.define('clear expired journeys', async function(job, done) {
     done(e);
   }
 });
+// This function exists only for debugging purposes.
+agenda.define('clear journeys', async function(job, done) {
+    console.log('CLEAR JOURNEY');
+  try {
+    const expiredJourneys = await JourneySpace.find({state: 'created'}).exec();
+    const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+    for (let journey of expiredJourneys) {
+        await journey.expire();
+        console.log("expired journey",journey);
+      if (globalSpace) {
+        opentok.signal(globalSpace.sessionId, null, { 'type': 'expiredJourney', 'data': JSON.stringify(journey) }, () => {});
+      }
+    }
+    done();
+  } catch(e) {
+    console.log(e);
+    done(e);
+  }
+});
 
 agenda.define('start journey', async function(job, done) {
   try {
@@ -79,21 +108,34 @@ agenda.define('start journey', async function(job, done) {
   }
 });
 
+// This is the filling algorithm. We have to pass data to the jobs.
+// Our basic algorithm will be to have queue length QL and
+// a queue duration QD. For now, QD = QL * 1 minute.
+// QL is for now about 30, about the number of journeys we have.
+// In theory these could be dynamically adjusted.
+
+// The Agenda.on function below exists to "load" the JourneyBoard which
+// has been a problem. Our basic algorithm is to run evenly
+// space the journeys through out QD/QL as per QL.
+const QL = 30;
+const QD = 30; // this is measured in minutes
 
 agenda.on('ready', function() {
-    var j = 0;
-    for(var i= 0; i < 5; i++) {
-	j = i*10;
-       agenda.schedule(j+' seconds','create journey space');
-   }
-    for(var i= 0; i < 5; i++) {
-	j += 30;
-       agenda.schedule(j+' seconds','create journey space');
-   }
+    var separation_sec = (QD * 60) / QL;
 
-  agenda.every('1 minute', 'create journey space');
-  agenda.every('1 minute', 'clear expired journeys');
+    // This is only used for debugging, in situations which may occur
+    // when working in this area.
+    // agenda.schedule('2 seconds', 'clear journeys');
+    
+    for(var i = 0; i < QL; i++) {
+        var data = {separation_sec: (separation_sec * i) };
+        agenda.schedule(20+' seconds','create journey space',data);        
+    }
 
-  agenda.start();
+    agenda.every('1 minute', 'create journey space');
+
+    agenda.every('1 minute', 'clear expired journeys');
+
+    agenda.start();
 });
 

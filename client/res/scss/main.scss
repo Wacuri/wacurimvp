@@ -244,7 +244,7 @@ h2 {
 
 // Possibly the div is obsolete
 .video-placeholder {
-  border: 1px solid rgb(83, 83, 83);
+//  border: 1px solid rgb(83, 83, 83);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -311,34 +311,6 @@ h2 {
     
 }
 
-// .jb-banner {
-//     background-color: black;
-//     width: 100%;
-//     display: flex;
-//     flex-direction: column-reverse;
-//     img {
-//         height: 400px;
-//         display: block;
-//         margin-left: auto;
-//     }
-//     .banner-text {
-//         background-color: black;
-//         margin-left: 20px;
-//         margin-right: 40px;
-//         color: white;
-//         display: flex;
-//         flex-direction: column;
-//         p {
-//             font-size: 16px;
-//         }
-//         h1 {
-//             margin-right: 20px;
-//         }
-//         p {
-//             margin-right: 20px;
-//         }
-//     }
-// }
 
 .joinable-journey-card {
     font-size: 10px;

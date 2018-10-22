@@ -295,20 +295,6 @@ class JourneyBoard extends Component {
 	          onOrientation={this.onOrientation}
 		/>
 
-            {/*
-			<div class="main-banner">
-				<div class="container">
-					<h1>The CuriousLive JourneyBoard</h1>
-					<p>Welcome to the CuriousLive JourneyBoard "Wake Up Curious" … It's the five-minute mental day spa everybody's talking about.</p>
-					<p>Select a journey to begin whenever you are ready. Wait for others to join, or invite friends!</p>
-		</div>
-                </div>
-             */}
-
-            {/*		<div class="main-header clearfix">
-                   <img  src={journeyboardbannerimage}/>                
-		</div>
-             */}
                 <div className="main-banner" style={{backgroundImage: `url(${journeyboardbannerimage})`}}>
                      <div  className="container">
 		          <h1>The CuriousLive JourneyBoard</h1>

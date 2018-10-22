@@ -11470,7 +11470,6 @@ h2 {
   position: relative; }
 
 .video-placeholder {
-  border: 1px solid #535353;
   display: flex;
   flex-direction: row;
   align-items: center;
