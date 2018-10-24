@@ -145,7 +145,6 @@ class JoinableJourneyCard extends Component {
       const currentUserHasRSVP = (journey.participants || []).find(participant => participant.user === state.sessionId) != null;
 
       const image_name = "images/SPOTS-0"+journey.participants.length+".png";
-      console.log("IMAGE_NAME",image_name);
     return (
       <div className='joinable-journey-card'>
         <div className='image'>
@@ -236,7 +235,6 @@ class JourneyBoard extends Component {
 
         this.sessionHelper.session.on("signal:expiredJourney", (event) => {
             const journey = JSON.parse(event.data);
-            console.log("CLIENT JOURNEY EXPIRED",journey);
           const idx = state.joinableJourneys.findIndex(j => j._id === journey._id);
           state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), ...state.joinableJourneys.slice(idx + 1)];
         });
@@ -264,7 +262,6 @@ class JourneyBoard extends Component {
 
         this.sessionHelper.session.on('signal:journeyerLeftSpace', (event) => {
           const participant = JSON.parse(event.data);
-          console.log('Event: left space', event.data);
           const journey = state.joinableJourneys.find(j => j._id === participant.journeySpace);
           const idx = state.joinableJourneys.indexOf(journey);
             journey.participants = journey.participants.filter(p => p._id !== participant._id);
@@ -290,7 +287,6 @@ class JourneyBoard extends Component {
 	// I want to remove the warnings I am getting, but this is a dangerous way to do it.
 	// Possibly I should deal with this in a different way.
 	var discriminator = 0;
-	console.log("SHOW ORIENTATION MODAL",this.state.showOrientationModal);
 	return (
 		<div>
 		 {this.state.showOrientationModal &&
@@ -353,7 +349,6 @@ class JourneyBoardOrientationModal extends Component {
 
   render() {
       const index = this.state.index;
-      console.log("INDEX",index);
       return (
 	    <div key='xxx' className='intro' style={{position: 'absolute',
 			 minHeight: '100%',

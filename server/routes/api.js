@@ -47,80 +47,77 @@ function generateToken(sessionId) {
 
 // TODO: switch to POST, just using GET for easier testing
 router.get('/journeys/:room', async (req, res) => {
-	const {room} = req.params;
+    const {room} = req.params;
     const journeySpace = await JourneySpace.findOne({room}).exec();
-    console.log("AAA", journeySpace);
-	if (journeySpace) {
-    try {
-      await journeySpace.joined();
-    } catch(e) {
-      // journey may already be in joined state, catch error here and ignore
-    }
+    if (journeySpace) {
+        try {
+            await journeySpace.joined();
+        } catch(e) {
+            // journey may already be in joined state, catch error here and ignore
+        }
 
-    if (!journeySpace.sessionId) {
-      const session = await new Promise((resolve, reject) => {
-        opentok.createSession(async (err, session) => {
-          if (err) reject(err);
-          resolve(session);
-        });
-      });
-      journeySpace.sessionId = session.sessionId;
-      await journeySpace.save();
-    }
-    const participants = await JourneyParticipant.find({journeySpace, present: true}).lean().exec();
-    const currentUserParticipant = await JourneyParticipant.findOne({journeySpace, user: req.session.id}).exec();
-    if (!currentUserParticipant) {
-      const newParticipant = new JourneyParticipant({journeySpace, user: req.session.id, present: true});
-      await newParticipant.save();
-        participants.push(newParticipant);
-            console.log("BBB PUSH done", newParticipant);
-        const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
-        console.log("CCC",globalSpace);
-      if (globalSpace) {
-        opentok.signal(globalSpace.sessionId, null, { 'type': 'newJoin', 'data': JSON.stringify(newParticipant.toJSON()) }, () => {});
-      }
+        if (!journeySpace.sessionId) {
+            const session = await new Promise((resolve, reject) => {
+                opentok.createSession(async (err, session) => {
+                    if (err) reject(err);
+                    resolve(session);
+                });
+            });
+            journeySpace.sessionId = session.sessionId;
+            await journeySpace.save();
+        }
+        const participants = await JourneyParticipant.find({journeySpace, present: true}).lean().exec();
+        const currentUserParticipant = await JourneyParticipant.findOne({journeySpace, user: req.session.id}).exec();
+        
+        if (!currentUserParticipant) {
+            const newParticipant = new JourneyParticipant({journeySpace, user: req.session.id, present: true});
+            await newParticipant.save();
+            participants.push(newParticipant);
+            const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+            if (globalSpace) {
+                opentok.signal(globalSpace.sessionId, null, { 'type': 'newJoin', 'data': JSON.stringify(newParticipant.toJSON()) }, () => {});
+            }
+        } else {
+            currentUserParticipant.present = true;
+            await currentUserParticipant.save();
+        }
+        const response = journeySpace.toJSON();
+        response.participants = participants;
+	res.json({
+	    ...response,
+	    token: generateToken(journeySpace.sessionId),
+	});
     } else {
-      currentUserParticipant.present = true;
-      await currentUserParticipant.save();
+	opentok.createSession(async (err, session) => {
+	    if (err) throw err;
+	    // create new journey space, save tok session id
+            const db = mongoose.connection;
+            let selectedJourney;
+            if (req.query.journey) {
+                selectedJourney = await JourneyContent.findOne({name: req.query.journey}).lean().exec();
+            }
+            if (!selectedJourney) {
+                const randomJourney = (await db.collection('journeycontents').aggregate([{$sample: {size: 1}}]).toArray())[0];
+                selectedJourney = randomJourney;
+            }
+            const newJourneySpace = new JourneySpace({
+                room, 
+                sessionId: session.sessionId,
+                journey: selectedJourney.filePath,
+                name: req.query.name || selectedJourney.name,
+                image: selectedJourney.image,
+                owner: req.session.id,
+            });
+	    await newJourneySpace.save();
+            const response = newJourneySpace.toJSON();
+            response.participants = [];
+            response.rsvps = [];
+	    res.json({
+		...response,
+		token: generateToken(session.sessionId),
+	    });
+	});
     }
-        console.log("DDD",globalSpace);            
-    const response = journeySpace.toJSON();
-    response.participants = participants;
-		res.json({
-			...response,
-			token: generateToken(journeySpace.sessionId),
-		});
-	} else {
-		opentok.createSession(async (err, session) => {
-		  if (err) throw err;
-			// create new journey space, save tok session id
-      const db = mongoose.connection;
-      let selectedJourney;
-      if (req.query.journey) {
-        selectedJourney = await JourneyContent.findOne({name: req.query.journey}).lean().exec();
-      }
-      if (!selectedJourney) {
-        const randomJourney = (await db.collection('journeycontents').aggregate([{$sample: {size: 1}}]).toArray())[0];
-        selectedJourney = randomJourney;
-      }
-      const newJourneySpace = new JourneySpace({
-        room, 
-        sessionId: session.sessionId,
-        journey: selectedJourney.filePath,
-        name: req.query.name || selectedJourney.name,
-        image: selectedJourney.image,
-        owner: req.session.id,
-      });
-			await newJourneySpace.save();
-      const response = newJourneySpace.toJSON();
-      response.participants = [];
-      response.rsvps = [];
-			res.json({
-				...response,
-				token: generateToken(session.sessionId),
-			});
-		});
-	}
 });
 
 router.post('/journeys/:room/joined', async (req, res) => {
