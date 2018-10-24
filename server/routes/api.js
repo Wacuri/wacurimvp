@@ -48,7 +48,8 @@ function generateToken(sessionId) {
 // TODO: switch to POST, just using GET for easier testing
 router.get('/journeys/:room', async (req, res) => {
 	const {room} = req.params;
-	const journeySpace = await JourneySpace.findOne({room}).exec();
+    const journeySpace = await JourneySpace.findOne({room}).exec();
+    console.log("AAA", journeySpace);
 	if (journeySpace) {
     try {
       await journeySpace.joined();
@@ -71,8 +72,10 @@ router.get('/journeys/:room', async (req, res) => {
     if (!currentUserParticipant) {
       const newParticipant = new JourneyParticipant({journeySpace, user: req.session.id, present: true});
       await newParticipant.save();
-      participants.push(newParticipant);
-      const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+        participants.push(newParticipant);
+            console.log("BBB PUSH done", newParticipant);
+        const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+        console.log("CCC",globalSpace);
       if (globalSpace) {
         opentok.signal(globalSpace.sessionId, null, { 'type': 'newJoin', 'data': JSON.stringify(newParticipant.toJSON()) }, () => {});
       }
@@ -80,6 +83,7 @@ router.get('/journeys/:room', async (req, res) => {
       currentUserParticipant.present = true;
       await currentUserParticipant.save();
     }
+        console.log("DDD",globalSpace);            
     const response = journeySpace.toJSON();
     response.participants = participants;
 		res.json({
@@ -337,7 +341,7 @@ router.post('/journeys/:room/pause', async (req, res) => {
     try {
       await journeySpace.pause();
     } catch(e) {
-      console.log('error pausing journey', e);
+        console.log('error pausing journey', e);
     }
     opentok.signal(journeySpace.sessionId, null, {type: 'pauseJourney', data: ''}, () => {});
   }

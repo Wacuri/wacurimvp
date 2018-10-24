@@ -21,12 +21,17 @@ import * as JSP from './components/journey_space';
 import * as INTRO from './components/intro';
 import CountdownMessage from './components/countdown_message';
 import state from './state';
-import * as someHelper from './utility/utility'
+import * as someHelper from './utility/utility';
+
+
+
 
 import SwipeableViews from 'react-swipeable-views';
 import { virtualize } from 'react-swipeable-views-utils';
 import { mod } from 'react-swipeable-views-core';
 const VirtualizeSwipeableViews = virtualize(SwipeableViews);
+
+
 
 import journeyboardbannerimage from 'file-loader!isomorphic-loader!../res/images/JourneyBoardWoman-Phone.jpg';
 
@@ -230,7 +235,8 @@ class JourneyBoard extends Component {
         });
 
         this.sessionHelper.session.on("signal:expiredJourney", (event) => {
-          const journey = JSON.parse(event.data);
+            const journey = JSON.parse(event.data);
+            console.log("CLIENT JOURNEY EXPIRED",journey);
           const idx = state.joinableJourneys.findIndex(j => j._id === journey._id);
           state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), ...state.joinableJourneys.slice(idx + 1)];
         });

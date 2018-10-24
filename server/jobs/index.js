@@ -16,6 +16,7 @@ const db = mongoose.connection;
 
 var offset = 0;
 agenda.define('create journey space', async function(job, done) {
+    console.log("CREATE JOURNEY SPACE CALLED");    
   try {
     const total = await db.collection('journeycontents').countDocuments();
       const randomJourney = (await db.collection('journeycontents').find().skip(offset++ % total).limit(1).toArray())[0];
@@ -53,12 +54,16 @@ agenda.define('create journey space', async function(job, done) {
 });
 
 agenda.define('clear expired journeys', async function(job, done) {
+  console.log("CLEAR EXPRIED JOURNEYS CALLED");        
   try {
     const expiredJourneys = await JourneySpace.find({state: 'created', startAt: {$lt: moment().subtract(1, 'minutes')}}).exec();
-    const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
-    for (let journey of expiredJourneys) {
-      await journey.expire();
-      if (globalSpace) {
+      const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+      console.log("GLOBAL SPACE SESSIONID",globalSpace.sessionId);          
+      for (let journey of expiredJourneys) {
+          console.log("EXPRIING",journey);
+          await journey.expire();
+          if (globalSpace) {
+              console.log("SENDING SIGNAL",globalSpace.sessionId);
         opentok.signal(globalSpace.sessionId, null, { 'type': 'expiredJourney', 'data': JSON.stringify(journey) }, () => {});
       }
     }
@@ -121,11 +126,12 @@ const QL = 30;
 const QD = 30; // this is measured in minutes
 
 agenda.on('ready', function() {
+    console.log("ON READY CALLED");
     var separation_sec = (QD * 60) / QL;
 
     // This is only used for debugging, in situations which may occur
     // when working in this area.
-    // agenda.schedule('2 seconds', 'clear journeys');
+    agenda.schedule('2 seconds', 'clear journeys');
     
     for(var i = 0; i < QL; i++) {
         var data = {separation_sec: (separation_sec * i) };
