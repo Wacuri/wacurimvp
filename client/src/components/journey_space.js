@@ -1165,8 +1165,8 @@ class UnfilledVideoSquare extends React.Component {
 	      <div key={localkey} id={vid} className={`${additionalClass} flex-box video-placeholder`}>
 	      <div className='box-content'
 	      style={{visibility: `${hide_control ? 'hidden' : 'visible'}` }}>
-              <i className='far fa-smile fa-2x'></i>
-              <p style={{color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1em'}}>Waiting...</p>
+              <i className='far fa-smile'></i>
+              <p style={{color: 'white', maxWidth: '80%', margin: '0 auto'}}>Waiting...</p>
               <button className='invite-button invite-friends-button'  onClick={this.props.onInvite}>Invite Friends
 	        </button>
 	      </div>
@@ -1211,9 +1211,9 @@ class NoVideoSquare extends React.Component {
 	  return (
 		  <div key={localkey} id={vid} className={`${additionalClass} flex-box video-placeholder`}>
 	        <div className='box-content'>
-	      <i className='far fa-smile fa-2x'  style={{ visibility: 'hidden'}}></i>
+	      <i className='far fa-smile'  style={{ visibility: 'hidden'}}></i>
 	      
-		  <p style={{visibility: `${topmsgvis}`, color: 'white', maxWidth: '80%', margin: '0 auto', fontSize: '1em'}}>{topmsg}</p>
+		  <p style={{visibility: `${topmsgvis}`, color: 'white', maxWidth: '80%', margin: '0 auto'}}>{topmsg}</p>
 	      {/* We need to create a colore class to unify with invite-friends-button */}
                   <button className='invite-button invite-orientation-button' onClick={fnc}
  	              >{msg}</button>

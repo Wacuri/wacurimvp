@@ -24,7 +24,7 @@
 // $fa-font-path: "./webfonts" !default;
 
 @import "~bootstrap/scss/bootstrap.scss";
-// @import "~@fortawesome/fontawesome-pro/css/all.css";
+@import "~fontawesome-pro-5.3.1-web/css/all.css";
 
 
 // Bootstrap overrides
@@ -696,7 +696,7 @@ h2 {
     background-color: black;
     margin-left: 0.7em;
     margin-right: 0.7em;
-    font-size: 1em;
+//    font-size: 1em;
     border-radius: 15px!important;
     border-width: 2px;
     border-color: white;
@@ -879,7 +879,8 @@ textarea {
     background-color: black;
     margin-left: 0.7em;
     margin-right: 0.7em;
-    font-size: 0.8em;
+    // This is my attempt to make this a little better
+//    font-size: 0.8em;
     border-radius: 15px!important;
     border-width: 2px;
     border-color: white;
@@ -956,6 +957,84 @@ textarea {
 }
 
 
+#centeringcontainer {
+    position: relative;
+    text-align: center;
+    color: lack;
+}
+
+.box-content {
+    position: relative;
+//    border: 1px solid #000;
+    width: 100%;
+    height: 100%;
+    // This is absolutely needed because OpenReact sticks an extra DIV in.
+    div {
+	width: 100%;
+	height: 100%;
+    }
+    // These are a bit suspect
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    
+    .fa-smile {
+	color: white;	
+    }
+    .btn {
+	font-size: 1em;
+	background-color: rgb(75,176,88);
+    }
+}
+
+.centered {
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    color: red;
+    z-index: 1003;
+    transform: translate(-50%, -50%);
+    width: 200%;
+    
+}
+#imageskipbutton {
+    position: relative;
+    .invisible-finger-target {
+	position: absolute;	
+	bottom: 0;
+	right: 0;
+	color: red;
+	width: 4em;
+	height: 4em;
+	z-index: 10;
+	.fa-stack {
+	    position: absolute;	
+	    bottom: 0;
+	    right: 0;
+	    z-index: 4;
+	}
+    }
+}
+
+// Need to center main column, and put the two special media queries here
+
+#overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+
+
 @media screen and (orientation: portrait){
     #bigsquares {
 	flex-direction: column;
@@ -985,6 +1064,43 @@ textarea {
         min-height: calc(4vh);
         font-size: 1.7vh;
     }
+    .invite-button {
+        font-size: 1.7vh;
+    }
+    #central_control_panel_id { 
+     	font-size: 3vh;    
+    }
+    .fa-smile {
+        font-size: 4vh;
+    }
+    .box-content {
+        p {
+            font-size: 2vh;            
+        }
+    }
+
+    #imageskipbutton {
+        .invisible-finger-target {
+	    .fa-stack {
+	        font-size: 3vh;
+	    }
+        }
+    }
+
+    // This is awkward but the only good way to keep the icons
+    // the "same" size inside a larger circle.
+    .play-button {
+        font-size: 4vh;
+        margin-left: 0.4vh;
+        margin-right: 0.4vh;
+        .fa-play {
+	    font-size: 4vh;
+        }
+        .fa-pause {
+	    font-size: 4vh;
+        }
+    }
+    
     body {
         font-size: 1.8vw;
     }
@@ -1015,6 +1131,42 @@ textarea {
     #titlebar {
         min-height: calc(6vh);
         font-size: 1.7vw;        
+    }
+    .invite-button {
+        font-size: 1.7vw;
+    }
+    #central_control_panel_id { 
+     	font-size: 3vw;    
+    }
+    .fa-smile {
+        font-size: 4vw;
+    }
+
+    #imageskipbutton {
+        .invisible-finger-target {
+	    .fa-stack {
+	        font-size: 3vw;
+	    }
+        }
+    }
+  
+    // This is awkward but the only good way to keep the icons
+    // the "same" size inside a larger circle.
+    .play-button {
+        font-size: 4vw;
+        margin-left: 0.4vw;
+        margin-right: 0.4vw;
+        .fa-play {
+	    font-size: 4vw;
+        }
+        .fa-pause {
+	    font-size: 4vw;
+        }
+    }
+    .box-content {
+        p {
+            font-size: 2vw;            
+        }
     }
     body {
         font-size: 1.8vh;
@@ -1079,126 +1231,13 @@ textarea {
 }
 
 
-// Need to center main column, and put the two special media queries here
-
-#overlay {
-    position: fixed;
-    display: none;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 2;
-    cursor: pointer;
-}
-
-
-
-#centeringcontainer {
-    position: relative;
-    text-align: center;
-    color: lack;
-}
-
-
-
-
-.box-content {
-    position: relative;
-//    border: 1px solid #000;
-    width: 100%;
-    height: 100%;
-    // This is absolutely needed because OpenReact sticks an extra DIV in.
-    div {
-	width: 100%;
-	height: 100%;
-    }
-    // These are a bit suspect
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    
-    .fa-smile {
-	color: white;	
-    }
-    .p {
-	color: white;
-    }
-    .btn {
-	font-size: 1em;
-	background-color: rgb(75,176,88);
-    }
-}
-
-.centered {
-    position: absolute;
-    top: 100%;
-    left: 100%;
-    color: red;
-    z-index: 1003;
-    transform: translate(-50%, -50%);
-    width: 200%;
-    
-}
-#imageskipbutton {
-    position: relative;
-    .invisible-finger-target {
-	position: absolute;	
-	bottom: 0;
-	right: 0;
-	color: red;
-	width: 4em;
-	height: 4em;
-	z-index: 10;
-	.fa-stack {
-	    position: absolute;	
-	    bottom: 0;
-	    right: 0;
-	    font-size: 1.5em;
-	    z-index: 4;
-	}
-    }
-}
-// This is awkward but the only good way to keep the icons
-// the "same" size inside a larger circle.
-.play-button {
-    font-size: 1.4em;
-    margin-left: 0.2em;
-    margin-right: 0.2em;
-    .fa-play {
-	font-size: 0.7em;
-    }
-    .fa-pause {
-	font-size: 0.7em;
-    }
-}
-#central_control_panel_id { 
-     	font-size: 1.2em;    
-}
-.fa-smile-o {
-         font-size: 1.3em;
-}
 
 
 // Here we deal with the JourneyBoard top banner
 @media screen and (orientation: landscape) {
-    // .jb-banner {    
-    //     flex-direction: row;
-    // }
 }
 
 @media screen and (orientation: portrait) {
-    // .jb-banner {
-    //     img {
-    //         margin-right: auto;
-    //     }
-    //     flex-direction: column-reverse;
-    // }
     .banner-text {
         width: 100%;
       
@@ -1207,33 +1246,6 @@ textarea {
 
 
 @media screen and (max-width: 550px) {
-    // background: red;
-    // .jb-banner {
-    //     // This is a bug --- this needed with NO EXPLANATION
-    //     background-color: white;
-    //     img {
-    //         height: 250px;
-    //     }
-    //     .banner-text {
-    //         background-color: black;
-    //         margin-left: 20px;
-    //         margin-right: 40px;
-    //         color: white;
-    //         display: flex;
-    //         flex-direction: column;
-    //         p {
-    //             font-size: 16px;
-    //         }
-    //         h1 {
-    //             margin-right: 20px;
-    //             font-size: 16px;
-    //         }
-    //         p {
-    //             margin-right: 20px;
-    //             font-size: 10px;
-    //         }
-    //     }
-    // }
     .joinable-journeys {
         padding: 5px;
     }
