@@ -187,7 +187,6 @@ h2 {
 
 #titlebar {
     display: flex;
-    font-size: 1.7vh;	          
     flex-flow: row wrap;
     justify-content: space-between;
     align-items: flex-end;
@@ -314,29 +313,50 @@ h2 {
 
 .joinable-journey-card {
     font-size: 10px;
-    height: 175px;
+//    height: 185px;
     max-width: 500px;
     min-width: 500px;
     display: flex;
-  margin-bottom: 20px;
+//    padding-right: 40px;
+//    background-color: red;
+    border-color: red;
+    border-width: 1px;
+    boder-style: solid;
+    margin-bottom: 5px;
+    margin-top: 10px;
 
   .image img {
-    border-radius: 10px;
-    width: 175px;
+      border-radius: 10px;
+      max-height: 165px;
+    width: 165px;
+    height: 165px;
   }
 
   .content {
-      height: 175px;
+      padding-left: 8px;
+      height: 165px;
+      max-height: 165px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-
-      font-size: 12px;      
+      justify-content: space-around;
+      font-size: 12px;
+      font-weight: 700;
+      .card-name {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+      }
       h4 {
           font-size: 24px;
+          font-weight: 500;
+          line-height: 24px;
+      }
+      .time-message-holder {
+          padding-bottom: 2px;
       }
       .time-message {
-          font-size: 16px;
+          font-size: 18px;
+          font-weight: 400;
       }
       .spotnumber {
           font-size: 30px;
@@ -346,15 +366,18 @@ h2 {
       }
       .time {
           font-weight: 700;
-          font-size: 18px;
+          font-size: 24px;
       }
       .btn {
-          font-size: 16px;
-          padding-left: 2em;
-          padding-right: 2em;
+          font-size: 22px;
+          margin-left: 15px;
+          padding-left: 20px;
+          padding-right: 20px;
           background-color: rgb(75,176,88);
           border-radius: 10px;
-          max-width: 100px;
+          max-width: 90px;
+          padding-top: 2px;
+          padding-bottom: 4px;
       }
       flex: 2;
       margin-left: 10px;
@@ -362,12 +385,14 @@ h2 {
           display: block;
       }
       .journey-vacant-spots {
+         font-weight: 400;          
          display: flex;
          flex-direction: row;
          align-items: center;
          margin-top: -5px;
+         font-size: 18px;
         img {
-            height: 30px;
+            height: 32px;
             margin-left: 0.5em;
         }
         i {
@@ -582,11 +607,6 @@ h2 {
     z-index: 1000;
 }
 
-// TODO: This needs to change
-.phase-bar {
-    height: 5px;
-}
-
 .bar-white {
     background-color: white;
 }
@@ -616,8 +636,8 @@ h2 {
 #phase-bar0 {
     display: grid;
     float: right;
-    width: 25vw;
-    grid-gap: 0.4vw;
+//    width: 25vw;
+
     grid-template-columns: auto auto auto auto ;
 }
 
@@ -1052,7 +1072,15 @@ textarea {
 	width: calc(46vh);	
     }
     #phase-bar0 {
-	width: calc(23vh);	
+	width: calc(23vh);
+        grid-gap: 0.4vh;
+        // 23 = (4 * w) + 3 * 0.4  =>
+        // w = (21.8/4)
+        // h = (5/43) * w
+        .phase-bar {
+//            height: calc((5/43)*((23-1.2)/4)*vh);
+            height: 0.6322vh;                                    
+        }
     }
     .logobar_and_titlebar {
         min-height: calc(8vh);
@@ -1063,6 +1091,9 @@ textarea {
     #titlebar {
         min-height: calc(4vh);
         font-size: 1.7vh;
+        #journeyname {
+            line-height: 1.7vh;
+        }
     }
     .invite-button {
         font-size: 1.7vh;
@@ -1120,8 +1151,17 @@ textarea {
 	width: calc(50vw);
     }
     #phase-bar0 {
-	width: calc(25vw);	
+	width: calc(25vw);	        
+        grid-gap: 0.4vw;
+        // 25 = (4 * w) + 3 * 0.4  =>
+        // w = (23.8/4)
+        // h = (5/43) * w
+        .phase-bar {
+//            height: calc(0.116*((25-1.2)/4)vw);
+            height: 0.6902vw;                        
+        }
     }
+    
     .logobar_and_titlebar {
         min-height: calc(12vh);
     }
@@ -1130,7 +1170,10 @@ textarea {
     }
     #titlebar {
         min-height: calc(6vh);
-        font-size: 1.7vw;        
+        font-size: 1.7vw;
+        #journeyname {
+            line-height: 1.7vw;
+        }
     }
     .invite-button {
         font-size: 1.7vw;
@@ -1244,46 +1287,108 @@ textarea {
     }
 }
 
-
+// In this case we have t to get the joinable journey-card
+// down to 400 pixels, to fit on iphone 5
 @media screen and (max-width: 550px) {
     .joinable-journeys {
         padding: 5px;
     }
+
     .joinable-journey-card {
-        margin-bottom: 10px;
-       max-width: 240px;
-       min-width: 260px;
-       height: 250px;
-        //        height: 120px;
-        
+        font-size: 10px;
+        //    height: 185px;
+        max-width: 400px;
+        min-width: 400px;
+        display: flex;
+        //    padding-right: 40px;
+        //    background-color: red;
+//        border-color: red;
+//        border-width: 1px;
+//        boder-style: solid;
+        margin-bottom: 5px;
+        margin-top: 10px;
+
         .image img {
-            max-width: 120px;
-            margin-left: -20px;
-        }
-        font-size: 8px;      
-        h4 {
-            font-size: 10px;
-        }
-        .time-message {
-            font-size: 11px;
-        }
-        .spotnumber {
-            font-size: 20px;
-            font-weight: 700;
-            margin-right:3px;
-            margin-top: -10px;
-        }
-        .time {
-            font-weight: 700;
-            font-size: 14px;
-        }
-        .content {
+            border-radius: 10px;
+            max-height: 120px;
+            width: 120px;
             height: 120px;
-            .btn {
+        }
+
+        .content {
+            padding-left: 8px;
+            height: 120px;
+            max-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            font-size: 10px;
+            font-weight: 700;
+            .card-name {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            h4 {
+                font-size: 18px;
+                font-weight: 500;
+                line-height: 24px;
+            }
+            .time-message-holder {
+                padding-bottom: 2px;
+            }
+            .time-message {
                 font-size: 14px;
-                padding-left: 5px;
-                padding-right: 1px;
-                width: 60px;
+                font-weight: 400;
+            }
+            .spotnumber {
+                font-size: 20px;
+                font-weight: 700;
+                margin-right:3px;
+                margin-top: -10px;
+            }
+            .time {
+                font-weight: 700;
+                font-size: 16px;
+            }
+            .btn {
+                font-size: 16px;
+                margin-left: 15px;
+                padding-left: 20px;
+                padding-right: 20px;
+                background-color: rgb(75,176,88);
+                border-radius: 10px;
+                max-width: 90px;
+                padding-top: 2px;
+                padding-bottom: 4px;
+            }
+            flex: 2;
+            margin-left: 10px;
+            .tightcol {
+                display: block;
+            }
+            .journey-vacant-spots {
+                font-weight: 400;          
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                margin-top: -5px;
+                font-size: 14px;
+                img {
+                    height: 32px;
+                    margin-left: 0.5em;
+                }
+                i {
+                    color: rgba(0, 0, 0, 0.2);
+                }
+
+                .fill {
+                    color: black;
+                }
+
+                li {
+                    margin-left: 4px;
+                }
             }
         }
     }

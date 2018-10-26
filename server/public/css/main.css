@@ -11426,7 +11426,6 @@ h2 {
 
 #titlebar {
   display: flex;
-  font-size: 1.7vh;
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: flex-end;
@@ -11508,26 +11507,43 @@ h2 {
 
 .joinable-journey-card {
   font-size: 10px;
-  height: 175px;
   max-width: 500px;
   min-width: 500px;
   display: flex;
-  margin-bottom: 20px; }
+  border-color: red;
+  border-width: 1px;
+  boder-style: solid;
+  margin-bottom: 5px;
+  margin-top: 10px; }
   .joinable-journey-card .image img {
     border-radius: 10px;
-    width: 175px; }
+    max-height: 165px;
+    width: 165px;
+    height: 165px; }
   .joinable-journey-card .content {
-    height: 175px;
+    padding-left: 8px;
+    height: 165px;
+    max-height: 165px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     font-size: 12px;
+    font-weight: 700;
     flex: 2;
     margin-left: 10px; }
+    .joinable-journey-card .content .card-name {
+      display: flex;
+      flex-direction: column;
+      justify-content: center; }
     .joinable-journey-card .content h4 {
-      font-size: 24px; }
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 24px; }
+    .joinable-journey-card .content .time-message-holder {
+      padding-bottom: 2px; }
     .joinable-journey-card .content .time-message {
-      font-size: 16px; }
+      font-size: 18px;
+      font-weight: 400; }
     .joinable-journey-card .content .spotnumber {
       font-size: 30px;
       font-weight: 700;
@@ -11535,23 +11551,28 @@ h2 {
       margin-top: -10px; }
     .joinable-journey-card .content .time {
       font-weight: 700;
-      font-size: 18px; }
+      font-size: 24px; }
     .joinable-journey-card .content .btn {
-      font-size: 16px;
-      padding-left: 2em;
-      padding-right: 2em;
+      font-size: 22px;
+      margin-left: 15px;
+      padding-left: 20px;
+      padding-right: 20px;
       background-color: #4bb058;
       border-radius: 10px;
-      max-width: 100px; }
+      max-width: 90px;
+      padding-top: 2px;
+      padding-bottom: 4px; }
     .joinable-journey-card .content .tightcol {
       display: block; }
     .joinable-journey-card .content .journey-vacant-spots {
+      font-weight: 400;
       display: flex;
       flex-direction: row;
       align-items: center;
-      margin-top: -5px; }
+      margin-top: -5px;
+      font-size: 18px; }
       .joinable-journey-card .content .journey-vacant-spots img {
-        height: 30px;
+        height: 32px;
         margin-left: 0.5em; }
       .joinable-journey-card .content .journey-vacant-spots i {
         color: rgba(0, 0, 0, 0.2); }
@@ -11702,9 +11723,6 @@ h2 {
   flex-flow: row wrap;
   z-index: 1000; }
 
-.phase-bar {
-  height: 5px; }
-
 .bar-white {
   background-color: white; }
 
@@ -11725,8 +11743,6 @@ h2 {
 #phase-bar0 {
   display: grid;
   float: right;
-  width: 25vw;
-  grid-gap: 0.4vw;
   grid-template-columns: auto auto auto auto; }
 
 .feedback-rating .feedback-empty {
@@ -12036,7 +12052,10 @@ textarea {
     height: calc(46vh);
     width: calc(46vh); }
   #phase-bar0 {
-    width: calc(23vh); }
+    width: calc(23vh);
+    grid-gap: 0.4vh; }
+    #phase-bar0 .phase-bar {
+      height: 0.6322vh; }
   .logobar_and_titlebar {
     min-height: calc(8vh); }
   .logobar {
@@ -12044,6 +12063,8 @@ textarea {
   #titlebar {
     min-height: calc(4vh);
     font-size: 1.7vh; }
+    #titlebar #journeyname {
+      line-height: 1.7vh; }
   .invite-button {
     font-size: 1.7vh; }
   #central_control_panel_id {
@@ -12076,7 +12097,10 @@ textarea {
     height: calc(50vw);
     width: calc(50vw); }
   #phase-bar0 {
-    width: calc(25vw); }
+    width: calc(25vw);
+    grid-gap: 0.4vw; }
+    #phase-bar0 .phase-bar {
+      height: 0.6902vw; }
   .logobar_and_titlebar {
     min-height: calc(12vh); }
   .logobar {
@@ -12084,6 +12108,8 @@ textarea {
   #titlebar {
     min-height: calc(6vh);
     font-size: 1.7vw; }
+    #titlebar #journeyname {
+      line-height: 1.7vw; }
   .invite-button {
     font-size: 1.7vw; }
   #central_control_panel_id {
@@ -12154,33 +12180,77 @@ textarea {
   .joinable-journeys {
     padding: 5px; }
   .joinable-journey-card {
-    margin-bottom: 10px;
-    max-width: 240px;
-    min-width: 260px;
-    height: 250px;
-    font-size: 8px; }
+    font-size: 10px;
+    max-width: 400px;
+    min-width: 400px;
+    display: flex;
+    margin-bottom: 5px;
+    margin-top: 10px; }
     .joinable-journey-card .image img {
-      max-width: 120px;
-      margin-left: -20px; }
-    .joinable-journey-card h4 {
-      font-size: 10px; }
-    .joinable-journey-card .time-message {
-      font-size: 11px; }
-    .joinable-journey-card .spotnumber {
-      font-size: 20px;
-      font-weight: 700;
-      margin-right: 3px;
-      margin-top: -10px; }
-    .joinable-journey-card .time {
-      font-weight: 700;
-      font-size: 14px; }
-    .joinable-journey-card .content {
+      border-radius: 10px;
+      max-height: 120px;
+      width: 120px;
       height: 120px; }
-      .joinable-journey-card .content .btn {
+    .joinable-journey-card .content {
+      padding-left: 8px;
+      height: 120px;
+      max-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      font-size: 10px;
+      font-weight: 700;
+      flex: 2;
+      margin-left: 10px; }
+      .joinable-journey-card .content .card-name {
+        display: flex;
+        flex-direction: column;
+        justify-content: center; }
+      .joinable-journey-card .content h4 {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 24px; }
+      .joinable-journey-card .content .time-message-holder {
+        padding-bottom: 2px; }
+      .joinable-journey-card .content .time-message {
         font-size: 14px;
-        padding-left: 5px;
-        padding-right: 1px;
-        width: 60px; } }
+        font-weight: 400; }
+      .joinable-journey-card .content .spotnumber {
+        font-size: 20px;
+        font-weight: 700;
+        margin-right: 3px;
+        margin-top: -10px; }
+      .joinable-journey-card .content .time {
+        font-weight: 700;
+        font-size: 16px; }
+      .joinable-journey-card .content .btn {
+        font-size: 16px;
+        margin-left: 15px;
+        padding-left: 20px;
+        padding-right: 20px;
+        background-color: #4bb058;
+        border-radius: 10px;
+        max-width: 90px;
+        padding-top: 2px;
+        padding-bottom: 4px; }
+      .joinable-journey-card .content .tightcol {
+        display: block; }
+      .joinable-journey-card .content .journey-vacant-spots {
+        font-weight: 400;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: -5px;
+        font-size: 14px; }
+        .joinable-journey-card .content .journey-vacant-spots img {
+          height: 32px;
+          margin-left: 0.5em; }
+        .joinable-journey-card .content .journey-vacant-spots i {
+          color: rgba(0, 0, 0, 0.2); }
+        .joinable-journey-card .content .journey-vacant-spots .fill {
+          color: black; }
+        .joinable-journey-card .content .journey-vacant-spots li {
+          margin-left: 4px; } }
 
 /* New CSS --- This is mainly to make the journeyboard banner look elegant */
 .main-header.clearfix img {

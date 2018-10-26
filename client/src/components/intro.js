@@ -22,15 +22,15 @@ export const INTRO_VIEWS = [
           <p>
                       For each journey, you can see when it will start and how many people are in the JourneySpace.
                       To promote sharing, each JourneySpace is limited to two or three participants.
-                      You can join a journeyspace at any time.
+                      You can join a JourneySpace at any time.
           </p>
                       <p>
-                      You can join a journeyspace that already has someone present, or go to a Journey
+                      You can join a JourneySpace that already has someone present, or go to a Journey
                       you would like to take and wait for someone else to join.
           </p>
           <p>
                       If no one joins, you can take the journey by yourself, or even create
-                      a permanent space to invite your personal friends to.
+                      a permanent JourneySpace to invite your personal friends to.
           </p>
         </div>,
                   

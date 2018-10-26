@@ -150,20 +150,19 @@ class JoinableJourneyCard extends Component {
         <div className='image'>
           <img src={journey.image}/>
         </div>
-        <div className='content'>
+            <div className='content'>
+            <div className='card-name'>
             <h4>{journey.name}</h4>
-            <div className="tightcol">
+            </div>
           <CountdownMessage endTime={journey.startAt} />
             <div className='journey-vacant-spots'>
-            <span className='spotnumber' key="msg">{3 - journey.participants.length} </span>
-
-        <span> spot{3 - journey.participants.length > 1 ? 's' : ''} available: </span>
-	    <img src={image_name} />
+              <span className='spotnumber' key="msg">{3 - journey.participants.length} </span>
+              <span> spot{3 - journey.participants.length > 1 ? 's' : ''} available: </span>
+	      <img src={image_name} />
             </div>
 
 	    {/* here "j" is inserted as a convenient means of marking this entry as a Journeyboard space rather than a permanent one */}
             <Link to={`/j/${journey.room}`} className='btn btn-primary'>{currentUserHasRSVP ? 'Go there now' : 'Join'}</Link>
-            </div>            
         </div>
       </div>
     )

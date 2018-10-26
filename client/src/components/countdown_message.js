@@ -52,7 +52,7 @@ class CountdownMessage extends Component {
 
 //    if (totalTimeInMinutes < 5) {
       return (
-        <div  ref='countdown_ref'>
+        <div  ref='countdown_ref' className="time-message-holder">
               <span className="time-message"> {tmessage}</span><span className="time"> {message}</span>
         </div>
       );
