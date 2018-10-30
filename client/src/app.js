@@ -132,7 +132,6 @@ class Login extends Component {
 }
 
 class JoinableJourneyCard extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -182,11 +181,20 @@ class JourneyBoard extends Component {
       super(props);
       this.state = {
 	  showOrientationModal: false,
+          joinableJourneys: []
       }
+      this.interval = setInterval(() => {
+          this.setState({
+              joinableJourneys: 
+              state.joinableJourneys.filter(
+                  journey => 
+                      (Date.parse(journey.startAt) > Date.parse(new Date()))
+              )
+          });
+      }, 1000);
   }
 
     onOrientation = (e) => {
-	console.log("onOrientation called");
     e.preventDefault();
     this.setState({
       showOrientationModal: true
@@ -229,13 +237,12 @@ class JourneyBoard extends Component {
 //	      state.joinableJourneys = _.unionBy(state.joinableJourneys, [JSON.parse(event.data)], (j) => j._id)	      
               state.joinableJourneys.push(JSON.parse(event.data));
 	      
-	      console.log(state.joinableJourneys);	      
         });
 
         this.sessionHelper.session.on("signal:expiredJourney", (event) => {
             const journey = JSON.parse(event.data);
           const idx = state.joinableJourneys.findIndex(j => j._id === journey._id);
-          state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), ...state.joinableJourneys.slice(idx + 1)];
+            state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), ...state.joinableJourneys.slice(idx + 1)];
         });
 
         this.sessionHelper.session.on("signal:failJourney", (event) => {
@@ -279,6 +286,7 @@ class JourneyBoard extends Component {
           .then(json => {
               // This may need to be sourted by expiration time...
               state.joinableJourneys = json;
+//              console.log("joinableJourneys setstate over active");
       });
   }
 
@@ -287,9 +295,9 @@ class JourneyBoard extends Component {
 	// I want to remove the warnings I am getting, but this is a dangerous way to do it.
 	// Possibly I should deal with this in a different way.
 	var discriminator = 0;
-        console.log("joinableJourneys", state.joinableJourneys);
+//        console.log("joinableJourneys", state.joinableJourneys);
         state.joinableJourneys.sort( (a,b) => (Date.parse(a.startAt) < Date.parse(b.startAt)));
-        console.log("sorted", state.joinableJourneys);        
+//        console.log("sorted", state.joinableJourneys);        
 	return (
 		<div>
 		 {this.state.showOrientationModal &&
@@ -309,10 +317,12 @@ class JourneyBoard extends Component {
                 </div>
       <div className='joinable-journeys'>
                 {state.joinableJourneys.map(journey => {
-                                            if (Date.parse(journey.startAt) > new Date()) {
-                                                return ( <JoinableJourneyCard key={journey._id+"_"+discriminator++}
-                                                         journey={journey} audioTag={this.audioTag}/>)
-                                            }}
+//                    console.log("Pair",Date.parse(journey.startAt),Date.parse(new Date()));
+//                    console.log("Boolean",Date.parse(journey.startAt) > Date.parse(new Date()));                    
+                    if (Date.parse(journey.startAt) > Date.parse(new Date())) {
+                        return ( <JoinableJourneyCard key={journey._id+"_"+discriminator++}
+                                 journey={journey} audioTag={this.audioTag}/>)
+                    }}
 
 )}
 	    </div>
@@ -331,7 +341,8 @@ class JourneyBoardOrientationModal extends Component {
       streams: [],
           views: INTRO.INTRO_VIEWS,
           index: 0
-    }
+      }
+   
   };
 
     onChange = (e) => {
