@@ -335,19 +335,18 @@ class JourneyPhases extends Component {
   render() {
       const {journey} = this.props;
       const NumPhases = 4;
-      const Messages = ["Breathe and center yourself","Journey in Progess","Share your Insights","Provide Feedback"];
+      const Messages = ["Breathe to Prepare","Journey in Progess","Share your Insights","Provide Feedback"];
     return (
 	    <div ref={el => {this.container = el}} className={`journey-timeline step-${this.stepIndex.toString()}`}>
 	    <div>
-	    <div style={{display: 'flex', flexDirection: 'row-reverse',  alignItems: 'flex-end' }}>
-	    <span >
-
+	    <div className={'phase-and-timer'}>
+	    <span>{Messages[this.stepIndex]}</span>
 	{ (((state.journey.startAt &&
 	     (this.stepIndex == 0))) || (this.stepIndex == 1) ) &&
-                <span className='timer' style={{marginLeft: '10px'}}>{this.props.timer.displayTime()}</span>
+          <div className='fixed-box'>
+          <span className='timer'>{this.props.timer.displayTime()}</span>
+          </div>
 	}
-	    <span>{Messages[this.stepIndex]}</span>
-	</span>
 	    </div>
 	    </div>
 	</div>			
@@ -384,54 +383,6 @@ class PhaseIndicator extends Component {
     )
   }
 }
-
-
-
-// class SkipButton extends Component {
-//     constructor(props) {
-//        super(props);
-//     }
-//     skipToNext = (e) => {
-// 	console.log("SKIP TO NEXT CALLED");
-// 	e.preventDefault();
-//    // This seeking to near the end works better than just calling skip, because it allows our natural processes to continue.
-//     // fetch(`/api/journeys/${this.props.journey.room}/skip`, {
-//     //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-//     //   credentials: 'same-origin', // include, same-origin, *omit
-//     //   headers: {
-//     //     'content-type': 'application/json'
-//     //   },
-//     //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-//     //   mode: 'cors', // no-cors, cors, *same-origin
-//     //   redirect: 'follow', // manual, *follow, error
-//     //   referrer: 'no-referrer', // *client, no-referrer
-//     // });
-//       // I believe this should change the state to completed, but I am not sure
-//       // if that happens server side or client side
-// 	console.log("skipToNext event fired");
-// 	const vid = this.props.vidid;
-// 	const playerState = this.props.playerState;
-// 	const seekTo = this.props.seekTo;
-// 	// This is my attempt to seek to the end....
-// 	// It is not clear how the audio really works; I am not sure that "seek" functions.
-// 	seekTo(99/100);
-// 	// figure out how to pause, and how to seek correctly....
-//   }
-
-//     render() {
-// 	return (
-// 	    <span className={`fa-stack`} onClick={this.skipToNext}>
-// 	    <i className='fa fa-circle fa-stack-2x' 
-// 	style={{color: 'rgb(75,176,88)'}}
-// 	    ></i>
-// 	    {
-//             <i className={`fa fa-step-forward fa-stack-1x`}
-// 	     style={{color: 'white'}}></i>
-// 	     }
-// 		 </span>
-//     )
-//   }
-// }
 
 
 class SkipButtonClear extends Component {
@@ -670,14 +621,27 @@ class PlayButton extends Component {
     render() {
     return (
 	    <span className='fa-stack play-button' onClick={this.togglePlay}>
-	    <i className='fa fa-circle fa-stack-2x'
-    	      style={{color: 'rgb(74,170,221)'}}
-	    ></i>
-	    {
-            <i className={`fa fa-${state.audioTag.paused ? 'play' : 'pause'} fa-stack-1x`}
-	     style={{color: 'white'}}></i>
-	     }
-		 </span>
+            <img src={'../images/' + (state.audioTag.paused ? 'PlayButton.svg' : 'PauseButton.svg')}/>
+	    </span>
+    )
+  }
+}
+
+class PlaceHolderButton extends Component {
+  constructor(props) {
+    super(props);
+  }
+    render() {
+        return (
+              <span className='fa-stack placeholder' onClick={this.togglePlay}>
+                <i className='fa fa-circle fa-stack-2x'
+            style={{color: 'rgb(74,170,221)'}}
+                ></i>
+                {
+                   <i className={`fa fa-play fa-stack-1x`}
+                    style={{color: 'white'}}></i>
+                }
+            </span>
     )
   }
 }
@@ -1167,6 +1131,7 @@ class UnfilledVideoSquare extends React.Component {
 	      style={{visibility: `${hide_control ? 'hidden' : 'visible'}` }}>
               <i className='far fa-smile'></i>
               <p style={{color: 'white', maxWidth: '80%', margin: '0 auto'}}>Waiting...</p>
+              <p/>
               <button className='invite-button invite-friends-button'  onClick={this.props.onInvite}>Invite Friends
 	        </button>
 	      </div>
@@ -1214,6 +1179,7 @@ class NoVideoSquare extends React.Component {
 	      <i className='far fa-smile'  style={{ visibility: 'hidden'}}></i>
 	      
 		  <p style={{visibility: `${topmsgvis}`, color: 'white', maxWidth: '80%', margin: '0 auto'}}>{topmsg}</p>
+              <p/>                  
 	      {/* We need to create a colore class to unify with invite-friends-button */}
                   <button className='invite-button invite-orientation-button' onClick={fnc}
  	              >{msg}</button>
@@ -1238,7 +1204,8 @@ class Controls extends Component {
 		      <AudioButton publisher={this.props.publisher}
   		         state={this.props.state}
 		         setMicrophoneMutedState={this.props.setMicrophoneMutedState}
-		      />
+		/>
+		<PlaceHolderButton publisher={this.props.publisher}/>                
 		<PlayButton style={{color: 'rgb(74,170,221)',
 				    backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
 	    journey={this.props.journey} player={this.props.player}/>

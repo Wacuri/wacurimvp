@@ -145,7 +145,7 @@ class JoinableJourneyCard extends Component {
       const currentUserHasRSVP = (journey.participants || []).find(participant => participant.user === state.sessionId) != null;
 
       const image_name = "images/SPOTS-0"+journey.participants.length+".png";
-    return (
+      return (
       <div className='joinable-journey-card'>
         <div className='image'>
           <img src={journey.image}/>
@@ -276,8 +276,11 @@ class JourneyBoard extends Component {
     // fetch currently active journeys
     fetch('/api/active_journeys')
       .then(res => res.json())
-      .then(json => {
-        state.joinableJourneys = json;
+          .then(json => {
+              // This may need to be sourted by expiration time...
+              state.joinableJourneys = json;
+              console.log("joinableJourneys", state.joinableJourneys);
+              stat.joinableJourneys.sort( (a,b) => (Date.parse(a.startAt) < Date.parse(b.startAt)));
       });
   }
 
@@ -304,7 +307,13 @@ class JourneyBoard extends Component {
                      </div>
                 </div>
       <div className='joinable-journeys'>
-        {state.joinableJourneys.map(journey => <JoinableJourneyCard key={journey._id+"_"+discriminator++} journey={journey} audioTag={this.audioTag}/>)}
+                {state.joinableJourneys.map(journey => {
+                                            if (Date.parse(journey.startAt) > new Date()) {
+                                                return ( <JoinableJourneyCard key={journey._id+"_"+discriminator++}
+                                                         journey={journey} audioTag={this.audioTag}/>)
+                                            }}
+
+)}
 	    </div>
 		</div>
     )

@@ -93,24 +93,48 @@ agenda.define('clear journeys', async function(job, done) {
   }
 });
 
-agenda.define('start journey', async function(job, done) {
+// This function exists only for debugging purposes.
+agenda.define('clear failed jobs', async function(job, done) {
+    console.log('CLEAR JOURNEY');
   try {
-    const {journey} = job.attrs.data;
-    const journeySpace = await JourneySpace.findById(journey).exec();
+    const expiredJourneys = await JourneySpace.find({state: 'created'}).exec();
     const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
-    const participants = await JourneyParticipant.find({journeySpace: journeySpace._id, present: true}).exec();
-    if (participants.length > 1) {
-      await journeySpace.start();
-      opentok.signal(journeySpace.sessionId, null, { 'type': 'startJourney', 'data': JSON.stringify({journey}) }, () => {});
-    } else {
-      await journeySpace.fail();
-      opentok.signal(journeySpace.sessionId, null, { 'type': 'failJourney', 'data': JSON.stringify({journey}) }, () => {});
-      opentok.signal(globalSpace.sessionId, null, { 'type': 'failJourney', 'data': JSON.stringify(journeySpace.toJSON()) }, () => {});
+    for (let journey of expiredJourneys) {
+        await journey.expire();
+        console.log("expired journey",journey);
+      if (globalSpace) {
+        opentok.signal(globalSpace.sessionId, null, { 'type': 'expiredJourney', 'data': JSON.stringify(journey) }, () => {});
+      }
     }
     done();
   } catch(e) {
+    console.log(e);
     done(e);
   }
+});
+
+// This fails when the session id is null, filling the database with empty jobs.
+// I don't understand what "globalSpace" is here, and why this is happening.
+agenda.define('start journey', async function(job, done) {
+    try {
+        const {journey} = job.attrs.data;
+        const journeySpace = await JourneySpace.findById(journey).exec();
+        if (journeySpace.sessionId != null) {
+            const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+            const participants = await JourneyParticipant.find({journeySpace: journeySpace._id, present: true}).exec();
+            if (participants.length > 1) {
+                await journeySpace.start();
+                opentok.signal(journeySpace.sessionId, null, { 'type': 'startJourney', 'data': JSON.stringify({journey}) }, () => {});
+            } else {
+                await journeySpace.fail();
+                opentok.signal(journeySpace.sessionId, null, { 'type': 'failJourney', 'data': JSON.stringify({journey}) }, () => {});
+                opentok.signal(globalSpace.sessionId, null, { 'type': 'failJourney', 'data': JSON.stringify(journeySpace.toJSON()) }, () => {});
+            }
+        }
+        done();
+    } catch(e) {
+        done(e);
+    }
 });
 
 // This is the filling algorithm. We have to pass data to the jobs.
@@ -122,8 +146,8 @@ agenda.define('start journey', async function(job, done) {
 // The Agenda.on function below exists to "load" the JourneyBoard which
 // has been a problem. Our basic algorithm is to run evenly
 // space the journeys through out QD/QL as per QL.
-const QL = 30;
-const QD = 30; // this is measured in minutes
+const QL = 10;
+const QD = 10; // this is measured in minutes
 
 agenda.on('ready', function() {
     console.log("ON READY CALLED");

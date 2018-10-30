@@ -163,8 +163,12 @@ h2 {
     background-color: gray;
 }
 
+// #journeyname {
+//     max-width: 40vw;
+// }
+
 #journeyname {
-    max-width: 40vw;
+    letter-spacing: -1px;
 }
 
 
@@ -191,30 +195,30 @@ h2 {
     justify-content: space-between;
     align-items: flex-end;
     margin-left: 1em;
-    margin-right: 1em;    
     background-color: black;
     color: white;
     min-height: calc(4vh);
+    align-items: center;
     select {
 	-webkit-appearance: menulist;
     	color: black;
     	background-color: white;
     	width: 33vw;
     }
-    select:after {
-      content: "";
-      position: absolute;
-      z-index: 2;
-      right: 8px;
-      top: 50%;
-      margin-top: -3px;
-      height: 0;
-      width: 0;
-      border-top: 6px solid #f99300;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      pointer-events: none;
-    }
+    // select:after {
+    //   content: "";
+    //   position: absolute;
+    //   z-index: 2;
+    //   right: 8px;
+    //   top: 50%;
+    //   margin-top: -3px;
+    //   height: 0;
+    //   width: 0;
+    //   border-top: 6px solid #f99300;
+    //   border-left: 6px solid transparent;
+    //   border-right: 6px solid transparent;
+    //   pointer-events: none;
+    // }
     overflow: auto;
     z-index: 4;
 }
@@ -307,7 +311,6 @@ h2 {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    
 }
 
 
@@ -472,11 +475,19 @@ h2 {
     font-size: 1em;
     margin-bottom: 0;
   }
+  .phase-and-timer {
+      display: flex;
+     flex-direction: row;
+  }
+  .fixed-box {
+      width: 3em;
+      margin-right: 0.25em;
+  }
 
   .timer {
+//      min-width: 20vw!;
       font-weight: bold;
-      margin-left: 1em;
-      margin-right: 1em;
+      margin-left: 0.5em;
   }
 }
 
@@ -714,6 +725,7 @@ h2 {
 .invite-button {
     color: white;
     background-color: black;
+    letter-spacing: -1px;    
     margin-left: 0.7em;
     margin-right: 0.7em;
 //    font-size: 1em;
@@ -1017,8 +1029,8 @@ textarea {
     z-index: 1003;
     transform: translate(-50%, -50%);
     width: 200%;
-    
 }
+
 #imageskipbutton {
     position: relative;
     .invisible-finger-target {
@@ -1090,23 +1102,20 @@ textarea {
     }
     #titlebar {
         min-height: calc(4vh);
-        font-size: 1.7vh;
-        #journeyname {
-            line-height: 1.7vh;
-        }
+        font-size: 2vh;
     }
     .invite-button {
-        font-size: 1.7vh;
+        font-size: 2.2vh;
     }
     #central_control_panel_id { 
      	font-size: 3vh;    
     }
     .fa-smile {
-        font-size: 4vh;
+        font-size: 5vh;
     }
     .box-content {
         p {
-            font-size: 2vh;            
+            font-size: 1.5vh;            
         }
     }
 
@@ -1121,19 +1130,29 @@ textarea {
     // This is awkward but the only good way to keep the icons
     // the "same" size inside a larger circle.
     .play-button {
-        font-size: 4vh;
-        margin-left: 0.4vh;
-        margin-right: 0.4vh;
-        .fa-play {
-	    font-size: 4vh;
-        }
-        .fa-pause {
-	    font-size: 4vh;
-        }
+        width: 7vw;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        color: red;
+        z-index: 1003;
+        transform: translate(-50%, -55%);
     }
-    
+
     body {
         font-size: 1.8vw;
+    }
+    
+    #central_control_panel_id { 
+     	font-size: 3vw;
+        .placeholder {
+            visibility: hidden;
+            width: 9vw;
+     	    font-size: 5vw;            
+        }
+        .fa-stack {
+
+        }
     }
 }
 
@@ -1170,19 +1189,13 @@ textarea {
     }
     #titlebar {
         min-height: calc(6vh);
-        font-size: 1.7vw;
-        #journeyname {
-            line-height: 1.7vw;
-        }
+        font-size: 2vw;
     }
     .invite-button {
-        font-size: 1.7vw;
-    }
-    #central_control_panel_id { 
-     	font-size: 3vw;    
+        font-size: 2.2vw;
     }
     .fa-smile {
-        font-size: 4vw;
+        font-size: 5vw;
     }
 
     #imageskipbutton {
@@ -1195,24 +1208,37 @@ textarea {
   
     // This is awkward but the only good way to keep the icons
     // the "same" size inside a larger circle.
+    // This is awkward but the only good way to keep the icons
+    // the "same" size inside a larger circle.
     .play-button {
-        font-size: 4vw;
-        margin-left: 0.4vw;
-        margin-right: 0.4vw;
-        .fa-play {
-	    font-size: 4vw;
-        }
-        .fa-pause {
-	    font-size: 4vw;
-        }
+        width: 7vw;
+        height: 7vw;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        color: red;
+        z-index: 1003;
+        transform: translate(-50%, -50%);
     }
+
     .box-content {
         p {
-            font-size: 2vw;            
+            font-size: 1.5vw;            
         }
     }
+    
     body {
         font-size: 1.8vh;
+    }
+
+    #central_control_panel_id { 
+     	font-size: 3vw;
+        .placeholder {
+            visibility: hidden;
+     	    font-size: 5vw;                        
+        }
+        .fa-stack {
+        }
     }
 }
 
@@ -1290,15 +1316,21 @@ textarea {
 // In this case we have t to get the joinable journey-card
 // down to 400 pixels, to fit on iphone 5
 @media screen and (max-width: 550px) {
-    .joinable-journeys {
-        padding: 5px;
-    }
 
+    .joinable-journeys {
+        width: 100vw;
+        padding: 5px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-conent: flex-end;
+    }    
     .joinable-journey-card {
+        line-height: 11px;
         font-size: 10px;
         //    height: 185px;
-        max-width: 400px;
-        min-width: 400px;
+        width: 300px;
+        min-width: 300px;
+        max-width: 300px;
         display: flex;
         //    padding-right: 40px;
         //    background-color: red;
@@ -1310,19 +1342,19 @@ textarea {
 
         .image img {
             border-radius: 10px;
-            max-height: 120px;
-            width: 120px;
+            width: 100px;
             height: 120px;
         }
 
         .content {
-            padding-left: 8px;
+            padding-left: 4px;
+            max-width: 200px;
             height: 120px;
             max-height: 120px;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            font-size: 10px;
+            font-size: 8px;
             font-weight: 700;
             .card-name {
                 display: flex;
@@ -1352,7 +1384,7 @@ textarea {
                 font-size: 16px;
             }
             .btn {
-                font-size: 16px;
+                font-size: 12px;
                 margin-left: 15px;
                 padding-left: 20px;
                 padding-right: 20px;
@@ -1360,10 +1392,9 @@ textarea {
                 border-radius: 10px;
                 max-width: 90px;
                 padding-top: 2px;
-                padding-bottom: 4px;
             }
             flex: 2;
-            margin-left: 10px;
+//            margin-left: 10px;
             .tightcol {
                 display: block;
             }
@@ -1375,7 +1406,7 @@ textarea {
                 margin-top: -5px;
                 font-size: 14px;
                 img {
-                    height: 32px;
+                    height: 24px;
                     margin-left: 0.5em;
                 }
                 i {
