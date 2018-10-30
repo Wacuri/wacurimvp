@@ -279,8 +279,6 @@ class JourneyBoard extends Component {
           .then(json => {
               // This may need to be sourted by expiration time...
               state.joinableJourneys = json;
-              console.log("joinableJourneys", state.joinableJourneys);
-              stat.joinableJourneys.sort( (a,b) => (Date.parse(a.startAt) < Date.parse(b.startAt)));
       });
   }
 
@@ -289,6 +287,9 @@ class JourneyBoard extends Component {
 	// I want to remove the warnings I am getting, but this is a dangerous way to do it.
 	// Possibly I should deal with this in a different way.
 	var discriminator = 0;
+        console.log("joinableJourneys", state.joinableJourneys);
+        state.joinableJourneys.sort( (a,b) => (Date.parse(a.startAt) < Date.parse(b.startAt)));
+        console.log("sorted", state.joinableJourneys);        
 	return (
 		<div>
 		 {this.state.showOrientationModal &&
