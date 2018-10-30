@@ -296,7 +296,7 @@ class JourneyBoard extends Component {
 	// Possibly I should deal with this in a different way.
 	var discriminator = 0;
 //        console.log("joinableJourneys", state.joinableJourneys);
-        state.joinableJourneys.sort( (a,b) => (Date.parse(a.startAt) < Date.parse(b.startAt)));
+        this.state.joinableJourneys = this.state.joinableJourneys.sort( (a,b) => (Date.parse(a.startAt) < Date.parse(b.startAt)));
 //        console.log("sorted", state.joinableJourneys);        
 	return (
 		<div>
