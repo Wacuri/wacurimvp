@@ -41,13 +41,18 @@ class CountdownMessage extends Component {
 
 
   render() {
-    var totalTimeInMinutes = this.state.total/1000/60
+      var totalTimeInMinutes = this.state.total/1000/60;
       if(totalTimeInMinutes > 0 && totalTimeInMinutes < 5) {
           var tmessage = ' Starts in: ';
       var message = `${this.state.minutes > 0 ? this.state.minutes + "min" : ""} ${this.state.seconds}sec`
       } else {
+          if (totalTimeInMinutes > 0) {
           var tmessage = ' Starts at: ';
-        var message =  moment(this.props.endTime).format('LT');
+              var message =  moment(this.props.endTime).format('LT');
+          } else {
+              var tmessage = '';
+              var message =  "";
+          }
     }
 
 //    if (totalTimeInMinutes < 5) {

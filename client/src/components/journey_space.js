@@ -214,96 +214,44 @@ class Waiting extends Component {
   }
 }
 
-class JourneyStateProgressBar extends Component {
 
-  constructor(props) {
-    super(props);
-    props.timer.on('tick', (current) => {
-      this.setState({
-        timerValue: current
-      });
-    });
-    this.state = {
-      timerValue: 0,
-      total: props.timer.total,
-    }
-  }
-
-  componentWillReceiveProps(newProps) {
-    newProps.timer.on('tick', (current) => {
-      this.setState({
-        timerValue: current
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    this.props.timer.clear();
-  }
-
-  formatState(state: number) {
-    switch(this.props.journey.state) {
-      case 'joined':
-      case 'created':
-        return 'Waiting';
-      case 'started':
-      case 'paused':
-        return 'The Journey';
-      case 'ended':
-        return 'The Sharing';
-      case 'failed':
-        return 'No one joined';
-      default:
-        return 'Waiting';
-    }
-  }
-
-  render() {
-    return (
-      <div className='journeyspace-progress pl-3 pr-3'>
-        <small>Current Section</small>
-        <progress max={this.props.timer.total} value={this.state.timerValue} style={{width: '100%'}}></progress>
-        <div style={{display: 'flex'}}>
-          <p>{this.formatState(this.props.journey.state)}</p>
-          <p style={{marginLeft: 'auto'}}>-{this.props.timer.displayTime()}</p>
-        </div>
-      </div>
-    )
-  }
-}
-
-// I need to create a new react component here. Possibly this would be releasable on its own.
-// The basic idea we need here is a changing piece of text, with bars beneath it to indicate the state.
-// Possibly I should develop this component separately, completely outside this project.
-// 
- // To be done: We need to define an additional state to represent "the completion of the journey"
-// We need to implement the state indicator bar as a series of colors. This should be
-// easy with background color and CSS
+const JOINED = 'joined';
+const CREATED = 'created';
+const FAILED = 'failed';
+const STARTED = 'started';
+const PAUSED = 'paused';
+const COMPLETED = 'completed';
+const ENDED = 'ended';
+const PLAYING = 'playing';
+const INTERNAL_ERROR = 'error';
 
 
-
-
-
+// This is actually very important, this defines our
+// true internal logical states and relates them to the phase indicator,
+// or the public state.
+// This function in fact only applies to "playerState".  The "state" on the Journey, confusingly, is something different.
 function stepIndexAux(s) {
     switch(s) {
-      case 'joined':
-      case 'created':
+      case JOINED:
+      case CREATED:
         return 0;
-      case 'failed':
+      case FAILED:
 	return 3;
-      case 'started':
-      case 'paused':
+      case STARTED:
+      case PAUSED:
         return 1;
-      case 'completed':
+      case COMPLETED:
 	return 2;
-      case 'ended':
+      case ENDED:
 	return 2;
-    case 'playing':
+    case PLAYING:
 	return 1;
-    case 'paused':
+    case PAUSED:
 	return 1;
-      default:
+    default: {
+        console.log("INTERNAL ERROR, stepIndexAux got:",s);
         return 2;
+    }
     }
 }
 
@@ -327,7 +275,7 @@ class JourneyPhases extends Component {
   }
 
    get stepIndex() {
-       return stepIndexAux(this.props.journey.state);
+       return stepIndexAux(this.props.playerState);
    }
     // Note: setting the backgroudnColor below to orange does not work, but at least gives us a
     // gray that can be seen against the black background
@@ -359,7 +307,7 @@ class PhaseIndicator extends Component {
     super(props);
   }
     get stepIndex() {
-       return stepIndexAux(this.props.journey.state);	
+       return stepIndexAux(this.props.playerState);	
     }
     // Note: setting the backgroudnColor below to orange does not work, but at least gives us a
     // gray that can be seen against the black background
@@ -1167,7 +1115,7 @@ class NoVideoSquare extends React.Component {
       const localkey = this.props.localkey;
       const vid = this.props.vidid;
       const feedbackNotOrientation =
-	    this.props.playerState == 'ended' || this.props.playerState == 'completed';
+	    this.props.playerState == ENDED || this.props.playerState == COMPLETED;
       const msg = (feedbackNotOrientation) ? "Leave and Give Feedback" : "Orientation"; 
       const topmsg = (feedbackNotOrientation) ? "When all sharing is done..." : "Waiting...";
       const topmsgvis = (feedbackNotOrientation) ? "visible" : "hidden";       
@@ -1232,7 +1180,7 @@ export class JourneySpace extends Component {
       streams: [],
       publisherId: '',
       session: null,
-      playerState: 'waiting',
+      playerState: JOINED,
       playerProgress: 0,
       playerProgressMS: 0,
       journeyDuration: 0,
@@ -1252,7 +1200,7 @@ export class JourneySpace extends Component {
     componentDidMount() {
 	state.audioTag.addEventListener('ended', (event) => {
 	    this.setState({
-		playerState: 'ended'
+		playerState: ENDED
 	    });
 
 	    console.log("DOING /completed fetch");
@@ -1356,7 +1304,7 @@ export class JourneySpace extends Component {
 			    });
 		    }
 		    this.setState({
-			playerState: 'playing',
+			playerState: PLAYING,
 			// we also want to mute the microphone here!
 			microphoneMuted: true,
 		    });
@@ -1370,7 +1318,7 @@ export class JourneySpace extends Component {
 		    }
 		    state.audioTag.pause();
 		    this.setState({
-			playerState: 'paused'
+			playerState: PAUSED
 		    });
 		});
 
@@ -1383,13 +1331,13 @@ export class JourneySpace extends Component {
 		    });
 		    console.log(" Got signal:journeyUpdated ", event, journey);
 
-		    if (state.journey.state != 'completed') {
+		    if (state.journey.state != COMPLETED) {
 			// if we are in completed state, then audio may be playing the sharing prompt
 			state.audioTag.src = state.journey.journey;
 			state.audioTag.currentTime = 0;
 		    }
 
-		    if (state.journey.state === 'started') {
+		    if (state.journey.state === STARTED) {
 
 			if (this.publisher && this.publisher.state && this.publisher.state.publisher) {
 			    this.publisher.state.publisher.publishAudio(false);
@@ -1403,7 +1351,10 @@ export class JourneySpace extends Component {
 		
 
 		this.sessionHelper.session.on("signal:fail", (event) => {
-		    state.journey.state = 'failed';
+		    state.journey.state = FAILED;
+			this.setState({
+			    playerState: FAILED
+			});
 		});
 
 
@@ -1412,7 +1363,7 @@ export class JourneySpace extends Component {
 		});
 
 		const onAudioCanPlay = (event) => { 
-		    if (state.journey.state === 'started') {
+		    if (state.journey.state === STARTED) {
 			state.audioTag.play();
 			if (!isNaN(state.journey.currentTime)) {
 			    state.audioTag.currentTime = state.journey.currentTime;
@@ -1463,8 +1414,8 @@ export class JourneySpace extends Component {
 
   get journeyStateTimer() {
     switch(state.journey.state) {
-      case 'started':
-      case 'paused':
+      case STARTED:
+      case PAUSED:
         if (!this.playerTimeEmitter) {
           this.playerTimeEmitter = new AudioPlayTickEmitter(state.audioTag);
         }
@@ -1738,10 +1689,24 @@ export class JourneySpace extends Component {
 		 {state.journey.startAt && <span id={"journeyname"} style={{color: 'white'}} >
 		  {this.prepJourneyName(state.journey.name)}</span>
 		 }
-                 { (this.props.isPermanentSpace ||
-		    (!state.journey.startAt && (state.journey.state === 'created' || state.journey.state === 'joined' || state.journey.state === 'completed'))) &&
+                 {
+// This should probably be converted to computing about the playerState
+/*                     (this.props.isPermanentSpace ||
+		    (!state.journey.startAt && (state.journey.state === CREATED || state.journey.state === JOINED || state.journey.state === COMPLETED))) &&
 		   <select onChange={this.onChangeJourney} value={state.journeys&& state.journey.journey}>
-                    <option value={''}>{'Pulldown to select a new Journey'}</option>		   
+                         <option value={''} selected={true}>{'Pulldown to select a new Journey'}</option>		   
+                     {
+		           state.journeys.map(journey => (
+				   <option key={optionkey++} value={journey.filePath}>{journey.name}
+			       <i className='far fa-smile'/>
+			       </option>
+                           ))}
+                     </select>
+*/
+                              (this.props.isPermanentSpace ||
+		    (!state.journey.startAt && (state.journey.state === CREATED || state.journey.state === JOINED || state.journey.state === COMPLETED))) &&
+		   <select onChange={this.onChangeJourney} value={'instruction'}>
+                         <option value={'instruction'} selected={true}>{'Pulldown to select a new Journey'}</option>		   
                      {
 		           state.journeys.map(journey => (
 				   <option key={optionkey++} value={journey.filePath}>{journey.name}
@@ -1751,9 +1716,9 @@ export class JourneySpace extends Component {
                       </select>
 		 }
 
-                 <JourneyPhases journey={state.journey} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
+                 <JourneyPhases playerState={this.state.playerState} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
 		 </div>
-		 <PhaseIndicator journey={state.journey} />	     
+		 <PhaseIndicator playerState={this.state.playerState} />	     
 		 </div>
 	    </div>
 

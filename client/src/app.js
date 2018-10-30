@@ -183,15 +183,6 @@ class JourneyBoard extends Component {
 	  showOrientationModal: false,
           joinableJourneys: []
       }
-      this.interval = setInterval(() => {
-          this.setState({
-              joinableJourneys: 
-              state.joinableJourneys.filter(
-                  journey => 
-                      (Date.parse(journey.startAt) > Date.parse(new Date()))
-              )
-          });
-      }, 1000);
   }
 
     onOrientation = (e) => {
@@ -276,7 +267,17 @@ class JourneyBoard extends Component {
 //	      console.log("journeyer left space done!");
 //	      console.log(state.joinableJourneys);	      	    
         });
-
+          // This only makes sense if we are on the journeyBoard page;
+          // I am not sure how to tell that. If this is mounted, perhaps?
+          this.interval = setInterval(() => {
+              this.setState({
+                  joinableJourneys: 
+                  state.joinableJourneys.filter(
+                      journey => 
+                          (Date.parse(journey.startAt) > Date.parse(new Date()))
+                  )
+              });
+          }, 1000);
       });
 
 
@@ -289,6 +290,11 @@ class JourneyBoard extends Component {
 //              console.log("joinableJourneys setstate over active");
       });
   }
+    
+      // When we are not rendering this component, there is no need to check for expirations.
+      componentWillUnmount() {
+          clearInterval(this.interval);
+      };
 
     render() {
 	// Note, if this key is ever read and treated as a id, then we will have a terrible problem.
