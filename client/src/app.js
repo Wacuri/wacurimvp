@@ -301,14 +301,14 @@ class JourneyBoard extends Component {
 	// I want to remove the warnings I am getting, but this is a dangerous way to do it.
 	// Possibly I should deal with this in a different way.
 	var discriminator = 0;
-//        console.log("joinableJourneys", state.joinableJourneys);
+
         this.state.joinableJourneys = this.state.joinableJourneys.sort( (a,b) => (Date.parse(a.startAt) < Date.parse(b.startAt)));
-//        console.log("sorted", state.joinableJourneys);        
+        
 	return (
 		<div>
 		 {this.state.showOrientationModal &&
-		  <JourneyBoardOrientationModal force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal}>
-		  </JourneyBoardOrientationModal>
+                  //		  <JourneyBoardOrientationModal force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal} />
+		  <INTRO.IntroBig force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal} />                  
 		 }
 		<LTB.JourneyBoardBar history={this.props.history} showLeave={false} showOrientation={true}
 	          onOrientation={this.onOrientation}
@@ -318,13 +318,11 @@ class JourneyBoard extends Component {
                      <div  className="container">
 		          <h1>The CuriousLive JourneyBoard</h1>
 					<p>Welcome to the CuriousLive JourneyBoard "Wake Up Curious" … It's the five-minute mental day spa everybody's talking about.</p>
-					<p>Select a journey to begin whenever you are ready. Wait for others to join, or invite friends!</p>
+					<p>Select a journey to begin whenever you are ready.<br/>Wait for others to join, or invite friends!</p>
                      </div>
                 </div>
       <div className='joinable-journeys'>
                 {state.joinableJourneys.map(journey => {
-//                    console.log("Pair",Date.parse(journey.startAt),Date.parse(new Date()));
-//                    console.log("Boolean",Date.parse(journey.startAt) > Date.parse(new Date()));                    
                     if (Date.parse(journey.startAt) > Date.parse(new Date())) {
                         return ( <JoinableJourneyCard key={journey._id+"_"+discriminator++}
                                  journey={journey} audioTag={this.audioTag}/>)
@@ -434,9 +432,9 @@ class IntroWrapper extends Component {
   render() {
     if (this.state.showIntro) {
       return (
-        <Intro onClose={this.onClose} {...this.props}>
+        <INTRO.IntroBig onClose={this.onClose} {...this.props}>
           <this.props.component {...this.props}/>
-        </Intro>
+        </INTRO.IntroBig>
       )
     } else {
       return <this.props.component {...this.props}/>

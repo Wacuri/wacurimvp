@@ -143,16 +143,16 @@ class AudioPlayTickEmitter extends AbstractTimerEmitter {
   }
 }
 
-const FlagControl = ({currentUserHasFlaggedStream, stream, onFlag, children}) => {
-  return (
-    <button 
-      className='btn-flag-session'
-      disabled={currentUserHasFlaggedStream}
-      onClick={(e) => { e.preventDefault(); onFlag(stream); }}>
-      {children}  
-    </button>
-  )
-}
+// const FlagControl = ({currentUserHasFlaggedStream, stream, onFlag, children}) => {
+//   return (
+//     <button 
+//       className='btn-flag-session'
+//       disabled={currentUserHasFlaggedStream}
+//       onClick={(e) => { e.preventDefault(); onFlag(stream); }}>
+//       {children}  
+//     </button>
+//   )
+// }
 class Waiting extends Component {
   constructor(props) {
     super(props);
@@ -218,6 +218,7 @@ class Waiting extends Component {
 const JOINED = 'joined';
 const CREATED = 'created';
 const FAILED = 'failed';
+const EXPIRED = 'expired';
 const STARTED = 'started';
 const PAUSED = 'paused';
 const COMPLETED = 'completed';
@@ -236,6 +237,7 @@ function stepIndexAux(s) {
       case CREATED:
         return 0;
       case FAILED:
+      case EXPIRED:
 	return 3;
       case STARTED:
       case PAUSED:
@@ -259,13 +261,30 @@ class JourneyPhases extends Component {
 
   constructor(props) {
     super(props);
-      props.timer.on('tick', (current) => {
-      this.setState({
-        timerValue: current
-      });
-    });
+      // props.timer.on('tick', (current) => {
+      // this.setState({
+      //   timerValue: current
+      // });
+      // });
+      // props.playTimer.on('tick', (current) => {
+      // this.setState({
+      //   playTimerValue: current
+      // });
+      // });
   }
 
+    componentWillMount() {
+        this.props.timer.on('tick', (current) => {
+            this.setState({
+                timerValue: current
+            });
+        });
+    };
+                     
+    componentWillUnmount() {
+
+    };
+    
   componentWillReceiveProps(newProps) {
     newProps.timer.on('tick', (current) => {
       this.setState({
@@ -280,10 +299,10 @@ class JourneyPhases extends Component {
     // Note: setting the backgroudnColor below to orange does not work, but at least gives us a
     // gray that can be seen against the black background
    
-  render() {
-      const {journey} = this.props;
+    render() {
+        const {journey} = this.props;
       const NumPhases = 4;
-      const Messages = ["Breathe to Prepare","Journey in Progess","Share your Insights","Provide Feedback"];
+        const Messages = ["Breathe to Prepare","Journey in Progess","Share your Insights","Provide Feedback"];
     return (
 	    <div ref={el => {this.container = el}} className={`journey-timeline step-${this.stepIndex.toString()}`}>
 	    <div>
@@ -316,7 +335,7 @@ class PhaseIndicator extends Component {
       const {journey} = this.props;
       const NumPhases = 4;
       const Messages = ["Breathe and center yourself","Journey in Progess","Share your Insights","Provide Feedback"];
-      console.log("PHASE INDICATOR RENDERED");
+//      console.log("PHASE INDICATOR RENDERED");
     return (
 	    <div id={'phase-bar0'}>
 	    <div className={ `phase-bar bar-${this.stepIndex == 0 ? 'white' : 'green'}`}>
@@ -803,58 +822,58 @@ class OrientationModal extends Component {
   render() {
       function slideRenderer(params) {
 	  console.log("params", params);
-  const { index, key } = params;
+          const { index, key } = params;
 
-  switch (mod(index, 3)) {
-    case 0:
-      return (
-	    <div>
-<p className='message-heading'>1.  Welcome to CuriousLive ...<br/>
-	      A five-minute guided journey - plus sharing - with others.</p>
-	      <p/>	      
-<p>
-The journey will begin when the timer above elapses and you hear the cime.
-</p>
-<p>
-Breathe slowly and deeply and ajust your posture to be comfortable.
-	    </p>
-	      </div>
-      );
+          switch (mod(index, 3)) {
+          case 0:
+              return (
+	              <div>
+                      <p className='message-heading'>1.  Welcome to CuriousLive ...<br/>
+	              A five-minute guided journey - plus sharing - with others.</p>
+	              <p/>	      
+                      <p>
+                      The journey will begin when the timer above elapses and you hear the cime.
+                      </p>
+                      <p>
+                      Breathe slowly and deeply and ajust your posture to be comfortable.
+	              </p>
+	              </div>
+              );
 
-    case 1:
-      return (
-    <div>	    
-	      <p className='message-heading'>2.  Next comes the Journey...</p>
-	      <p/>	      
-<p>
-Your microphone will be muted.
-</p>
-<p>
-Some people like to leave their cameras on during the journey to increase the feeling of a shared experience. It is up to you.
-	    </p>
-	    </div>
-	      
-      );
+          case 1:
+              return (
+                      <div>	    
+	              <p className='message-heading'>2.  Next comes the Journey...</p>
+	              <p/>	      
+                      <p>
+                      Your microphone will be muted.
+                      </p>
+                      <p>
+                      Some people like to leave their cameras on during the journey to increase the feeling of a shared experience. It is up to you.
+	              </p>
+	              </div>
+	              
+              );
 
-    case 2:
-      return (
-	    <div>
-	      <p className='message-heading'>3.  After the Journey comes the Sharing and Connecting.</p>
-	      <p/>
-<p>
-	    After the journey you will have the opportunity to share your insights.
-	    Each person takes 1 or 2 minutes.
-</p>
-	    <p>
-	    When others are sharing, please listen deeply, and in turn they will listen more deeply to you.
-	    </p>
-	    </div>
-      );
+          case 2:
+              return (
+	              <div>
+	              <p className='message-heading'>3.  After the Journey comes the Sharing and Connecting.</p>
+	              <p/>
+                      <p>
+	              After the journey you will have the opportunity to share your insights.
+	              Each person takes 1 or 2 minutes.
+                      </p>
+	              <p>
+	              When others are sharing, please listen deeply, and in turn they will listen more deeply to you.
+	              </p>
+	              </div>
+              );
 
-    default:
-      return null;
-  }
-}
+          default:
+              return null;
+          }
+      }
 
     const index = this.state.index;
       return (
@@ -884,7 +903,7 @@ Some people like to leave their cameras on during the journey to increase the fe
         slideRenderer={slideRenderer}
 	className='swipable-message'
         />	    
-	    </div>
+// 	    </div>
 	    <button  onClick={this.left} style={{visibility: `${(index == 0) ? 'hidden' : 'visible'}`, position: 'absolute', left: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
 	    	    <i className="fa fa-caret-left fa-3x"></i>
 	</button>
@@ -1095,7 +1114,8 @@ class UnfilledVideoSquare extends React.Component {
                                 width: '100%',
                                 height: '100%',
                               }}
-                            />
+              />
+              {/*
                           <div className='journeyspace-stream-controls'>
               <FlagControl currentUserHasFlaggedStream={hasFlagged}
 	          onFlag={this.onFlag} stream={stream.id}>
@@ -1103,6 +1123,7 @@ class UnfilledVideoSquare extends React.Component {
 	          className='fa fa-flag'></i>
                               </FlagControl>
                             </div>
+               */}
                         </div>
 		    ); }	  
 }
@@ -1188,13 +1209,12 @@ export class JourneySpace extends Component {
 	showInviteModal: false,
 	showOrientationModal: false,
 	showFeedbackModal: false,
-	  showIntro: true,
+//	  showIntro: true,
 	  permanentRoom: false, // what is publisher?
 	  journey: null,
       }
       this.publisher = {};
       this.audioTag = {};
-      console.log('PROPS',props);
   }
 
     componentDidMount() {
@@ -1232,13 +1252,6 @@ export class JourneySpace extends Component {
 
 		state.audioTag.src = state.journey.journey;
 
-		console.log("JOURNEY INFO",state.journey);
-		console.log("ROOM",this.props.match.params.room);		
-		if (state.journey.name) {
-		    console.log("JOURNEY BOARD ROOM");
-		} else {
-		    console.log("PERMANENT ROOM");		    
-		}
 		state.audioTag.currentTime = 0;
 
 		this.sessionHelper = createSession({
@@ -1296,7 +1309,7 @@ export class JourneySpace extends Component {
 		    if (playPromise !== undefined) {
 			playPromise
 			    .then(() => {
-				console.log('audio promise resolve');
+//				console.log('audio promise resolve');
 			    })
 			// Safety first!
 			    .catch(e => {
@@ -1309,7 +1322,7 @@ export class JourneySpace extends Component {
 			microphoneMuted: true,
 		    });
 		    // In theory, this could be the place to mute microphones
-		    console.log("MUTE HERE!!!!!!");
+//		    console.log("MUTE HERE!!!!!!");
 		});
 
 		this.sessionHelper.session.on("signal:pauseJourney", (event) => {
@@ -1386,6 +1399,14 @@ export class JourneySpace extends Component {
     if (this.sessionHelper) {
       this.sessionHelper.disconnect();
     }
+      if (this.playerTimeEmitter) {
+          this.playerTimeEmitter.clear();
+          this.playerTimeEmitter = null;          
+      }
+      if (this.secondsEmitter) {
+          this.secondsEmitter.clear();
+          this.secondsEmitter = null;
+      }
   }
 
   refreshSession = () => {
@@ -1412,20 +1433,30 @@ export class JourneySpace extends Component {
     return currentParticipant && state.journey.participants.indexOf(currentParticipant) === 0
   }
 
-  get journeyStateTimer() {
-    switch(state.journey.state) {
-      case STARTED:
-      case PAUSED:
-        if (!this.playerTimeEmitter) {
-          this.playerTimeEmitter = new AudioPlayTickEmitter(state.audioTag);
+    get journeyStateTimer() {
+        console.log("JourneyState XXX",state.journey.state);
+        switch(this.state.playerState) {
+        case JOINED:
+        case CREATED:
+            if (!this.secondsEmitter) {
+                this.secondsEmitter = new SecondsTimerEmitter(new Date(state.journey.createdAt), new Date(state.journey.startAt));
+            }
+            return this.secondsEmitter;
+        case FAILED:
+        case EXPIRED:
+        case STARTED:            
+        case PLAYING:
+        case PAUSED:            
+        case ENDED:
+        case COMPLETED:
+            if (!this.playerTimeEmitter) {
+                this.playerTimeEmitter = new AudioPlayTickEmitter(state.audioTag);
+            }
+            return this.playerTimeEmitter;
+        default:
+            console.log("XXXX",this.state.playerState);
+            return null;
         }
-        return this.playerTimeEmitter;
-      default:
-        if (!this.secondsEmitter) {
-          this.secondsEmitter = new SecondsTimerEmitter(new Date(state.journey.createdAt), new Date(state.journey.startAt));
-        }
-        return this.secondsEmitter;
-    }
   }
 
   onInitPublisher = () => {
@@ -1663,16 +1694,12 @@ export class JourneySpace extends Component {
         // Note: I remove single quotes from the journey name here, I am not sure why this
         // is required, but it is.
         var url = (state.journey && state.journey.name) ? 'url(' + urlprefix + "journeyBackgrounds/" +  encodeURIComponent(state.journey.name.replace('\'','')) +urlsuffix + ')' : "none";
-        if (state.journey && state.journey.name) {
-            console.log("YYYY" + url);
-        }
 	return (
 		<div className='journeyspace'
             id='journeyspace_id'
             style={{position: 'relative'}}
                 >
 
-	    {/*          <div className='journeyspace-content flexiblerow'> */}
 		{this.state.session && /* AAA */
                  <div className='journeyspace-content' >		 
 
@@ -1690,19 +1717,6 @@ export class JourneySpace extends Component {
 		  {this.prepJourneyName(state.journey.name)}</span>
 		 }
                  {
-// This should probably be converted to computing about the playerState
-/*                     (this.props.isPermanentSpace ||
-		    (!state.journey.startAt && (state.journey.state === CREATED || state.journey.state === JOINED || state.journey.state === COMPLETED))) &&
-		   <select onChange={this.onChangeJourney} value={state.journeys&& state.journey.journey}>
-                         <option value={''} selected={true}>{'Pulldown to select a new Journey'}</option>		   
-                     {
-		           state.journeys.map(journey => (
-				   <option key={optionkey++} value={journey.filePath}>{journey.name}
-			       <i className='far fa-smile'/>
-			       </option>
-                           ))}
-                     </select>
-*/
                               (this.props.isPermanentSpace ||
 		    (!state.journey.startAt && (state.journey.state === CREATED || state.journey.state === JOINED || state.journey.state === COMPLETED))) &&
 		   <select onChange={this.onChangeJourney} value={'instruction'}>
@@ -1716,7 +1730,7 @@ export class JourneySpace extends Component {
                       </select>
 		 }
 
-                 <JourneyPhases playerState={this.state.playerState} timer={this.journeyStateTimer} seekTo={this.seekTo}/>
+                 <JourneyPhases playerState={this.state.playerState} timer={this.journeyStateTimer}  seekTo={this.seekTo}/>
 		 </div>
 		 <PhaseIndicator playerState={this.state.playerState} />	     
 		 </div>
@@ -1831,9 +1845,6 @@ export class JourneySpace extends Component {
 		 </UnfilledVideoSquare>
 
 		 
-		 {/*
-		 <div style={{display: 'flex', flexDirection: 'row', visibility: `${(this.state.showOrientationModal) ? "hidden" : "visible"}`}}>
-		  */}
 		 <UnfilledVideoSquare vidid='video-square3'
 		 additionalClass={'third-box'}		 
 		 limit={2}
@@ -1858,9 +1869,6 @@ export class JourneySpace extends Component {
 		 ></NoVideoSquare>
 		 </div>
 
-		 {/*
-		 </div>
-		  */}
 		 {/*
 		 </div>
 		  */}

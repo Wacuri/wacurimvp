@@ -11773,6 +11773,31 @@ h2 {
     font-size: 1.0em;
     background-color: #4bb058; }
 
+.bigIntro {
+  position: absolute;
+  max-width: 100%;
+  min-height: 100%;
+  background-color: #4aaadd;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  z-index: 1003; }
+  .bigIntro .swipable-message {
+    margin: 15%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; }
+    .bigIntro .swipable-message .message-heading {
+      font-size: 2.0em;
+      color: black;
+      font-weight: 700;
+      font-family: 'Playfair Display'; }
+    .bigIntro .swipable-message p {
+      font-size: 1.6em;
+      font-weight: 200;
+      color: white; }
+
 .swipable-message {
   margin: 15%;
   height: 100%;
@@ -12032,6 +12057,49 @@ textarea {
   z-index: 2;
   cursor: pointer; }
 
+/* New CSS --- This is mainly to make the journeyboard banner look elegant */
+.main-header.clearfix img {
+  width: 100%; }
+
+.main-content > .container {
+  max-width: 920px;
+  margin: 0 auto;
+  background: #fff; }
+
+.main-content {
+  background: #0e0e0e; }
+
+.main-banner img {
+  width: 100%; }
+
+.main-banner {
+  padding: 30px 0px;
+  background: #000;
+  background-position: right;
+  background-size: 60%;
+  background-repeat: no-repeat; }
+  .main-banner h1 {
+    font-weight: 700; }
+
+.main-banner h1, .main-banner p {
+  color: #fff; }
+
+.main-banner > .container {
+  max-width: 600px;
+  margin: 0 auto; }
+
+h1 {
+  margin: 0;
+  font-size: 60px;
+  line-height: 0.9em;
+  padding-bottom: 11px;
+  letter-spacing: -0.03em;
+  padding-bottom: 30px; }
+
+.main-banner p {
+  max-width: 380px;
+  padding-bottom: 14px; }
+
 @media screen and (orientation: portrait) {
   #bigsquares {
     flex-direction: column;
@@ -12152,24 +12220,47 @@ textarea {
 @media only screen and (min-device-width: 375px) and (max-device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape) {
   #bigsquares {
     flex-direction: row;
-    height: calc(88vh); }
+    height: calc(84vh); }
   #secondsquare {
-    height: calc(88vh);
-    width: calc(88vh); }
+    height: calc(84vh);
+    width: calc(84vh); }
   #firstsquare {
-    height: calc(88vh);
-    width: calc(88vh); }
+    height: calc(84vh);
+    width: calc(84vh); }
   #phase-bar0 {
-    width: calc(44vh); }
+    width: calc(42vh); }
   .logobar_and_titlebar {
-    min-height: calc(12vh); }
+    min-height: calc(16vh); }
   .logobar {
-    height: calc(6vh); }
+    height: calc(8vh); }
   #titlebar {
-    min-height: calc(6vh);
+    min-height: calc(8vh);
     font-size: 1.7vw; }
   body {
-    font-size: 1.8vh; } }
+    font-size: 1.8vh; }
+  .main-banner {
+    padding-bottom: 10px;
+    padding-top: 10px; }
+    .main-banner p {
+      font-size: 4vh;
+      font-weight: 200;
+      margin-left: 30px;
+      padding-bottom: 7px; }
+    .main-banner h1 {
+      font-size: 45px;
+      margin-left: 30px; }
+  .jblogobar {
+    height: calc(10vh);
+    font-size: 4vh; }
+    .jblogobar .logo {
+      height: 100%;
+      display: block;
+      margin-left: 110px;
+      margin-right: auto;
+      margin-top: 2px;
+      margin-bottom: 2px; }
+    .jblogobar .header-orientation-button {
+      font-size: 5vh; } }
 
 @media screen and (orientation: portrait) {
   .banner-text {
@@ -12254,49 +12345,6 @@ textarea {
           color: black; }
         .joinable-journey-card .content .journey-vacant-spots li {
           margin-left: 4px; } }
-
-/* New CSS --- This is mainly to make the journeyboard banner look elegant */
-.main-header.clearfix img {
-  width: 100%; }
-
-.main-content > .container {
-  max-width: 920px;
-  margin: 0 auto;
-  background: #fff; }
-
-.main-content {
-  background: #0e0e0e; }
-
-.main-banner img {
-  width: 100%; }
-
-.main-banner {
-  padding: 30px 0px;
-  background: #000;
-  background-position: right;
-  background-size: 60%;
-  background-repeat: no-repeat; }
-  .main-banner h1 {
-    font-weight: 700; }
-
-.main-banner h1, .main-banner p {
-  color: #fff; }
-
-.main-banner > .container {
-  max-width: 600px;
-  margin: 0 auto; }
-
-h1 {
-  margin: 0;
-  font-size: 60px;
-  line-height: 0.9em;
-  padding-bottom: 11px;
-  letter-spacing: -0.03em;
-  padding-bottom: 30px; }
-
-.main-banner p {
-  max-width: 380px;
-  padding-bottom: 14px; }
 
 @media screen and (max-width: 680px) {
   .main-banner > .container {

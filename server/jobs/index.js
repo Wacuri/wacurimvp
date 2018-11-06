@@ -73,6 +73,8 @@ agenda.define('clear expired journeys', async function(job, done) {
     done(e);
   }
 });
+
+
 // This function exists only for debugging purposes.
 agenda.define('clear journeys', async function(job, done) {
     console.log('CLEAR JOURNEY');
@@ -137,6 +139,22 @@ agenda.define('start journey', async function(job, done) {
     }
 });
 
+// how do we know that each restart only creates one of these...
+agenda.define('remove current create journey spaces', async function(job, done) {
+    console.log("CLEAR EXPRIED JOURNEYS CALLED");        
+    try {
+        agenda.cancel({name: 'create journey space'}, (err, numRemoved) => {
+            console.log("num 'create journey space jobs canceled'",numRemoved);
+        });
+        
+    done();
+  } catch(e) {
+    console.log(e);
+    done(e);
+  }
+});
+
+
 // This is the filling algorithm. We have to pass data to the jobs.
 // Our basic algorithm will be to have queue length QL and
 // a queue duration QD. For now, QD = QL * 1 minute.
@@ -151,6 +169,16 @@ const QD = 10; // this is measured in minutes
 
 agenda.on('ready', function() {
     console.log("ON READY CALLED");
+    try {    
+        agenda.cancel({name: 'create journey space'}, (err, numRemoved) => {
+            console.log("num 'create journey space jobs canceled'",numRemoved);
+        });
+    } catch(e) {
+        console.log(e);
+    }
+    
+    //    agenda.schedule('2 seconds', 'remove current create journey spaces');
+    
     var separation_sec = (QD * 60) / QL;
 
     // This is only used for debugging, in situations which may occur
