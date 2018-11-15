@@ -614,8 +614,11 @@ h2 {
     justify-content: center;
     align-items: center;
     height: 0px;
-    flex-flow: row wrap;    
+    flex-flow: row nowrap;     
     z-index: 1000;
+    .fa-stack {
+        vertical-align: middle;
+    }
 }
 
 .bar-white {
@@ -1140,6 +1143,114 @@ h1 {
     padding-bottom: 14px;
 }
 
+.journeyspace-invite {
+    font-size: 3vh;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    background-color: rgba(89, 153, 222, 1.0);
+    .invite-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        .invite-message-square {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            div {
+                text-align: center;
+            }
+            .perm-room-button {
+                margin-top: 2vh;
+            }
+        }
+        .invite-control-square {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            #personal-link-url {
+                color: black;
+                overflow: scroll;
+            }
+            .sharing-block {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            .status-message {
+                font-size: 0.5em;
+                border-radius: 15px;
+                padding: 2px;
+                background-color: gold;
+                color: black;
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+    }
+}
+
+
+// @media screen and (orientation: portrait){
+//     #bigsquares {
+// 	flex-direction: column;
+// 	height: calc(92vh);
+// 	justify-content: center;
+// 	align-content: center;
+//     }
+//     .journeyspace-invite {
+//         .invite-container {
+// 	    flex-direction: column;
+//             .invite-message-square {
+// 	        height: calc(46vh);
+// 	        width: calc(46vh);
+//                 max-width: calc(46vh);
+//             }
+//             .invite-control-square {
+// 	        height: calc(46vh);
+// 	        width: calc(46vh);
+//                 max-width: calc(46vh);
+//                 #personal-link-url {
+//                     color: black;
+//                     overflow: visible;
+//                     text-overflow: ellipsis;
+//                     width: calc(30vh)!important;
+//                     max-width: calc(30vh)!important;
+//                 }
+//                 .sharing-block {
+//                     display: flex;
+//                     flex-direction: column;
+//                     align-items: center;
+//                     justify-content: center;
+//                 }
+//                 .status-message {
+//                     font-size: 0.5em;
+//                     border-radius: 15px;
+//                     padding: 2px;
+//                     background-color: gold;
+//                     color: black;
+//                     position: absolute;
+//                     top: 100%;
+//                     left: 50%;
+//                     transform: translate(-50%, -50%);
+//                 }
+//             }
+//         }
+//     }
+// }
+
 
 @media screen and (orientation: portrait){
     #bigsquares {
@@ -1148,12 +1259,50 @@ h1 {
 	justify-content: center;
 	align-content: center;
     }
+    .journeyspace-invite {
+        .invite-container {
+	    flex-direction: column;
+            .invite-message-square {
+	        height: calc(46vh);
+	        width: calc(46vh);
+                max-width: calc(46vh);
+            }
+            .invite-control-square {
+	        height: calc(46vh);
+	        width: calc(46vh);
+                max-width: calc(                
+                #personal-link-url {
+                    color: black;
+                    overflow: scroll;
+                    width: calc(20vh)!important;
+                    max-width: calc(20vh)!important;
+                }
+                .sharing-block {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .status-message {
+                    font-size: 0.5em;
+                    border-radius: 15px;
+                    padding: 2px;
+                    background-color: gold;
+                    color: black;
+                    position: absolute;
+                    top: 100%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+            }
+        }
+    }
     // TODO: since these are the same, this is better done with a class than a ID
-    #secondsquare {
+    #secondsquare,.invite-control-square {
 	height: calc(46vh);
 	width: calc(46vh);
     }
-    #firstsquare {
+    #firstsquare,.invite-message-square {
 	height: calc(46vh);
 	width: calc(46vh);	
     }
@@ -1205,6 +1354,7 @@ h1 {
     // the "same" size inside a larger circle.
     .play-button {
         width: 7vw;
+        height: 7vw;        
         position: absolute;
         top: 100%;
         left: 50%;
@@ -1228,12 +1378,55 @@ h1 {
 
         }
     }
+
+
+
 }
 
 @media screen and (orientation: landscape){
     #bigsquares {
 	flex-direction: row;
 	height: calc(88vh);
+    }
+    .journeyspace-invite {
+        .invite-container {
+	    flex-direction: row;
+            .invite-message-square {
+	        height: calc(50vw);
+	        width: calc(50vw);
+                max-width: calc(50vw);                                
+            }
+            .invite-control-square {
+	        height: calc(50vw);
+	        width: calc(50vw);
+                max-width: calc(50vw);
+                #personal-link-url {
+                    font-size: 0.75em;
+                    color: black;
+                    /* Required for text-overflow to do anything */
+                    overflow: scroll!important;
+                    overflow-y: scroll!important;                    
+                    max-width: calc(40vw)!important;
+                }
+                .sharing-block {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .status-message {
+                    font-size: 0.5em;
+                    border-radius: 15px;
+                    padding: 2px;
+                    background-color: gold;
+                    color: black;
+                    position: absolute;
+                    top: 100%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+            }
+        }
     }
     #secondsquare {
 	height: calc(50vw);

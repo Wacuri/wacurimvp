@@ -452,33 +452,6 @@ class AudioButton extends Component {
     this.toggleMicrophone = this.toggleMicrophone.bind(this);
   }
 
-    // NOTE: This seems like a good idea, and it causes no problem on Chrome,
-    // but it makes a complete failure on Safari, so I am giving up this feature.
-    
-  //   componentWillReceiveProps(nextProps) {
-  // 	console.log("WillReceiveProps called");
-  // 	const {publisher} = nextProps;
-
-  // 	console.log("WillReceiveProps called",publisher);	
-  // 	if (publisher && publisher.state && publisher.state.publisher) {
-
-  // 	    // WARNING: Commneting this out is partially working --- it is controlling things in a one-way direction.
-  // 	    // the active drop down on the video image is not correctly tied to this on Safari.
-  // 	    // Rob believes this is cauising a bug on Safari...
-  // 	    // Note that there is a warning on the log in Chrome about an "unmounted componnets".
-  //     publisher.state.publisher.on('audioLevelUpdated', (event) => {
-  //       if (event.audioLevel === 0) {
-  //         this.setState({
-  //           publishing: false
-  //         });
-  //       } else {
-  //         this.setState({
-  //           publishing: true
-  //         });
-  //       }
-  //     });
-  //   }
-  // }
     componentDidUpdate(prevProps) {
   // Typical usage (don't forget to compare props):
   if (this.props.userID !== prevProps.userID) {
@@ -677,8 +650,6 @@ class PauseButton extends Component {
   }
 }
 
-
-
 class SharePrompt extends Component {
 
   render() {
@@ -692,14 +663,24 @@ class SharePrompt extends Component {
 }
 
 class InviteModal extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      journeySpaceName: '',
-      error: false
+        journeySpaceName: '',
+        linkCopied: false,
+        error: false
     }
   }
+
+    updateLink = (url) => {
+      document.getElementById("personal-link-url").value = url;
+
+      var span = document.getElementById("personal-link-url");
+      while( span.firstChild ) {
+        span.removeChild( span.firstChild );
+      }
+        span.appendChild( document.createTextNode(url ));
+    }
 
     onChange = (e) => {
     e.preventDefault();	
@@ -707,7 +688,13 @@ class InviteModal extends Component {
       journeySpaceName: e.target.value,
       error: this.state.error && e.target.value != ''
     });
-	e.stopPropagation();	
+
+      const name = this.state.journeySpaceName;
+      const urlFriendlyName = name.replace(/[^\w]/g, '-').toLowerCase();
+      const url = `${window.location.protocol}//${window.location.host}/${urlFriendlyName}`;
+      this.updateLink(url);
+
+      e.stopPropagation();	
   }
 
   onCopy = (e) => {
@@ -723,16 +710,42 @@ class InviteModal extends Component {
       const name = this.state.journeySpaceName;
       const urlFriendlyName = name.replace(/[^\w]/g, '-').toLowerCase();
       const url = `${window.location.protocol}//${window.location.host}/${urlFriendlyName}`;
-      const success = this._copy(url);
+        const success = this._copy(url);
       if (success) {
-        this.props.onComplete(url, name);
-      } else {
+          //        this.props.onComplete(url, name);
         this.setState({
-          error: 'failed to copy url'
+            linkCopied: true
+        });
+      } else {
+          this.setState({
+              linkCopied: false,              
+              error: 'failed to copy url'
         });
       }
     }
   }
+
+    onGoThereNow = (e) => {
+        console.log("onGoThereNow","A");        
+        e.preventDefault();
+        if (this.state.journeySpaceName === '') {
+            this.setState({
+                error: 'please enter a name'
+            });
+        } else {
+            this.setState({
+                error: false
+            });
+            const name = this.state.journeySpaceName;
+            const urlFriendlyName = name.replace(/[^\w]/g, '-').toLowerCase();
+            const url = `${urlFriendlyName}`;
+            // const success = this._copy(url);
+            console.log("onGoThereNow",url);
+            this.props.history.push(url);
+            this.props.onComplete(url,name);            
+        }
+    }
+    
 
   _copy(url) {
     // A <span> contains the text to copy
@@ -765,25 +778,55 @@ class InviteModal extends Component {
     return success;
   }
 
-  render() {
+    componentDidUpdate(prevProps) {
+        const name = this.state.journeySpaceName;
+        const urlFriendlyName = name.replace(/[^\w]/g, '-').toLowerCase();
+        const url = `${window.location.protocol}//${window.location.host}/${urlFriendlyName}`;
+        this.updateLink(url);        
+    }
+
+    // TODO: The x here is two small, it should be removed from here and put in CSS
+    render() {
+//        console.log("function",this.onGoThereNow);
     return (
-      <div style={{width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(89, 153, 222, 0.9)'}} className='journeyspace-invite'>
-        <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px'}}>
-          <i className='fa fa-times' style={{fontSize: '22px', color: 'white'}}/>
-        </a>
-        <div style={{textAlign: 'center', position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '0 20px', minWidth: '90%'}}>
-          <p style={{fontSize: '26px', lineHeight: 0.8, fontFamily: 'Playfair Display, serif', color: 'white'}}>Share your new permanent CuriousLive Space with Friends</p>
-          <input type='text' value={this.state.journeySpaceName} onChange={this.onChange} placeholder='Name Your Space'/>
-          {this.state.error && <p className='text-danger'>{this.state.error}</p>}
-          <p style={{margin: '10px 0 10px 0'}}>Share Using</p>
-          <ul style={{listStyle: 'none', margin: 0, padding: 0}}>
-            <li onClick={this.onCopy} style={{width: '90px', height: '90px', margin: '0 auto', cursor: 'pointer'}}>
-              <i className='fa fa-link' style={{display: 'flex', background: 'white', height: '70px', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', fontSize: '38px'}}/>
-              <p>Copy Link</p>
-            </li>
-          </ul>
-        </div>
-      </div>
+            <div className='journeyspace-invite'>
+              <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px'}}>
+                <i className='fa fa-times' style={{color: 'white'}}/>
+              </a>
+              <div className='invite-container'>
+                <div className='invite-message-square'>
+                  <div>You can name and share a permanent CuriousLive JourneySpace with your Friends</div>
+            <button className={(this.state.journeySpaceName == '') ? 'perm-room-button' : 'perm-room-button-disabled'} onClick={this.onGoThereNow}>
+            {(this.state.journeySpaceName == '') ? 'Enter a Name' : 'Go There Now'}
+ 	        </button>
+                </div>
+            <div className='invite-control-square'>
+            <div>
+              <div>Name your space:</div>
+              <input type='text' value={this.state.journeySpaceName} onChange={this.onChange} placeholder='Name Your Space'/>
+              {this.state.error && <p className='text-danger'>{this.state.error}</p>}
+              <div className='sharing-block'>
+                 <div>Share Using:</div>
+                    <div onClick={this.onCopy} style={{ margin: '0 auto', cursor: 'pointer'}}>
+               <i className='fa fa-link' style={{position: 'relative', display: 'flex', color: 'gray', background: 'white', width: '70px',height: '70px', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', fontSize: '38px'}}>
+              {this.state.linkCopied &&
+               <span className='status-message'>
+             Link&nbsp;Copied
+               </span>
+              }
+               </i>
+              </div>
+              <div style={{position: 'relative'}}>Copy Link
+              </div>
+            </div>
+            </div>
+            {/* this needs to be moved out of flex-box */}
+            <div>Your link:</div>
+            <p id='personal-link-url'> </p>
+            </div>
+            </div>
+            
+            </div>
     )
   }
 }
@@ -1169,25 +1212,16 @@ class Controls extends Component {
     render() {
 	return (
 		<div id='central_control_panel_id' className='centered' style={this.props.visibility}>
-		
-		      <AudioButton publisher={this.props.publisher}
+		  <AudioButton publisher={this.props.publisher}
   		         state={this.props.state}
 		         setMicrophoneMutedState={this.props.setMicrophoneMutedState}
-		/>
-		<PlaceHolderButton publisher={this.props.publisher}/>                
-		<PlayButton style={{color: 'rgb(74,170,221)',
+		  />
+	          <PlaceHolderButton publisher={this.props.publisher}/>
+		  <PlayButton style={{color: 'rgb(74,170,221)',
 				    backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
-	    journey={this.props.journey} player={this.props.player}/>
-		<VideoButton publisher={this.props.publisher}/>
-		{/*
-		      <PauseButton style={{color: 'rgb(74,170,221)',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%', }}
-		          journey={this.props.journey} player={this.props.player}/>			 
-		      <SkipButton style={{color: 'white',backgroundColor: 'rgb(75,176,88)', borderRadius: '50%',  }}
-	                  journey={this.props.journey} playerState={this.props.playerState}
-		          seekTo={this.props.seekTo}
-		      />
-		 */}
-	         </div>
+	            journey={this.props.journey} player={this.props.player}/>
+		  <VideoButton publisher={this.props.publisher}/>
+	        </div>
 	);
     }
     
@@ -1558,34 +1592,52 @@ export class JourneySpace extends Component {
     });
   }
 
-  onCloseShareModal = (e) => {
+    onCloseShareModal = (e) => {
+        console.log("spud closeShareModal");
     e.preventDefault();
     this.setState({
       showInviteModal: false
     });
   }
 
-  onCompleteShare = (url, name) => {
+    onCompleteShare = (url, name) => {
+        console.log("spud complete Share Modal");        
     this.setState({
       showInviteModal: false
     });
     window.location = url + `?journey=${state.journey.name}&name=${name}`;
   }
 
+    // TODO: This is testing, it should be rmeoved...
+    TEST_INVITATION = false;
     onOrientation = (e) => {
 	console.log("onOrientation called");
-    e.preventDefault();
-    this.setState({
-      showOrientationModal: true
-    });
+        e.preventDefault();
+        if (this.TEST_INVITATION) {
+            this.setState({
+                showInviteModal: true
+            });
+        } else {
+            this.setState({
+                showOrientationModal: true
+            });
+        }
+
     e.stopPropagation();	
   }
 
-  onCloseOrientationModal = (e) => {
-    e.preventDefault();
-    this.setState({
-      showOrientationModal: false
-    });
+    onCloseOrientationModal = (e) => {
+        console.log("on close called");
+      e.preventDefault();
+        if (this.TEST_INVITATION) {
+            this.setState({
+                showInviteModal: false
+            });
+        } else {
+            this.setState({
+                showOrientationModal: false
+            });
+        }
   }
 
   onCompleteOrienetation = (url, name) => {
@@ -1874,6 +1926,9 @@ export class JourneySpace extends Component {
 		  */}
 		 </div>
 		 
+          {this.state.showInviteModal &&
+            <InviteModal journey={this.state.session} onComplete={this.onCompleteShare} onClose={this.onCloseShareModal} history={this.props.history} />
+          }
 
 		 
 		 </div>
@@ -1885,9 +1940,6 @@ export class JourneySpace extends Component {
             </div>
           </div>
 		  */}
-          {this.state.showInviteModal &&
-            <InviteModal journey={this.state.session} onComplete={this.onCompleteShare} onClose={this.onCloseShareModal}/>
-          }
 			</div>		 
 		}
 	    

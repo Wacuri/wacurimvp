@@ -11712,8 +11712,10 @@ h2 {
   justify-content: center;
   align-items: center;
   height: 0px;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
   z-index: 1000; }
+  #central_control_panel_id .fa-stack {
+    vertical-align: middle; }
 
 .bar-white {
   background-color: white; }
@@ -12100,16 +12102,95 @@ h1 {
   max-width: 380px;
   padding-bottom: 14px; }
 
+.journeyspace-invite {
+  font-size: 3vh;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background-color: #5999de; }
+  .journeyspace-invite .invite-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color: white; }
+    .journeyspace-invite .invite-container .invite-message-square {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center; }
+      .journeyspace-invite .invite-container .invite-message-square div {
+        text-align: center; }
+      .journeyspace-invite .invite-container .invite-message-square .perm-room-button {
+        margin-top: 2vh; }
+    .journeyspace-invite .invite-container .invite-control-square {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center; }
+      .journeyspace-invite .invite-container .invite-control-square #personal-link-url {
+        color: black;
+        overflow: scroll; }
+      .journeyspace-invite .invite-container .invite-control-square .sharing-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; }
+      .journeyspace-invite .invite-container .invite-control-square .status-message {
+        font-size: 0.5em;
+        border-radius: 15px;
+        padding: 2px;
+        background-color: gold;
+        color: black;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%); }
+
 @media screen and (orientation: portrait) {
   #bigsquares {
     flex-direction: column;
     height: calc(92vh);
     justify-content: center;
     align-content: center; }
-  #secondsquare {
+  .journeyspace-invite .invite-container {
+    flex-direction: column; }
+    .journeyspace-invite .invite-container .invite-message-square {
+      height: calc(46vh);
+      width: calc(46vh);
+      max-width: calc(46vh); }
+    .journeyspace-invite .invite-container .invite-control-square {
+      height: calc(46vh);
+      width: calc(46vh);
+      max-width: calc(                 #personal-link-url);
+        max-width-color: black;
+        max-width-overflow: scroll;
+        max-width-width: calc(20vh) !important;
+        max-width-max-width: calc(20vh) !important; }
+      .journeyspace-invite .invite-container .invite-control-square .sharing-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; }
+      .journeyspace-invite .invite-container .invite-control-square .status-message {
+        font-size: 0.5em;
+        border-radius: 15px;
+        padding: 2px;
+        background-color: gold;
+        color: black;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%); }
+  #secondsquare, .invite-control-square {
     height: calc(46vh);
     width: calc(46vh); }
-  #firstsquare {
+  #firstsquare, .invite-message-square {
     height: calc(46vh);
     width: calc(46vh); }
   #phase-bar0 {
@@ -12136,6 +12217,7 @@ h1 {
     font-size: 3vh; }
   .play-button {
     width: 7vw;
+    height: 7vw;
     position: absolute;
     top: 100%;
     left: 50%;
@@ -12155,6 +12237,38 @@ h1 {
   #bigsquares {
     flex-direction: row;
     height: calc(88vh); }
+  .journeyspace-invite .invite-container {
+    flex-direction: row; }
+    .journeyspace-invite .invite-container .invite-message-square {
+      height: calc(50vw);
+      width: calc(50vw);
+      max-width: calc(50vw); }
+    .journeyspace-invite .invite-container .invite-control-square {
+      height: calc(50vw);
+      width: calc(50vw);
+      max-width: calc(50vw); }
+      .journeyspace-invite .invite-container .invite-control-square #personal-link-url {
+        font-size: 0.75em;
+        color: black;
+        /* Required for text-overflow to do anything */
+        overflow: scroll !important;
+        overflow-y: scroll !important;
+        max-width: calc(40vw) !important; }
+      .journeyspace-invite .invite-container .invite-control-square .sharing-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; }
+      .journeyspace-invite .invite-container .invite-control-square .status-message {
+        font-size: 0.5em;
+        border-radius: 15px;
+        padding: 2px;
+        background-color: gold;
+        color: black;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%); }
   #secondsquare {
     height: calc(50vw);
     width: calc(50vw); }
