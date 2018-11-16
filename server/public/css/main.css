@@ -11749,18 +11749,6 @@ h2 {
   margin-left: 5px;
   margin-right: 5px; }
 
-.orientation-message {
-  display: flex;
-  flex-flow: column;
-  justify-content: space-between;
-  height: 100%; }
-  .orientation-message div {
-    color: white; }
-  .orientation-message h3 {
-    font-size: 1.5em; }
-  .orientation-message p {
-    font-size: 0.5em; }
-
 .feedback-message {
   display: flex;
   flex-flow: column;
@@ -11775,7 +11763,7 @@ h2 {
     font-size: 1.0em;
     background-color: #4bb058; }
 
-.bigIntro {
+.orientation {
   position: absolute;
   max-width: 100%;
   min-height: 100%;
@@ -11784,21 +11772,37 @@ h2 {
   flex-flow: column nowrap;
   justify-content: center;
   z-index: 1003; }
-  .bigIntro .swipable-message {
-    margin: 15%;
+  .orientation a {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    zIndex: 100; }
+  .orientation .swipable-message {
+    margin: 10%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center; }
-    .bigIntro .swipable-message .message-heading {
-      font-size: 2.0em;
+    .orientation .swipable-message .message-heading {
+      font-size: 3.2em;
       color: black;
       font-weight: 700;
       font-family: 'Playfair Display'; }
-    .bigIntro .swipable-message p {
-      font-size: 1.6em;
+    .orientation .swipable-message p {
+      font-size: 2em;
       font-weight: 200;
       color: white; }
+  .orientation .leftbutton {
+    left: 20px; }
+  .orientation .rightbutton {
+    right: 20px; }
+  .orientation .orientation-caret {
+    position: absolute;
+    top: 50%;
+    zIndex: 100;
+    background-color: #4aaadd;
+    color: white;
+    border: 0px; }
 
 .swipable-message {
   margin: 15%;
@@ -11876,23 +11880,6 @@ textarea {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap; }
-
-@media screen and (orientation: portrait) {
-  #bigsquares {
-    flex-direction: column;
-    height: calc(92vh);
-    justify-content: center;
-    align-content: center; }
-  #secondsquare {
-    height: calc(46vh);
-    width: calc(46vh); }
-  #firstsquare {
-    height: calc(46vh);
-    width: calc(46vh); }
-  display: grid;
-  width: 25vw;
-  grid-gap: 12px;
-  grid-template-columns: auto auto auto auto; }
 
 .feedback-rating .feedback-empty {
   color: white;
@@ -12207,8 +12194,6 @@ h1 {
     font-size: 2vh; }
   .invite-button {
     font-size: 2.2vh; }
-  #central_control_panel_id {
-    font-size: 3vh; }
   .fa-smile {
     font-size: 5vh; }
   .box-content p {
@@ -12216,22 +12201,25 @@ h1 {
   #imageskipbutton .invisible-finger-target .fa-stack {
     font-size: 3vh; }
   .play-button {
-    width: 7vw;
-    height: 7vw;
+    width: 9vh;
+    height: 9vh;
     position: absolute;
     top: 100%;
     left: 50%;
     color: red;
     z-index: 1003;
-    transform: translate(-50%, -55%); }
+    padding-left: 5px;
+    padding-right: 5px;
+    transform: translate(-50%, -45%); }
   body {
     font-size: 1.8vw; }
   #central_control_panel_id {
-    font-size: 3vw; }
+    font-size: 3.5vh; }
     #central_control_panel_id .placeholder {
       visibility: hidden;
-      width: 9vw;
-      font-size: 5vw; } }
+      width: 9vh; }
+    #central_control_panel_id .fa-stack {
+      font-size: 3.5vh; } }
 
 @media screen and (orientation: landscape) {
   #bigsquares {

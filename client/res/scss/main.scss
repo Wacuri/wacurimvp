@@ -163,10 +163,6 @@ h2 {
     background-color: gray;
 }
 
-// #journeyname {
-//     max-width: 40vw;
-// }
-
 #journeyname {
     letter-spacing: -1px;
 }
@@ -669,21 +665,21 @@ h2 {
     }
 }
 
-.orientation-message {
-    display: flex;
-    flex-flow: column;
-    justify-content: space-between;
-    height: 100%;
-    div {
-	color: white;
-    }
-    h3 {
-	font-size: 1.5em;
-    }
-    p {
-	font-size: 0.5em;	
-    }
-}
+// .orientation-message {
+//     display: flex;
+//     flex-flow: column;
+//     justify-content: space-between;
+//     height: 100%;
+//     div {
+// 	color: white;
+//     }
+//     h3 {
+// 	font-size: 1.5em;
+//     }
+//     p {
+// 	font-size: 0.5em;	
+//     }
+// }
 
 .feedback-message {
     display: flex;
@@ -703,7 +699,7 @@ h2 {
     }
 }
 
-.bigIntro {
+.orientation {
     position: absolute;
     max-width: 100%;
     min-height: 100%;
@@ -712,24 +708,44 @@ h2 {
     flex-flow: column nowrap;
     justify-content: center;
     z-index: 1003;
+    a {
+        position: absolute;
+        right: 30px;
+        top: 30px;
+        zIndex: 100;        
+    }
     .swipable-message {
-        margin: 15%;
+        margin: 10%;
         height: 100%;
 
         .message-heading {
-	    font-size: 2.0em;	
+	    font-size: 3.2em;	
 	    color: black;
 	    font-weight: 700;
 	    font-family: 'Playfair Display'	
         }
         p {
-	    font-size: 1.6em;    
+	    font-size: 2em;    
 	    font-weight: 200;	    
 	    color: white;
         }
         display: flex;
         flex-direction: column;
         justify-content: center;    
+    }
+    .leftbutton {
+        left: 20px;
+    }
+    .rightbutton {
+        right: 20px;
+    }
+    .orientation-caret {
+        position: absolute;
+        top: 50%;
+        zIndex: 100;
+        background-color: rgb(74,170,221);
+        color: white;
+        border: 0px        
     }
 }
 
@@ -844,28 +860,6 @@ textarea {
     flex-wrap: wrap;
 }
 
-
-@media screen and (orientation: portrait){
-    #bigsquares {
-	flex-direction: column;
-	height: calc(92vh);
-	justify-content: center;
-	align-content: center;
-    }
-    #secondsquare {
-	height: calc(46vh);
-	width: calc(46vh);
-    }
-    #firstsquare {
-	height: calc(46vh);
-	width: calc(46vh);	
-    }
-    
-    display: grid;
-    width: 25vw;
-    grid-gap: 12px;
-    grid-template-columns: auto auto auto auto ;
-}
 
 .feedback-rating {
     .feedback-empty {
@@ -1202,56 +1196,6 @@ h1 {
     }
 }
 
-
-// @media screen and (orientation: portrait){
-//     #bigsquares {
-// 	flex-direction: column;
-// 	height: calc(92vh);
-// 	justify-content: center;
-// 	align-content: center;
-//     }
-//     .journeyspace-invite {
-//         .invite-container {
-// 	    flex-direction: column;
-//             .invite-message-square {
-// 	        height: calc(46vh);
-// 	        width: calc(46vh);
-//                 max-width: calc(46vh);
-//             }
-//             .invite-control-square {
-// 	        height: calc(46vh);
-// 	        width: calc(46vh);
-//                 max-width: calc(46vh);
-//                 #personal-link-url {
-//                     color: black;
-//                     overflow: visible;
-//                     text-overflow: ellipsis;
-//                     width: calc(30vh)!important;
-//                     max-width: calc(30vh)!important;
-//                 }
-//                 .sharing-block {
-//                     display: flex;
-//                     flex-direction: column;
-//                     align-items: center;
-//                     justify-content: center;
-//                 }
-//                 .status-message {
-//                     font-size: 0.5em;
-//                     border-radius: 15px;
-//                     padding: 2px;
-//                     background-color: gold;
-//                     color: black;
-//                     position: absolute;
-//                     top: 100%;
-//                     left: 50%;
-//                     transform: translate(-50%, -50%);
-//                 }
-//             }
-//         }
-//     }
-// }
-
-
 @media screen and (orientation: portrait){
     #bigsquares {
 	flex-direction: column;
@@ -1330,9 +1274,6 @@ h1 {
     .invite-button {
         font-size: 2.2vh;
     }
-    #central_control_panel_id { 
-     	font-size: 3vh;    
-    }
     .fa-smile {
         font-size: 5vh;
     }
@@ -1353,14 +1294,16 @@ h1 {
     // This is awkward but the only good way to keep the icons
     // the "same" size inside a larger circle.
     .play-button {
-        width: 7vw;
-        height: 7vw;        
+        width: 9vh;
+        height: 9vh;        
         position: absolute;
         top: 100%;
         left: 50%;
         color: red;
         z-index: 1003;
-        transform: translate(-50%, -55%);
+        padding-left: 5px;
+        padding-right: 5px;
+        transform: translate(-50%, -45%);
     }
 
     body {
@@ -1368,14 +1311,13 @@ h1 {
     }
     
     #central_control_panel_id { 
-     	font-size: 3vw;
+     	font-size: 3.5vh;
         .placeholder {
             visibility: hidden;
-            width: 9vw;
-     	    font-size: 5vw;            
+            width: 9vh;
         }
         .fa-stack {
-
+     	    font-size: 3.5vh;
         }
     }
 
@@ -1729,13 +1671,13 @@ h1 {
 
 
 
-@media screen and (max-width:1024px){
-}
-@media screen and (max-width:880px){
-}
+// @media screen and (max-width:1024px){
+// }
+// @media screen and (max-width:880px){
+// }
 
-@media screen and (max-width:768px){
-}
+// @media screen and (max-width:768px){
+// }
 
 @media screen and (max-width:680px){
 .main-banner>.container {

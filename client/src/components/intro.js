@@ -20,22 +20,15 @@ if (__CLIENT__) {
 }
 
 
+// TODO: These classes are really specializations of the same class;
+// a great deal of duplication could be removed by properly using inheritance here.
 
-export class IntroBig extends Component {
+class BasicOrientation extends Component {
     constructor(props) {
         super(props);
         this.state = {
 	    index: 0
         }
-        this.NUM_VIEWS = 5;        
-    }
-    onChange = (e) => {
-        e.preventDefault();	
-        this.setState({
-            journeySpaceName: e.target.value,
-            error: this.state.error && e.target.value != ''
-        });
-	e.stopPropagation();	
     }
 
     left = () => {
@@ -50,11 +43,51 @@ export class IntroBig extends Component {
 	    {index: index}
 	);
     };
+    render() {
+        const index = this.state.index;
+        return (
+	        <div className="orientation" >
+                <a href='#' onClick={this.props.onClose}>
+                <i className='fa fa-times fa-4x' style={{color: 'white'}}/>
+                </a>
+	        <div style={{
+	    	    display: 'flex',
+		    flexFlow: 'column nowrap',
+		    justifyContent: 'center'
+	        }}>
+	        <VirtualizeSwipeableViews
+            index={this.state.index}
+            onChangeIndex={this.handleChangeIndex}
+            slideRenderer={this.slideRenderer}
+	    className='swipable-message'
+                />	    
+	        </div>
+	        <button  className="leftbutton orientation-caret" onClick={this.left}
+            visibility={`${(index == 0) ? 'hidden' : 'visible'}`}
+                >
+	    	<i className="fa fa-caret-left fa-5x"></i>
+	        </button>
+	        <button className="rightbutton orientation-caret" onClick={this.right}
+            visibility={`${(index == (this.NUM_VIEWS-1)) ? 'hidden' : 'visible'}`}
+                >
+	    	<i className="fa fa-caret-right fa-5x" ></i>
+	        </button>
+	        </div>	    
+        )
+    }
+}
+
+
+export class IntroBig extends BasicOrientation {
+    constructor(props) {
+        super(props);
+        this.NUM_VIEWS = 5;        
+    }
     componentDidMount() {
         Cookie.set('saw intro', true, {expires: 365});
     }
 
-    slideRendererX = (params) => {
+    slideRenderer = (params) => {
         const { index, key } = params;
         var i = mod(index, this.NUM_VIEWS);
         switch(i) {
@@ -154,81 +187,33 @@ export class IntroBig extends Component {
                 a moment to rate your experience and
                 give us your valuable feedback using the feedback button.
                     </p>
+                    <p>
+                    Dismiss this orientation with by clicking the "X" in the upper right corner to go to the JourneyBoard.               
+                    </p>
                     </div>);
         default:
                 console.log("INTERNAL ERROR IN SWIPABLEMODAL",i);
         }
     };
-    render() {
-        const index = this.state.index;
-        return (
-	        <div className="bigIntro" >
-                <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
-                <i className='fa fa-times fa-2x' style={{color: 'white'}}/>
-                </a>
-	        <div style={{
-	    	    display: 'flex',
-		    flexFlow: 'column nowrap',
-		    justifyContent: 'center'
-	        }}>
-	        <VirtualizeSwipeableViews
-            index={this.state.index}
-            onChangeIndex={this.handleChangeIndex}
-            slideRenderer={this.slideRendererX}
-	    className='swipable-message'
-                />	    
-	        </div>
-	        <button  onClick={this.left} style={{visibility: `${(index == 0) ? 'hidden' : 'visible'}`, position: 'absolute', left: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
-	    	<i className="fa fa-caret-left fa-3x"></i>
-	        </button>
-	        <button onClick={this.right} style={{visibility: `${(index == (this.NUM_VIEWS-1)) ? 'hidden' : 'visible'}`, position: 'absolute', right: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
-	    	<i className="fa fa-caret-right fa-3x" ></i>
-	        </button>
-	        </div>	    
-        )
-    }
 }
 
 
-export class OrientationModal extends Component {
+export class OrientationModal extends BasicOrientation {
     constructor(props) {
         super(props);
         this.state = {
 	    index: 0
         }
+        this.NUM_VIEWS = 3;
     }
 
-    onChange = (e) => {
-        e.preventDefault();	
-        this.setState({
-            journeySpaceName: e.target.value,
-            error: this.state.error && e.target.value != ''
-        });
-	e.stopPropagation();	
-    }
-
-    left = () => {
-	this.handleChangeIndex((this.state.index-1) % 3);
-    }
-    right = () => {
-	this.handleChangeIndex((this.state.index+1) % 3);	
-    }
-
-    handleChangeIndex = index => {
-	this.setState(
-	    {index: index}
-	);
-    };
-
-    render() {
-        function slideRenderer(params) {
-	    console.log("params", params);
-            const { index, key } = params;
-
-            switch (mod(index, 3)) {
+    slideRenderer = (params) => {
+        const { index, key } = params;
+        var i = mod(index, this.NUM_VIEWS);
+        switch (i) {
             case 0:
                 return (
-	                <div>
+	                <div className='intro-screen' key={key}>
                         <p className='message-heading'>1.  Welcome to CuriousLive ...<br/>
 	                A five-minute guided journey - plus sharing - with others.</p>
 	                <p/>	      
@@ -243,7 +228,7 @@ export class OrientationModal extends Component {
 
             case 1:
                 return (
-                        <div>	    
+                        <div className='intro-screen' key={key}>	    
 	                <p className='message-heading'>2.  Next comes the Journey...</p>
 	                <p/>	      
                         <p>
@@ -258,7 +243,7 @@ export class OrientationModal extends Component {
 
             case 2:
                 return (
-	                <div>
+	                <div className='intro-screen' key={key}>
 	                <p className='message-heading'>3.  After the Journey comes the Sharing and Connecting.</p>
 	                <p/>
                         <p>
@@ -276,42 +261,4 @@ export class OrientationModal extends Component {
             }
         }
 
-        const index = this.state.index;
-        return (
-	        <div style={{position: 'absolute',
-			     minHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
-			     maxWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,
-			     maxHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
-			     minWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,			 
-			     backgroundColor: 'rgba(74, 170, 221, 1.0)',
-			     display: 'flex',
-			     flexFlow: 'column nowrap',
-			     justifyContent: 'center',
-			     zIndex: '1003'
-			    }
-		           }>
-                <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
-                <i className='fa fa-times fa-2x' style={{color: 'white'}}/>
-                </a>
-	        <div style={{
-	    	    display: 'flex',
-		    flexFlow: 'column nowrap',
-		    justifyContent: 'center'
-	        }}>
-	        <VirtualizeSwipeableViews
-            index={this.state.index}
-            onChangeIndex={this.handleChangeIndex}
-            slideRenderer={slideRenderer}
-	    className='swipable-message'
-                />	    
-	        </div>
-	        <button  onClick={this.left} style={{visibility: `${(index == 0) ? 'hidden' : 'visible'}`, position: 'absolute', left: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
-	    	<i className="fa fa-caret-left fa-3x"></i>
-	        </button>
-	        <button onClick={this.right} style={{visibility: `${(index == 2) ? 'hidden' : 'visible'}`, position: 'absolute', right: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
-	    	<i className="fa fa-caret-right fa-3x" ></i>
-	        </button>
-	        </div>	    
-        )
-    }
 }

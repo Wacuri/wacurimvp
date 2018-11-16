@@ -25,7 +25,7 @@ import {initLayoutContainer} from 'opentok-layout-js';
 import './share';
 import JourneyStartsIn from './journey_starts_in';
 import * as LTB from './header';
-import Intro from './intro';
+import * as INTRO from './intro';
 
 // This may not be the right way to do this
 // var Rating = require('react-rating');
@@ -561,6 +561,9 @@ class PlayButton extends Component {
     render() {
     return (
 	    <span className='fa-stack play-button' onClick={this.togglePlay}>
+            {/*            <i className={`fa fa-${state.audioTag.paused ? 'pause' : 'play'} fa-stack-1x`}
+	     style={{color: 'white'}}></i>
+             */}
             <img src={'../images/' + (state.audioTag.paused ? 'PlayButton.svg' : 'PauseButton.svg')}/>
 	    </span>
     )
@@ -830,136 +833,6 @@ class InviteModal extends Component {
     )
   }
 }
-
-
-class OrientationModal extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-	index: 0
-    }
-  }
-
-    onChange = (e) => {
-    e.preventDefault();	
-    this.setState({
-      journeySpaceName: e.target.value,
-      error: this.state.error && e.target.value != ''
-    });
-	e.stopPropagation();	
-    }
-
-    left = () => {
-	this.handleChangeIndex((this.state.index-1) % 3);
-    }
-    right = () => {
-	this.handleChangeIndex((this.state.index+1) % 3);	
-    }
-
-    handleChangeIndex = index => {
-	this.setState(
-	    {index: index}
-	);
-    };
-
-  render() {
-      function slideRenderer(params) {
-	  console.log("params", params);
-          const { index, key } = params;
-
-          switch (mod(index, 3)) {
-          case 0:
-              return (
-	              <div>
-                      <p className='message-heading'>1.  Welcome to CuriousLive ...<br/>
-	              A five-minute guided journey - plus sharing - with others.</p>
-	              <p/>	      
-                      <p>
-                      The journey will begin when the timer above elapses and you hear the cime.
-                      </p>
-                      <p>
-                      Breathe slowly and deeply and ajust your posture to be comfortable.
-	              </p>
-	              </div>
-              );
-
-          case 1:
-              return (
-                      <div>	    
-	              <p className='message-heading'>2.  Next comes the Journey...</p>
-	              <p/>	      
-                      <p>
-                      Your microphone will be muted.
-                      </p>
-                      <p>
-                      Some people like to leave their cameras on during the journey to increase the feeling of a shared experience. It is up to you.
-	              </p>
-	              </div>
-	              
-              );
-
-          case 2:
-              return (
-	              <div>
-	              <p className='message-heading'>3.  After the Journey comes the Sharing and Connecting.</p>
-	              <p/>
-                      <p>
-	              After the journey you will have the opportunity to share your insights.
-	              Each person takes 1 or 2 minutes.
-                      </p>
-	              <p>
-	              When others are sharing, please listen deeply, and in turn they will listen more deeply to you.
-	              </p>
-	              </div>
-              );
-
-          default:
-              return null;
-          }
-      }
-
-    const index = this.state.index;
-      return (
-	    <div style={{position: 'absolute',
-			 minHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
-			 maxWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,
-			 maxHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
-			 minWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,			 
-			 backgroundColor: 'rgba(74, 170, 221, 1.0)',
-			 display: 'flex',
-			 flexFlow: 'column nowrap',
-			 justifyContent: 'center',
-			 zIndex: '1003'
-			 }
-		       }>
-            <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
-          <i className='fa fa-times fa-2x' style={{color: 'white'}}/>
-        </a>
-	    <div style={{
-	    		 display: 'flex',
-			 flexFlow: 'column nowrap',
-			 justifyContent: 'center'
-	    }}>
-	    <VirtualizeSwipeableViews
-          index={this.state.index}
-          onChangeIndex={this.handleChangeIndex}
-        slideRenderer={slideRenderer}
-	className='swipable-message'
-        />	    
-// 	    </div>
-	    <button  onClick={this.left} style={{visibility: `${(index == 0) ? 'hidden' : 'visible'}`, position: 'absolute', left: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
-	    	    <i className="fa fa-caret-left fa-3x"></i>
-	</button>
-	    <button onClick={this.right} style={{visibility: `${(index == 2) ? 'hidden' : 'visible'}`, position: 'absolute', right: '20px', top: '50%', zIndex: 100,  backgroundColor: 'rgb(74,170,221)', color: 'white', border: '0px'}}>
-	    	    <i className="fa fa-caret-right fa-3x" ></i>
-	    </button>
-	</div>	    
-    )
-  }
-}
-
-
-
 
 class FeedbackModal extends Component {
   constructor(props) {
@@ -1468,7 +1341,6 @@ export class JourneySpace extends Component {
   }
 
     get journeyStateTimer() {
-        console.log("JourneyState XXX",state.journey.state);
         switch(this.state.playerState) {
         case JOINED:
         case CREATED:
@@ -1542,8 +1414,6 @@ export class JourneySpace extends Component {
   }
 
     onTimeUpdate = (e) => {
-	console.log("onTimeUpdate",e);
-	console.log("onTimeUpdate",e.target.currentTime);	
     this.setState({
       playerProgress: (e.target.currentTime / e.target.duration) * 100,
       playerProgressMS: e.target.currentTime,
@@ -1593,7 +1463,6 @@ export class JourneySpace extends Component {
   }
 
     onCloseShareModal = (e) => {
-        console.log("spud closeShareModal");
     e.preventDefault();
     this.setState({
       showInviteModal: false
@@ -1601,7 +1470,6 @@ export class JourneySpace extends Component {
   }
 
     onCompleteShare = (url, name) => {
-        console.log("spud complete Share Modal");        
     this.setState({
       showInviteModal: false
     });
@@ -1611,7 +1479,6 @@ export class JourneySpace extends Component {
     // TODO: This is testing, it should be rmeoved...
     TEST_INVITATION = false;
     onOrientation = (e) => {
-	console.log("onOrientation called");
         e.preventDefault();
         if (this.TEST_INVITATION) {
             this.setState({
@@ -1627,7 +1494,6 @@ export class JourneySpace extends Component {
   }
 
     onCloseOrientationModal = (e) => {
-        console.log("on close called");
       e.preventDefault();
         if (this.TEST_INVITATION) {
             this.setState({
@@ -1755,6 +1621,7 @@ export class JourneySpace extends Component {
 		{this.state.session && /* AAA */
                  <div className='journeyspace-content' >		 
 
+                 
 		{/* tob bar */}
 		<div id="topbar_and_header">
 		 <LTB.LogoAndTitleBar history={this.props.history} showLeave={true}
@@ -1791,11 +1658,19 @@ export class JourneySpace extends Component {
 		 <div className="flex-squares" id="flex-squares-id"
                              style={{position: 'relative',
                                      backgroundImage: url,
-                    backgroundSize: 'cover'}}>
+                                     backgroundSize: 'cover'}}>
+
+		 {/* This is a modal which is usually invisible. */}
+		 {this.state.showOrientationModal &&
+		  <INTRO.OrientationModal force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal}/>
+		 }
+                 
 			 
 		 {/* here we create the two big squares;  */}
 		 
 		 <div id="bigsquares">
+
+                 
 		 
                  <div  id="firstsquare" className="flexiblecol" key="name">
 		 <div className="flexiblecol-content">
@@ -1823,10 +1698,6 @@ export class JourneySpace extends Component {
 		 
 
 
-		 {/* This is a modal which is usually invisible. */}
-		 {this.state.showOrientationModal &&
-		  <OrientationModal force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal}/>
-		 }
 
 		 {this.state.showFeedbackModal &&
 		  <FeedbackModal
