@@ -201,20 +201,6 @@ h2 {
     	background-color: white;
     	width: 33vw;
     }
-    // select:after {
-    //   content: "";
-    //   position: absolute;
-    //   z-index: 2;
-    //   right: 8px;
-    //   top: 50%;
-    //   margin-top: -3px;
-    //   height: 0;
-    //   width: 0;
-    //   border-top: 6px solid #f99300;
-    //   border-left: 6px solid transparent;
-    //   border-right: 6px solid transparent;
-    //   pointer-events: none;
-    // }
     overflow: auto;
     z-index: 4;
 }
@@ -243,7 +229,6 @@ h2 {
 
 // Possibly the div is obsolete
 .video-placeholder {
-//  border: 1px solid rgb(83, 83, 83);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -269,15 +254,6 @@ h2 {
 
 .journeyspace-stream {
   position: relative;
-  
-  // >div {
-  //   border: 1px solid rgb(83, 83, 83);
-  //   width: 100%;
-  //   height: calc(100% - 25px);
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  // }
   
   .journeyspace-stream-controls {
     position: absolute;
@@ -864,15 +840,22 @@ textarea {
 .feedback-rating {
     .feedback-empty {
 	color: white;
-	margin-left: 5px;
-	margin-right: 5px;
+	margin-left: 1em;
+	margin-right: 1em;
 	
     }
     .feedback-full {
 	color: black;
-	margin-left: 5px;
-	margin-right: 5px;
+	margin-left: 1em;
+	margin-right: 1em;
     }
+}
+
+#feedback_text {
+    borderRadius: 15px;
+    marginLeft: 1em;
+    marginRight: 1em;
+    marginBottom: 0px;
 }
 
 .orientation-message {
@@ -1013,13 +996,6 @@ textarea {
     flex-wrap: wrap;
 }
 
-
-#centeringcontainer {
-    position: relative;
-    text-align: center;
-    color: lack;
-}
-
 .box-content {
     position: relative;
 //    border: 1px solid #000;
@@ -1045,6 +1021,22 @@ textarea {
 	background-color: rgb(75,176,88);
     }
 }
+
+.centeringholder {
+    height: 0px;
+    width: 0px;
+    position: absolute;
+    top: 100%;
+    transform: translate(-50%, -50%);    
+}
+.centered-button {
+    position: relative;
+    top: -1em;
+    borderRadius: 15px;
+//    color: red;
+    z-index: 1004;
+}
+
 
 .centered {
     position: absolute;

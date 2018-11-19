@@ -834,158 +834,6 @@ class InviteModal extends Component {
   }
 }
 
-class FeedbackModal extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-	journeySpaceName: '',
-	rating: 0,
-	feeling: 0,
-	text: '',
-      error: false
-    }
-  }
-    
-    onChange = (e) => {
-    e.preventDefault();	
-	this.setState({
-	    journeySpaceName: e.target.value,
-	    error: this.state.error && e.target.value != ''
-	});
-	e.stopPropagation();	
-    }
-    onSubmit = (e) => {
-	console.log("onSubmit clicked!");
-	// NEXT
-	// Here is where we will hit an api to access the database.
-	console.log(this.props.room);
-
-      fetch(`/api/journeys/${this.props.room}/feedback`, {
-          body: JSON.stringify({
-	      rating: this.state.rating,
-	      feeling: this.state.feeling,
-	      text: document.getElementById("feedback_text").value,
-	      journey: this.props.journeySpaceName,
-	      room: this.props.room
-	  }),
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-          'content-type': 'application/json'
-        },
-        method: 'POST',
-        mode: 'cors',
-      });
-	// Return to the journeyboard....
-      this.props.history.push('/');      	
-    }
-    onInvite = (e) => {
-	console.log("onInvite clicked!");	
-    }
-    
-    render() {
-    return (
-	    <div style={{position: 'absolute',
-			 minHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
-			 maxWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,
-			 maxHeight: `${someHelper.ONE_SQUARE_WIDTH}px`,
-			 minWidth: `${someHelper.ONE_SQUARE_WIDTH}px`,			 
-			 width: `${someHelper.ONE_SQUARE_WIDTH}pxog`,			 
-			 backgroundColor: 'rgba(89, 153, 222, 0.9)',
-			 display: 'flex',
-			 flexDirection: 'column',
-			 justifyContent: 'center',
-			 alignItems: 'center',
-			 zIndex: '1003',
-			 }
-		       }>
-
-            <a href='#' onClick={this.props.onClose} style={{position: 'absolute', right: '20px', top: '20px', zIndex: 100}}>
-          <i className='fa fa-times' style={{fontSize: '22px', color: 'white'}}/>
-            </a>
-
-            <div style={{
-		display: 'flex',
-		flexDirection: 'column',		
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		padding: '0.5em'
-	    }}>
-	    <p> Please rate your experience for: </p>
-	    <p> "{this.props.journeySpaceName}"</p>
-	    <div>
-	    <Rating start={0} stop={10} className='feedback-rating'
-	emptySymbol="fa fa-circle rating-circle feedback-empty"
-	fullSymbol="fa fa-circle rating-circle feedback-full"
-	onChange={ (v) => { this.state.rating = v;}
-	}/>
-	    <div  style={{
-		display: 'flex',
-		flexDirection: 'row',		
-		justifyContent: 'space-between',
-	    }}>
-	    <div>1</div> <div>10</div> </div>
-	    </div>
-	    <p> How do you Feel?</p>
-	    <div>
-	    <Rating start={0} stop={10} className='feedback-rating'
-	emptySymbol="fa fa-circle rating-circle feedback-empty"
-	fullSymbol="fa fa-circle rating-circle feedback-full"
-	onChange={ (v) => { this.state.feeling = v;}
-	}/>
-	    <div  style={{
-		display: 'flex',
-		flexDirection: 'row',		
-		justifyContent: 'space-between',
-	    }}>
-	    <p>Worse</p>
-	    <p>The Same</p>
-	    <p>Better</p>
-	    </div>
-	    </div>
-	    <p />
-	    <div className="form-group"
-	    style={{
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',					 
-		justifyContent: 'space-between',
-		width: '100%'
-	    }}>
-	    <textarea id="feedback_text" className="form-control rounded-0" rows="4"
-	style={{borderRadius: '15px',
-		marginLeft: '1em',
-		marginRight: '1em',
-		marginBottom: '0px',
-		onChange: (e) => {
-		    // no need to call setState since we are only keeping for submit...
-		    console.log("ONCHANGE OF TEXT",e);
-		    this.state.text = e.target.value;
-		}
-		  }}
-	    >
-	    </textarea>
-	    </div>
-            <button className='invite-button feedback-button' onClick={this.onSubmit}
-	style={{borderRadius: '15px',
-		marginLeft: '1em',
-		marginRight: '1em',
-		marginTop: '-2em',
-		zIndex: '1001',
-	       }}
- 	    >Submit Feedback</button>
-</div>
-	    <p />
-	    <p />	    	    
-                  <button className='invite-button feedback-button' onClick={this.props.onCloseAndInvite}
- 	              >Invite Friends to a New Journey</button>
-
-	    </div>	    
-    );
-    }
-}
-
-
 class UnfilledVideoSquare extends React.Component {
   constructor(props) {
       super(props);
@@ -1476,6 +1324,10 @@ export class JourneySpace extends Component {
     window.location = url + `?journey=${state.journey.name}&name=${name}`;
   }
 
+   onJoinMailingList = () => {
+    window.location = "http://wacuri.com/stay-updated/";
+  }
+    
     // TODO: This is testing, it should be rmeoved...
     TEST_INVITATION = false;
     onOrientation = (e) => {
@@ -1524,7 +1376,8 @@ export class JourneySpace extends Component {
   }
 
   onCloseFeedbackModal = (e) => {
-    e.preventDefault();
+      e.preventDefault();
+      console.log("onCloseFeedbackModal");
     this.setState({
       showFeedbackModal: false
     });
@@ -1665,12 +1518,28 @@ export class JourneySpace extends Component {
 		  <INTRO.OrientationModal force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal}/>
 		 }
                  
+		 {this.state.showFeedbackModal &&
+		  <INTRO.FeedbackModal
+		  journeySpaceName={state.journey.name}
+		  journey={this.state.session}
+		  onComplete={this.onCompleteFeedback}
+		  onClose={this.onCloseFeedbackModal}
+		  onCloseAndInvite={(e) => { this.onCloseFeedbackModal(e);
+					    this.onInvite(e);
+		  }}
+		  onJoinMailingList={(e) => { this.onCloseFeedbackModal(e);
+					    this.onJoinMailingList(e);
+		  }}
+		  room={this.props.match.params.room}
+		  history={this.props.history}
+		  />
+		 }
+		 
+                 
 			 
 		 {/* here we create the two big squares;  */}
 		 
 		 <div id="bigsquares">
-
-                 
 		 
                  <div  id="firstsquare" className="flexiblecol" key="name">
 		 <div className="flexiblecol-content">
@@ -1699,20 +1568,6 @@ export class JourneySpace extends Component {
 
 
 
-		 {this.state.showFeedbackModal &&
-		  <FeedbackModal
-		  journeySpaceName={state.journey.name}
-		  journey={this.state.session}
-		  onComplete={this.onCompleteFeedback}
-		  onClose={this.onCloseFeedbackModal}
-		  onCloseAndInvite={(e) => { this.onCloseFeedbackModal(e);
-					    this.onInvite(e);
-		  }}
-		  room={this.props.match.params.room}
-		  history={this.props.history}
-		  />
-		 }
-		 
 		 
 		 {/*
 		  <div style={{display: 'flex', flexDirection: 'row', visibility: `${(this.state.showOrientationModal || this.state.showFeedbackModal ) ? "hidden" : "visible"}`}}>

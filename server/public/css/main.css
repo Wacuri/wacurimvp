@@ -11883,13 +11883,19 @@ textarea {
 
 .feedback-rating .feedback-empty {
   color: white;
-  margin-left: 5px;
-  margin-right: 5px; }
+  margin-left: 1em;
+  margin-right: 1em; }
 
 .feedback-rating .feedback-full {
   color: black;
-  margin-left: 5px;
-  margin-right: 5px; }
+  margin-left: 1em;
+  margin-right: 1em; }
+
+#feedback_text {
+  borderRadius: 15px;
+  marginLeft: 1em;
+  marginRight: 1em;
+  marginBottom: 0px; }
 
 .orientation-message {
   display: flex;
@@ -11985,11 +11991,6 @@ textarea {
   flex-direction: row;
   flex-wrap: wrap; }
 
-#centeringcontainer {
-  position: relative;
-  text-align: center;
-  color: lack; }
-
 .box-content {
   position: relative;
   width: 100%;
@@ -12007,6 +12008,19 @@ textarea {
   .box-content .btn {
     font-size: 1em;
     background-color: #4bb058; }
+
+.centeringholder {
+  height: 0px;
+  width: 0px;
+  position: absolute;
+  top: 100%;
+  transform: translate(-50%, -50%); }
+
+.centered-button {
+  position: relative;
+  top: -1em;
+  borderRadius: 15px;
+  z-index: 1004; }
 
 .centered {
   position: absolute;

@@ -6,6 +6,9 @@ import Cookie from 'js-cookie';
 import SwipeableViews from 'react-swipeable-views';
 import { virtualize } from 'react-swipeable-views-utils';
 import { mod } from 'react-swipeable-views-core';
+
+import Rating from 'react-rating';
+
 const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
 import state from '../state';
@@ -46,7 +49,7 @@ class BasicOrientation extends Component {
     render() {
         const index = this.state.index;
         return (
-	        <div className="orientation" >
+	        <div className="orientation" key={this.props.myForceKey}>
                 <a href='#' onClick={this.props.onClose}>
                 <i className='fa fa-times fa-4x' style={{color: 'white'}}/>
                 </a>
@@ -63,12 +66,16 @@ class BasicOrientation extends Component {
                 />	    
 	        </div>
 	        <button  className="leftbutton orientation-caret" onClick={this.left}
-            visibility={`${(index == 0) ? 'hidden' : 'visible'}`}
+            style={{
+                visibility: `${(index == 0) ? 'hidden' : 'visible'}`
+            }}
                 >
 	    	<i className="fa fa-caret-left fa-5x"></i>
 	        </button>
 	        <button className="rightbutton orientation-caret" onClick={this.right}
-            visibility={`${(index == (this.NUM_VIEWS-1)) ? 'hidden' : 'visible'}`}
+            style={{
+                visibility: `${(index == (this.NUM_VIEWS-1)) ? 'hidden' : 'visible'}`
+            }}
                 >
 	    	<i className="fa fa-caret-right fa-5x" ></i>
 	        </button>
@@ -261,4 +268,169 @@ export class OrientationModal extends BasicOrientation {
             }
         }
 
+}
+
+
+export class FeedbackModalAux extends BasicOrientation {
+    constructor(props) {
+        super(props);
+        this.state = {
+	    journeySpaceName: '',
+	    rating: 0,
+	    feeling: 0,
+	    text: '',
+            error: false,
+	    index: 0,
+            feedbackSubmitted: false
+        }
+        this.NUM_VIEWS = 1;
+    }
+
+    onChange = (e) => {
+        e.preventDefault();	
+	this.setState({
+	    journeySpaceName: e.target.value,
+	    error: this.state.error && e.target.value != ''
+	});
+	e.stopPropagation();	
+    }
+    onSubmit = (e) => {
+        this.props.setSubmitted(true);
+        fetch(`/api/journeys/${this.props.room}/feedback`, {
+            body: JSON.stringify({
+	        rating: this.state.rating,
+	        feeling: this.state.feeling,
+	        text: this.state.text,
+	        journey: this.props.journeySpaceName,
+	        room: this.props.room
+	    }),
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'content-type': 'application/json'
+            },
+            method: 'POST',
+            mode: 'cors',
+        });
+    }
+    
+    slideRenderer = (params) => {
+        const { index, key } = params;
+        var i = mod(index, this.NUM_VIEWS);
+        switch (i) {
+        case 0:
+            return (
+	            <div key={key} style={{
+			         display: 'flex',
+			         flexDirection: 'column',
+			         justifyContent: 'center',
+			         alignItems: 'center',
+			         zIndex: '1003'
+			        }
+		               }>
+                    <div style={{
+		        display: 'flex',
+		        flexDirection: 'column',		
+		        justifyContent: 'space-between',
+		        alignItems: 'center',
+		        padding: '0.5em'
+	            }}>
+	            <p> Please rate your experience for: </p>
+	            <p> "{this.props.journeySpaceName}"</p>
+	            <div>
+	            <Rating start={0} stop={10} className='feedback-rating'
+	        emptySymbol="fa fa-circle rating-circle feedback-empty"
+	        fullSymbol="fa fa-circle rating-circle feedback-full"
+	        onChange={ (v) => { this.state.rating = v;}
+	                 }/>
+	            <div  style={{
+		        display: 'flex',
+		        flexDirection: 'row',		
+		        justifyContent: 'space-between',
+	            }}>
+	            <div>1</div> <div>10</div> </div>
+	            </div>
+	            <p> How do you Feel?</p>
+	            <div>
+	            <Rating start={0} stop={10} className='feedback-rating'
+	        emptySymbol="fa fa-circle rating-circle feedback-empty"
+	        fullSymbol="fa fa-circle rating-circle feedback-full"
+	        onChange={ (v) => { this.state.feeling = v;}
+	                 }/>
+	            <div  style={{
+		        display: 'flex',
+		        flexDirection: 'row',		
+		        justifyContent: 'space-between',
+                        color: 'black',
+	            }}>
+	            <p>Worse</p>
+	            <p>The Same</p>
+	            <p>Better</p>
+	            </div>
+	            </div>
+	            <p />
+	            <div className="form-group"
+	        style={{
+		    display: 'flex',
+		    flexDirection: 'column',
+		    alignItems: 'center',					 
+		    justifyContent: 'space-between',
+		    width: '100%',
+                    position: 'relative'
+	        }}>
+	            <textarea id="feedback_text" className="form-control rounded-0" rows="4"
+                onChange= { (e) => {
+                    this.state.text = e.target.value;
+                }
+                          }
+	            >
+	            </textarea>
+                    <button id="outside-react-feedback-button" className='invite-button feedback-button centered-button' onClick={this.onSubmit}
+                style={{color: `${this.props.feedbackSubmitted ? "red" : "white" }`}}
+ 	            >{this.props.feedbackSubmitted ? 'Thanks! Feedback Submitted.': 'Submit Feedback'}</button>
+	            </div>
+                    </div>
+                    <button className='invite-button feedback-button' onClick={this.props.onCloseAndInvite}
+ 	            >Invite Friends to a New Journey</button>
+                    <p />	    	    
+                    <button className='invite-button feedback-button' onClick={this.props.onJoinMailingList}
+ 	            >Join our Mailing List</button>
+
+	        </div>	    
+            );
+        }
+
+    }
+}
+
+export class FeedbackModal extends Component {
+    constructor(props) {
+        super(props);
+        this.keyNumber = 0;
+        this.state = {
+            feedbackSubmitted: false
+        }
+        this.forceSubmitted= false;
+    }
+    setSubmitted = (submitted) => {
+        this.setState({ feedbackSubmitted: submitted});
+        this.forceSubmitted = submitted;
+    }
+    render() {
+        return (
+                <FeedbackModalAux
+		  journeySpaceName={this.props.journeySpaceName}
+		  journey={this.state.session}
+		  onComplete={this.props.onComplete}
+		  onClose={this.props.onClose}
+		  onCloseAndInvite={this.props.onCloseAndInvite}
+		  onJoinMailingList={this.props.onJoinMailingList}
+		  room={this.props.room}
+	          history={this.props.history}
+                  setSubmitted={this.setSubmitted}
+                  feedbackSubmitted={this.forceSubmitted}
+                  myForceKey={this.keyNumber++}
+                />
+        );
+    }
 }
