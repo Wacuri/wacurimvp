@@ -22,6 +22,7 @@ import * as INTRO from './components/intro';
 import CountdownMessage from './components/countdown_message';
 import state from './state';
 import * as someHelper from './utility/utility';
+import queryString from 'query-string';
 
 
 
@@ -144,6 +145,7 @@ class JoinableJourneyCard extends Component {
       const currentUserHasRSVP = (journey.participants || []).find(participant => participant.user === state.sessionId) != null;
 
       const image_name = "images/SPOTS-0"+journey.participants.length+".png";
+      const queryparam = (this.props.skipOn ? "?" + "skipon=true" : "");
       return (
       <div className='joinable-journey-card'>
         <div className='image'>
@@ -161,20 +163,12 @@ class JoinableJourneyCard extends Component {
             </div>
 
 	    {/* here "j" is inserted as a convenient means of marking this entry as a Journeyboard space rather than a permanent one */}
-            <Link to={`/j/${journey.room}`} className='btn btn-primary'>{currentUserHasRSVP ? 'Go there now' : 'Join'}</Link>
+            <Link to={`/j/${journey.room}${queryparam}`} className='btn btn-primary'>{currentUserHasRSVP ? 'Go there now' : 'Join'}</Link>
         </div>
       </div>
     )
   }
 }
-
-	    {/*
-            {Array(3).fill(0).map((k, i) => (
-		// Rob is changing this to "user" just as a test of my ability to change things...
-		// Note: Adding a "key" here seems unneeded but made a confusing waring disappear...
-		    <li key={"item"+i}><i className={`fas fa-user ${journey.participants.length > i ? 'fill' : ''}`}></i></li>
-		    ))} */}
-
 
 class JourneyBoard extends Component {
   constructor(props) {
@@ -311,7 +305,8 @@ class JourneyBoard extends Component {
 		  <INTRO.IntroBig force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal} />                  
 		 }
 		<LTB.JourneyBoardBar history={this.props.history} showLeave={false} showOrientation={true}
-	          onOrientation={this.onOrientation}
+	    onOrientation={this.onOrientation}
+            skipOn={this.props.skipOn}
 		/>
 
                 <div className="main-banner" style={{backgroundImage: `url(${journeyboardbannerimage})`}}>
@@ -325,7 +320,7 @@ class JourneyBoard extends Component {
                 {state.joinableJourneys.map(journey => {
                     if (Date.parse(journey.startAt) > Date.parse(new Date())) {
                         return ( <JoinableJourneyCard key={journey._id+"_"+discriminator++}
-                                 journey={journey} audioTag={this.audioTag}/>)
+                                 journey={journey} audioTag={this.audioTag} skipOn={this.props.skipOn}/>)
                     }}
 
 )}
@@ -373,6 +368,9 @@ class JourneyBoardOrientationModal extends Component {
 
   render() {
       const index = this.state.index;
+
+      console.log("JourneyBoard Props",this.props);
+      
       return (
 	    <div key='xxx' className='intro' style={{position: 'absolute',
 			 minHeight: '100%',
@@ -447,7 +445,8 @@ const RouteWithIntro = ({component: Component, ...rest}) => {
     return (
     <div>
       {showIntro && 
-        <Route {...rest} render={renderProps => {
+       <Route {...rest} render={renderProps => {
+           console.log(renderProps);
           return (
             <IntroWrapper component={Component} {...renderProps}/>
           )
@@ -456,7 +455,9 @@ const RouteWithIntro = ({component: Component, ...rest}) => {
 
       {!showIntro &&
        <Route {...rest} render={renderProps => {
-	   const myprops = {isPermanentSpace: rest.isPermanentSpace,...renderProps};    
+
+	   const myprops = {isPermanentSpace: rest.isPermanentSpace,skipOn: rest.skipOn,...renderProps};
+           console.log("My Props",myprops);           
           return (
 		  <Component {...myprops} />
           )
@@ -468,15 +469,19 @@ const RouteWithIntro = ({component: Component, ...rest}) => {
 
 
 class App extends Component {
-  render() {
+    render() {
+        console.log("props internal",this.props);
+        const parsed = queryString.parse(this.props.location.search);
+        console.log("Parsed",parsed);
+        var skipon = (parsed.skipon == "true");
     return (
       <div>
         <Switch>
           <RouteWithIntro exact path="/login" component={withRouter(Login)} />
-          <RouteWithIntro exact path="/" component={view(JourneyBoard)} />
+          <RouteWithIntro exact path="/" component={view(JourneyBoard)} skipOn={skipon}/>
             <RouteWithIntro exact path="/old" component={Home} />
-	    <RouteWithIntro exact path="/j/:room" component={JSP.JourneySpace} isPermanentSpace={false} />
-            <RouteWithIntro exact path="/:room" component={JSP.JourneySpace} isPermanentSpace={true}  />
+	    <RouteWithIntro exact path="/j/:room" component={JSP.JourneySpace} isPermanentSpace={false} skipOn={skipon}/>
+            <RouteWithIntro exact path="/:room" component={JSP.JourneySpace} isPermanentSpace={true}  skipOn={skipon}/>
         </Switch>
       </div>
     )

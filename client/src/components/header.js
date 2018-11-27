@@ -23,7 +23,7 @@ class LeaveRoomButton extends Component {
     if (!state.audioTag.paused) {
       state.audioTag.pause();
     }
-    this.props.history.push('/');            
+      this.props.history.push('/'+(this.props.skipOn ? '?skipon=true' : ''));            
   }
 
   render() {
@@ -54,7 +54,7 @@ export class LogoAndTitleBar extends React.Component {
 		<div style={{padding: '5px'}}>
 		</div>
 		{ this.props.showLeave && 
-		  <LeaveRoomButton history={this.props.history}/> }
+		  <LeaveRoomButton history={this.props.history} skipOn={this.props.skipOn}/> }
 	    { this.props.isPermanentSpace &&
 	      <span className="journeyspacetitle">Space Name: {this.props.spaceName} </span>
 	    }
@@ -87,7 +87,7 @@ export class JourneyBoardBar extends React.Component {
 		<div style={{padding: '5px'}}>
 		</div>
 		{ this.props.showLeave && 
-		  <LeaveRoomButton history={this.props.history}/> }
+		  <LeaveRoomButton history={this.props.history} skipOn={this.props.skipOn}/> }
 	    { this.props.isPermanentSpace &&
 	      <span className="journeyspacetitle">Space Name: {this.props.spaceName} </span>
 	    }

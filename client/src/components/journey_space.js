@@ -326,7 +326,11 @@ class PhaseIndicator extends Component {
     super(props);
   }
     get stepIndex() {
-       return stepIndexAux(this.props.playerState);	
+        if (this.props.showingFeedback) {
+            return 3;
+        } else {
+            return stepIndexAux(this.props.playerState);	
+        }
     }
     // Note: setting the backgroudnColor below to orange does not work, but at least gives us a
     // gray that can be seen against the black background
@@ -1450,6 +1454,8 @@ export class JourneySpace extends Component {
     }
     render() {
         // Here I am attempting to set the background image---really thise needs to be done with the journy changes, not in render.
+
+        console.log("journey_space props",this.props);
         
 	    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
 	    var local_key_counter_to_avoid_warning = 0;	    
@@ -1482,6 +1488,7 @@ export class JourneySpace extends Component {
 		<div id="topbar_and_header">
 		 <LTB.LogoAndTitleBar history={this.props.history} showLeave={true}
 		 isPermanentSpace={this.props.isPermanentSpace}
+                 skipOn={this.props.skipOn}
 		 spaceName={spaceName}
 		 />
 
@@ -1507,7 +1514,7 @@ export class JourneySpace extends Component {
 
                  <JourneyPhases playerState={this.state.playerState} timer={this.journeyStateTimer}  seekTo={this.seekTo}/>
 		 </div>
-		 <PhaseIndicator playerState={this.state.playerState} />	     
+		 <PhaseIndicator playerState={this.state.playerState} showingFeedback={this.state.showFeedbackModal}/>	     
 		 </div>
 	    </div>
 
@@ -1547,6 +1554,7 @@ export class JourneySpace extends Component {
                  <div  id="firstsquare" className="flexiblecol" key="name">
 		 <div className="flexiblecol-content">
                  <img id='video-square0' className="journey-image" src={state.journey.image} onClick={this.togglePlayState}/>
+                 {this.props.skipOn &&
 		 <SkipButtonClear
 		 visibility={{visibility: `${(!(this.state.showInviteModal || this.state.showOrientationModal || this.state.showFeedbackModal)) ? "visible" : "hidden"}`}}
 		 publisher={this.publisher}
@@ -1559,8 +1567,10 @@ export class JourneySpace extends Component {
 		 journey= {state.journey}
 		 playerState={state.playerState}
 		 seekTo={this.seekTo}>
-		  </SkipButtonClear>
-		 </div>
+		         </SkipButtonClear>
+                 }
+                 }
+		         </div>
                  </div>
 
 
