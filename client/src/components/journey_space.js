@@ -853,7 +853,10 @@ class UnfilledVideoSquare extends React.Component {
       const visible = this.props.visible;      
       const hide_control = (!visible) ||
       	    !(state.playerState == "waiting" ||
-	      state.playerState == "failed");
+	      state.playerState == "failed" ||
+             state.playerState == "joined");
+      console.log("state.playerState",state.playerState);
+      console.log("visibile",visible);      
       const additionalClass = this.props.additionalClass;
 
       return ((slength < limit) ?
