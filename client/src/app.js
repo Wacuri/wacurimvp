@@ -185,6 +185,15 @@ class JoinableJourneyCard extends Component {
   }
 }
 
+// https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
+function uniqBy(a, key) {
+    var seen = {};
+    return a.filter(function(item) {
+        var k = key(item);
+        return seen.hasOwnProperty(k) ? false : (seen[k] = true);
+    })
+}
+
 class JourneyBoard extends Component {
   constructor(props) {
       super(props);
@@ -234,8 +243,10 @@ class JourneyBoard extends Component {
 	      // console.log("joinable Jounerys:");
 	      // console.log(state.joinableJourneys);
 	      // console.log([JSON.parse(event.data)]);	      
-//	      state.joinableJourneys = _.unionBy(state.joinableJourneys, [JSON.parse(event.data)], (j) => j._id)	      
+              //	      state.joinableJourneys = _.unionBy(state.joinableJourneys, [JSON.parse(event.data)], (j) => j._id)
+	      console.log("before",state.joinableJourneys);
               state.joinableJourneys.push(JSON.parse(event.data));
+	      console.log("after",state.joinableJourneys);              
 	      
         });
 
@@ -305,6 +316,7 @@ class JourneyBoard extends Component {
           clearInterval(this.interval);
       };
 
+ 
     render() {
 	// Note, if this key is ever read and treated as a id, then we will have a terrible problem.
 	// I want to remove the warnings I am getting, but this is a dangerous way to do it.
@@ -314,32 +326,41 @@ class JourneyBoard extends Component {
         // As an experiment, we will sort by number of participants.
         // this.state.joinableJourneys = this.state.joinableJourneys.sort( (a,b) => (Date.parse(a.startAt) < Date.parse(b.startAt)));
 
-        this.state.joinableJourneys.sort( (a,b) =>
-                                              {
-                                                  if (a.participants.length > b.participants.length)
-                                                      return -1;
-                                                  if ((a.participants.length == b.participants.length) && (Date.parse(a.startAt) < Date.parse(b.startAt)))
-                                                      return -1;
-                                                  // This should not happen!!
-                                                  if ((a.participants.length == b.participants.length) && (Date.parse(a.startAt) == Date.parse(b.startAt)))
-                                                      return 0;
-                                                  return 1;
-                                              });
+        this.state.joinableJourneys.sort(
+            (a,b) =>
+                {
+                    if (a.participants.length > b.participants.length)
+                        return -1;
+                    if ((a.participants.length == b.participants.length) && (Date.parse(a.startAt) < Date.parse(b.startAt)))
+                        return -1;
+                    // This should not happen!!
+                    if ((a.participants.length == b.participants.length) && (Date.parse(a.startAt) == Date.parse(b.startAt)))
+                        return 0;
+                    return 1;
+                });
 
         var JAP = this.state.joinableJourneys.filter(j => (j.participants.length > 0));
+        JAP = uniqBy(JAP,(j => j.name));
         
-        var JA = this.state.joinableJourneys.filter(j => (j.participants.length == 0));        
+        var JA = this.state.joinableJourneys.filter(j => (j.participants.length == 0));
+        var firstlen = JA.length;
+        JA = uniqBy(JA,(j => j.name));
+        var secondlen = JA.length;
+        if (firstlen != secondlen) {
+            console.log("uniqBy removed some",firstlen,secondlen);
+        }
 
-        const CardArrayParticipants =  JAP.map(journey => {
+       const CardArrayParticipants =  JAP.map(journey => {
             if (journey.participants.length > 0) {
                     if (Date.parse(journey.startAt) > Date.parse(new Date())) {
                         return ( <JoinableJourneyCard key={journey._id+"_"+discriminator++}
                                  journey={journey} audioTag={this.audioTag} skipOn={this.props.skipOn}/>);
                     } else {
                         return (null)
-                    }} else {
-                        return (null)
                     }
+            } else {
+                return (null)
+            }
         });
         
         const CardArray =  JA.map(journey => {
@@ -349,9 +370,10 @@ class JourneyBoard extends Component {
                                  journey={journey} audioTag={this.audioTag} skipOn={this.props.skipOn}/>);
                     } else {
                         return (null)
-                    }} else {
-                        return (null)
                     }
+            } else {
+                return (null)
+            }
         });
         
         
