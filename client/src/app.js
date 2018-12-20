@@ -22,7 +22,7 @@ import * as INTRO from './components/intro';
 import CountdownMessage from './components/countdown_message';
 import state from './state';
 import * as someHelper from './utility/utility';
-import queryString from 'query-string';
+import * as queryStringX from 'query-string';
 
 
 
@@ -38,6 +38,18 @@ import journeyboardbannerimage from 'file-loader!isomorphic-loader!../res/images
 
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 
+const MYonbeforeunload = function (e) {
+  //  alert("unload");
+  var message = "Your confirmation message goes here.",
+  e = e || window.event;
+  // For IE and Firefox
+  if (e) {
+    e.returnValue = message;
+  }
+
+  // For Safari
+  return message;
+};    
 
 // Note: it may be worth using serve favicon to make this work on our deployed site: https://expressjs.com/en/resources/middleware/serve-favicon.html
 
@@ -60,6 +72,9 @@ if (__CLIENT__) {
     document.body.addEventListener('click', globalClickCatcher);
     window.addEventListener('resize', resizeEventHandler);
     window.addEventListener('load', resizeEventHandler);
+    // This is my attempt not to warn the user, but to catch the event for the purpose of updating the
+    // event that counts the users in the rooms.
+   //  window.addEventListener('beforeunload', MYonbeforeunload);    
 }
 
 
@@ -296,7 +311,49 @@ class JourneyBoard extends Component {
 	// Possibly I should deal with this in a different way.
 	var discriminator = 0;
 
-        this.state.joinableJourneys = this.state.joinableJourneys.sort( (a,b) => (Date.parse(a.startAt) < Date.parse(b.startAt)));
+        // As an experiment, we will sort by number of participants.
+        // this.state.joinableJourneys = this.state.joinableJourneys.sort( (a,b) => (Date.parse(a.startAt) < Date.parse(b.startAt)));
+
+        this.state.joinableJourneys.sort( (a,b) =>
+                                              {
+                                                  if (a.participants.length > b.participants.length)
+                                                      return -1;
+                                                  if ((a.participants.length == b.participants.length) && (Date.parse(a.startAt) < Date.parse(b.startAt)))
+                                                      return -1;
+                                                  // This should not happen!!
+                                                  if ((a.participants.length == b.participants.length) && (Date.parse(a.startAt) == Date.parse(b.startAt)))
+                                                      return 0;
+                                                  return 1;
+                                              });
+
+        var JAP = this.state.joinableJourneys.filter(j => (j.participants.length > 0));
+        
+        var JA = this.state.joinableJourneys.filter(j => (j.participants.length == 0));        
+
+        const CardArrayParticipants =  JAP.map(journey => {
+            if (journey.participants.length > 0) {
+                    if (Date.parse(journey.startAt) > Date.parse(new Date())) {
+                        return ( <JoinableJourneyCard key={journey._id+"_"+discriminator++}
+                                 journey={journey} audioTag={this.audioTag} skipOn={this.props.skipOn}/>);
+                    } else {
+                        return (null)
+                    }} else {
+                        return (null)
+                    }
+        });
+        
+        const CardArray =  JA.map(journey => {
+            if (journey.participants.length == 0) {            
+                if (Date.parse(journey.startAt) > Date.parse(new Date())) {
+                        return ( <JoinableJourneyCard key={journey._id+"_"+discriminator++}
+                                 journey={journey} audioTag={this.audioTag} skipOn={this.props.skipOn}/>);
+                    } else {
+                        return (null)
+                    }} else {
+                        return (null)
+                    }
+        });
+        
         
 	return (
 		<div>
@@ -316,16 +373,18 @@ class JourneyBoard extends Component {
 					<p>Select a journey to begin whenever you are ready.<br/>Wait for others to join, or invite friends!</p>
                      </div>
                 </div>
-      <div className='joinable-journeys'>
-                {state.joinableJourneys.map(journey => {
-                    if (Date.parse(journey.startAt) > Date.parse(new Date())) {
-                        return ( <JoinableJourneyCard key={journey._id+"_"+discriminator++}
-                                 journey={journey} audioTag={this.audioTag} skipOn={this.props.skipOn}/>)
-                    }}
-
-)}
+                {/* Here we will draw those with participants first, separated from those without. This creates an unneeded space.*/}
+            { (CardArrayParticipants.length > 0) &&
+              <div className='joinable-journeys'>
+              { CardArrayParticipants}
+              <p> </p>              
+	      </div>
+            }
+            <div className='joinable-journeys'>
+                { CardArray}
 	    </div>
-		</div>
+
+	    </div>
     )
   }
 }
@@ -470,9 +529,7 @@ const RouteWithIntro = ({component: Component, ...rest}) => {
 
 class App extends Component {
     render() {
-        console.log("props internal",this.props);
-        const parsed = queryString.parse(this.props.location.search);
-        console.log("Parsed",parsed);
+        const parsed = queryStringX.parse(this.props.location.search);
         var skipon = (parsed.skipon == "true");
     return (
       <div>
