@@ -38,18 +38,6 @@ import journeyboardbannerimage from 'file-loader!isomorphic-loader!../res/images
 
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 
-const MYonbeforeunload = function (e) {
-  //  alert("unload");
-  var message = "Your confirmation message goes here.",
-  e = e || window.event;
-  // For IE and Firefox
-  if (e) {
-    e.returnValue = message;
-  }
-
-  // For Safari
-  return message;
-};    
 
 // Note: it may be worth using serve favicon to make this work on our deployed site: https://expressjs.com/en/resources/middleware/serve-favicon.html
 
@@ -72,9 +60,6 @@ if (__CLIENT__) {
     document.body.addEventListener('click', globalClickCatcher);
     window.addEventListener('resize', resizeEventHandler);
     window.addEventListener('load', resizeEventHandler);
-    // This is my attempt not to warn the user, but to catch the event for the purpose of updating the
-    // event that counts the users in the rooms.
-   //  window.addEventListener('beforeunload', MYonbeforeunload);    
 }
 
 

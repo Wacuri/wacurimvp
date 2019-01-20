@@ -39,29 +39,77 @@ require('isomorphic-fetch');
 
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 
+
 if (__CLIENT__) {
 	var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
 	const OT = require('@opentok/client');
-	window.state = state;
+    window.state = state;
+
+    // This is my attempt not to warn the user, but to catch the event for the purpose of updating the
+    // event that counts the users in the rooms.
+
+    // On this event, our goal is to remove the participant, so that
+    // the participants number is correct on the JourneyBoard.
+    // This should also produce a signal that can be used,
+    // just as we have at this time a signal which adds the participant.
 }
 
 
-class LeaveRoomButton extends Component {
+// WARNING: the scoping of these two is probably not correct.
+// These are needed in the event handler. I would prefer none
+// of this to be global, but I am not sure how to make that happen.
+var JS_GLOBAL_ROOM;
+var JS_GLOBAL_SESSION_HELPER;
 
-  onLeave = (e) => {
-    e.preventDefault();
-    if (!state.audioTag.paused) {
-      state.audioTag.pause();
-    }
-      this.props.history.push('/');      
-  }
+// Possibly this should just be on the JourneySpace
+    function MYonbeforeunload(e) {
+        //  alert("unload");
+//        var message = "Your confirmation message goes here.",
+//            e = e || window.event;
+        // For IE and Firefox
+//        if (e) {
+//            e.returnValue = undefined;
+//        }
 
-  render() {
-    return (
-      <button onClick={this.onLeave} className='btn btn-primary'>Leave</button>
-    )
-  }
-}
+        // I need to to figure out the room parameter here...
+        fetch(`/api/journeys/${JS_GLOBAL_ROOM}/unjoined`, {
+	    body: JSON.stringify({id: JS_GLOBAL_SESSION_HELPER.session.connection.id}),
+	    credentials: 'same-origin', // include, same-origin, *omit
+	    headers: {
+	        'content-type': 'application/json'
+	    },
+	    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+	    mode: 'cors', // no-cors, cors, *same-origin
+	    redirect: 'follow', // manual, *follow, error
+	    referrer: 'no-referrer', // *client, no-referrer
+        });
+
+        console.log("FETCH DONE");
+        // For Safari
+        // returning null should prevent the actual prompting...
+        return;
+    };    
+
+
+// class LeaveRoomButton extends Component {
+
+//   onLeave = (e) => {
+//     e.preventDefault();
+//     if (!state.audioTag.paused) {
+//       state.audioTag.pause();
+//     }
+
+//       MYonbeforeunload();
+     
+//       this.props.history.push('/');      
+//   }
+
+//   render() {
+//     return (
+//       <button onClick={this.onLeave} className='btn btn-primary'>Leave</button>
+//     )
+//   }
+// }
 
 
 class AbstractTimerEmitter extends EventEmitter {
@@ -955,6 +1003,8 @@ class Controls extends Component {
     
 }
 
+
+
 export class JourneySpace extends Component {
   constructor(props) {
       super(props);
@@ -979,7 +1029,15 @@ export class JourneySpace extends Component {
       this.audioTag = {};
   }
 
+    // This is needed because of the
+    // the fact that the event is invoked separately.
+
+
+
     componentDidMount() {
+
+
+        
 	state.audioTag.addEventListener('ended', (event) => {
 	    this.setState({
 		playerState: ENDED
@@ -1022,6 +1080,12 @@ export class JourneySpace extends Component {
 		    token: state.journey.token,
 		    onConnect: () => {
 			console.log('assigned connection to publisher', this.sessionHelper.session.connection);
+                        // This is where the participant is joined,
+                        // and we probably need to make an inversion of this
+                        // function which removes the participant.
+
+                        // WARNING: This is an ugly, temporary solution
+                        JS_GLOBAL_ROOM = this.props.match.params.room;
 			fetch(`/api/journeys/${this.props.match.params.room}/joined`, {
 			    body: JSON.stringify({id: this.sessionHelper.session.connection.id}),
 			    credentials: 'same-origin', // include, same-origin, *omit
@@ -1044,6 +1108,15 @@ export class JourneySpace extends Component {
 			}
 		    }
 		});
+
+                JS_GLOBAL_SESSION_HELPER = this.sessionHelper;
+
+                // Now we can add this event listener
+                if (__CLIENT__) {
+                    window.addEventListener('beforeunload', MYonbeforeunload);
+                }
+                
+                
 		this.sessionHelper.session.on("connectionDestroyed", (event) => {
 		    const data = {
 			sessionId: this.sessionHelper.session.sessionId,
@@ -1490,6 +1563,7 @@ export class JourneySpace extends Component {
 		 isPermanentSpace={this.props.isPermanentSpace}
                  skipOn={this.props.skipOn}
 		 spaceName={spaceName}
+                 extraOnLeave={MYonbeforeunload}
 		 />
 
 		 <div style={{ overflow: 'auto'}} >

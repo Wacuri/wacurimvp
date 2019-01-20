@@ -120,6 +120,8 @@ router.get('/journeys/:room', async (req, res) => {
     }
 });
 
+// Possibly we will need to implement a new endpoint that allows the removal of this.
+// Probably the session.id is where the user ide that needs to be removed.
 router.post('/journeys/:room/joined', async (req, res) => {
 	const {room} = req.params;
   const {id: connectionId} = req.body;
@@ -139,6 +141,35 @@ router.post('/journeys/:room/joined', async (req, res) => {
     const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
     if (globalSpace) {
       opentok.signal(globalSpace.sessionId, null, { 'type': 'journeyerJoined', 'data': JSON.stringify(participant.toJSON()) }, () => {});
+    }
+    res.json(participant.toJSON());
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+router.post('/journeys/:room/unjoined', async (req, res) => {
+	const {room} = req.params;
+  const {id: connectionId} = req.body;
+  req.session.connections = req.session.connections || {};
+  req.session.connections[room] = connectionId;
+	const journeySpace = await JourneySpace.findOne({room}).lean().exec();
+	if (journeySpace) {
+    let participant = await JourneyParticipant.findOne({journeySpace, user: req.session.id}).exec();
+    if (participant) {
+      participant.connectionId = connectionId;
+      participant.present = false;
+      await participant.save();
+    }
+    // else {
+    //   participant = new JourneyParticipant({journeySpace, user: req.session.id, connectionId});
+    //   await participant.save();
+    // }
+            const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+            console.log("UNJOINED event found on server!",globalSpace,participant);
+            
+    if (globalSpace) {
+        opentok.signal(globalSpace.sessionId, null, { 'type': 'journeyerLeftSpace', 'data': JSON.stringify(participant.toJSON()) }, () => {});
     }
     res.json(participant.toJSON());
   } else {
