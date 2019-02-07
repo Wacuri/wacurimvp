@@ -48,6 +48,9 @@ module.exports = {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
+      // TODO: This seems to be incompatible with the latest version of query-string.
+      // Removing it causes our access to fonts to fail, for a reaon I don't quite understand.
+      // Possibly this is a version dependence issue, which are a big pain.
     new UglifyJSPlugin({
       sourceMap: true
     }),

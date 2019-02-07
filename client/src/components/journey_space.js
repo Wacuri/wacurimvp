@@ -37,6 +37,9 @@ require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
 
+// TODO: This is really a shared global!!
+const MAX_PARTICIPANTS = 3;
+
 var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 
 
@@ -63,13 +66,6 @@ var JS_GLOBAL_SESSION_HELPER;
 
 // Possibly this should just be on the JourneySpace
     function MYonbeforeunload(e) {
-        //  alert("unload");
-//        var message = "Your confirmation message goes here.",
-//            e = e || window.event;
-        // For IE and Firefox
-//        if (e) {
-//            e.returnValue = undefined;
-//        }
 
         // I need to to figure out the room parameter here...
         fetch(`/api/journeys/${JS_GLOBAL_ROOM}/unjoined`, {
@@ -89,28 +85,6 @@ var JS_GLOBAL_SESSION_HELPER;
         // returning null should prevent the actual prompting...
         return;
     };    
-
-
-// class LeaveRoomButton extends Component {
-
-//   onLeave = (e) => {
-//     e.preventDefault();
-//     if (!state.audioTag.paused) {
-//       state.audioTag.pause();
-//     }
-
-//       MYonbeforeunload();
-     
-//       this.props.history.push('/');      
-//   }
-
-//   render() {
-//     return (
-//       <button onClick={this.onLeave} className='btn btn-primary'>Leave</button>
-//     )
-//   }
-// }
-
 
 class AbstractTimerEmitter extends EventEmitter {
   _displayTime(millisec: number) {
@@ -907,8 +881,6 @@ class UnfilledVideoSquare extends React.Component {
       	    !(state.playerState == "waiting" ||
 	      state.playerState == "failed" ||
              state.playerState == "joined");
-      console.log("state.playerState",state.playerState);
-      console.log("visibile",visible);      
       const additionalClass = this.props.additionalClass;
 
       return ((slength < limit) ?
@@ -1036,8 +1008,6 @@ export class JourneySpace extends Component {
 
     componentDidMount() {
 
-
-        
 	state.audioTag.addEventListener('ended', (event) => {
 	    this.setState({
 		playerState: ENDED
@@ -1068,7 +1038,6 @@ export class JourneySpace extends Component {
 	    .then(res => res.json())
 	    .then(json => {
 		state.journey = json;
-		
 
 		state.audioTag.src = state.journey.journey;
 
@@ -1096,10 +1065,29 @@ export class JourneySpace extends Component {
 			    mode: 'cors', // no-cors, cors, *same-origin
 			    redirect: 'follow', // manual, *follow, error
 			    referrer: 'no-referrer', // *client, no-referrer
-			});
+			}).then(function(response) {
+                            if (!response.ok) {
+                                console.log("throwing",response);
+                                throw Error(response.statusText);
+                            }
+                        }).catch(function(error) {
+                            console.log(error);
+                            // This returns them to journey board.
+                            // Basically at this point we want
+                            // to make very sure we don't render any streams.
+                            // I am not sure how to do this.
+                        });
 		    },
 		    onStreamsUpdated: streams => {
 			console.log('Current subscriber streams:', streams);
+                        // We substract one here becase the owner if this
+                        // page counts as a participant who is not a subscriber
+                        // stream
+                        if (streams.length+1 > MAX_PARTICIPANTS) {
+                            console.log("RETREATING BECAUSE TOO MANY USERS");
+                            alert("Too Many users");
+                            this.props.history.push('/');                            
+                        }
 			this.setState({ streams });
 			if (!this.state.currentlyActivePublisher) {
 			    this.setState({
@@ -1203,6 +1191,10 @@ export class JourneySpace extends Component {
 			this.setState({
 			    playerState: FAILED
 			});
+		});
+                
+		this.sessionHelper.session.on("signal:roomTooFull", (event) => {
+                    alert("ROOM TOO FULL!");
 		});
 
 
@@ -1525,11 +1517,16 @@ export class JourneySpace extends Component {
 	
 	return value;
     }
+    countPresentParticipants = (journey) => {
+        const reducer = (accumulator, currentValue) => accumulator + (currentValue.present ? 1 : 0);
+        if (journey)
+            return journey.participants.reduce(reducer,0);
+        else
+            return 0;
+    }
     render() {
         // Here I am attempting to set the background image---really thise needs to be done with the journy changes, not in render.
 
-        console.log("journey_space props",this.props);
-        
 	    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
 	    var local_key_counter_to_avoid_warning = 0;	    
 	    let currentUserHasFlaggedJourney = state.journey && state.journey.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
@@ -1564,6 +1561,8 @@ export class JourneySpace extends Component {
                  skipOn={this.props.skipOn}
 		 spaceName={spaceName}
                  extraOnLeave={MYonbeforeunload}
+                 js_global_room={JS_GLOBAL_ROOM}
+                 session_helper={JS_GLOBAL_SESSION_HELPER}
 		 />
 
 		 <div style={{ overflow: 'auto'}} >

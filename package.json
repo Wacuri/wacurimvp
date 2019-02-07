@@ -59,6 +59,7 @@
     "opentok-layout-js": "^1.1.0",
     "opentok-react": "^0.8.0",
     "prop-types": "^15.5.10",
+    "query-string": "5",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
     "react-easy-state": "^5.0.0",

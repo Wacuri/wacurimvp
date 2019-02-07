@@ -155,6 +155,24 @@ agenda.define('remove current create journey spaces', async function(job, done) 
 });
 
 
+// We do not wish to allow someone to be "present" for very long
+agenda.define('ensure know when is present for too long', async function(job, done) {
+    console.log('CLEAR PRESENT USERS');
+  try {
+      const presentParticipants = await JourneyParticipant.find({ present: true}).exec();
+      console.log('presentParticipants.legnth',presentParticipants.length);
+      for (let participant of presentParticipants) {
+          participant.present = false;
+          await participant.save();
+    }
+    done();
+  } catch(e) {
+    console.log(e);
+    done(e);
+  }
+});
+
+
 // This is the filling algorithm. We have to pass data to the jobs.
 // Our basic algorithm will be to have queue length QL and
 // a queue duration QD. For now, QD = QL * 1 minute.
@@ -184,6 +202,7 @@ agenda.on('ready', function() {
     // This is only used for debugging, in situations which may occur
     // when working in this area.
     agenda.schedule('2 seconds', 'clear journeys');
+    agenda.schedule('2 seconds', 'ensure know when is present for too long');
     
     for(var i = 0; i < QL; i++) {
         var data = {separation_sec: (separation_sec * i) };

@@ -24,6 +24,19 @@ class LeaveRoomButton extends Component {
       state.audioTag.pause();
     }
       this.props.extraOnLeave();
+
+        fetch(`/api/journeys/${this.props.js_global_rom}/unjoined`, {
+	    body: JSON.stringify({id: this.props.session_helper.session.connection.id}),
+	    credentials: 'same-origin', // include, same-origin, *omit
+	    headers: {
+	        'content-type': 'application/json'
+	    },
+	    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+	    mode: 'cors', // no-cors, cors, *same-origin
+	    redirect: 'follow', // manual, *follow, error
+	    referrer: 'no-referrer', // *client, no-referrer
+        });
+      
       this.props.history.push('/'+(this.props.skipOn ? '?skipon=true' : ''));            
   }
 
@@ -55,7 +68,9 @@ export class LogoAndTitleBar extends React.Component {
 		<div style={{padding: '5px'}}>
 		</div>
 		{ this.props.showLeave && 
-		  <LeaveRoomButton history={this.props.history} skipOn={this.props.skipOn} extraOnLeave={this.props.extraOnLeave}/> }
+		  <LeaveRoomButton history={this.props.history} skipOn={this.props.skipOn} extraOnLeave={this.props.extraOnLeave} js_global_room={this.props.js_global_room}
+                  session_helper={this.props.session_helper}
+                  /> }
 	    { this.props.isPermanentSpace &&
 	      <span className="journeyspacetitle">Space Name: {this.props.spaceName} </span>
 	    }

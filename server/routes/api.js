@@ -24,18 +24,21 @@ dotenv.config();
 
 mongoose.connect(process.env.MONGODB_URI || process.env.MONGO_URL);
 
-function promisify(fn) {
-  /**
-   * @param {...Any} params The params to pass into *fn*
-   * @return {Promise<Any|Any[]>}
-   */
-  return function promisified(...params) {
-    return new Promise((resolve, reject) => fn(...params.concat([(err, ...args) => err ? reject(err) : resolve( args.length < 2 ? args[0] : args )])))
-  }
-}
+// function promisify(fn) {
+//   /**
+//    * @param {...Any} params The params to pass into *fn*
+//    * @return {Promise<Any|Any[]>}
+//    */
+//   return function promisified(...params) {
+//     return new Promise((resolve, reject) => fn(...params.concat([(err, ...args) => err ? reject(err) : resolve( args.length < 2 ? args[0] : args )])))
+//   }
+// }
 
 const opentok = new OpenTok(process.env.OPENTOK_KEY, process.env.OPENTOK_SECRET);
 const router = express.Router();
+const GLOBAL_JOURNEY_BOARD = 'temp-home-location';
+
+
 
 function generateToken(sessionId) {
 	let tokenOptions = {};
@@ -66,14 +69,16 @@ router.get('/journeys/:room', async (req, res) => {
             journeySpace.sessionId = session.sessionId;
             await journeySpace.save();
         }
-        const participants = await JourneyParticipant.find({journeySpace, present: true}).lean().exec();
+        // NOTE: This line may be a sticking point
+        const participants = await JourneyParticipant.find({session: journeySpace, present: true}).lean().exec();
+//        const participants = await JourneyParticipant.find({journeySpace, present: true}).lean().exec();        
         const currentUserParticipant = await JourneyParticipant.findOne({journeySpace, user: req.session.id}).exec();
         
         if (!currentUserParticipant) {
             const newParticipant = new JourneyParticipant({journeySpace, user: req.session.id, present: true});
             await newParticipant.save();
             participants.push(newParticipant);
-            const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+            const globalSpace = await JourneySpace.findOne({room: GLOBAL_JOURNEY_BOARD}).exec();
             if (globalSpace) {
                 opentok.signal(globalSpace.sessionId, null, { 'type': 'newJoin', 'data': JSON.stringify(newParticipant.toJSON()) }, () => {});
             }
@@ -138,7 +143,7 @@ router.post('/journeys/:room/joined', async (req, res) => {
       participant = new JourneyParticipant({journeySpace, user: req.session.id, connectionId});
       await participant.save();
     }
-    const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+    const globalSpace = await JourneySpace.findOne({room: GLOBAL_JOURNEY_BOARD}).exec();
     if (globalSpace) {
       opentok.signal(globalSpace.sessionId, null, { 'type': 'journeyerJoined', 'data': JSON.stringify(participant.toJSON()) }, () => {});
     }
@@ -161,11 +166,11 @@ router.post('/journeys/:room/unjoined', async (req, res) => {
       participant.present = false;
       await participant.save();
     }
-    // else {
-    //   participant = new JourneyParticipant({journeySpace, user: req.session.id, connectionId});
-    //   await participant.save();
-    // }
-            const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+     else {
+       participant = new JourneyParticipant({journeySpace, user: req.session.id, connectionId});
+       await participant.save();
+     }
+            const globalSpace = await JourneySpace.findOne({room: GLOBAL_JOURNEY_BOARD}).exec();
             console.log("UNJOINED event found on server!",globalSpace,participant);
             
     if (globalSpace) {
@@ -192,7 +197,7 @@ router.get('/active_journeys', async(req, res) => {
   const journeys = await JourneySpace.aggregate([
     {
       $match: {
-        state: {$in: ['created', 'joined']}, startAt: {$gte: new Date()}, room: {$ne: 'temp-home-location'}
+        state: {$in: ['created', 'joined']}, startAt: {$gte: new Date()}, room: {$ne: GLOBAL_JOURNEY_BOARD}
       }
     }, 
 
@@ -239,7 +244,7 @@ router.post('/journeys/:id/rsvp', async (req, res) => {
   }
   const rsvp = new JourneyRSVP({journey, user: req.session.id});
   await rsvp.save();
-  const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+  const globalSpace = await JourneySpace.findOne({room: GLOBAL_JOURNEY_BOARD}).exec();
   if (globalSpace) {
     opentok.signal(globalSpace.sessionId, null, { 'type': 'newRSVP', 'data': JSON.stringify(rsvp) }, () => {});
   }
@@ -291,7 +296,7 @@ router.post('/journeys/:id/skip', async (req, res) => {
 // Trigger a general announcement to everyone
 router.get('/sessions/test/temp-home-location', async (req, res) => {
   // const {room, connection} = req.params;
-  const journeySpace = await JourneySpace.findOne({room:'temp-home-location'}).exec();
+  const journeySpace = await JourneySpace.findOne({room:GLOBAL_JOURNEY_BOARD}).exec();
   if (journeySpace) {
   console.log("**** SENDING SIGNAL")
   let messageData = {
@@ -404,7 +409,7 @@ router.post('/event', async (req, res) => {
         if (participant) {
           participant.present = false;
           await participant.save();
-          const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
+          const globalSpace = await JourneySpace.findOne({room: GLOBAL_JOURNEY_BOARD}).exec();
           if (globalSpace) {
             opentok.signal(globalSpace.sessionId, null, { 'type': 'journeyerLeftSpace', 'data': JSON.stringify(participant.toJSON()) }, () => {});
           }

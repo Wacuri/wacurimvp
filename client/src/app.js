@@ -42,6 +42,12 @@ var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = {};
 // Note: it may be worth using serve favicon to make this work on our deployed site: https://expressjs.com/en/resources/middleware/serve-favicon.html
 
 
+const MAX_PARTICIPANTS = 3;
+
+const spot_index = (l) => {
+    return Math.max(0,Math.min(MAX_PARTICIPANTS,MAX_PARTICIPANTS-l));
+}
+
 if (__CLIENT__) {
   var { OTSession, OTPublisher, OTStreams, OTSubscriber, createSession } = require('opentok-react');
   const OT = require('@opentok/client');
@@ -132,6 +138,8 @@ class Login extends Component {
   }
 }
 
+
+
 class JoinableJourneyCard extends Component {
   constructor(props) {
     super(props);
@@ -140,14 +148,14 @@ class JoinableJourneyCard extends Component {
     }
   }
 
-  render() {
+    render() {
     const {journey} = this.props;
       const currentUserHasRSVP = (journey.participants || []).find(participant => participant.user === state.sessionId) != null;
 
       const image_name = "images/SPOTS-0"+journey.participants.length+".png";
       const queryparam = (this.props.skipOn ? "?" + "skipon=true" : "");
-      return (
-      <div className='joinable-journey-card'>
+        return (
+                <div className='joinable-journey-card'>
         <div className='image'>
           <img src={journey.image}/>
         </div>
@@ -156,16 +164,17 @@ class JoinableJourneyCard extends Component {
             <h4>{journey.name}</h4>
             </div>
           <CountdownMessage endTime={journey.startAt} />
-            <div className='journey-vacant-spots'>
-              <span className='spotnumber' key="msg">{3 - journey.participants.length} </span>
-              <span> spot{3 - journey.participants.length > 1 ? 's' : ''} available: </span>
+                <div className='journey-vacant-spots'>
+              <span className='spotnumber' key="msg">{spot_index(journey.participants.length)} </span>
+              <span> spot{spot_index(journey.participants.length) > 1 ? 's' : ''} available: </span>
 	      <img src={image_name} />
             </div>
 
 	    {/* here "j" is inserted as a convenient means of marking this entry as a Journeyboard space rather than a permanent one */}
             <Link to={`/j/${journey.room}${queryparam}`} className='btn btn-primary'>{currentUserHasRSVP ? 'Go there now' : 'Join'}</Link>
-        </div>
-      </div>
+              </div> 
+              </div>
+
     )
   }
 }
@@ -178,6 +187,8 @@ function uniqBy(a, key) {
         return seen.hasOwnProperty(k) ? false : (seen[k] = true);
     })
 }
+
+
 
 class JourneyBoard extends Component {
   constructor(props) {
@@ -229,9 +240,7 @@ class JourneyBoard extends Component {
 	      // console.log(state.joinableJourneys);
 	      // console.log([JSON.parse(event.data)]);	      
               //	      state.joinableJourneys = _.unionBy(state.joinableJourneys, [JSON.parse(event.data)], (j) => j._id)
-	      console.log("before",state.joinableJourneys);
               state.joinableJourneys.push(JSON.parse(event.data));
-	      console.log("after",state.joinableJourneys);              
 	      
         });
 
@@ -255,6 +264,11 @@ class JourneyBoard extends Component {
             if (journey.participants.findIndex(_participant => _participant._id === participant._id) === -1) {
               journey.participants.push(participant);
             }
+
+              // TODO: I know we should remove it, but I am confused.
+              if (journey.participants >= MAX_PARTICIPANTS) {
+                  state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), journey, ...state.joinableJourneys.slice(idx + 1)];
+              }
 //	      console.log(state.joinableJourneys);
               state.joinableJourneys = [...state.joinableJourneys.slice(0, idx), journey, ...state.joinableJourneys.slice(idx + 1)];
 //	      console.log("journeyer joined done!");
@@ -278,8 +292,9 @@ class JourneyBoard extends Component {
               this.setState({
                   joinableJourneys: 
                   state.joinableJourneys.filter(
-                      journey => 
-                          (Date.parse(journey.startAt) > Date.parse(new Date()))
+                      journey =>
+                          ((journey.participants.length < MAX_PARTICIPANTS) &&
+                           (Date.parse(journey.startAt) > Date.parse(new Date())))
                   )
               });
           }, 1000);
@@ -301,7 +316,6 @@ class JourneyBoard extends Component {
           clearInterval(this.interval);
       };
 
- 
     render() {
 	// Note, if this key is ever read and treated as a id, then we will have a terrible problem.
 	// I want to remove the warnings I am getting, but this is a dangerous way to do it.
@@ -310,7 +324,6 @@ class JourneyBoard extends Component {
 
         // As an experiment, we will sort by number of participants.
         // this.state.joinableJourneys = this.state.joinableJourneys.sort( (a,b) => (Date.parse(a.startAt) < Date.parse(b.startAt)));
-
         this.state.joinableJourneys.sort(
             (a,b) =>
                 {
@@ -332,7 +345,6 @@ class JourneyBoard extends Component {
         JA = uniqBy(JA,(j => j.name));
         var secondlen = JA.length;
         if (firstlen != secondlen) {
-            console.log("uniqBy removed some",firstlen,secondlen);
         }
 
        const CardArrayParticipants =  JAP.map(journey => {
@@ -361,7 +373,6 @@ class JourneyBoard extends Component {
             }
         });
         
-        
 	return (
 		<div>
 		 {this.state.showOrientationModal &&
@@ -381,15 +392,18 @@ class JourneyBoard extends Component {
                      </div>
                 </div>
                 {/* Here we will draw those with participants first, separated from those without. This creates an unneeded space.*/}
-            { (CardArrayParticipants.length > 0) &&
+            {
+               (CardArrayParticipants.length > 0) &&
               <div className='joinable-journeys'>
               { CardArrayParticipants}
               <p> </p>              
 	      </div>
             }
+            {
             <div className='joinable-journeys'>
-                { CardArray}
-	    </div>
+                    { CardArray}
+	        </div>
+            }
 
 	    </div>
     )
@@ -435,8 +449,6 @@ class JourneyBoardOrientationModal extends Component {
   render() {
       const index = this.state.index;
 
-      console.log("JourneyBoard Props",this.props);
-      
       return (
 	    <div key='xxx' className='intro' style={{position: 'absolute',
 			 minHeight: '100%',

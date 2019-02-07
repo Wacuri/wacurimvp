@@ -19,5 +19,6 @@ const JourneyParticipantSchema = new Schema({
 
 const JourneyParticipant = mongoose.model('JourneyParticipant', JourneyParticipantSchema);
 
+
 export default JourneyParticipant;
 

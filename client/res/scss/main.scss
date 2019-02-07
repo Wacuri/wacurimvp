@@ -21,11 +21,16 @@
 // and the Pixel 2 both have a landscape greater
 // than 2. However, they can be detected with Media Queries
 
-// $fa-font-path: "./webfonts" !default;
+
+$fa-font-path: "./webfonts" !default;
 
 @import "~bootstrap/scss/bootstrap.scss";
-@import "~fontawesome-pro-5.3.1-web/css/all.css";
-
+// @import "~fontawesome-pro-5.3.1-web/css/all.css";
+// @import "~/../server/public/css/all.css";
+// I had to copy the fontawesome-pro css into here by hand due to
+// problems interacting with React and WebPack (and maybe yarn).
+// A better deployment engineer might be able to figure this out.
+@import "./fa-special.css";
 
 // Bootstrap overrides
 
