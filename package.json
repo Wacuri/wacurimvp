@@ -51,7 +51,7 @@
     "isomorphic-fetch": "^2.2.1",
     "isomorphic-loader": "^2.0.2",
     "js-cookie": "^2.2.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "moment": "^2.22.1",
     "mongoose": "^5.0.14",
     "newrelic": "^4.9.0",
