@@ -31,7 +31,7 @@ import * as INTRO from './intro';
 // var Rating = require('react-rating');
 import Rating from 'react-rating';
 
-import * as someHelper from '../utility/utility'
+import * as someHelper from './utility';
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
@@ -84,7 +84,7 @@ var JS_GLOBAL_SESSION_HELPER;
         // For Safari
         // returning null should prevent the actual prompting...
         return;
-    };    
+    };
 
 class AbstractTimerEmitter extends EventEmitter {
   _displayTime(millisec: number) {
@@ -106,7 +106,7 @@ class AbstractTimerEmitter extends EventEmitter {
     }
     return `${minutes}:${seconds}`;
   }
-}  
+}
 
 class SecondsTimerEmitter extends AbstractTimerEmitter {
   constructor(createdAt, startAt) {
@@ -130,7 +130,7 @@ class SecondsTimerEmitter extends AbstractTimerEmitter {
   displayTime() {
     return this._displayTime(this.total - this.passed);
   }
-  
+
 }
 
 class AudioPlayTickEmitter extends AbstractTimerEmitter {
@@ -157,7 +157,7 @@ class AudioPlayTickEmitter extends AbstractTimerEmitter {
   }
 
   clear() {
-    
+
   }
 
   displayTime() {
@@ -167,11 +167,11 @@ class AudioPlayTickEmitter extends AbstractTimerEmitter {
 
 // const FlagControl = ({currentUserHasFlaggedStream, stream, onFlag, children}) => {
 //   return (
-//     <button 
+//     <button
 //       className='btn-flag-session'
 //       disabled={currentUserHasFlaggedStream}
 //       onClick={(e) => { e.preventDefault(); onFlag(stream); }}>
-//       {children}  
+//       {children}
 //     </button>
 //   )
 // }
@@ -203,7 +203,7 @@ class Waiting extends Component {
       var ctx = _this.canvas.getContext('2d');
       ctx.fillStyle = "rgba(42,42,42,1)";
       ctx.fillRect(0, 0, _this.canvas.width, _this.canvas.height);
-      
+
       fadeOut();
     }
   }
@@ -302,11 +302,11 @@ class JourneyPhases extends Component {
             });
         });
     };
-                     
+
     componentWillUnmount() {
 
     };
-    
+
   componentWillReceiveProps(newProps) {
     newProps.timer.on('tick', (current) => {
       this.setState({
@@ -320,7 +320,7 @@ class JourneyPhases extends Component {
    }
     // Note: setting the backgroudnColor below to orange does not work, but at least gives us a
     // gray that can be seen against the black background
-   
+
     render() {
         const {journey} = this.props;
       const NumPhases = 4;
@@ -338,7 +338,7 @@ class JourneyPhases extends Component {
 	}
 	    </div>
 	    </div>
-	</div>			
+	</div>
     )
   }
 }
@@ -351,12 +351,12 @@ class PhaseIndicator extends Component {
         if (this.props.showingFeedback) {
             return 3;
         } else {
-            return stepIndexAux(this.props.playerState);	
+            return stepIndexAux(this.props.playerState);
         }
     }
     // Note: setting the backgroudnColor below to orange does not work, but at least gives us a
     // gray that can be seen against the black background
-   
+
   render() {
       const {journey} = this.props;
       const NumPhases = 4;
@@ -448,16 +448,16 @@ class VideoButton extends Component {
     render() {
     return (
 	    <span className={`fa-stack`} onClick={this.toggle}>
-	    <i className='fa fa-circle fa-stack-2x' 
-	style={{color: `${this.state.publishing ? 'rgb(75,176,88)' : 'red'}`}}	
+	    <i className='fa fa-circle fa-stack-2x'
+	style={{color: `${this.state.publishing ? 'rgb(75,176,88)' : 'red'}`}}
 	    ></i>
 	    { this.state.publishing &&
-	    <i className={`fas fa-video fa-stack-1x`}		
+	    <i className={`fas fa-video fa-stack-1x`}
 		style={{color: 'white'}}>
 		</i>
 	    }
 	{ !this.state.publishing &&
-	    <i className={`fas fa-video-slash fa-stack-1x`}		
+	    <i className={`fas fa-video-slash fa-stack-1x`}
 		style={{color: 'white'}}>
 		</i>
 	    }
@@ -474,7 +474,7 @@ class AudioButton extends Component {
       publishing: true
     }
 
-    // This binding is necessary to make `this` work in the callback -- ROB IS TRYING THIS  
+    // This binding is necessary to make `this` work in the callback -- ROB IS TRYING THIS
     this.toggleMicrophone = this.toggleMicrophone.bind(this);
   }
 
@@ -491,11 +491,11 @@ class AudioButton extends Component {
 	    this.props.setMicrophoneMutedState(!curMuted);
 	    return { publishing: !prevState.publishing};
 	});
-	
+
     };
-    
+
     toggleMicrophone = (e) => {
-	const DEBUG_MUTE = 0;	
+	const DEBUG_MUTE = 0;
 	e.preventDefault();
       const {publisher} = this.props;
       if (DEBUG_MUTE) {
@@ -503,25 +503,25 @@ class AudioButton extends Component {
 	  console.log(publisher,publisher.state,publisher.state.publisher);
       }
 	// ON SAFARI, this state is never changing!
-	
+
     if (publisher && publisher.state && publisher.state.publisher) {
 	publisher.state.publisher.publishAudio(!this.state.publishing);
 	this.changeToggleValue();
     }
 	if (DEBUG_MUTE) {
 	  console.log("FINAL this.publishing:",this.state.publishing);
-	  console.log("FINAL state:",this.state);	  
+	  console.log("FINAL state:",this.state);
       }
 
 	// This is absolutely necessary, but insuffient to make it work properly.
 	e.stopPropagation();
   }
-  
+
 
     render() {
     return (
 	    <span className={`fa-stack`} onClick={this.toggleMicrophone}>
-	    <i className={`fa fa-circle fa-stack-2x`} 
+	    <i className={`fa fa-circle fa-stack-2x`}
 	   style={{color: `${!this.props.state.microphoneMuted ? 'rgb(75,176,88)' : 'red'}`}}
 	    ></i>
 	    {
@@ -530,7 +530,7 @@ class AudioButton extends Component {
 	     }
 		 </span>
 
-	
+
     )
   }
 }
@@ -546,7 +546,7 @@ class PlayButton extends Component {
       this.setState({
         paused: false
       });
-    // This binding is necessary to make `this` work in the callback -- ROB IS TRYING THIS  
+    // This binding is necessary to make `this` work in the callback -- ROB IS TRYING THIS
     this.togglePlay = this.togglePlay.bind(this);
     });
 
@@ -626,7 +626,7 @@ class PauseButton extends Component {
       this.setState({
         paused: false
       });
-    // This binding is necessary to make `this` work in the callback -- ROB IS TRYING THIS  
+    // This binding is necessary to make `this` work in the callback -- ROB IS TRYING THIS
     this.togglePlay = this.togglePlay.bind(this);
     });
 
@@ -712,7 +712,7 @@ class InviteModal extends Component {
     }
 
     onChange = (e) => {
-    e.preventDefault();	
+    e.preventDefault();
     this.setState({
       journeySpaceName: e.target.value,
       error: this.state.error && e.target.value != ''
@@ -723,7 +723,7 @@ class InviteModal extends Component {
       const url = `${window.location.protocol}//${window.location.host}/${urlFriendlyName}`;
       this.updateLink(url);
 
-      e.stopPropagation();	
+      e.stopPropagation();
   }
 
   onCopy = (e) => {
@@ -747,7 +747,7 @@ class InviteModal extends Component {
         });
       } else {
           this.setState({
-              linkCopied: false,              
+              linkCopied: false,
               error: 'failed to copy url'
         });
       }
@@ -755,7 +755,7 @@ class InviteModal extends Component {
   }
 
     onGoThereNow = (e) => {
-        console.log("onGoThereNow","A");        
+        console.log("onGoThereNow","A");
         e.preventDefault();
         if (this.state.journeySpaceName === '') {
             this.setState({
@@ -771,10 +771,10 @@ class InviteModal extends Component {
             // const success = this._copy(url);
             console.log("onGoThereNow",url);
             this.props.history.push(url);
-            this.props.onComplete(url,name);            
+            this.props.onComplete(url,name);
         }
     }
-    
+
 
   _copy(url) {
     // A <span> contains the text to copy
@@ -811,7 +811,7 @@ class InviteModal extends Component {
         const name = this.state.journeySpaceName;
         const urlFriendlyName = name.replace(/[^\w]/g, '-').toLowerCase();
         const url = `${window.location.protocol}//${window.location.host}/${urlFriendlyName}`;
-        this.updateLink(url);        
+        this.updateLink(url);
     }
 
     // TODO: The x here is two small, it should be removed from here and put in CSS
@@ -854,7 +854,7 @@ class InviteModal extends Component {
             <p id='personal-link-url'> </p>
             </div>
             </div>
-            
+
             </div>
     )
   }
@@ -876,7 +876,7 @@ class UnfilledVideoSquare extends React.Component {
       const journey = this.props.journey;
       const sessionId = this.props.sessionId;
       const hasFlagged = (stream) ? !!journey.flags.find(flag => flag.user === sessionId && flag.flagged === stream.id) : false;
-      const visible = this.props.visible;      
+      const visible = this.props.visible;
       const hide_control = (!visible) ||
       	    !(state.playerState == "waiting" ||
 	      state.playerState == "failed" ||
@@ -916,36 +916,36 @@ class UnfilledVideoSquare extends React.Component {
                             </div>
                */}
                         </div>
-		    ); }	  
+		    ); }
 }
 
 class NoVideoSquare extends React.Component {
   constructor(props) {
       super(props);
-  }    
+  }
   render() {
       const localkey = this.props.localkey;
       const vid = this.props.vidid;
       const feedbackNotOrientation =
 	    this.props.playerState == ENDED || this.props.playerState == COMPLETED;
-      const msg = (feedbackNotOrientation) ? "Leave and Give Feedback" : "Orientation"; 
+      const msg = (feedbackNotOrientation) ? "Leave and Give Feedback" : "Orientation";
       const topmsg = (feedbackNotOrientation) ? "When all sharing is done..." : "Waiting...";
-      const topmsgvis = (feedbackNotOrientation) ? "visible" : "hidden";       
+      const topmsgvis = (feedbackNotOrientation) ? "visible" : "hidden";
       const fnc = (feedbackNotOrientation) ? this.props.onFeedback : this.props.onOrientation;
-      const additionalClass = this.props.additionalClass;      
+      const additionalClass = this.props.additionalClass;
 	  return (
 		  <div key={localkey} id={vid} className={`${additionalClass} flex-box video-placeholder`}>
 	        <div className='box-content'>
 	      <i className='far fa-smile'  style={{ visibility: 'hidden'}}></i>
-	      
+
 		  <p style={{visibility: `${topmsgvis}`, color: 'white', maxWidth: '80%', margin: '0 auto'}}>{topmsg}</p>
-              <p/>                  
+              <p/>
 	      {/* We need to create a colore class to unify with invite-friends-button */}
                   <button className='invite-button invite-orientation-button' onClick={fnc}
  	              >{msg}</button>
   	         </div>
 		  </div>);
-  }	  
+  }
 }
 // return null if not a permanent-room, return the name if it is a permanent room.
 function isPermanentRoom(url) {
@@ -956,7 +956,7 @@ function isPermanentRoom(url) {
 class Controls extends Component {
     constructor(props) {
 	super(props);
-    }    
+    }
     render() {
 	return (
 		<div id='central_control_panel_id' className='centered' style={this.props.visibility}>
@@ -972,7 +972,7 @@ class Controls extends Component {
 	        </div>
 	);
     }
-    
+
 }
 
 
@@ -1086,7 +1086,7 @@ export class JourneySpace extends Component {
                         if (streams.length+1 > MAX_PARTICIPANTS) {
                             console.log("RETREATING BECAUSE TOO MANY USERS");
                             alert("Too Many users");
-                            this.props.history.push('/');                            
+                            this.props.history.push('/');
                         }
 			this.setState({ streams });
 			if (!this.state.currentlyActivePublisher) {
@@ -1103,8 +1103,8 @@ export class JourneySpace extends Component {
                 if (__CLIENT__) {
                     window.addEventListener('beforeunload', MYonbeforeunload);
                 }
-                
-                
+
+
 		this.sessionHelper.session.on("connectionDestroyed", (event) => {
 		    const data = {
 			sessionId: this.sessionHelper.session.sessionId,
@@ -1161,7 +1161,7 @@ export class JourneySpace extends Component {
 		this.sessionHelper.session.on("signal:journeyUpdated", (event) => {
 		    const journey = JSON.parse(event.data);
 		    // Rob doesn't understand this apparently I have to call setState and use the statement above?
-		    state.journey = journey;		    
+		    state.journey = journey;
 		    this.setState({
 			journey: journey
 		    });
@@ -1184,7 +1184,7 @@ export class JourneySpace extends Component {
 			});
 		    }
 		});
-		
+
 
 		this.sessionHelper.session.on("signal:fail", (event) => {
 		    state.journey.state = FAILED;
@@ -1192,7 +1192,7 @@ export class JourneySpace extends Component {
 			    playerState: FAILED
 			});
 		});
-                
+
 		this.sessionHelper.session.on("signal:roomTooFull", (event) => {
                     alert("ROOM TOO FULL!");
 		});
@@ -1202,7 +1202,7 @@ export class JourneySpace extends Component {
 		    session: this.sessionHelper.session
 		});
 
-		const onAudioCanPlay = (event) => { 
+		const onAudioCanPlay = (event) => {
 		    if (state.journey.state === STARTED) {
 			state.audioTag.play();
 			if (!isNaN(state.journey.currentTime)) {
@@ -1221,14 +1221,14 @@ export class JourneySpace extends Component {
 		state.journeys = json;
 	    });
     }
-    
+
   componentWillUnmount() {
     if (this.sessionHelper) {
       this.sessionHelper.disconnect();
     }
       if (this.playerTimeEmitter) {
           this.playerTimeEmitter.clear();
-          this.playerTimeEmitter = null;          
+          this.playerTimeEmitter = null;
       }
       if (this.secondsEmitter) {
           this.secondsEmitter.clear();
@@ -1240,7 +1240,7 @@ export class JourneySpace extends Component {
 		fetch(`/api/journeys/${this.props.match.params.room}`, {credentials: 'include'})
 			.then(res => res.json())
 	  .then(json => {
-	      
+
 //	      this.setState({
 		  state.journey = json
 //	      })
@@ -1270,9 +1270,9 @@ export class JourneySpace extends Component {
             return this.secondsEmitter;
         case FAILED:
         case EXPIRED:
-        case STARTED:            
+        case STARTED:
         case PLAYING:
-        case PAUSED:            
+        case PAUSED:
         case ENDED:
         case COMPLETED:
             if (!this.playerTimeEmitter) {
@@ -1399,7 +1399,7 @@ export class JourneySpace extends Component {
    onJoinMailingList = () => {
     window.location = "http://wacuri.com/stay-updated/";
   }
-    
+
     // TODO: This is testing, it should be rmeoved...
     TEST_INVITATION = false;
     onOrientation = (e) => {
@@ -1414,7 +1414,7 @@ export class JourneySpace extends Component {
             });
         }
 
-    e.stopPropagation();	
+    e.stopPropagation();
   }
 
     onCloseOrientationModal = (e) => {
@@ -1444,7 +1444,7 @@ export class JourneySpace extends Component {
     this.setState({
       showFeedbackModal: true
     });
-    e.stopPropagation();	
+    e.stopPropagation();
   }
 
   onCloseFeedbackModal = (e) => {
@@ -1461,16 +1461,16 @@ export class JourneySpace extends Component {
     });
     window.location = url + `?journey=${state.journey.name}&name=${name}`;
   }
-    
+
 
 
     seekTo = (fraction) => {
       console.log("duration",state.audioTag.duration);
-      console.log("audioTag",state.audioTag.currentTime);      
+      console.log("audioTag",state.audioTag.currentTime);
 	state.audioTag.play();
 
-	
-	
+
+
     state.audioTag.currentTime = state.audioTag.duration * fraction;
 
       console.log("SEEK called with:",fraction);
@@ -1514,7 +1514,7 @@ export class JourneySpace extends Component {
 	if (value.length > maxlen) {
 	    value = value.substring(0,62)+"...";
 	}
-	
+
 	return value;
     }
     countPresentParticipants = (journey) => {
@@ -1528,7 +1528,7 @@ export class JourneySpace extends Component {
         // Here I am attempting to set the background image---really thise needs to be done with the journy changes, not in render.
 
 	    const currentParticipant = this.state.session && this.state.session.connection && state.journey && state.journey.participants.find(participant => participant.connectionId === this.state.session.connection.id);
-	    var local_key_counter_to_avoid_warning = 0;	    
+	    var local_key_counter_to_avoid_warning = 0;
 	    let currentUserHasFlaggedJourney = state.journey && state.journey.flags.map(flag => flag.user).indexOf(state.sessionId) > -1;
 	var stream0 = this.state.streams[0];
 	// NEXT
@@ -1551,9 +1551,9 @@ export class JourneySpace extends Component {
                 >
 
 		{this.state.session && /* AAA */
-                 <div className='journeyspace-content' >		 
+                 <div className='journeyspace-content' >
 
-                 
+
 		{/* tob bar */}
 		<div id="topbar_and_header">
 		 <LTB.LogoAndTitleBar history={this.props.history} showLeave={true}
@@ -1575,7 +1575,7 @@ export class JourneySpace extends Component {
                               (this.props.isPermanentSpace ||
 		    (!state.journey.startAt && (state.journey.state === CREATED || state.journey.state === JOINED || state.journey.state === COMPLETED))) &&
 		   <select onChange={this.onChangeJourney} value={'instruction'}>
-                         <option value={'instruction'} selected={true}>{'Pulldown to select a new Journey'}</option>		   
+                         <option value={'instruction'} selected={true}>{'Pulldown to select a new Journey'}</option>
                      {
 		           state.journeys.map(journey => (
 				   <option key={optionkey++} value={journey.filePath}>{journey.name}
@@ -1587,7 +1587,7 @@ export class JourneySpace extends Component {
 
                  <JourneyPhases playerState={this.state.playerState} timer={this.journeyStateTimer}  seekTo={this.seekTo}/>
 		 </div>
-		 <PhaseIndicator playerState={this.state.playerState} showingFeedback={this.state.showFeedbackModal}/>	     
+		 <PhaseIndicator playerState={this.state.playerState} showingFeedback={this.state.showFeedbackModal}/>
 		 </div>
 	    </div>
 
@@ -1600,7 +1600,7 @@ export class JourneySpace extends Component {
 		 {this.state.showOrientationModal &&
 		  <INTRO.OrientationModal force={true} onComplete={this.onCompleteOrientation} onClose={this.onCloseOrientationModal}/>
 		 }
-                 
+
 		 {this.state.showFeedbackModal &&
 		  <INTRO.FeedbackModal
 		  journeySpaceName={state.journey.name}
@@ -1617,13 +1617,13 @@ export class JourneySpace extends Component {
 		  history={this.props.history}
 		  />
 		 }
-		 
-                 
-			 
+
+
+
 		 {/* here we create the two big squares;  */}
-		 
+
 		 <div id="bigsquares">
-		 
+
                  <div  id="firstsquare" className="flexiblecol" key="name">
 		 <div className="flexiblecol-content">
                  <img id='video-square0' className="journey-image" src={state.journey.image} onClick={this.togglePlayState}/>
@@ -1633,7 +1633,7 @@ export class JourneySpace extends Component {
 		 publisher={this.publisher}
 		 state={this.state}
 		 setMicrophoneMutedState={(b) => {
-		     this.publisher.state.publisher.publishAudio(!b);		     
+		     this.publisher.state.publisher.publishAudio(!b);
 		     this.setState({microphoneMuted: b});
 		 }}
 		 player={state.audioTag}
@@ -1648,22 +1648,22 @@ export class JourneySpace extends Component {
 
 
 
-		 {/* This is the second square;  */}		 
+		 {/* This is the second square;  */}
 		 <div id='secondsquare' className='flexiblecol'>
-		 
 
 
 
-		 
+
+
 		 {/*
 		  <div style={{display: 'flex', flexDirection: 'row', visibility: `${(this.state.showOrientationModal || this.state.showFeedbackModal ) ? "hidden" : "visible"}`}}>
 		  */}
-		  
 
-		 
+
+
 		 <div key="stream" id='video-square1' className='first-box flex-box journeyspace-stream journeyspace-me'>
 		 <div className='box-content'>
-                        <OTPublisher 
+                        <OTPublisher
                           session={this.sessionHelper.session}
                           onInit={this.onInitPublisher}
                  ref={publisher => {this.publisher = publisher}}
@@ -1681,7 +1681,7 @@ export class JourneySpace extends Component {
 		 publisher={this.publisher}
 		 state={this.state}
 		 setMicrophoneMutedState={(b) => {
-		     this.publisher.state.publisher.publishAudio(!b);		     
+		     this.publisher.state.publisher.publishAudio(!b);
 		     this.setState({microphoneMuted: b});
 		 }}
 		 player={state.audioTag}
@@ -1691,11 +1691,11 @@ export class JourneySpace extends Component {
 		 />
 
 		 </div>
-		 
+
 		 <UnfilledVideoSquare vidid='video-square2'
 		 additionalClass={'second-box'}
 		 limit={1}
-		 onInvite={this.onInvite}		 
+		 onInvite={this.onInvite}
 		 streamlength={this.state.streams.length}
 		 stream={this.state.streams[0]}
 		 session={this.sessionHelper.session}
@@ -1708,11 +1708,11 @@ export class JourneySpace extends Component {
 
 		 </UnfilledVideoSquare>
 
-		 
+
 		 <UnfilledVideoSquare vidid='video-square3'
-		 additionalClass={'third-box'}		 
+		 additionalClass={'third-box'}
 		 limit={2}
-		 onInvite={this.onInvite}		 
+		 onInvite={this.onInvite}
 		 streamlength={this.state.streams.length}
 		 stream={this.state.streams[1]}
 		 session={this.sessionHelper.session}
@@ -1721,14 +1721,14 @@ export class JourneySpace extends Component {
 		 journey={state.journey}
 		 sessionId={state.sessionId}
 		 visible={(!this.state.showOrientationModal)}
-		 
+
 		 ></UnfilledVideoSquare>
-		 
+
 		 <NoVideoSquare vidid='video-square4'
-		 additionalClass={'fourth-box'}		 
+		 additionalClass={'fourth-box'}
 		 localkey={local_key_counter_to_avoid_warning++}
 		 onOrientation={this.onOrientation}
-		 onFeedback={this.onFeedback}		 
+		 onFeedback={this.onFeedback}
 		 playerState={this.state.playerState}
 		 ></NoVideoSquare>
 		 </div>
@@ -1737,12 +1737,12 @@ export class JourneySpace extends Component {
 		 </div>
 		  */}
 		 </div>
-		 
+
           {this.state.showInviteModal &&
             <InviteModal journey={this.state.session} onComplete={this.onCompleteShare} onClose={this.onCloseShareModal} history={this.props.history} />
           }
 
-		 
+
 		 </div>
 		 {/*
           <div className='journeyspace-footer' style={{display: 'flex'}}>
@@ -1752,15 +1752,13 @@ export class JourneySpace extends Component {
             </div>
           </div>
 		  */}
-			</div>		 
+			</div>
 		}
-	    
+
 			 {/* AAA */}
 
 
-		    </div>						
+		    </div>
 	)
 	}
 }
-
-

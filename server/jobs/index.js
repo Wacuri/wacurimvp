@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import Agenda from 'Agenda';
+import Agenda from 'agenda';
 import _ from 'lodash';
 import OpenTok from 'opentok';
 import moment from 'moment';
@@ -16,14 +16,14 @@ const db = mongoose.connection;
 
 var offset = 0;
 agenda.define('create journey space', async function(job, done) {
-    console.log("CREATE JOURNEY SPACE CALLED");    
+    console.log("CREATE JOURNEY SPACE CALLED");
   try {
     const total = await db.collection('journeycontents').countDocuments();
       const randomJourney = (await db.collection('journeycontents').find().skip(offset++ % total).limit(1).toArray())[0];
       var seconds_to_add_to_now = 0;
       if (job.attrs.data && job.attrs.data.separation_sec) {
           console.log("DATA",job.attrs.data.separation_sec);
-          seconds_to_add_to_now = job.attrs.data.separation_sec;          
+          seconds_to_add_to_now = job.attrs.data.separation_sec;
       } else {
           console.log("NO DATA");
           seconds_to_add_to_now = 10*60;
@@ -54,11 +54,11 @@ agenda.define('create journey space', async function(job, done) {
 });
 
 agenda.define('clear expired journeys', async function(job, done) {
-  console.log("CLEAR EXPRIED JOURNEYS CALLED");        
+  console.log("CLEAR EXPRIED JOURNEYS CALLED");
   try {
     const expiredJourneys = await JourneySpace.find({state: 'created', startAt: {$lt: moment().subtract(1, 'minutes')}}).exec();
       const globalSpace = await JourneySpace.findOne({room: 'temp-home-location'}).exec();
-      console.log("GLOBAL SPACE SESSIONID",globalSpace.sessionId);          
+      console.log("GLOBAL SPACE SESSIONID",globalSpace.sessionId);
       for (let journey of expiredJourneys) {
           console.log("EXPRIING",journey);
           await journey.expire();
@@ -141,12 +141,12 @@ agenda.define('start journey', async function(job, done) {
 
 // how do we know that each restart only creates one of these...
 agenda.define('remove current create journey spaces', async function(job, done) {
-    console.log("CLEAR EXPRIED JOURNEYS CALLED");        
+    console.log("CLEAR EXPRIED JOURNEYS CALLED");
     try {
         agenda.cancel({name: 'create journey space'}, (err, numRemoved) => {
             console.log("num 'create journey space jobs canceled'",numRemoved);
         });
-        
+
     done();
   } catch(e) {
     console.log(e);
@@ -187,26 +187,26 @@ const QD = 10; // this is measured in minutes
 
 agenda.on('ready', function() {
     console.log("ON READY CALLED");
-    try {    
+    try {
         agenda.cancel({name: 'create journey space'}, (err, numRemoved) => {
             console.log("num 'create journey space jobs canceled'",numRemoved);
         });
     } catch(e) {
         console.log(e);
     }
-    
+
     //    agenda.schedule('2 seconds', 'remove current create journey spaces');
-    
+
     var separation_sec = (QD * 60) / QL;
 
     // This is only used for debugging, in situations which may occur
     // when working in this area.
     agenda.schedule('2 seconds', 'clear journeys');
     agenda.schedule('2 seconds', 'ensure know when is present for too long');
-    
+
     for(var i = 0; i < QL; i++) {
         var data = {separation_sec: (separation_sec * i) };
-        agenda.schedule(20+' seconds','create journey space',data);        
+        agenda.schedule(20+' seconds','create journey space',data);
     }
 
     agenda.every('1 minute', 'create journey space');
@@ -215,4 +215,3 @@ agenda.on('ready', function() {
 
     agenda.start();
 });
-

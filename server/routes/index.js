@@ -13,7 +13,15 @@ import createMongoStore from 'connect-mongo';
 
 
 const app = express();
+
+
 app.use(secure);
+
+// app.use(express.static(path.join(__dirname, '..', 'public/webfonts')));
+
+app.use('/webfonts', express.static(path.join(__dirname, '../public/webfonts')))
+// res.sendfile(path.join(__dirname, '..', 'public/webfonts/fa-sold-900.woff'));
+
 const agenda = new Agenda({db: {address: process.env.MONGODB_URI || process.env.MONGO_URL}});
 
 app.use(session({
@@ -32,7 +40,9 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
+
 app.use('/api', api);
+app.use("/webfonts", express.static(__dirname +  '/../public/webfonts/'));
 app.use('/*', ssr);
 
 // This is a test to see if this shows up in the Heroku log..

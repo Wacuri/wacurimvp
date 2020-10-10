@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+// const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 var IsomorphicLoaderPlugin = require("isomorphic-loader/lib/webpack-plugin");
 
@@ -8,6 +8,10 @@ module.exports = {
   context: path.join(__dirname, '../client'),
   devtool: 'source-map',
   entry: [
+    'react-hot-loader/patch',
+//    'webpack-dev-server/client?http://localhost:8080',
+//    'webpack/hot/only-dev-server',
+    './res/scss/fa-special.css',
     './src/index.js',
     './res/scss/main.scss',
   ],
@@ -23,16 +27,20 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['react', 'es2015', 'stage-1'],
+            presets: ['react', 'es2015', 'stage-2'],
           },
         },
       },
-      {
+/*      {
         test: /\.scss$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: ['css-loader', 'sass-loader'],
         }),
+*/
+      {
+        test: /\.(css|sass|scss)$/,
+        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader!sass-loader' })
       },
       {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?mimetype=image/svg+xml'},
       {test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader?mimetype=application/font-woff"},
@@ -51,15 +59,15 @@ module.exports = {
       // TODO: This seems to be incompatible with the latest version of query-string.
       // Removing it causes our access to fonts to fail, for a reaon I don't quite understand.
       // Possibly this is a version dependence issue, which are a big pain.
-    new UglifyJSPlugin({
-      sourceMap: true
-    }),
+//     new UglifyJSPlugin({
+//      sourceMap: true
+//    }),
 		 new webpack.DefinePlugin({
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: true,
     }),
-    
+
     new ExtractTextPlugin('css/main.css'),
   ],
 };

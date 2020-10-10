@@ -17,7 +17,7 @@
 // The best simple solution is to use flexboxes
 // and compute from the (supposed) longest dimension
 // based on an orientation media query.
-// Then we have to make two exceptions: The Iphone X 
+// Then we have to make two exceptions: The Iphone X
 // and the Pixel 2 both have a landscape greater
 // than 2. However, they can be detected with Media Queries
 
@@ -30,7 +30,9 @@ $fa-font-path: "./webfonts" !default;
 // I had to copy the fontawesome-pro css into here by hand due to
 // problems interacting with React and WebPack (and maybe yarn).
 // A better deployment engineer might be able to figure this out.
-@import "./fa-special.css";
+// @import "./fa-special.css";
+
+// @import "~/../server/public/fa-special.css";
 
 // Bootstrap overrides
 
@@ -54,7 +56,7 @@ body {
     left: 0;
 }
 
-@media (max-width: 767.98px) { 
+@media (max-width: 767.98px) {
   body {
     cursor: pointer;
   }
@@ -95,15 +97,15 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(4vh);  
-  font-size: 1.9vh;	      
+  height: calc(4vh);
+  font-size: 1.9vh;
   .logo {
       height: 100%;
     display: block;
     margin-left: auto;
     margin-right: auto;
     margin-top: 2px; // xxx
-    margin-bottom: 2px; // xxx    
+    margin-bottom: 2px; // xxx
   }
   .journeyspacetitle {
       color: black;
@@ -121,26 +123,26 @@ h2 {
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  height: calc(6vh);  
-  font-size: 1.9vh;	      
+  height: calc(6vh);
+  font-size: 1.9vh;
   .logo {
       height: 100%;
       display: block;
       margin-left: auto;
       margin-right: auto;
     margin-top: 2px; // xxx
-    margin-bottom: 2px; // xxx    
+    margin-bottom: 2px; // xxx
   }
   .header-orientation-button {
-      font-size: 2.4vh;	            
+      font-size: 2.4vh;
       padding-left: 0.5em;
       padding-right: 0.5em;
     margin-right: 20px;
-    background-color: rgb(75,176,88);    
-    border-radius: 10px!important;    
+    background-color: rgb(75,176,88);
+    border-radius: 10px!important;
     color: white;
 }
-  
+
 }
 
 
@@ -250,7 +252,7 @@ h2 {
   p {
     color: rgb(83, 83, 83);
   }
-  
+
   li:first-child {
     border: none;
   }
@@ -259,7 +261,7 @@ h2 {
 
 .journeyspace-stream {
   position: relative;
-  
+
   .journeyspace-stream-controls {
     position: absolute;
     bottom: 0;
@@ -365,7 +367,7 @@ h2 {
           display: block;
       }
       .journey-vacant-spots {
-         font-weight: 400;          
+         font-weight: 400;
          display: flex;
          flex-direction: row;
          align-items: center;
@@ -474,14 +476,14 @@ h2 {
   h2 {
     color: white;
   }
-  
+
   h3 {
     font-family: Playfair Display, serif;
     color: rgb(132, 253, 49);
     font-size: 3em;
   }
   p {
-    font-size: 2em;      
+    font-size: 2em;
   }
 
   .intro-screen p {
@@ -591,7 +593,7 @@ h2 {
     justify-content: center;
     align-items: center;
     height: 0px;
-    flex-flow: row nowrap;     
+    flex-flow: row nowrap;
     z-index: 1000;
     .fa-stack {
         vertical-align: middle;
@@ -603,7 +605,7 @@ h2 {
 }
 
 .bar-green {
-    background-color: rgb(75,176,88);    
+    background-color: rgb(75,176,88);
 }
 
 
@@ -623,7 +625,7 @@ h2 {
     height: 20px;
 }
 
-// The grid gap is: (8/500)*25vw = 
+// The grid gap is: (8/500)*25vw =
 #phase-bar0 {
     display: grid;
     float: right;
@@ -637,7 +639,7 @@ h2 {
 	color: white;
 	margin-left: 5px;
 	margin-right: 5px;
-	
+
     }
     .feedback-full {
 	color: black;
@@ -658,7 +660,7 @@ h2 {
 // 	font-size: 1.5em;
 //     }
 //     p {
-// 	font-size: 0.5em;	
+// 	font-size: 0.5em;
 //     }
 // }
 
@@ -693,26 +695,26 @@ h2 {
         position: absolute;
         right: 30px;
         top: 30px;
-        zIndex: 100;        
+        zIndex: 100;
     }
     .swipable-message {
         margin: 10%;
         height: 100%;
 
         .message-heading {
-	    font-size: 3.2em;	
+	    font-size: 3.2em;
 	    color: black;
 	    font-weight: 700;
-	    font-family: 'Playfair Display'	
+	    font-family: 'Playfair Display'
         }
         p {
-	    font-size: 2em;    
-	    font-weight: 200;	    
+	    font-size: 2em;
+	    font-weight: 200;
 	    color: white;
         }
         display: flex;
         flex-direction: column;
-        justify-content: center;    
+        justify-content: center;
     }
     .leftbutton {
         left: 20px;
@@ -726,7 +728,7 @@ h2 {
         zIndex: 100;
         background-color: rgb(74,170,221);
         color: white;
-        border: 0px        
+        border: 0px
     }
 }
 
@@ -735,25 +737,25 @@ h2 {
     height: 100%;
 
     .message-heading {
-	font-size: 1.0em;	
+	font-size: 1.0em;
 	color: black;
 	font-weight: 700;
-	font-family: 'Playfair Display'	
+	font-family: 'Playfair Display'
     }
     p {
-	font-size: 0.8em;    
-	font-weight: 200;	    
+	font-size: 0.8em;
+	font-weight: 200;
 	color: white;
     }
     display: flex;
     flex-direction: column;
-    justify-content: center;    
+    justify-content: center;
 }
 
 .invite-button {
     color: white;
     background-color: black;
-    letter-spacing: -1px;    
+    letter-spacing: -1px;
     margin-left: 0.7em;
     margin-right: 0.7em;
 //    font-size: 1em;
@@ -768,20 +770,20 @@ h2 {
 
 .invite-orientation-button {
     background-color: rgb(75,176,88);
-    border-color: rgb(75,176,88);    
+    border-color: rgb(75,176,88);
 }
 .header-orientation-button {
     padding-left: 0.5em;
     padding-right: 0.5em;
     background-color: white;
     border-color: white;
-    border-radius: 15px!important;    
+    border-radius: 15px!important;
     color: black;
 }
 
 .feedback-button {
     background-color: rgb(75,176,88);
-    border-color: rgb(75,176,88);    
+    border-color: rgb(75,176,88);
 }
 
 textarea {
@@ -823,15 +825,15 @@ textarea {
 //    background-color: yellow;
 }
 .third-box {
-//    background-color: green;    
+//    background-color: green;
 }
 .fourth-box {
-//    background-color: purple;        
+//    background-color: purple;
 }
 
 #bigsquares {
     display: flex;
-    flex-wrap: wrap;    
+    flex-wrap: wrap;
 }
 #firstsquare {
 }
@@ -847,7 +849,7 @@ textarea {
 	color: white;
 	margin-left: 1em;
 	margin-right: 1em;
-	
+
     }
     .feedback-full {
 	color: black;
@@ -875,7 +877,7 @@ textarea {
 	font-size: 1.5em;
     }
     p {
-	font-size: 0.5em;	
+	font-size: 0.5em;
     }
 }
 
@@ -904,19 +906,19 @@ textarea {
     height: 100%;
 
     .message-heading {
-	font-size: 1.0em;	
+	font-size: 1.0em;
 	color: black;
 	font-weight: 700;
-	font-family: 'Playfair Display'	
+	font-family: 'Playfair Display'
     }
     p {
-	font-size: 0.8em;    
-	font-weight: 200;	    
+	font-size: 0.8em;
+	font-weight: 200;
 	color: white;
     }
     display: flex;
     flex-direction: column;
-    justify-content: center;    
+    justify-content: center;
 }
 
 .invite-button {
@@ -937,12 +939,12 @@ textarea {
 
 .invite-orientation-button {
     background-color: rgb(75,176,88);
-    border-color: rgb(75,176,88);    
+    border-color: rgb(75,176,88);
 }
 
 .feedback-button {
     background-color: rgb(75,176,88);
-    border-color: rgb(75,176,88);    
+    border-color: rgb(75,176,88);
 }
 
 textarea {
@@ -983,15 +985,15 @@ textarea {
 //    background-color: yellow;
 }
 .third-box {
-//    background-color: green;    
+//    background-color: green;
 }
 .fourth-box {
-//    background-color: purple;        
+//    background-color: purple;
 }
 
 #bigsquares {
     display: flex;
-    flex-wrap: wrap;    
+    flex-wrap: wrap;
 }
 #firstsquare {
 }
@@ -1017,9 +1019,9 @@ textarea {
     align-items: center;
     justify-content: center;
     color: white;
-    
+
     .fa-smile {
-	color: white;	
+	color: white;
     }
     .btn {
 	font-size: 1em;
@@ -1032,7 +1034,7 @@ textarea {
     width: 0px;
     position: absolute;
     top: 100%;
-    transform: translate(-50%, -50%);    
+    transform: translate(-50%, -50%);
 }
 .centered-button {
     position: relative;
@@ -1056,7 +1058,7 @@ textarea {
 #imageskipbutton {
     position: relative;
     .invisible-finger-target {
-	position: absolute;	
+	position: absolute;
 	bottom: 0;
 	right: 0;
 	color: red;
@@ -1064,7 +1066,7 @@ textarea {
 	height: 4em;
 	z-index: 10;
 	.fa-stack {
-	    position: absolute;	
+	    position: absolute;
 	    bottom: 0;
 	    right: 0;
 	    z-index: 4;
@@ -1211,7 +1213,7 @@ h1 {
             .invite-control-square {
 	        height: calc(46vh);
 	        width: calc(46vh);
-                max-width: calc(                
+                max-width: calc(
                 #personal-link-url {
                     color: black;
                     overflow: scroll;
@@ -1245,7 +1247,7 @@ h1 {
     }
     #firstsquare,.invite-message-square {
 	height: calc(46vh);
-	width: calc(46vh);	
+	width: calc(46vh);
     }
     #phase-bar0 {
 	width: calc(23vh);
@@ -1255,7 +1257,7 @@ h1 {
         // h = (5/43) * w
         .phase-bar {
 //            height: calc((5/43)*((23-1.2)/4)*vh);
-            height: 0.6322vh;                                    
+            height: 0.6322vh;
         }
     }
     .logobar_and_titlebar {
@@ -1276,7 +1278,7 @@ h1 {
     }
     .box-content {
         p {
-            font-size: 1.5vh;            
+            font-size: 1.5vh;
         }
     }
 
@@ -1292,7 +1294,7 @@ h1 {
     // the "same" size inside a larger circle.
     .play-button {
         width: 9vh;
-        height: 9vh;        
+        height: 9vh;
         position: absolute;
         top: 100%;
         left: 50%;
@@ -1306,8 +1308,8 @@ h1 {
     body {
         font-size: 1.8vw;
     }
-    
-    #central_control_panel_id { 
+
+    #central_control_panel_id {
      	font-size: 3.5vh;
         .placeholder {
             visibility: hidden;
@@ -1333,7 +1335,7 @@ h1 {
             .invite-message-square {
 	        height: calc(50vw);
 	        width: calc(50vw);
-                max-width: calc(50vw);                                
+                max-width: calc(50vw);
             }
             .invite-control-square {
 	        height: calc(50vw);
@@ -1344,7 +1346,7 @@ h1 {
                     color: black;
                     /* Required for text-overflow to do anything */
                     overflow: scroll!important;
-                    overflow-y: scroll!important;                    
+                    overflow-y: scroll!important;
                     max-width: calc(40vw)!important;
                 }
                 .sharing-block {
@@ -1376,17 +1378,17 @@ h1 {
 	width: calc(50vw);
     }
     #phase-bar0 {
-	width: calc(25vw);	        
+	width: calc(25vw);
         grid-gap: 0.4vw;
         // 25 = (4 * w) + 3 * 0.4  =>
         // w = (23.8/4)
         // h = (5/43) * w
         .phase-bar {
 //            height: calc(0.116*((25-1.2)/4)vw);
-            height: 0.6902vw;                        
+            height: 0.6902vw;
         }
     }
-    
+
     .logobar_and_titlebar {
         min-height: calc(12vh);
     }
@@ -1411,7 +1413,7 @@ h1 {
 	    }
         }
     }
-  
+
     // This is awkward but the only good way to keep the icons
     // the "same" size inside a larger circle.
     // This is awkward but the only good way to keep the icons
@@ -1429,19 +1431,19 @@ h1 {
 
     .box-content {
         p {
-            font-size: 1.5vw;            
+            font-size: 1.5vw;
         }
     }
-    
+
     body {
         font-size: 1.8vh;
     }
 
-    #central_control_panel_id { 
+    #central_control_panel_id {
      	font-size: 3vw;
         .placeholder {
             visibility: hidden;
-     	    font-size: 5vw;                        
+     	    font-size: 5vw;
         }
         .fa-stack {
         }
@@ -1464,7 +1466,7 @@ h1 {
 	width: calc(100vw);
     }
     #phase-bar0 {
-	width: calc(50vw);	
+	width: calc(50vw);
     }
     #titlebar {
         font-size: 1.7vh;
@@ -1488,7 +1490,7 @@ h1 {
 	width: calc(84vh);
     }
     #phase-bar0 {
-	width: calc(42vh);	
+	width: calc(42vh);
     }
     .logobar_and_titlebar {
         min-height: calc(16vh);
@@ -1498,7 +1500,7 @@ h1 {
     }
     #titlebar {
         min-height: calc(8vh);
-        font-size: 1.7vw;                
+        font-size: 1.7vw;
     }
     body {
         font-size: 1.8vh;
@@ -1516,11 +1518,11 @@ h1 {
             font-size: 45px;
             margin-left: 30px;
         }
-        
+
     }
     .jblogobar {
 
-        height: calc(10vh);  
+        height: calc(10vh);
         font-size: 4vh;
         .logo {
             height: 100%;
@@ -1530,14 +1532,14 @@ h1 {
             margin-left: 110px;
             margin-right: auto;
             margin-top: 2px; // xxx
-            margin-bottom: 2px; // xxx    
+            margin-bottom: 2px; // xxx
         }
         .header-orientation-button {
-            font-size: 5vh;	            
+            font-size: 5vh;
         }
-        
+
     }
-    
+
 }
 
 
@@ -1550,7 +1552,7 @@ h1 {
 @media screen and (orientation: portrait) {
     .banner-text {
         width: 100%;
-      
+
     }
 }
 
@@ -1564,7 +1566,7 @@ h1 {
         flex-direction: column;
         justify-content: flex-start;
         align-conent: flex-end;
-    }    
+    }
     .joinable-journey-card {
         line-height: 11px;
         font-size: 10px;
@@ -1640,7 +1642,7 @@ h1 {
                 display: block;
             }
             .journey-vacant-spots {
-                font-weight: 400;          
+                font-weight: 400;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
