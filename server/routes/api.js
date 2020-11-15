@@ -71,9 +71,9 @@ router.get('/journeys/:room', async (req, res) => {
         }
         // NOTE: This line may be a sticking point
         const participants = await JourneyParticipant.find({session: journeySpace, present: true}).lean().exec();
-//        const participants = await JourneyParticipant.find({journeySpace, present: true}).lean().exec();        
+//        const participants = await JourneyParticipant.find({journeySpace, present: true}).lean().exec();
         const currentUserParticipant = await JourneyParticipant.findOne({journeySpace, user: req.session.id}).exec();
-        
+
         if (!currentUserParticipant) {
             const newParticipant = new JourneyParticipant({journeySpace, user: req.session.id, present: true});
             await newParticipant.save();
@@ -106,7 +106,7 @@ router.get('/journeys/:room', async (req, res) => {
                 selectedJourney = randomJourney;
             }
             const newJourneySpace = new JourneySpace({
-                room, 
+                room,
                 sessionId: session.sessionId,
                 journey: selectedJourney.filePath,
                 name: req.query.name || selectedJourney.name,
@@ -172,7 +172,7 @@ router.post('/journeys/:room/unjoined', async (req, res) => {
      }
             const globalSpace = await JourneySpace.findOne({room: GLOBAL_JOURNEY_BOARD}).exec();
             console.log("UNJOINED event found on server!",globalSpace,participant);
-            
+
     if (globalSpace) {
         opentok.signal(globalSpace.sessionId, null, { 'type': 'journeyerLeftSpace', 'data': JSON.stringify(participant.toJSON()) }, () => {});
     }
@@ -199,7 +199,7 @@ router.get('/active_journeys', async(req, res) => {
       $match: {
         state: {$in: ['created', 'joined']}, startAt: {$gte: new Date()}, room: {$ne: GLOBAL_JOURNEY_BOARD}
       }
-    }, 
+    },
 
     {
       $lookup: {
@@ -275,9 +275,9 @@ router.post('/journeys/:id/feedback', async (req, res) => {
 				      text: req.body.text,
 				      journey: req.body.journey,
 				      room: req.body.room });
-    
+
     console.log("newFeedback",newFeedback);
-    
+
     await newFeedback.save(function (err, fluffy) {
 	if (err) return console.error(err);
     });
@@ -421,7 +421,8 @@ router.post('/event', async (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-  req.session.loggedIn = true;
+  if (!req.session) { reg.session = {}}
+  req.session.id = 357;
   req.session.user = {
     name: req.body.name
   };
@@ -437,4 +438,3 @@ router.get('/logout', (req, res) => {
 });
 
 export default router;
-

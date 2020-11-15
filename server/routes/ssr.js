@@ -12,8 +12,6 @@ const router = express.Router();
 router.get('/', (req, res) => {
     const context = {};
 
-// NEXT:    console.log("req",req);
-
   state.loggedIn = req.session.loggedIn;
   state.user = req.session.user;
 
@@ -34,10 +32,14 @@ router.get('/', (req, res) => {
     }
     res.end();
   } else {
-    res.status(200).render(process.env.NODE_ENV === 'production' ? 'index.ejs' : 'index.dev.ejs', {
+    res.status(200).render('index.ejs', {
       html,
-      script: JSON.stringify({openTokKey: process.env.OPENTOK_KEY, loggedIn: req.session.loggedIn, user: req.session.user, sessionId: req.sessionID}),
+      script: JSON.stringify({openTokKey: process.env.OPENTOK_KEY,
+                              loggedIn: req.session.loggedIn,
+                              user: req.session.user,
+                              sessionId: req.sessionID}),
     });
+    console.log("BBB");
   }
 });
 

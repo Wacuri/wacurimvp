@@ -10,7 +10,8 @@ import Agendash from 'agendash';
 
 import session from 'express-session';
 import createMongoStore from 'connect-mongo';
-
+const MongoStore = require('connect-mongo')(session);
+import mongoose from 'mongoose';
 
 const app = express();
 
@@ -21,15 +22,19 @@ app.use(secure);
 
 app.use('/webfonts', express.static(path.join(__dirname, '../public/webfonts')))
 // res.sendfile(path.join(__dirname, '..', 'public/webfonts/fa-sold-900.woff'));
+const agenda = new Agenda({db: {address: process.env.MONGODB_URI || process.env.MONGO_URL ,
+                                useNewUrlParser: true }});
 
-const agenda = new Agenda({db: {address: process.env.MONGODB_URI || process.env.MONGO_URL}});
+// WARNING!!! This is what is causing the hang up!
+// it is not really clear what we use this for.
+
 
 app.use(session({
-    secret: 'qVaNxeu5VVEAtkyFJ/62EKcp7Lw=',
-    saveUninitialized: true, // don't create session until something stored
-	  resave: false, //don't save session if unmodified
-    store: new (createMongoStore(session))({url: process.env.MONGODB_URI || process.env.MONGO_URL}),
-    cookie: {expires: new Date(253402300000000)}
+  secret: 'a tuna is a like a bullet',
+  saveUninitialized: true, // don't create session until something stored
+  resave: false, //don't save session if unmodified
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  cookie: { secure: true, expires: new Date(253402300000000) }
 }));
 
 app.use('/jobs', Agendash(agenda));
